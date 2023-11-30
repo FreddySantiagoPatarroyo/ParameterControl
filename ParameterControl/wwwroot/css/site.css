@@ -1,0 +1,260 @@
+@import url(../fonts/stylesheet.css);
+@import url(../icons/css/icons.css);
+@import url(../icons/css/icons-ie7.css);
+@import url(../icons/css/icons-ie7-codes.css);
+@import url(../icons/css/icons-embedded.css);
+@import url(../icons/css/icons-codes.css);
+
+* {
+    padding: 0px 0px 0px;
+    margin: 0px 0px 0px;
+    outline: none;
+    font-family: "Roboto", sans-serif;
+    letter-spacing: 0px;
+    border: none;
+    transform-origin: 50% 50%;
+    transition: all .4s ease-in-out;
+    -webkit-animation-duration: .2s;
+    animation-duration: .2s;
+    -webkit-animation-timing-function: cubic-bezier(.25, .46, .45, .94);
+    animation-timing-function: cubic-bezier(.25, .46, .45, .94);
+    -webkit-animation-fill-mode: both;
+    animation-fill-mode: both;
+    -ms-tap-highlight-color: rgba(0, 0, 0, 0) !important;
+    -o-tap-highlight-color: rgba(0, 0, 0, 0) !important;
+    -moz-tap-highlight-color: rgba(0, 0, 0, 0) !important;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0) !important;
+    box-sizing: content-box;
+}
+
+body {
+    --gray_100: #F4F4F4;
+    --gray_200: #DBDBDB;
+    --gray_300: #B9B9B9;
+    --gray_400: #989898;
+    --gray_500: #6C6C6C;
+    --gray_600: #515251;
+    --gray_700: #3C3C3C;
+    --gray_800: #2D2D2D;
+    --gray_900: #222222;
+    --red_100: #FCF3F3;
+    --red_200: #FDE3E3;
+    --red_300: #FCC5C1;
+    --red_400: #FA8680;
+    --red_500: #F65041;
+    --red_600: #DA291C;
+    --red_700: #C72519;
+    --red_800: #B52217;
+    --red_900: #83170E;
+    --blue_100: #C7F8FD;
+    --blue_200: #B2F3F6;
+    --blue_300: #8CDDE1;
+    --blue_400: #7CCCD0;
+    --blue_500: #0097a9;
+    --blue_600: #2592A3;
+    --blue_700: #208190;
+    --blue_800: #1A6E7A;
+    --blue_900: #145D66;
+    --yellow_100: #FFFCE0;
+    --yellow_200: #FEF9AC;
+    --yellow_300: #FDF072;
+    --yellow_400: #FDE458;
+    --yellow_500: #F4D327;
+    --yellow_600: #FFC721;
+    --yellow_700: #FAAD17;
+    --yellow_800: #FA9C2D;
+    --yellow_900: #FF8300;
+    --green_100: #F3FFFC;
+    --green_200: #DDF9ED;
+    --green_300: #B2E5D3;
+    --green_400: #8AE2C3;
+    --green_500: #46CEA4;
+    --green_600: #2DB58E;
+    --green_700: #27A17B;
+    --green_800: #218C67;
+    --green_900: #006B4F;
+    /*States*/
+    --bg_error: var(--red_100);
+    --tx_error: var(--red_800);
+    --bg_warning: var(--yellow_100);
+    --tx_warning: var(--red_800);
+    --bg_success: var(--green_100);
+    --tx_success: var(--green_900);
+    /*End*/
+    /*Buttons*/
+    --button_hover: rgba(0, 0, 0, .02);
+    --button_primary: var(--red_600);
+    --button_primary_hover: var(--red_800);
+    --button_secondary: var(--white);
+    --button_secondary_hover: var(--button_primary_hover);
+    --button_tertiary: var(--gray_400);
+    --tx_button_tertiary: var(--gray_800);
+    --button_tertiary_hover: var(--gray_900);
+    --radius_buttons: 500px;
+    --radius_icon_button: 500px;
+    /*End*/
+    /*Texts*/
+    --texts: var(--gray_900);
+    /*End*/
+    /*Links*/
+    --link: var(--blue_500);
+    --link_hover: rgba(0, 151, 169, .02);
+    /*End*/
+    /*Inputs fields and more inputs*/
+    --bg_inputs: var(--white);
+    --br_inputs: var(--gray_300);
+    --br_inputs_hover: var(--gray_400);
+    --pl_inputs: var(--gray_500);
+    --tx_inputs: var(--gray_900);
+    --radius_inputs: 12px;
+    --radius_checkbox: 4px;
+    --bg_option_select_hover: var(--gray_200);
+    --bg_option_select_multi: var(--gray_100);
+    /*End*/
+    /*Bread crumbs*/
+    --radius_breadcrumb: 4px;
+    --bg_breadcrumb_hover: rgba(0, 0, 0, .04);
+    /*End*/
+    /*Table*/
+    --bg_columns_table: var(--gray_100);
+    --bg_rows_table: var(--white);
+    --br_table: var(--gray_300);
+    --radius_table: 8px;
+    --bg_row_selected: rgba(218, 41, 28, .08);
+    --bg_row_blocked: var(--bg_disable);
+    /*End*/
+    /*Cards*/
+    --bg_card_element: var(--white);
+    --br_card_element: var(--gray_200);
+    --padding_card_element: 20px;
+    --radius_card_element: 16px;
+    /*End*/
+    /*Graphics*/
+    --bg_graphic: #f2f2f2;
+    --br_graphic: #EAEAEA;
+    /*End*/
+    /*Ornamentals*/
+    --ornamentals: var(--yellow_600);
+    /*End*/
+    /*Others*/
+    --shadow: 3px 3px 20px rgba(47, 47, 96, .15);
+    --opaque: rgba(0, 0, 0, .21);
+    --lightbox: rgba(0, 0, 0, .80);
+    --blur_lightbox: blur(3px);
+    /*End*/
+    /*Disables*/
+    --bg_disable: var(--gray_400);
+    --tx_disable: var(--gray_900);
+    /*End*/
+    /*Scroll*/
+    --scroll_track: var(--gray_300);
+    --scroll_thumb: var(--principal);
+    /*End*/
+    /*Basics*/
+    --white: #FFFFFF;
+    --black: #000000;
+    --pure_white: #FFFFFF;
+    --pure_black: #000000;
+    --principal: var(--red_600);
+    /*End*/
+    /*Mains*/
+    --sub_menu: var(--gray_100);
+    --br_main: var(--gray_200);
+    /*End*/
+    /*Margins and paddings*/
+    --margin_base: 4px;
+    --spacing_xxs: 8px;
+    --spacing_xs: 12px;
+    --spacing_m: 16px;
+    --spacing_xm: 20px;
+    --spacing_xxm: 24px;
+    --spacing_l: 32px;
+    --spacing_xl: 40px;
+    --spacing_xxl: 56px;
+    --spacing_xxxl: 72px;
+    /*End*/
+    color: var(--texts);
+    background-color: var(--bg_card_element);
+}
+
+@media (prefers-color-scheme: dark) {
+    body {
+        /*States*/
+        --bg_success: var(--green_200);
+        /*End*/
+        /*Buttons*/
+        --button_hover: rgba(255, 255, 255, .02);
+        --button_primary: var(--red_500);
+        --button_secondary_hover: var(--gray_800);
+        --tx_button_tertiary: var(--gray_400);
+        --button_tertiary_hover: var(--gray_100);
+        /*End*/
+        /*Texts*/
+        --texts: var(--gray_100);
+        /*End*/
+        /*Inputs fields and more inputs*/
+        --br_inputs: var(--gray_700);
+        --br_inputs_hover: var(--gray_800);
+        --pl_inputs: var(--gray_500);
+        --tx_inputs: var(--gray_100);
+        --bg_option_select_hover: var(--gray_800);
+        --bg_option_select_multi: var(--gray_900);
+        /*End*/
+        /*Bread crumbs*/
+        --bg_breadcrumb_hover: rgba(255, 255, 255, 0.04);
+        /*End*/
+        /*Table*/
+        --bg_columns_table: var(--gray_900);
+        --br_table: var(--gray_500);
+        --bg_row_selected: rgba(218, 41, 28, .16);
+        /*End*/
+        /*Cards*/
+        --bg_card_element: var(--gray_700);
+        --br_card_element: var(--gray_800);
+        /*End*/
+        /*Graphics*/
+        --bg_graphic: #726C6C;
+        --br_graphic: #404040;
+        /*End*/
+        /*Scroll*/
+        --scroll_track: var(--gray_600);
+        /*End*/
+        /*Main*/
+        --br_main: var(--gray_800);
+        /*End*/
+        /*Basics*/
+        --white: #000000;
+        --black: #FFFFFF;
+        --principal: var(--red_500);
+        --sub_menu: var(--gray_500);
+        /*End*/
+        background-color: var(--white);
+    }
+
+    img,
+    video {
+        -webkit-filter: brightness(.8) contrast(1.2);
+        filter: brightness(.8) contrast(1.2);
+    }
+}
+
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background-color: var(--scroll_track);
+    border-radius: 500px;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: var(--scroll_thumb);
+    border-radius: 500px;
+}
+
+p {
+    margin-bottom: 0px !important;
+    white-space: pre-wrap;
+}
+
