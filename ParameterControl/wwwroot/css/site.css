@@ -126,8 +126,8 @@ body {
     --bg_row_blocked: var(--bg_disable);
     /*End*/
     /*Cards*/
-    --bg_card_element: var(--white);
-    --br_card_element: var(--gray_200);
+    --bg_card_element: var(--gray_100);
+    --br_card_element: var(--gray_300);
     --padding_card_element: 20px;
     --radius_card_element: 16px;
     /*End*/
