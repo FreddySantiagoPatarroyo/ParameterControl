@@ -4,35 +4,38 @@
     ViewData["Title"] = "login";
 }
 
-<h1>login</h1>
 
-<h4>LoginViewModel</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="login">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="user" class="control-label"></label>
-                <input asp-for="user" class="form-control" />
-                <span asp-validation-for="user" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="password" class="control-label"></label>
-                <input asp-for="password" class="form-control" />
-                <span asp-validation-for="password" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
+<div class="login">  
+    <div class="box">
+        <div _ngcontent-xow-c136="" class="card_element animate fadeIn one">
+            <form class="content" asp-action="login">
+                <p class="logo icon_281 "></p>
+                <p class="title">Inicio de sesión</p>
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+                    <label asp-for="user" class="">Usuario</label>
+                    <input asp-for="user" class="input_login" />
+                    <span asp-validation-for="user" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="password" class="">Contraseña</label>
+                    <input asp-for="password" type="password" class="input_login" />
+                    <span asp-validation-for="password" class="text-danger"></span>
+                </div>
+                <div class="box_btn">
+                    <a class="btn_login" asp-area="" asp-controller="Home" asp-action="Index">Acceder</a>
+
+                </div>
+               
+            </form>
+        </div>
     </div>
-</div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+        
+ </div>
+        
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }
