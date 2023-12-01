@@ -104,10 +104,10 @@ label {
 }
 
 
-.btn_login:hover {
-    background-color: var(--button_primary_hover);
-    color: var(--pure_white);
-}
+    .btn_login:hover {
+        background-color: var(--button_primary_hover);
+        color: var(--pure_white);
+    }
 
 .text-danger {
     font-size: 15px;
