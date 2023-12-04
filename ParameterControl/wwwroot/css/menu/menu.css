@@ -1,1 +1,283 @@
-﻿
+﻿* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+}
+
+.menu {
+    background-color: var(--button_primary);
+    color: #fff;
+    height: 65px;
+}
+
+.claro_logo {
+    visibility: visible;
+    margin-top: -5px;
+}
+
+header .menu_logo img {
+    max-width: 100px;
+}
+
+.menu__container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 90%;
+    max-width: 1200px;
+    height: 100%;
+    margin: 0 auto;
+}
+
+.menu__links {
+    height: 100%;
+    transition: transform .5s;
+    display: flex;
+}
+
+.menu__item {
+    list-style: none;
+    position: relative;
+    height: 100%;
+    --clip: polygon(0 0, 100% 0, 100% 0, 0 0);
+    --transform: rotate(-90deg);
+}
+
+    .menu__item:hover {
+        --clip: polygon(0 0, 100% 0, 100% 100%, 0% 100%);
+        --transform: rotate(0);
+    }
+
+.menu__link {
+    margin-top: 22px;
+    margin-right: 8px;
+    color: var(--pure-white);
+    text-decoration: none;
+    padding: 7px 16px 6px;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+}
+
+    .menu__link:hover {
+        background-color: var(--button_primary_hover);
+        color: var(--pure-white);
+        border-radius: 20px;
+    }
+
+
+.menu__arrow {
+    transform: var(--transform);
+    transition: transform .3s;
+    display: block;
+    margin-left: 3px;
+}
+
+.menu__nesting {
+    list-style: none;
+    padding: 0;
+    transition: clip-path .3s;
+    clip-path: var(--clip);
+    position: absolute;
+    left: 0;
+    bottom: -10px;
+    width: max-content;
+    border-radius: 2px var(--spacing_m) 0px 0px;
+    transform: translateY(100%);
+    background-color: var(--bg_card_element);
+    box-shadow: 2px 4px 6px rgba(0, 0, 0, 0.1);
+    z-index: 100;
+}
+
+.menu__link--inside {
+    margin-top: -2px;
+    margin-right: 0;
+    height: 35px;
+    border-radius: 0px;
+    color: var(--black);
+    border: 1.5px solid var(--br_main);
+}
+
+    .menu__link--inside:hover {
+        background-color: var(--bg_option_select_hover);
+        border-radius: 0px;
+        color: var(--black);
+    }
+
+.menu__link--hover {
+    border-radius: 2px var(--spacing_m) 0px 0px;
+}
+
+    .menu__link--hover:hover {
+        border-radius: 2px var(--spacing_m) 0px 0px;
+        background-color: var(--bg_option_select_hover);
+    }
+
+.menu__hamburguer {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    padding: 0 15px;
+    cursor: pointer;
+    display: none;
+}
+
+.menu__img {
+    display: block;
+    margin-top: 5px;
+    width: 36px;
+}
+
+.menu_icon_text {
+    margin-top: 26px;
+    margin-bottom: 5px;
+    margin-left: 100px;
+    text-decoration: none;
+    color: var(--pure_white);
+    padding: 5px 16px 6px;
+    background-color: var(--button_primary_hover);
+    border-radius: 100px;
+    visibility: visible;
+}
+
+    .menu_icon_text:hover {
+        color: var( --button_primary);
+    }
+
+.menu_icon {
+    visibility: hidden;
+}
+
+.claro_logo_re {
+    visibility: hidden;
+}
+/*Responsive---------*/
+@media (max-width:910px) {
+    .menu__hamburguer {
+        display: flex;
+        z-index: 100;
+    }
+
+    .menu_logo {
+        margin-left: -350px;
+    }
+
+    .menu__item {
+        --clip: 0;
+        overflow: hidden;
+        border-radius: 0px;
+    }
+
+    .menu__item--active {
+        --transform: rotate(0);
+    }
+
+    .menu__item--show {
+        background-color: var(--bg_card_element);
+        color: var(--pure_black)
+    }
+
+
+    .menu__links {
+        position: fixed;
+        width: 100%;
+        top: 70px;
+        bottom: 0;
+        right: 0;
+        background-color: var(--white);
+        overflow-y: auto;
+        display: grid;
+        grid-auto-rows: max-content;
+        transform: translateX(100%);
+        box-shadow: var(--shadown);
+    }
+
+    .menu__links--show {
+        transform: unset;
+        width: 100%;
+    }
+
+    .menu__link {
+        padding: 7px 16px 6px;
+        height: auto;
+        margin-top: 0;
+        width: 100%;
+        color: var(--black);
+    }
+
+        .menu__link:hover {
+            background-color: var(--button_primary_hover);
+            color: var(--black);
+            border-radius: 0px;
+        }
+
+    .menu__arrow {
+        margin-left: auto;
+        margin-right: 20px;
+        color: var(--black)
+    }
+
+    .menu__nesting {
+        display: grid;
+        position: unset;
+        width: 100%;
+        transform: translateY(0);
+        height: 0;
+        transition: height .3s;
+        border-radius: 0px;
+        margin-top: 2px;
+    }
+
+    .menu__link--inside {
+        width: 90%;
+        margin-left: auto;
+        border-left: 1px solid #798499;
+    }
+
+    .menu_icon {
+        margin-top: 7px;
+        margin-bottom: 5px;
+        text-decoration: none;
+        width: 100%;
+        color: var(--pure_white);
+        padding: 5px 16px 6px;
+        background-color: var(--button_primary_hover);
+        border-radius: 100px;
+        visibility: visible;
+    }
+
+        .menu_icon:hover {
+            color: var( --button_primary);
+        }
+
+    .menu_icon_text {
+        display: none;
+        visibility: hidden;
+    }
+
+    .claro_logo_re {
+        visibility: visible;
+        margin-top: -7px;
+        margin-left: 8px;
+        max-width: 100px;
+    }
+
+    .claro_logo {
+        visibility: hidden;
+    }
+
+    .menu__inside {
+        margin-bottom: 0;
+    }
+
+    .menu__link--hover {
+        border-radius: 0px;
+    }
+}
