@@ -1,0 +1,11 @@
+﻿@using ParameterControl.Models.Policy
+@model TablePoliciesViewModel
+
+@{
+    ViewData["Title"] = "Politicas";
+}
+
+<partial name="_Menu"/>
+<div class="content_policies">
+    <partial name="_TablePolicies" model="Model" />
+</div>

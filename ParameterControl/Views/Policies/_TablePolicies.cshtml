@@ -1,0 +1,64 @@
+﻿@using System;
+@using System.Reflection;
+@using ParameterControl.Models.Policy
+@model TablePoliciesViewModel
+
+@{
+}
+
+<div class="card_policies card_element flex_box">
+    <div class="title_table">
+        <p>Politicas</p>
+        @if(Model.IsCreate){
+            <button class="button_create">Crear</button>
+        }
+    </div>
+
+    <div class="list">
+        <div class="element_table">
+            <div class="content_filter">
+            </div>
+            <div class="content_table">
+                <div class="tables flex_box">
+                    <div class="columns">
+                        @foreach (var Colunm in Model.Rows)
+                        {
+                            <div class="@Colunm.Name column flex_box order">
+                                <p class="text font_bold">@Colunm.Name</p>
+                                <i class="icon icon_154"></i>
+                            </div>
+                        }
+                        <div class="column actions flex_box">
+                            <p class="text font_bold">Acciones</p>
+                        </div>
+                    </div>
+                    @foreach (var Policy in Model.Data)
+                    {
+                        <div class="rows">
+                            @foreach (var Row in Policy.GetProperties())
+                            {
+                                <div class="row_table flex_box">
+                                    <p id="text_row" class="text flex_box">@Row?.GetValue(Policy)?.ToString()</p>
+                                </div>
+                            }
+                            <div class="row_table flex_box actions">
+                                <button>Ver</button>
+                                <button>Ver</button>
+                                <button>Ver</button>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+            <div class="pagination">
+            </div>
+        </div>
+        
+    </div>
+</div>
+
+@section scripts{
+    <script>
+       
+    </script>
+}

@@ -4,8 +4,9 @@
 @import url(../icons/css/icons-ie7-codes.css);
 @import url(../icons/css/icons-embedded.css);
 @import url(../icons/css/icons-codes.css);
-@import url('login/login.css');
-@import url('menu/menu.css');
+@import url('./login/login.css');
+@import url('./menu/menu.css');
+@import url(./policies/policies.css);
 
 * {
     padding: 0px 0px 0px;
@@ -260,3 +261,37 @@ p {
     white-space: pre-wrap;
 }
 
+.body{
+    position:relative;
+    width: 100%;
+    height: calc(100vh - 65px);
+    z-index: 1;
+}
+
+.flex_box {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
+}
+
+.card_element {
+    display: flex;
+    align-items: flex-start;
+    align-content: flex-start;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    padding: var(--padding_card_element);
+    background-color: var(--bg_card_element);
+    border: 1px solid var(--br_card_element);
+    border-radius: var(--radius_card_element);
+    box-shadow: var(--shadow);
+    height: 100%;
+}
+
+
+@media (min-width:910px){
+
+}
