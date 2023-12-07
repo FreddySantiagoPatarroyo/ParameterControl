@@ -16,7 +16,8 @@ namespace ParameterControl.Controllers.Policies
                     Description = "Descripcion ejemplo",
                     Conciliation = 123,
                     ControlType = "Emial",
-                    OperationType = "OperationType_1asdasdasdasdasdadasdasdasdad"
+                    OperationType = "OperationType_1asdasdasdasdasdadasdasdasdad",
+                    State = true
                 },
                 new Policy(){
                     Code = "COD_006",
@@ -24,7 +25,8 @@ namespace ParameterControl.Controllers.Policies
                     Description = "Description",
                     Conciliation = 123,
                     ControlType = "Voz",
-                    OperationType = "OperationType"
+                    OperationType = "OperationType",
+                    State = false
                 }
             };
 

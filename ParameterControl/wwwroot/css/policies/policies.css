@@ -4,7 +4,8 @@
     width: 100%;
     padding-top: 16px;
     padding-bottom: 16px;
-    z-index:1;
+    z-index:-1;
+    max-width: calc(100% - 2px);
 }
 
 .content_policies .card_policies {
@@ -118,6 +119,7 @@
 }
 
 .content_policies .card_policies .list .element_table .content_table .tables .rows .row_table.actions{
+    width: 194px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -142,8 +144,9 @@
 }
 
 @media (min-width:910px) {
-    .content_policies{
-    height:calc(100% - 65px);
+    .content_policies {
+        max-width: calc(100% - 40px);
+        height: calc(100% - 65px);
     }
 
     .content_policies .card_policies {

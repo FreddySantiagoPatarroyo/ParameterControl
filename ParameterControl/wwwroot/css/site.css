@@ -291,7 +291,36 @@ p {
     height: 100%;
 }
 
+.button_icon {
+    display: flex;
+    align-items: center;
+    align-content: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    width: 38px;
+    height: 38px;
+    background-color: transparent;
+    border: 1px solid transparent;
+    border-radius: var(--radius_icon_button);
+    cursor: pointer;
+    margin-left: 8px;
+}
 
-@media (min-width:910px){
+.button_icon .icon{
+    color: var(--pure_white);
+    font-size: 20px;
+}
 
+.button_icon:first-child{
+    margin-right: 0px;
+}
+
+.button_primary {
+    background-color: var(--button_primary);
+}
+
+@media (min-width:910px) {
+    .button_primary:hover {
+        background-color: var(--button_primary_hover);
+    }
 }

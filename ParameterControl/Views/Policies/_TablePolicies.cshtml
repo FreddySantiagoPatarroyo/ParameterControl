@@ -35,16 +35,22 @@
                     @foreach (var Policy in Model.Data)
                     {
                         <div class="rows">
-                            @foreach (var Row in Policy.GetProperties())
+                            @foreach (var Row in Policy.GetProperties(Model.Rows))
                             {
                                 <div class="row_table flex_box">
                                     <p id="text_row" class="text flex_box">@Row?.GetValue(Policy)?.ToString()</p>
                                 </div>
                             }
                             <div class="row_table flex_box actions">
-                                <button>Ver</button>
-                                <button>Ver</button>
-                                <button>Ver</button>
+                                <button class="button_icon button_primary" title="Ver">
+                                    <i class="icon icon_041"></i>
+                                </button>
+                                <button class="button_icon button_primary" title="Editar">
+                                    <i class="icon icon_106"></i>
+                                </button>
+                                <button class="button_icon button_primary" title="Inactivar">
+                                    <i class="icon icon_011"></i>
+                                </button>
                             </div>
                         </div>
                     }
