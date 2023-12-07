@@ -1,0 +1,71 @@
+﻿.flex_box {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
+}
+
+.card_element {
+    display: flex;
+    align-items: flex-start;
+    align-content: flex-start;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    padding: var(--padding_card_element);
+    background-color: var(--bg_card_element);
+    border: 1px solid var(--br_card_element);
+    border-radius: var(--radius_card_element);
+    box-shadow: var(--shadow);
+    height: 100%;
+}
+
+.button {
+    display: flex;
+    align-items: center;
+    align-content: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    min-width: 104px;
+    height: 38px;
+    padding: 0 16px;
+    background-color: transparent;
+    border: 1px solid transparent;
+    border-radius: var(--radius_buttons);
+    cursor: pointer;
+}
+
+.button_icon {
+    display: flex;
+    align-items: center;
+    align-content: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    width: 38px;
+    height: 38px;
+    background-color: transparent;
+    border: 1px solid transparent;
+    border-radius: var(--radius_icon_button);
+    cursor: pointer;
+    margin-left: 8px;
+}
+
+.button_icon .icon {
+    color: var(--pure_white);
+    font-size: 20px;
+}
+
+.button_icon:first-child {
+    margin-right: 0px;
+}
+
+.button_primary {
+    background-color: var(--button_primary);
+}
+
+@media (min-width:910px) {
+    .button_primary:hover {
+        background-color: var(--button_primary_hover);
+    }
+}
