@@ -15,11 +15,36 @@
             </button>
         }
     </div>
-
     <div class="list">
         <div class="element_table">
-            <div class="content_filter">
+            <div class="content_filter flex_box">
+                <div class="filter_primary">
+                    <div id="field" class="field">
+                        <label class="name font_normal" for="select_filter">Filtrar Por :</label>
+                        <div id="input" class="input">
+                            <input class="input_select" value="" type="text" placeholder="Seleccione una opción" onclick="showOptions()" readonly />
+                            <i class="icon icon_select icon_153"></i>
+                        </div>
+                        <div id="options" class="options">
+                            <ul class="options_list">
+                                <li class="option">
+                                    <p class="option_text">Seleccione una opción</p>
+                                </li>
+                                @foreach (var Colunm in Model.Rows)
+                                {
+                                    <li class="option">
+                                        <p class="option_text">@Colunm.Name</p>
+                                    </li>
+                                }
+                            </ul>
+                        </div>
+                        <div id="select_helper" class="select_helper" onclick="showOptions()"></div>
+                    </div>
+                </div>
+
+                <div class="filter_secondary"></div>
             </div>
+
             <div class="content_table">
                 <div class="tables flex_box">
                     <div class="columns">
@@ -65,8 +90,5 @@
     </div>
 </div>
 
-@section scripts{
-    <script>
-       
-    </script>
+@section Scripts {
 }

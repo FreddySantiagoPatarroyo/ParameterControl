@@ -5,11 +5,6 @@
 @import url(../icons/css/icons-embedded.css);
 @import url(../icons/css/icons-codes.css);
 
-@import url(./policies/policies.css);
-@import url(./helpers//helpers.css);
-@import url('./login/login.css');
-@import url('./menu/menu.css');
-
 * {
     padding: 0px 0px 0px;
     margin: 0px 0px 0px;

@@ -64,8 +64,113 @@
     background-color: var(--button_primary);
 }
 
+.field{
+    min-width:266px;
+    width: 100%;
+}
+
+.field .name{
+    width: 100%;
+    height: auto;
+    margin-bottom: 8px;
+    color: var(--tx_inputs);
+    font-size: 16px;
+    text-align: left;
+    text-transform: lowercase;
+    text-overflow: Ellipsis;
+    white-space: nowrap;
+}
+
+.field .input {
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    align-content: center;
+    justify-content: flex-start;
+    width: calc(100% - 0px);
+    height: 40px;
+    padding: 0px 16px;
+    background-color: var(--bg_inputs);
+    border: 1px solid var(--br_inputs);
+    border-radius: var(--radius_inputs);
+    z-index: 1;
+}
+
+.field .input .input_select{
+    width: 100%;
+    color: var(--tx_inputs);
+    margin-bottom: 3px;
+    font-size: 16px;
+    text-align: left;
+    background-color: transparent;
+    cursor: pointer;
+}
+
+.field .input .icon_select{
+    position: absolute;
+    right: 0;
+    margin-right: 16px;
+    z-index: -1;
+}
+
+.field .options{
+    position: absolute;
+    background-color: var(--bg_inputs);
+    border: 1px solid var(--br_inputs);
+    border-radius: var(--radius_inputs);
+    min-width: 100%;
+    display: none;
+    z-index: 3;
+}
+
+.field .options .options_list{
+    list-style: none;
+    padding: 0px;
+    height: auto;
+    max-height: 200px;
+    overflow-x: hidden;
+    margin: 0px;
+}
+
+.field .options .options_list .option{
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    align-content: center;
+    justify-content: flex-start;
+    width: calc(100% - 0px);
+    height: 40px;
+    padding: 0px 16px;
+    border-bottom: 1px solid var(--br_inputs);
+    cursor: pointer;
+}
+
+.field .select_helper{
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    height: 100vh;
+    width: 100vw;
+    background-color: transparent;
+    z-index: 2;
+    display: none;
+}
+
 @media (min-width:910px) {
     .button_primary:hover {
         background-color: var(--button_primary_hover);
+    }
+
+    .field {
+        width: auto;
+    }
+
+    .field .options{
+        min-width: 266px;
+    }
+
+    .field .options .options_list .option:hover{
+        background: var(--bg_option_select_hover);
     }
 }
