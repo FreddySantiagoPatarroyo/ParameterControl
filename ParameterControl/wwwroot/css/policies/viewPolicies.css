@@ -1,0 +1,13 @@
+﻿#box__policies-view{
+    display:none;
+}
+.form__container p{
+    font-weight: 800;
+}
+.btn_container .btn_cancel-view {
+    margin-right: 0px;
+    }
+.form__container .title_form{
+    font-weight: 400;
+    margin-top:20px;
+}

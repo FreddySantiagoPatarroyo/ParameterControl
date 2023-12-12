@@ -1,0 +1,25 @@
+﻿#box__policies-delete{
+    display: none;
+}
+.card__container h2 {
+    font-size: 24px;
+    font-weight: 700;
+    color: #F65041;
+}
+.title_form {
+    font-size: 16px;
+    font-weight: 100;
+}
+.btn_container .btn_update {
+    padding: 7px 20px;
+    border: none;
+    background-color: #F65041;
+    color: var(--pure_white);
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: 700;
+}
+
+    .btn_container .btn_update:hover {
+        transform: scale(1.1);
+    }

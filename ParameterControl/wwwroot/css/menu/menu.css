@@ -15,6 +15,7 @@ header {
     background-color: var(--button_primary);
     color: #fff;
     height: 65px;
+    z-index:100;
 }
 
 .claro_logo {
@@ -43,7 +44,7 @@ header .menu_logo img {
 .menu__item {
     list-style: none;
     position: relative;
-    height: 100%;
+    height: 80px;
     --clip: polygon(0 0, 100% 0, 100% 0, 0 0);
     --transform: rotate(-90deg);
 }
@@ -65,7 +66,7 @@ header .menu_logo img {
     font-size: 15px;
 }
 
-    .menu__link:hover {
+    .menu__link:hover    {
         background-color: var(--button_primary_hover);
         color: var(--pure-white);
         border-radius: 20px;
@@ -86,13 +87,13 @@ header .menu_logo img {
     clip-path: var(--clip);
     position: absolute;
     left: 0;
-    bottom: -10px;
+    bottom: 0;
     width: max-content;
-    border-radius: 2px var(--spacing_m) 0px 0px;
+    border-radius: 0px 20px 20px 20px;
     transform: translateY(100%);
     background-color: var(--bg_card_element);
     box-shadow: 2px 4px 6px rgba(0, 0, 0, 0.1);
-    z-index: 100;
+    z-index: 50;
 }
 
 .menu__link--inside {
@@ -111,11 +112,11 @@ header .menu_logo img {
     }
 
 .menu__link--hover {
-    border-radius: 2px var(--spacing_m) 0px 0px;
+    border-radius: 0px 20px 0px 0px;
 }
 
     .menu__link--hover:hover {
-        border-radius: 2px var(--spacing_m) 0px 0px;
+        border-radius: 0px 20px 0px 0px;
         background-color: var(--bg_option_select_hover);
     }
 
@@ -180,7 +181,15 @@ header .menu_logo img {
     max-width: 30px;
     filter: invert(100%);
 }
-  
+.menu__link--border {
+    border-radius: 0px 0px 20px 20px;
+}
+
+    .menu__link--border:hover {
+        border-radius: 0px 0px 20px 20px;
+        background-color: var(--bg_option_select_hover);
+    }
+
 
 
 /*Responsive---------*/
@@ -199,6 +208,8 @@ header .menu_logo img {
         --clip: 0;
         overflow: hidden;
         border-radius: 0px;
+        height: 100%;
+        margin-right: -10px;
     }
 
     .menu__item--active {
@@ -223,11 +234,13 @@ header .menu_logo img {
         grid-auto-rows: max-content;
         transform: translateX(100%);
         box-shadow: var(--shadown);
+        z-index: 100;
     }
 
     .menu__links--show {
         transform: unset;
         width: 100%;
+        
     }
 
     .menu__link {
@@ -268,7 +281,6 @@ header .menu_logo img {
     }
 
     .menu_icon {
-        margin-top: 3px;
         text-decoration: none;
         font-size:25px;
         color: var(--pure_white);
@@ -277,12 +289,11 @@ header .menu_logo img {
         visibility: visible;
         position: absolute;
         right: 15px;
+        top: 16px;
         font-weight: 100;
     }
 
-        .menu_icon:hover {
-            color: var( --button_primary);
-        }
+       
 
     .menu_icon_text {
         display: none;
@@ -305,6 +316,9 @@ header .menu_logo img {
     }
 
     .menu__link--hover {
+        border-radius: 0px;
+    }
+    .menu__link--border{
         border-radius: 0px;
     }
     .user {
