@@ -6,7 +6,7 @@
 @{
 }
 
-<div class="card_policies card_element flex_box">
+<div class="card_policies card_element flex_box" id="card_policies">
     <div class="flex_box titulation">
         <p class="title_table font_bold">Politicas</p>
         @if(Model.IsCreate){
@@ -75,13 +75,13 @@
                                 </div>
                             }
                             <div class="row_table flex_box actions">
-                                <button class="button_icon button_primary" title="Ver">
+                                <button class="button_icon button_primary" title="Ver" onclick="policiesViewShow()">
                                     <i class="icon icon_041"></i>
                                 </button>
-                                <button class="button_icon button_primary" title="Editar">
+                                <button class="button_icon button_primary" title="Editar" onclick="policiesShow()">
                                     <i class="icon icon_106"></i>
                                 </button>
-                                <button class="button_icon button_primary" title="Inactivar">
+                                <button class="button_icon button_primary" title="Inactivar" onclick="policiesDeleteShow()">
                                     <i class="icon icon_011"></i>
                                 </button>
                             </div>
@@ -92,9 +92,10 @@
             <div class="pagination">
             </div>
         </div>
-        
+       
     </div>
 </div>
 
 <script src="~/js/helpers.js" asp-append-version="true"></script>
+
 

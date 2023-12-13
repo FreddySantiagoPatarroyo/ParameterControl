@@ -4,6 +4,9 @@
 @import url(../icons/css/icons-ie7-codes.css);
 @import url(../icons/css/icons-embedded.css);
 @import url(../icons/css/icons-codes.css);
+@import url(policies/createPolicies.css);
+@import url(policies/viewPolicies.css);
+@import url(policies/deletePolicies.css);
 
 * {
     padding: 0px 0px 0px;
@@ -175,6 +178,9 @@ body {
     /*End*/
     color: var(--texts);
     background-color: var(--bg_card_element);
+
+    /*New*/
+    --radius_forms: 0px 20px 20px 20px;
 }
 
 @media (prefers-color-scheme: dark) {
