@@ -22,17 +22,17 @@
                     <div id="field" class="field">
                         <label class="name font_normal" for="select_filter">Filtrar Por :</label>
                         <div id="input" class="input">
-                            <input class="input_select" value="" type="text" placeholder="Seleccione una opción" onclick="showOptions()" readonly />
+                            <input class="input_select" id="input_select_filter" name="input_select_filter" value="" type="text" placeholder="Seleccione una opción" onclick="showOptions()" readonly/>
                             <i class="icon icon_select icon_153"></i>
                         </div>
                         <div id="options" class="options">
                             <ul class="options_list">
-                                <li class="option">
+                                <li onclick="selectOption('@null', '@null')" class="option">
                                     <p class="option_text">Seleccione una opción</p>
                                 </li>
                                 @foreach (var Colunm in Model.Rows)
                                 {
-                                    <li class="option">
+                                    <li onclick="selectOption('@Colunm.Name', '@Colunm.Value')" class="option">
                                         <p class="option_text">@Colunm.Name</p>
                                     </li>
                                 }
@@ -42,7 +42,13 @@
                     </div>
                 </div>
 
-                <div class="filter_secondary"></div>
+                <div class="filter_secondary">
+                    <div id="field" class="field">
+                        <div id="input" class="input">
+                            <input class="input_select" id="input_filter" name="input_filter" type="text" placeholder="Filtro"/>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <div class="content_table">
@@ -90,5 +96,5 @@
     </div>
 </div>
 
-@section Scripts {
-}
+<script src="~/js/helpers.js" asp-append-version="true"></script>
+
