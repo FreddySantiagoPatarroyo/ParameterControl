@@ -5,97 +5,99 @@
 
 @{
 }
-
-<div class="card_policies card_element flex_box" id="card_policies">
-    <div class="flex_box titulation">
-        <p class="title_table font_bold">Politicas</p>
-        @if(Model.IsCreate){
-            <button class="button button_primary">
-                <p class="text font_bold">Crear</p>
-            </button>
-        }
-    </div>
-    <div class="list">
-        <div class="element_table">
-            <div class="content_filter flex_box">
-                <div class="filter_primary">
-                    <div id="field" class="field">
-                        <label class="name font_normal" for="select_filter">Filtrar Por :</label>
-                        <div id="input" class="input">
-                            <input class="input_select" id="input_select_filter" name="input_select_filter" value="" type="text" placeholder="Seleccione una opción" onclick="showOptions()" readonly/>
-                            <i class="icon icon_select icon_153"></i>
-                        </div>
-                        <div id="options" class="options">
-                            <ul class="options_list">
-                                <li onclick="selectOption('@null', '@null')" class="option">
-                                    <p class="option_text">Seleccione una opción</p>
-                                </li>
-                                @foreach (var Colunm in Model.Rows)
-                                {
-                                    <li onclick="selectOption('@Colunm.Name', '@Colunm.Value')" class="option">
-                                        <p class="option_text">@Colunm.Name</p>
-                                    </li>
-                                }
-                            </ul>
-                        </div>
-                        <div id="select_helper" class="select_helper" onclick="showOptions()"></div>
-                    </div>
-                </div>
-
-                <div class="filter_secondary">
-                    <div id="field" class="field">
-                        <div id="input" class="input">
-                            <input class="input_select" id="input_filter" name="input_filter" type="text" placeholder="Filtro"/>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="content_table">
-                <div class="tables flex_box">
-                    <div class="columns">
-                        @foreach (var Colunm in Model.Rows)
-                        {
-                            <div class="@Colunm.Name column flex_box order">
-                                <p class="text font_bold">@Colunm.Name</p>
-                                <i class="icon icon_154"></i>
+<div class="content_policies">
+    <div class="card_policies card_element flex_box" id="card_policies">
+        <div class="flex_box titulation">
+            <p class="title_table font_bold">Politicas</p>
+            @if (Model.IsCreate)
+            {
+                <button class="button button_primary">
+                    <p class="text font_bold">Crear</p>
+                </button>
+            }
+        </div>
+        <div class="list">
+            <div class="element_table">
+                <div class="content_filter flex_box">
+                    <div class="filter_primary">
+                        <div id="field" class="field">
+                            <label class="name font_normal" for="select_filter">Filtrar Por :</label>
+                            <div id="input" class="input">
+                                <input class="input_select" id="input_select_filter" name="input_select_filter" value="" type="text" placeholder="Seleccione una opción" onclick="showOptions()" readonly />
+                                <i class="icon icon_select icon_153"></i>
                             </div>
-                        }
-                        <div class="column actions flex_box">
-                            <p class="text font_bold">Acciones</p>
+                            <div id="options" class="options">
+                                <ul class="options_list">
+                                    <li onclick="selectOption('@null', '@null')" class="option">
+                                        <p class="option_text">Seleccione una opción</p>
+                                    </li>
+                                    @foreach (var Colunm in Model.Rows)
+                                    {
+                                        <li onclick="selectOption('@Colunm.Name', '@Colunm.Value')" class="option">
+                                            <p class="option_text">@Colunm.Name</p>
+                                        </li>
+                                    }
+                                </ul>
+                            </div>
+                            <div id="select_helper" class="select_helper" onclick="showOptions()"></div>
                         </div>
                     </div>
-                    @foreach (var Policy in Model.Data)
-                    {
-                        <div class="rows">
-                            @foreach (var Row in Policy.GetProperties(Model.Rows))
+
+                    <div class="filter_secondary">
+                        <div id="field" class="field">
+                            <div id="input" class="input">
+                                <input class="input_select" id="input_filter" name="input_filter" type="text" placeholder="Filtro" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="content_table">
+                    <div class="tables flex_box">
+                        <div class="columns">
+                            @foreach (var Colunm in Model.Rows)
                             {
-                                <div class="row_table flex_box">
-                                    <p id="text_row" class="text flex_box">@Row?.GetValue(Policy)?.ToString()</p>
+                                <div class="@Colunm.Name column flex_box order">
+                                    <p class="text font_bold">@Colunm.Name</p>
+                                    <i class="icon icon_154"></i>
                                 </div>
                             }
-                            <div class="row_table flex_box actions">
-                                <button class="button_icon button_primary" title="Ver" onclick="policiesViewShow()">
-                                    <i class="icon icon_041"></i>
-                                </button>
-                                <button class="button_icon button_primary" title="Editar" onclick="policiesShow()">
-                                    <i class="icon icon_106"></i>
-                                </button>
-                                <button class="button_icon button_primary" title="Inactivar" onclick="policiesDeleteShow()">
-                                    <i class="icon icon_011"></i>
-                                </button>
+                            <div class="column actions flex_box">
+                                <p class="text font_bold">Acciones</p>
                             </div>
                         </div>
-                    }
+                        @foreach (var Policy in Model.Data)
+                        {
+                            <div class="rows">
+                                @foreach (var Row in Policy.GetProperties(Model.Rows))
+                                {
+                                    <div class="row_table flex_box">
+                                        <p id="text_row" class="text flex_box">@Row?.GetValue(Policy)?.ToString()</p>
+                                    </div>
+                                }
+                                <div class="row_table flex_box actions">
+                                    <button class="button_icon button_primary" title="Ver" onclick="policiesViewShow()">
+                                        <i class="icon icon_041"></i>
+                                    </button>
+                                    <button class="button_icon button_primary" title="Editar" onclick="policiesShow()">
+                                        <i class="icon icon_106"></i>
+                                    </button>
+                                    <button class="button_icon button_primary" title="Inactivar" onclick="policiesDeleteShow()">
+                                        <i class="icon icon_011"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+                <div class="pagination">
                 </div>
             </div>
-            <div class="pagination">
-            </div>
+
         </div>
-       
     </div>
 </div>
 
-<script src="~/js/helpers.js" asp-append-version="true"></script>
+<script src="~/js/helpers/Filter.js" asp-append-version="true"></script>
 
 

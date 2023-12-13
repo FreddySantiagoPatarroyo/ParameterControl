@@ -16,8 +16,7 @@
     margin-left: auto;
     margin-right: auto;
     z-index: 1;
-    border-radius: var(--radius_forms);
-    
+    border-radius: var(--radius_card_element);
 }
 
 .content_policies .card_policies .titulation {

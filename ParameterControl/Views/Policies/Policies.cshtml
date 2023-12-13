@@ -6,39 +6,35 @@
 }
 
 <partial name="_Menu"/>
-<div class="content_policies">
-    <partial name="_TablePolicies" model="Model" />
-</div>
 
-@section Scripts{
-    <script>
-        console.log("hola munfdo");
-    </script>
-}
+<partial name="_TablePolicies" model="Model" />
 
 <partial name="Actions/_CreatePolicy.cshtml" model="Model" />
 <partial name="Actions/_ViewPolicy.cshtml" model="Model" />
 <partial name="Actions/_DeletePolicy.cshtml" model="Model" />
 
-<script>
-    function policiesHidden() {
-        document.getElementById("box__policies").style.display = "none";
+@section Scripts {
+    <script>
+        function policiesHidden() {
+            document.getElementById("box__policies").style.display = "none";
 
-    }
-    function policiesShow() {
-        document.getElementById("box__policies").style.display = "block";
+        }
+        function policiesShow() {
+            document.getElementById("box__policies").style.display = "block";
 
-    }
-    function policiesViewShow() {
-        document.getElementById("box__policies-view").style.display = "block";
-    }
-    function policiesViewHidden() {
-        document.getElementById("box__policies-view").style.display = "none";
-    }
-    function policiesDeleteShow() {
-        document.getElementById("box__policies-delete").style.display = "block";
-    }
-    function policiesDeleteHidden() {
-        document.getElementById("box__policies-delete").style.display = "none";
-    }
-</script>
+        }
+        function policiesViewShow() {
+            document.getElementById("box__policies-view").style.display = "block";
+        }
+        function policiesViewHidden() {
+            document.getElementById("box__policies-view").style.display = "none";
+        }
+        function policiesDeleteShow() {
+            document.getElementById("box__policies-delete").style.display = "block";
+        }
+        function policiesDeleteHidden() {
+            document.getElementById("box__policies-delete").style.display = "none";
+        }
+    </script>
+}
+

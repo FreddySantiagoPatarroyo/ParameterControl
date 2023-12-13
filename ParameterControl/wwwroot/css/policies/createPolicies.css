@@ -10,22 +10,25 @@
     height: 100vh;
     background-color: #00000090;
     backdrop-filter: blur(3px);
-    z-index: -10;
+    z-index: 1;
 }
 
 .form__container {
     width: calc(100% - 40px);
     max-width: 450px;
+    height: auto;
+    max-height: calc(100vh - 100px);
     margin: 0 auto;
-    margin-top: 100px;
+    overflow: auto;
     background-color: var(--bg_card_element);
-    border-radius: var(--radius_forms);
+    border-radius: var(--radius_card_element);
     box-shadow: -7px 7px 15px #0000000b;
     padding: var(--padding_card_element);
     display: flex;
     justify-content: center;
     align-items: center;
-}
+    position: relative;
+    z-index: 10;}
 
 .card__container {
     width: 90%;
@@ -83,30 +86,14 @@
 .btn_container{
     display:flex;
     justify-content: center;
+    align-items: center;
     margin-top: 25px;
 }
-    .btn_container .btn_cancel {
-        margin-right: 25px;
-        padding: 7px 20px;
-        border: none;
-        background-color: #D9D9D9;
-        color: var(--pure_black);
-        border-radius: 10px;
-        font-size: 16px;
-        font-weight:700;
-    }
-    .btn_container .btn_cancel:hover  {
-        transform: scale(1.1);
-    }
-    .btn_container .btn_update {
-        padding: 7px 20px;
-        border: none;
-        background-color: #F65041;
-        color: var(--pure_white);
-        border-radius: 10px;
-        font-size: 16px;
-        font-weight: 700;
-    }
-        .btn_container .btn_update:hover {
-            transform: scale(1.1);
-        }
+
+.btn_container button {
+    margin-left: 16px;
+}
+
+.btn_container button:first-child{
+    margin-right:0px;
+}

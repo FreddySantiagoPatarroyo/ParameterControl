@@ -88,8 +88,8 @@ body {
     --button_hover: rgba(0, 0, 0, .02);
     --button_primary: var(--red_600);
     --button_primary_hover: var(--red_800);
-    --button_secondary: var(--white);
-    --button_secondary_hover: var(--button_primary_hover);
+    --button_secondary: var(--gray_200);
+    --button_secondary_hover: var(--gray_300);
     --button_tertiary: var(--gray_400);
     --tx_button_tertiary: var(--gray_800);
     --button_tertiary_hover: var(--gray_900);
@@ -178,7 +178,6 @@ body {
     /*End*/
     color: var(--texts);
     background-color: var(--bg_card_element);
-
     /*New*/
     --radius_forms: 0px 20px 20px 20px;
 }
@@ -191,7 +190,8 @@ body {
         /*Buttons*/
         --button_hover: rgba(255, 255, 255, .02);
         --button_primary: var(--red_500);
-        --button_secondary_hover: var(--gray_800);
+        --button_secondary: var(--gray_300);
+        --button_secondary_hover: var(--gray_100);
         --tx_button_tertiary: var(--gray_400);
         --button_tertiary_hover: var(--gray_100);
         /*End*/

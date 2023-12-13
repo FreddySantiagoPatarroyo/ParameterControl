@@ -64,8 +64,20 @@
     background-color: var(--button_primary);
 }
 
-.field{
-    min-width:266px;
+.button_secondary {
+    background-color: var(--button_secondary);
+}
+
+.button_primary .text {
+    color: var(--pure_white);
+}
+
+.button_secondary .text {
+    color: var(--pure_black);
+}
+
+.field {
+    min-width: 266px;
     width: 100%;
 }
 
@@ -162,6 +174,10 @@
         background-color: var(--button_primary_hover);
     }
 
+    .button_secondary:hover {
+        background-color: var(--button_secondary_hover);
+    }
+
     .field {
         width: auto;
     }
@@ -173,4 +189,5 @@
     .field .options .options_list .option:hover{
         background: var(--bg_option_select_hover);
     }
+
 }
