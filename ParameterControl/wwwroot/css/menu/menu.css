@@ -69,7 +69,6 @@ header .menu_logo img {
     .menu__link:hover    {
         background-color: var(--button_primary_hover);
         color: var(--pure-white);
-        border-radius: 20px;
     }
 
 
@@ -89,20 +88,18 @@ header .menu_logo img {
     left: 0;
     bottom: 0;
     width: max-content;
-    border-radius: 0px 20px 20px 20px;
     transform: translateY(100%);
-    background-color: var(--bg_card_element);
-    box-shadow: 2px 4px 6px rgba(0, 0, 0, 0.1);
     z-index: 50;
 }
 
 .menu__link--inside {
     margin-top: -2px;
     margin-right: 0;
-    height: 35px;
+    height: 43px;
     border-radius: 0px;
     color: var(--black);
-    border: 1.5px solid var(--br_main);
+    border: 2.5px solid var(--br_main);
+    background-color: var(--bg_card_element);
 }
 
     .menu__link--inside:hover {
@@ -113,6 +110,7 @@ header .menu_logo img {
 
 .menu__link--hover {
     border-radius: 0px 20px 0px 0px;
+    margin-top:1px;
 }
 
     .menu__link--hover:hover {
@@ -120,6 +118,12 @@ header .menu_logo img {
         background-color: var(--bg_option_select_hover);
     }
 
+.menu__inside--border{
+    border-radius: 0px 0px 20px 20px;
+}
+.menu__inside--border:hover {
+    border-radius: 0px 0px 20px 20px;
+}
 .menu__hamburguer {
     height: 100%;
     display: flex;
@@ -181,14 +185,6 @@ header .menu_logo img {
     max-width: 30px;
     filter: invert(100%);
 }
-.menu__link--border {
-    border-radius: 0px 0px 20px 20px;
-}
-
-    .menu__link--border:hover {
-        border-radius: 0px 0px 20px 20px;
-        background-color: var(--bg_option_select_hover);
-    }
 
 
 
@@ -210,6 +206,7 @@ header .menu_logo img {
         border-radius: 0px;
         height: 100%;
         margin-right: -10px;
+        border: 1px solid var(--br_main);
     }
 
     .menu__item--active {
@@ -271,13 +268,13 @@ header .menu_logo img {
         height: 0;
         transition: height .3s;
         border-radius: 0px;
-        margin-top: 2px;
     }
 
     .menu__link--inside {
         width: 90%;
         margin-left: auto;
-        border-left: 1px solid #798499;
+        margin-top: -1px;
+        border-left: 2.5px solid var(--br_main);
     }
 
     .menu_icon {
@@ -313,13 +310,12 @@ header .menu_logo img {
 
     .menu__inside {
         margin-bottom: 0;
+        margin-top: -1px;
     }
 
     .menu__link--hover {
         border-radius: 0px;
-    }
-    .menu__link--border{
-        border-radius: 0px;
+        margin-top:0;
     }
     .user {
         display: flex;
@@ -338,4 +334,7 @@ header .menu_logo img {
             max-width: 30px;
             filter: invert(100%);
         }
+    .menu__inside--border {
+        border-radius: 0px;
+    }
 }
