@@ -1,7 +1,12 @@
+using ParameterControl.Services.Policies;
+using ParameterControl.Services.Rows;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddTransient<IPoliciesServices, PoliciesServices>();
+builder.Services.AddScoped<Rows>();
 
 var app = builder.Build();
 
