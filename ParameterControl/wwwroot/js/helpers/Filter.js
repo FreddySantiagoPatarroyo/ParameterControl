@@ -18,9 +18,11 @@ const selectOption = (name, value) => {
     if (name == null || value == null || name == '' || value == '') {
         console.log("vacio");
         document.getElementById("input_select_filter").value = '';
+        document.getElementById('field_secundary').style.display = 'none';
     } else {
         console.log(value);
         document.getElementById("input_select_filter").value = name;
+        document.getElementById('field_secundary').style.display = 'block';
     }
 
     showOptions();

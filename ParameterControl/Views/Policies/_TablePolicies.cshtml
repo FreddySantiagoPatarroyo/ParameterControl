@@ -20,7 +20,7 @@
             <div class="element_table">
                 <div class="content_filter flex_box">
                     <div class="filter_primary">
-                        <div id="field" class="field">
+                        <div id="field_primary" class="field">
                             <label class="name font_normal" for="select_filter">Filtrar Por :</label>
                             <div id="input" class="input">
                                 <input class="input_select" id="input_select_filter" name="input_select_filter" value="" type="text" placeholder="Seleccione una opción" onclick="showOptions()" readonly />
@@ -44,7 +44,7 @@
                     </div>
 
                     <div class="filter_secondary">
-                        <div id="field" class="field">
+                        <div id="field_secundary" class="field">
                             <div id="input" class="input">
                                 <input class="input_select" id="input_filter" name="input_filter" type="text" placeholder="Filtro" />
                             </div>
@@ -68,32 +68,103 @@
                         </div>
                         @foreach (var Policy in Model.Data)
                         {
-                            <div class="rows">
-                                @foreach (var Row in Policy.GetProperties(Model.Rows))
-                                {
-                                    <div class="row_table flex_box">
-                                        <p id="text_row" class="text flex_box">@Row?.GetValue(Policy)?.ToString()</p>
+                            @if (Policy.State)
+                            {
+                                <div class="rows">
+                                    @foreach (var Row in Policy.GetProperties(Model.Rows))
+                                    {
+                                        <div class="row_table flex_box">
+                                            <p id="text_row" class="text flex_box">@Row?.GetValue(Policy)?.ToString()</p>
+                                        </div>
+                                    }
+                                    <div class="row_table flex_box actions">
+                                        <button class="button_icon button_primary" title="Ver" onclick="policiesViewShow()">
+                                            <i class="icon icon_041"></i>
+                                        </button>
+                                        <button class="button_icon button_primary" title="Editar" onclick="policiesShow()">
+                                            <i class="icon icon_106"></i>
+                                        </button>
+                                        <button class="button_icon button_primary" title="Inactivar" onclick="policiesDeleteShow()">
+                                            <i class="icon icon_196"></i>
+                                        </button>
                                     </div>
-                                }
-                                <div class="row_table flex_box actions">
-                                    <button class="button_icon button_primary" title="Ver" onclick="policiesViewShow()">
-                                        <i class="icon icon_041"></i>
-                                    </button>
-                                    <button class="button_icon button_primary" title="Editar" onclick="policiesShow()">
-                                        <i class="icon icon_106"></i>
-                                    </button>
-                                    <button class="button_icon button_primary" title="Inactivar" onclick="policiesDeleteShow()">
-                                        <i class="icon icon_011"></i>
-                                    </button>
                                 </div>
-                            </div>
+                            }
+                            else
+                            {
+                                <div class="rows disabled">
+                                    @foreach (var Row in Policy.GetProperties(Model.Rows))
+                                    {
+                                        <div class="row_table flex_box">
+                                            <p id="text_row" class="text flex_box">@Row?.GetValue(Policy)?.ToString()</p>
+                                        </div>
+                                    }
+                                    <div class="row_table flex_box actions">
+                                        <button class="button_icon button_primary disabled" title="Ver" onclick="policiesViewShow()" disabled>
+                                            <i class="icon icon_041"></i>
+                                        </button>
+                                        <button class="button_icon button_primary disabled" title="Editar" onclick="policiesShow()" disabled>
+                                            <i class="icon icon_106"></i>
+                                        </button>
+                                        <button class="button_icon button_primary" title="Activar" onclick="policiesDeleteShow()">
+                                            <i class="icon icon_199"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            }
+
                         }
                     </div>
                 </div>
-                <div class="pagination">
+                <div class="pagination flex_box">
+                    <div id="pagination_mobile" class="custom_pagination pagination_mobile flex_box">
+                        <button class="button button_primary">
+                            <i class="icon text icon_160"></i>
+                            <p class="text font_bold">Anterior</p>
+                        </button>
+                        <p class="pages font_light">
+                            pagina 1 de 2
+                        </p>
+                        <button class="button button_primary">
+                            <p class="text font_bold">Siguiente</p>
+                            <i class="icon text icon_158"></i>
+                        </button>
+                    </div>
+                    <div id="pagination_desktop" class="custom_pagination pagination_desktop flex_box">
+                        <div class="navigator flex_box">
+                            <button class="button button_primary">
+                                <p class="text font_bold">Primera</p>
+                            </button>
+                            <button class="button_icon button_primary">
+                                <i class="icon text icon_152"></i>
+                            </button>
+                            <div class="pages flex_box">
+                                <button class="button_icon button_primary">
+                                    <p class="text font_bold">1</p>
+                                </button>
+                                <button class="button_icon button_primary">
+                                    <p class="text font_bold">2</p>
+                                </button>
+                                <button class="button_icon button_primary">
+                                    <p class="text font_bold">3</p>
+                                </button>
+                                <button class="button_icon button_primary">
+                                    <p class="text font_bold">4</p>
+                                </button>
+                                <button class="button_icon button_primary">
+                                    <p class="text font_bold">5</p>
+                                </button>
+                            </div>
+                            <button class="button_icon button_primary">
+                                <i class="icon text icon_151"></i>
+                            </button>
+                            <button class="button button_primary">
+                                <p class="text font_bold">Ultima</p>
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
-
         </div>
     </div>
 </div>
