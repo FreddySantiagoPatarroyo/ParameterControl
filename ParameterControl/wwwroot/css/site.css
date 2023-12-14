@@ -7,6 +7,7 @@
 @import url(policies/createPolicies.css);
 @import url(policies/viewPolicies.css);
 @import url(policies/deletePolicies.css);
+@import url(policies/actions.css);
 
 * {
     padding: 0px 0px 0px;
