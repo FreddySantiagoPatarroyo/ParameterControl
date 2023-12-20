@@ -1,5 +1,10 @@
-﻿@{
+﻿@using ParameterControl.Models.Policy;
+@model Policy;
+
+@{
 }
+
+<partial name="_Menu" />
 
 <div id="box__policies-view">
     <div class="bg__blur"></div>
@@ -13,19 +18,19 @@
 
             <div class="form_group">
                 <p class="title_form">Código:</p>
-                <p>COD_001</p>
+                <p>@Model.Code</p>
             </div>
             <div class="form_groupm">
-                <p class="title_form">Descripción:</p>
-                <p>Descripcion ejemplo</p>
+                <p class="title_form">Nombre:</p>
+                <p>@Model.Name</p>
             </div>
             <div class="form_group">
-                <p class="title_form">Objetivos:</p>
-                <p>Objetivo Ejemplo</p>
+                <p class="title_form">Descripción:</p>
+                <p>@Model.Description</p>
             </div>
 
             <div class="btn_container">
-                <button class="button button_secondary btn_cancel-view" onclick="policiesViewHidden()"><p class="text font_bold">Cancelar</p></button>
+                <a class="button button_secondary btn_cancel-view" asp-controller="Policies" asp-action="Policies"><p class="text font_bold">Cancelar</p></a>
             </div>
         </div>
     </form>

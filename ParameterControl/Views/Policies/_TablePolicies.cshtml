@@ -46,7 +46,7 @@
                     <div class="filter_secondary">
                         <div id="field_secundary" class="field">
                             <div id="input" class="input">
-                                <input class="input_select" id="input_filter" name="input_filter" type="text" placeholder="Filtro" />
+                                <input class="input_select" id="input_filter" name="input_filter" type="text" placeholder="Filtro" onkeyup="selectValue()" />
                             </div>
                         </div>
                     </div>
@@ -78,15 +78,15 @@
                                         </div>
                                     }
                                     <div class="row_table flex_box actions">
-                                        <button class="button_icon button_primary" title="Ver" onclick="policiesViewShow()">
+                                        <a class="button_icon button_primary" title="Ver" asp-controller="Policies" asp-action="View" asp-route-id="@Policy.Id">
                                             <i class="icon icon_041"></i>
-                                        </button>
-                                        <button class="button_icon button_primary" title="Editar" onclick="policiesShow()">
+                                        </a>
+                                        <a class="button_icon button_primary" title="Editar" asp-controller="Policies" asp-action="Edit" asp-route-id="@Policy.Id">
                                             <i class="icon icon_106"></i>
-                                        </button>
-                                        <button class="button_icon button_primary" title="Inactivar" onclick="policiesDeleteShow()">
+                                        </a>
+                                        <a class="button_icon button_primary" title="Inactivar" asp-controller="Policies" asp-action="Desactive" asp-route-id="@Policy.Id">
                                             <i class="icon icon_196"></i>
-                                        </button>
+                                        </a>
                                     </div>
                                 </div>
                             }
@@ -100,10 +100,10 @@
                                         </div>
                                     }
                                     <div class="row_table flex_box actions">
-                                        <button class="button_icon button_primary disabled" title="Ver" onclick="policiesViewShow()" disabled>
+                                        <button class="button_icon button_primary disabled" title="Ver" disabled>
                                             <i class="icon icon_041"></i>
                                         </button>
-                                        <button class="button_icon button_primary disabled" title="Editar" onclick="policiesShow()" disabled>
+                                        <button class="button_icon button_primary disabled" title="Editar" disabled>
                                             <i class="icon icon_106"></i>
                                         </button>
                                         <button class="button_icon button_primary" title="Activar" onclick="policiesDeleteShow()">
@@ -112,7 +112,6 @@
                                     </div>
                                 </div>
                             }
-
                         }
                     </div>
                 </div>

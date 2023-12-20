@@ -4,9 +4,9 @@
 @import url(../icons/css/icons-ie7-codes.css);
 @import url(../icons/css/icons-embedded.css);
 @import url(../icons/css/icons-codes.css);
-@import url(policies/createPolicies.css);
+@import url(policies/editPolicies.css);
 @import url(policies/viewPolicies.css);
-@import url(policies/deletePolicies.css);
+@import url(policies/desactivePolicies.css);
 @import url(policies/actions.css);
 
 * {

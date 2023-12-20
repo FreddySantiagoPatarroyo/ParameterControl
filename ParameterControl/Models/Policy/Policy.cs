@@ -5,6 +5,7 @@ namespace ParameterControl.Models.Policy
 {
     public class Policy
     {
+        public string Id { get; set; } = string.Empty;
         public string Code { get; set; } = string.Empty;
         public string Name { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
@@ -31,7 +32,6 @@ namespace ParameterControl.Models.Policy
             //Obtener la propiedades que se van a mostrar en la tabla
             for (int i = 0; i < DiscardProperties.Length; i++)
             {
-                Console.WriteLine(DiscardProperties[i]);
                 ListProperties = ListProperties.Where((propertie) => propertie != DiscardProperties[i]).ToArray();
             }
 

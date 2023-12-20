@@ -94,13 +94,13 @@
     margin-top: 25px;
 }
 
-    .btn_container button {
-        margin-left: 16px;
-    }
+.btn_container .button {
+    margin-left: 16px;
+}
 
-        .btn_container button:first-child {
-            margin-right: 0px;
-        }
+.btn_container .button:first-child {
+    margin-right: 0px;
+}
 
 @media (max-width:910px) {
     .form__container {

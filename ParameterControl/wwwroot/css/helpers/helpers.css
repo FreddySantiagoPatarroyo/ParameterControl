@@ -34,6 +34,7 @@
     border: 1px solid transparent;
     border-radius: var(--radius_buttons);
     cursor: pointer;
+    text-decoration: none;
 }
 
 .button_icon {

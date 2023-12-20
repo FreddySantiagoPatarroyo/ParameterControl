@@ -1,5 +1,10 @@
-﻿@{
+﻿@using ParameterControl.Models.Policy;
+@model Policy;
+
+@{
 }
+
+<partial name="_Menu" />
 
 <div id="box__policies-delete">
     <div class="bg__blur"></div>
@@ -9,11 +14,11 @@
             <div class="header_form">
                 <img src="/images/iconApple.png" />
                 <h1>Desactivar Politica</h1>
-                <h2>¿Está seguro de desactivar la politica?</h2>
+                <h2>¿Está seguro de desactivar la politica @Model.Name?</h2>
             </div>
 
             <div class="btn_container">
-                <button class="button button_secondary" onclick="policiesDeleteHidden()"><p class="text font_bold">Cancelar</p></button>
+                <a class="button button_secondary" asp-controller="Policies" asp-action="Policies"><p class="text font_bold">Cancelar</p></a>
                 <button class="button button_primary"><p class="text font_bold">Desactivar</p></button>
             </div>
         </div>
