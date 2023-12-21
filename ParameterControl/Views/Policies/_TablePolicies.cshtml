@@ -52,7 +52,7 @@
                     </div>
                 </div>
 
-                <div class="content_table">
+                <div id="table" class="content_table">
                     <div class="tables flex_box">
                         <div class="columns">
                             @foreach (var Colunm in Model.Rows)
@@ -66,51 +66,59 @@
                                 <p class="text font_bold">Acciones</p>
                             </div>
                         </div>
-                        @foreach (var Policy in Model.Data)
+                        @if(Model.Data.Count() == 0)
                         {
-                            @if (Policy.State)
+                            <p>No hay data</p>
+                            <p>@Model.Data.Count()</p>
+                        }
+                        else
+                        {
+                            @foreach (var Policy in Model.Data)
                             {
-                                <div class="rows">
-                                    @foreach (var Row in Policy.GetProperties(Model.Rows))
-                                    {
-                                        <div class="row_table flex_box">
-                                            <p id="text_row" class="text flex_box">@Row?.GetValue(Policy)?.ToString()</p>
+                                @if (Policy.State)
+                                {
+                                    <div class="rows">
+                                        @foreach (var Row in Policy.GetProperties(Model.Rows))
+                                        {
+                                            <div class="row_table flex_box">
+                                                <p id="text_row" class="text flex_box">@Row?.GetValue(Policy)?.ToString()</p>
+                                            </div>
+                                        }
+                                        <div class="row_table flex_box actions">
+                                            <a class="button_icon button_primary" title="Ver" asp-controller="Policies" asp-action="View" asp-route-id="@Policy.Id">
+                                                <i class="icon icon_041"></i>
+                                            </a>
+                                            <a class="button_icon button_primary" title="Editar" asp-controller="Policies" asp-action="Edit" asp-route-id="@Policy.Id">
+                                                <i class="icon icon_106"></i>
+                                            </a>
+                                            <a class="button_icon button_primary" title="Inactivar" asp-controller="Policies" asp-action="Desactive" asp-route-id="@Policy.Id">
+                                                <i class="icon icon_196"></i>
+                                            </a>
                                         </div>
-                                    }
-                                    <div class="row_table flex_box actions">
-                                        <a class="button_icon button_primary" title="Ver" asp-controller="Policies" asp-action="View" asp-route-id="@Policy.Id">
-                                            <i class="icon icon_041"></i>
-                                        </a>
-                                        <a class="button_icon button_primary" title="Editar" asp-controller="Policies" asp-action="Edit" asp-route-id="@Policy.Id">
-                                            <i class="icon icon_106"></i>
-                                        </a>
-                                        <a class="button_icon button_primary" title="Inactivar" asp-controller="Policies" asp-action="Desactive" asp-route-id="@Policy.Id">
-                                            <i class="icon icon_196"></i>
-                                        </a>
                                     </div>
-                                </div>
-                            }
-                            else
-                            {
-                                <div class="rows disabled">
-                                    @foreach (var Row in Policy.GetProperties(Model.Rows))
-                                    {
-                                        <div class="row_table flex_box">
-                                            <p id="text_row" class="text flex_box">@Row?.GetValue(Policy)?.ToString()</p>
+                                }
+                                else
+                                {
+                                    <div class="rows disabled">
+                                        @foreach (var Row in Policy.GetProperties(Model.Rows))
+                                        {
+                                            <div class="row_table flex_box">
+                                                <p id="text_row" class="text flex_box">@Row?.GetValue(Policy)?.ToString()</p>
+                                            </div>
+                                        }
+                                        <div class="row_table flex_box actions">
+                                            <button class="button_icon button_primary disabled" title="Ver" disabled>
+                                                <i class="icon icon_041"></i>
+                                            </button>
+                                            <button class="button_icon button_primary disabled" title="Editar" disabled>
+                                                <i class="icon icon_106"></i>
+                                            </button>
+                                            <button class="button_icon button_primary" title="Activar" onclick="policiesDeleteShow()">
+                                                <i class="icon icon_199"></i>
+                                            </button>
                                         </div>
-                                    }
-                                    <div class="row_table flex_box actions">
-                                        <button class="button_icon button_primary disabled" title="Ver" disabled>
-                                            <i class="icon icon_041"></i>
-                                        </button>
-                                        <button class="button_icon button_primary disabled" title="Editar" disabled>
-                                            <i class="icon icon_106"></i>
-                                        </button>
-                                        <button class="button_icon button_primary" title="Activar" onclick="policiesDeleteShow()">
-                                            <i class="icon icon_199"></i>
-                                        </button>
                                     </div>
-                                </div>
+                                }
                             }
                         }
                     </div>
@@ -168,6 +176,14 @@
     </div>
 </div>
 
+<script>
+    var x = document.getElementById("table");
+    var w = x.contentDocument;
+    w.location.reload();
+</script>
+
 <script src="~/js/helpers/Filter.js" asp-append-version="true"></script>
+
+
 
 
