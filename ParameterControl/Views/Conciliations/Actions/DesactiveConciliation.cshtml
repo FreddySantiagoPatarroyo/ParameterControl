@@ -1,0 +1,26 @@
+﻿@using ParameterControl.Models.Conciliation;
+@model Conciliation;
+
+@{
+}
+
+<partial name="_Menu" />
+
+<div id="box__conciliations-delete">
+    <div class="bg__blur"></div>
+    <form class="form__container">
+
+        <div class="card__container">
+            <div class="header_form">
+                <img src="/images/iconApple.png" />
+                <h1>Desactivar Politica</h1>
+                <h2>¿Está seguro de desactivar la conciliacion @Model.Name?</h2>
+            </div>
+
+            <div class="btn_container">
+                <a class="button button_secondary" asp-controller="Conciliations" asp-action="Conciliations"><p class="text font_bold">Cancelar</p></a>
+                <button class="button button_primary"><p class="text font_bold">Desactivar</p></button>
+            </div>
+        </div>
+    </form>
+</div>
