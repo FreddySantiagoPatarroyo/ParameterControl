@@ -1,7 +1,7 @@
 ﻿@using System;
 @using System.Reflection;
-@using ParameterControl.Models.Policy
-@model TablePoliciesViewModel
+@using ParameterControl.Models.Scenery
+@model TableScenariosViewModel
 
 @{
 }
@@ -73,25 +73,25 @@
                         }
                         else
                         {
-                            @foreach (var Policy in Model.Data)
+                            @foreach (var Scenary in Model.Data)
                             {
-                                @if (Policy.State)
+                                @if (Scenary.State)
                                 {
                                     <div class="rows">
-                                        @foreach (var Row in Policy.GetProperties(Model.Rows))
+                                        @foreach (var Row in Scenary.GetProperties(Model.Rows))
                                         {
                                             <div class="row_table flex_box">
-                                                <p id="text_row" class="text flex_box">@Row?.GetValue(Policy)?.ToString()</p>
+                                                <p id="text_row" class="text flex_box">@Row?.GetValue(Scenary)?.ToString()</p>
                                             </div>
                                         }
                                         <div class="row_table flex_box actions">
-                                            <a class="button_icon button_primary" title="Ver" asp-controller="Policies" asp-action="View" asp-route-id="@Policy.Id">
+                                            <a class="button_icon button_primary" title="Ver" asp-controller="Scenarios" asp-action="View" asp-route-id="@Scenary.Id">
                                                 <i class="icon icon_041"></i>
                                             </a>
-                                            <a class="button_icon button_primary" title="Editar" asp-controller="Policies" asp-action="Edit" asp-route-id="@Policy.Id">
+                                            <a class="button_icon button_primary" title="Editar" asp-controller="Scenarios" asp-action="Edit" asp-route-id="@Scenary.Id">
                                                 <i class="icon icon_106"></i>
                                             </a>
-                                            <a class="button_icon button_primary" title="Inactivar" asp-controller="Policies" asp-action="Desactive" asp-route-id="@Policy.Id">
+                                            <a class="button_icon button_primary" title="Inactivar" asp-controller="Scenarios" asp-action="Desactive" asp-route-id="@Scenary.Id">
                                                 <i class="icon icon_196"></i>
                                             </a>
                                         </div>
@@ -100,10 +100,10 @@
                                 else
                                 {
                                     <div class="rows disabled">
-                                        @foreach (var Row in Policy.GetProperties(Model.Rows))
+                                        @foreach (var Row in Scenary.GetProperties(Model.Rows))
                                         {
                                             <div class="row_table flex_box">
-                                                <p id="text_row" class="text flex_box">@Row?.GetValue(Policy)?.ToString()</p>
+                                                <p id="text_row" class="text flex_box">@Row?.GetValue(Scenary)?.ToString()</p>
                                             </div>
                                         }
                                         <div class="row_table flex_box actions">
@@ -113,7 +113,7 @@
                                             <button class="button_icon button_primary disabled" title="Editar" disabled>
                                                 <i class="icon icon_106"></i>
                                             </button>
-                                            <button class="button_icon button_primary" title="Activar" onclick="policiesDeleteShow()">
+                                            <button class="button_icon button_primary" title="Activar" onclick="scenariosDeleteShow()">
                                                 <i class="icon icon_199"></i>
                                             </button>
                                         </div>
@@ -184,6 +184,5 @@
 </script>
 
 <script src="~/js/helpers/Filter.js" asp-append-version="true"></script>
-
 
 

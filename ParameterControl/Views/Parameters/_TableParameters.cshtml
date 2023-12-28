@@ -1,14 +1,14 @@
 ﻿@using System;
 @using System.Reflection;
-@using ParameterControl.Models.Policy
-@model TablePoliciesViewModel
+@using ParameterControl.Models.Parameter
+@model TableParametersViewModel
 
 @{
 }
 <div class="content_policies">
     <div class="card_policies card_element flex_box" id="card_policies">
         <div class="flex_box titulation">
-            <p class="title_table font_bold">Politicas</p>
+            <p class="title_table font_bold">Parametros</p>
             @if (Model.IsCreate)
             {
                 <button class="button button_primary">
@@ -73,25 +73,25 @@
                         }
                         else
                         {
-                            @foreach (var Policy in Model.Data)
+                            @foreach (var Parameter in Model.Data)
                             {
-                                @if (Policy.State)
+                                @if (Parameter.State)
                                 {
                                     <div class="rows">
-                                        @foreach (var Row in Policy.GetProperties(Model.Rows))
+                                        @foreach (var Row in Parameter.GetProperties(Model.Rows))
                                         {
                                             <div class="row_table flex_box">
-                                                <p id="text_row" class="text flex_box">@Row?.GetValue(Policy)?.ToString()</p>
+                                                <p id="text_row" class="text flex_box">@Row?.GetValue(Parameter)?.ToString()</p>
                                             </div>
                                         }
                                         <div class="row_table flex_box actions">
-                                            <a class="button_icon button_primary" title="Ver" asp-controller="Policies" asp-action="View" asp-route-id="@Policy.Id">
+                                            <a class="button_icon button_primary" title="Ver" asp-controller="Parameters" asp-action="View" asp-route-id="@Parameter.Id">
                                                 <i class="icon icon_041"></i>
                                             </a>
-                                            <a class="button_icon button_primary" title="Editar" asp-controller="Policies" asp-action="Edit" asp-route-id="@Policy.Id">
+                                            <a class="button_icon button_primary" title="Editar" asp-controller="Parameters" asp-action="Edit" asp-route-id="@Parameter.Id">
                                                 <i class="icon icon_106"></i>
                                             </a>
-                                            <a class="button_icon button_primary" title="Inactivar" asp-controller="Policies" asp-action="Desactive" asp-route-id="@Policy.Id">
+                                            <a class="button_icon button_primary" title="Inactivar" asp-controller="Parameters" asp-action="Desactive" asp-route-id="@Parameter.Id">
                                                 <i class="icon icon_196"></i>
                                             </a>
                                         </div>
@@ -100,10 +100,10 @@
                                 else
                                 {
                                     <div class="rows disabled">
-                                        @foreach (var Row in Policy.GetProperties(Model.Rows))
+                                        @foreach (var Row in Parameter.GetProperties(Model.Rows))
                                         {
                                             <div class="row_table flex_box">
-                                                <p id="text_row" class="text flex_box">@Row?.GetValue(Policy)?.ToString()</p>
+                                                <p id="text_row" class="text flex_box">@Row?.GetValue(Parameter)?.ToString()</p>
                                             </div>
                                         }
                                         <div class="row_table flex_box actions">
@@ -113,7 +113,7 @@
                                             <button class="button_icon button_primary disabled" title="Editar" disabled>
                                                 <i class="icon icon_106"></i>
                                             </button>
-                                            <button class="button_icon button_primary" title="Activar" onclick="policiesDeleteShow()">
+                                            <button class="button_icon button_primary" title="Activar" onclick="parametersDeleteShow()">
                                                 <i class="icon icon_199"></i>
                                             </button>
                                         </div>
@@ -184,6 +184,4 @@
 </script>
 
 <script src="~/js/helpers/Filter.js" asp-append-version="true"></script>
-
-
 

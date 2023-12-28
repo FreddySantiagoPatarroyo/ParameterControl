@@ -71,7 +71,7 @@
     position: relative;
     width: 100%;
     max-width: calc(100vw - 2px);
-    height: calc(100vh - 500px);
+    height: calc(100vh - 470px);
     border: 1px solid var(--br_table);
     border-radius: var(--radius_table);
     overflow-x: auto;

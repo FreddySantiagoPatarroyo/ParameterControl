@@ -1,3 +1,5 @@
+using ParameterControl.Services.Scenarios;
+using ParameterControl.Services.Parameters;
 using ParameterControl.Services.Conciliations;
 using ParameterControl.Services.Policies;
 using ParameterControl.Services.Rows;
@@ -8,6 +10,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddTransient<IPoliciesServices, PoliciesServices>();
 builder.Services.AddTransient<IConciliationsServices, ConciliationsServices>();
+builder.Services.AddTransient<IParametersService, ParametersService>();
+builder.Services.AddTransient<IScenariosServices, ScenariosServices>();
 builder.Services.AddScoped<Rows>();
 
 var app = builder.Build();

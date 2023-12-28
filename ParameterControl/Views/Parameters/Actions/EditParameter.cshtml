@@ -1,0 +1,48 @@
+﻿@using ParameterControl.Models.Parameter;
+@model Parameter;
+
+@{
+}
+
+<partial name="_Menu" />
+
+<div id="box__policies">
+    <div class="bg__blur"></div>
+    <form asp-controller="Parameters" class="form__container">
+        <div class="card__container">
+            <div class="header_form">
+                <img src="/images/iconApple.png" />
+                <h1>Editar Parametro</h1>
+            </div>
+
+            <div class="form_group">
+                <label for="parameter--parameters" asp-for="_Parameters" class="label_form">Parametro*</label>
+                <input type="text" class="code" id="parameter--parameters" name="_Parameters" asp-for="_Parameters" readonly />
+            </div>
+            <div class="form_group">
+                <label for="value--parameters" asp-for="Value" class="label_form">Valor*</label>
+                <input type="text" class="description" id="value--parameters" name="Value" asp-for="Value" readonly />
+            </div>
+            <div class="form_group">
+                <label for="description--parameters" asp-for="Description" class="label_form">Descripcion*</label>
+                <textarea class="objective" id="description--parameters" name="Description" asp-for="Description"></textarea>
+            </div>
+            <div class="form_group">
+                <label for="type--parameters" asp-for="ParameterType" class="label_form">Tipo*</label>
+                <textarea class="objective" id="type--parameters" name="ParameterType" asp-for="ParameterType"></textarea>
+            </div>
+
+            <p class="note_text"><span>Nota: </span>Los campos con (*) son obligatorios</p>
+
+            <div class="btn_container">
+                <a class="button button_secondary" asp-controller="Parameters" asp-action="Parameters"><p class="text font_bold">Cancelar</p></a>
+                <button class="button button_primary"><p class="text font_bold">Actualizar</p></button>
+            </div>
+        </div>
+    </form>
+</div>
+
+
+<script>
+
+</script>
