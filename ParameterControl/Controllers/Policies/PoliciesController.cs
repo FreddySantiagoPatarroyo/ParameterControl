@@ -66,6 +66,14 @@ namespace ParameterControl.Controllers.Policies
         }
 
         [HttpGet]
+        public async Task<ActionResult> Active(string id)
+        {
+            Policy policy = await policiesServices.GetPolicyById(id);
+
+            return View("Actions/ActivePolicy", policy);
+        }
+
+        [HttpGet]
         public async Task<ActionResult> Edit(string id)
         {
             Policy policy = await policiesServices.GetPolicyById(id);
@@ -79,6 +87,14 @@ namespace ParameterControl.Controllers.Policies
             Policy policy = await policiesServices.GetPolicyById(id);
 
             return View("Actions/ViewPolicy", policy);
+        }
+
+        [HttpGet]
+        public async Task<ActionResult> FilterPolicies()
+        {
+            List<Row> Rows = rows.RowsPolicies();
+
+            return View("FilterPolicies", Rows);
         }
 
         [HttpPost]

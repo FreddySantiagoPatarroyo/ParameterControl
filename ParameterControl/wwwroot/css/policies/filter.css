@@ -1,0 +1,11 @@
+﻿#box_policies_filter {
+    display: block;
+}
+
+
+#box_policies_filter .form__container .card__container .content_filter .filter_secondary .field{
+    margin: 16px;
+    display: none;
+}
+
+

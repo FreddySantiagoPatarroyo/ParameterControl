@@ -57,7 +57,12 @@
     z-index: 3;
 }
 
-.content_policies .card_policies .list .element_table .content_filter .filter_primary,
+.content_policies .card_policies .list .element_table .content_filter .button{
+    width: 100%;
+    text-align:center;
+}
+
+/*.content_policies .card_policies .list .element_table .content_filter .filter_primary,
 .content_policies .card_policies .list .element_table .content_filter .filter_secondary{
     display: contents;
 }
@@ -65,7 +70,7 @@
 .content_policies .card_policies .list .element_table .content_filter .filter_secondary .field{
     margin-left: 8px;
     display: none;
-}
+}*/
 
 .content_policies .card_policies .list .element_table .content_table {
     position: relative;
@@ -277,6 +282,11 @@
         align-content: flex-end;
         align-items: flex-end;
         justify-content: flex-start;
+    }
+
+    .content_policies .card_policies .list .element_table .content_filter .button {
+        width: auto;
+        text-align: center;
     }
 
     .content_policies .card_policies .list .element_table .content_table {

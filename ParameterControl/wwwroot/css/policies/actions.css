@@ -12,7 +12,7 @@
 .form__container {
     width: calc(100% - 40px);
     max-width: 450px;
-    max-height: calc(100vh - 100px);
+    max-height: calc(100vh - 150px);
     margin: 100px auto;
     overflow: auto;
     background-color: var(--bg_card_element);
@@ -37,15 +37,15 @@
     text-align: center;
 }
 
-    .header_form img {
-        max-width: 80px;
-    }
+.header_form img {
+    max-width: 80px;
+}
 
-    .header_form h1 {
-        font-size: 24px;
-        font-weight: 700;
-        color: var(--black);
-    }
+.header_form h1 {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--black);
+}
 
 .form__container .label_form {
     font-size: 16px;
