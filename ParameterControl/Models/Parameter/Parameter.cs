@@ -1,27 +1,22 @@
 ﻿using ParameterControl.Models.Rows;
 using System.Reflection;
 
-namespace ParameterControl.Models.Conciliation
+namespace ParameterControl.Models.Parameter
 {
-    public class Conciliation
+    public class Parameter
     {
         public string Id { get; set; } = string.Empty;
-        public string Code { get; set; } = string.Empty;
-        public string Name { get; set; } = string.Empty;
+        public string _Parameters { get; set; } = string.Empty;
+        public string Value { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
-        public string Conciliation_ { get; set; } = string.Empty;
-        public string Package { get; set; } = string.Empty;
-        public string Email { get; set; } = string.Empty;
-        public string Destination { get; set; } = string.Empty;
-        public string Policies { get; set; } = string.Empty;
-        public string Required { get; set; } = string.Empty;
-        public bool Result { get; set; } = false;
+        public string ParameterType { get; set; } = string.Empty;
         public bool State { get; set; } = false;
 
+        //Obtener listado de las propiedades de este modelo que se mostraran en la tabla
         public PropertyInfo[] GetProperties(List<Row> Columns)
         {
-            PropertyInfo[] ListProperties = typeof(Conciliation).GetProperties();
-            PropertyInfo[] DiscardProperties = typeof(Conciliation).GetProperties();
+            PropertyInfo[] ListProperties = typeof(Parameter).GetProperties();
+            PropertyInfo[] DiscardProperties = typeof(Parameter).GetProperties();
 
             //Obtener las propiedades que se descartan
             foreach (Row Column in Columns)

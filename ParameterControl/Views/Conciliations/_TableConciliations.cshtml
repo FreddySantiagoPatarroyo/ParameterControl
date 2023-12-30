@@ -1,14 +1,14 @@
 ﻿@using System;
 @using System.Reflection;
-@using ParameterControl.Models.Policy
-@model TablePoliciesViewModel
+@using ParameterControl.Models.Conciliation
+@model TableConciliationViewModel
 
 @{
 }
 <div class="content_policies">
-    <div class="card_policies card_element flex_box" id="card_policies">
+    <div class="card_policies card_element flex_box" id="card_conciliation">
         <div class="flex_box titulation">
-            <p class="title_table font_bold">Politicas</p>
+            <p class="title_table font_bold">Conciliaciones</p>
             @if (Model.IsCreate)
             {
                 <button class="button button_primary">
@@ -19,7 +19,7 @@
         <div class="list">
             <div class="element_table">
                 <div class="content_filter flex_box">
-                   @* <div class="filter_primary">
+                    <div class="filter_primary">
                         <div id="field_primary" class="field">
                             <label class="name font_normal" for="select_filter">Filtrar Por :</label>
                             <div id="input" class="input">
@@ -49,11 +49,7 @@
                                 <input class="input_select" id="input_filter" name="input_filter" type="text" placeholder="Filtro" onkeyup="selectValue()" />
                             </div>
                         </div>
-                    </div> *@
-                    <a class="button button_primary" title="Filtrar" asp-controller="Policies" asp-action="FilterPolicies">
-                        <p class="text font_bold">Filtrar Tabla</p>
-                    </a>
-
+                    </div>
                 </div>
 
                 <div id="table" class="content_table">
@@ -77,25 +73,25 @@
                         }
                         else
                         {
-                            @foreach (var Policy in Model.Data)
+                            @foreach (var Conciliation in Model.Data)
                             {
-                                @if (Policy.State)
+                                @if (Conciliation.State)
                                 {
                                     <div class="rows">
-                                        @foreach (var Row in Policy.GetProperties(Model.Rows))
+                                        @foreach (var Row in Conciliation.GetProperties(Model.Rows))
                                         {
                                             <div class="row_table flex_box">
-                                                <p id="text_row" class="text flex_box">@Row?.GetValue(Policy)?.ToString()</p>
+                                                <p id="text_row" class="text flex_box">@Row?.GetValue(Conciliation)?.ToString()</p>
                                             </div>
                                         }
                                         <div class="row_table flex_box actions">
-                                            <a class="button_icon button_primary" title="Ver" asp-controller="Policies" asp-action="View" asp-route-id="@Policy.Id">
+                                            <a class="button_icon button_primary" title="Ver" asp-controller="Conciliations" asp-action="View" asp-route-id="@Conciliation.Id">
                                                 <i class="icon icon_041"></i>
                                             </a>
-                                            <a class="button_icon button_primary" title="Editar" asp-controller="Policies" asp-action="Edit" asp-route-id="@Policy.Id">
+                                            <a class="button_icon button_primary" title="Editar" asp-controller="Conciliations" asp-action="Edit" asp-route-id="@Conciliation.Id">
                                                 <i class="icon icon_106"></i>
                                             </a>
-                                            <a class="button_icon button_primary" title="Inactivar" asp-controller="Policies" asp-action="Desactive" asp-route-id="@Policy.Id">
+                                            <a class="button_icon button_primary" title="Inactivar" asp-controller="Conciliations" asp-action="Desactive" asp-route-id="@Conciliation.Id">
                                                 <i class="icon icon_196"></i>
                                             </a>
                                         </div>
@@ -104,10 +100,10 @@
                                 else
                                 {
                                     <div class="rows disabled">
-                                        @foreach (var Row in Policy.GetProperties(Model.Rows))
+                                        @foreach (var Row in Conciliation.GetProperties(Model.Rows))
                                         {
                                             <div class="row_table flex_box">
-                                                <p id="text_row" class="text flex_box">@Row?.GetValue(Policy)?.ToString()</p>
+                                                <p id="text_row" class="text flex_box">@Row?.GetValue(Conciliation)?.ToString()</p>
                                             </div>
                                         }
                                         <div class="row_table flex_box actions">
@@ -117,9 +113,9 @@
                                             <button class="button_icon button_primary disabled" title="Editar" disabled>
                                                 <i class="icon icon_106"></i>
                                             </button>
-                                            <a class="button_icon button_primary" title="Activar" asp-controller="Policies" asp-action="Active" asp-route-id="@Policy.Id">
+                                            <button class="button_icon button_primary" title="Activar" onclick="conciliationsDeleteShow()">
                                                 <i class="icon icon_199"></i>
-                                            </a>
+                                            </button>
                                         </div>
                                     </div>
                                 }
@@ -180,5 +176,12 @@
     </div>
 </div>
 
+<script>
+    var x = document.getElementById("table");
+    var w = x.contentDocument;
+    console.log(x);
+    w.location.reload();
+</script>
 
+<script src="~/js/helpers/Filter.js" asp-append-version="true"></script>
 

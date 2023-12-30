@@ -1,9 +1,12 @@
-﻿using ParameterControl.Models.Conciliation;
-using ParameterControl.Models.Policy;
+﻿using Newtonsoft.Json.Linq;
+using ParameterControl.Models.Conciliation;
+using System.Collections.Generic;
+using System.Data.Common;
+using System.Reflection;
 
 namespace ParameterControl.Services.Conciliations
 {
-    public class ConciliationsServices
+    public class ConciliationsServices : IConciliationsServices
     {
         private List<Conciliation> conciliations = new List<Conciliation>();
         public ConciliationsServices()
@@ -13,7 +16,7 @@ namespace ParameterControl.Services.Conciliations
                 new Conciliation(){
                     Id = "1",
                     Code = "COD_001",
-                    Name = "Politica_1",
+                    Name = "Conciliacion_1",
                     Description = "Descripcion ejemplo",
                     Conciliation_ = "111",
                     Result = false,
@@ -31,7 +34,7 @@ namespace ParameterControl.Services.Conciliations
                 new Conciliation(){
                     Id = "3",
                     Code = "COD_001",
-                    Name = "Politica_1",
+                    Name = "Conciliacion_1",
                     Description = "Descripcion ejemplo",
                     Conciliation_ = "333",
                     Result = false,
@@ -49,7 +52,7 @@ namespace ParameterControl.Services.Conciliations
                 new Conciliation(){
                     Id = "5",
                     Code = "COD_001",
-                    Name = "Politica_1",
+                    Name = "Conciliacion_1",
                     Description = "Descripcion ejemplo",
                     Conciliation_ = "123",
                     Result = false,
@@ -67,7 +70,7 @@ namespace ParameterControl.Services.Conciliations
                 new Conciliation(){
                     Id = "7",
                     Code = "COD_001",
-                    Name = "Politica_1",
+                    Name = "Conciliacion_1",
                     Description = "Descripcion ejemplo",
                     Conciliation_ = "234",
                     Result = false,

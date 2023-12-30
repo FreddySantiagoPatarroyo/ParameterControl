@@ -1,0 +1,60 @@
+﻿@using ParameterControl.Models.Conciliation;
+@model Conciliation;
+
+@{
+}
+
+<partial name="_Menu" />
+
+<div id="box__conciliations">
+    <div class="bg__blur"></div>
+    <form asp-controller="Conciliations" class="form__container">
+        <div class="card__container">
+            <div class="header_form">
+                <img src="/images/iconApple.png" />
+                <h1>Editar Conciliación</h1>
+            </div>
+
+            <div class="form_group">
+                <label for="code--conciliations" asp-for="Code" class="label_form">Código*</label>
+                <input type="text" class="code" id="code--conciliations" name="Code" asp-for="Code" readonly />
+            </div>
+            <div class="form_group">
+                <label for="description--conciliations" asp-for="Name" class="label_form">Nombre*</label>
+                <input type="text" class="description" id="description--conciliations" name="Name" asp-for="Name" readonly />
+            </div>
+            <div class="form_group">
+                <label for="package--conciliations" asp-for="Package" class="label_form">Paquete*</label>
+                <input type="text" class="objective" id="package--conciliations" name="Package" asp-for="Package">
+            </div>
+            <div class="form_group">
+                <label for="email--conciliations" asp-for="Email" class="label_form">Email Usuario Asignado*</label>
+                <input type="text" class="objective" id="email--conciliations" name="Email" asp-for="Email">
+            </div>
+            <div class="form_group">
+                <label for="destination--conciliations" asp-for="Destination" class="label_form">Destino</label>
+                <input type="text" class="objective" id="destination--conciliations" name="Destination" asp-for="Destination">
+            </div>
+            <div class="form_group">
+                <label for="policies--conciliations" asp-for="Policies" class="label_form">Politica*</label>
+                <input type="text" class="objective" id="policies--conciliations" name="Policies" asp-for="Policies">
+            </div>
+            <div class="form_group">
+                <label for="required--conciliations" asp-for="Required" class="label_form">Requiere aprovación de resultado*</label>
+                <input type="text" class="objective" id="required--conciliations" name="Required" asp-for="Required">
+            </div>
+
+            <p class="note_text"><span>Nota: </span>Los campos con (*) son obligatorios</p>
+
+            <div class="btn_container">
+                <a class="button button_secondary" asp-controller="Conciliations" asp-action="Conciliations"><p class="text font_bold">Cancelar</p></a>
+                <button class="button button_primary"><p class="text font_bold">Actualizar</p></button>
+            </div>
+        </div>
+    </form>
+</div>
+
+
+<script>
+
+</script>

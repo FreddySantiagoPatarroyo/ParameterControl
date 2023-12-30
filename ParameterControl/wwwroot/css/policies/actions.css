@@ -12,7 +12,7 @@
 .form__container {
     width: calc(100% - 40px);
     max-width: 450px;
-    max-height: calc(100vh - 150px);
+    max-height: calc(100vh - 155px);
     margin: 100px auto;
     overflow: auto;
     background-color: var(--bg_card_element);
