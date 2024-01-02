@@ -38,7 +38,7 @@ namespace ParameterControl.Controllers.Policies
             TablePolicies.Rows = rows.RowsPolicies();
 
             TablePolicies.Filter = true;
-            TablePolicies.IsCreate = false;
+            TablePolicies.IsCreate = true;
             TablePolicies.IsActivate = true;
             TablePolicies.IsEdit = true;
             TablePolicies.IsInactivate = true;
@@ -71,7 +71,7 @@ namespace ParameterControl.Controllers.Policies
             TablePolicies.Rows = rows.RowsPolicies();
 
             TablePolicies.Filter = true;
-            TablePolicies.IsCreate = false;
+            TablePolicies.IsCreate = true;
             TablePolicies.IsActivate = true;
             TablePolicies.IsEdit = true;
             TablePolicies.IsInactivate = true;

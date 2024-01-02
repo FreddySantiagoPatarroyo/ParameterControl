@@ -198,6 +198,7 @@ body {
         /*End*/
         /*Texts*/
         --texts: var(--gray_100);
+        --tx_error: var(--red_600);
         /*End*/
         /*Inputs fields and more inputs*/
         --br_inputs: var(--gray_700);
