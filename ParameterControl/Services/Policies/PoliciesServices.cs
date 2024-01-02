@@ -112,13 +112,13 @@ namespace ParameterControl.Services.Policies
         {
             List<Policy> policiesFilter = new List<Policy>();
 
-            if((filterModel.Filter.Value == null || filterModel.Filter.Value == "" || filterModel.ValueFilter == null || filterModel.ValueFilter == ""))
+            if((filterModel.ColumValue == null || filterModel.ColumValue == "" || filterModel.ValueFilter == null || filterModel.ValueFilter == ""))
             {
                 policiesFilter = policies;
             }
             else
             {
-                switch (filterModel.Filter.Value)
+                switch (filterModel.ColumValue)
                 {
                     case "Code":
                         policiesFilter = applyFilter(filterModel);
@@ -148,7 +148,7 @@ namespace ParameterControl.Services.Policies
 
         public List<Policy> applyFilter(FilterViewModel filterModel)
         {
-            var property = typeof(Policy).GetProperty(filterModel.Filter.Value);
+            var property = typeof(Policy).GetProperty(filterModel.ColumValue);
 
             List<Policy> policiesFilter = new List<Policy>();
 

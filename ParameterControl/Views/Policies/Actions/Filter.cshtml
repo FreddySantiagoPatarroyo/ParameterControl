@@ -1,0 +1,147 @@
+﻿@using System;
+@using ParameterControl.Models.Filter;
+@model FilterViewModel;
+
+@{
+    ViewData["Title"] = "Filtrar Politicas";
+}
+
+<partial name="_Menu" />
+
+<div id="box_policies_filter">
+    <div class="bg__blur"></div>
+    <div class="form__container">
+        <div class="card__container">
+            <div class="header_form">
+                <img src="/images/iconApple.png" />
+                <h1>Filtar Tabla Politicas</h1>
+            </div>
+            <form asp-controller="Policies" asp-action="FilterPolicies">
+                <div class="content_filter flex_box">
+                    <div class="filter_primary">
+                        <div id="field_primary" class="field">
+                            <label asp-for="ColumValue" class="name font_normal" for="select_filter">Filtrar Por :</label>
+                            <div id="input" class="input">
+                                <input class="input_select" id="input_select_filter" name="input_select_filter" placeholder="Seleccione una opción" onclick="showOptions()" readonly />
+                                <input type="hidden" id="input_select_filter_value" name="ColumValue" asp-for="ColumValue" />
+                                <i class="icon icon_select icon_153"></i>
+                            </div>
+                            <div id="options" class="options">
+                                <ul class="options_list">
+                                    <li onclick="selectOption('@null', '@null')" class="option">
+                                        <p class="option_text">Seleccione una opción</p>
+                                    </li>
+                                    @foreach (var Colunm in Model.Rows)
+                                    {
+                                        <li onclick="selectOption('@Colunm.Name', '@Colunm.Value')" class="option">
+                                            <p class="option_text">@Colunm.Name</p>
+                                        </li>
+                                    }
+                                </ul>
+                            </div>
+                            <div id="select_helper" class="select_helper" onclick="showOptions()"></div>
+                        </div>
+                    </div>
+
+                    <div class="filter_secondary">
+                        <div id="field_secundary" class="field">
+                            <div id="input" class="input">
+                                <input class="input" id="input_filter" name="ValueFilter" asp-for="ValueFilter" placeholder="Valor filtro" autocomplete="off" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="btn_container">
+                    <a class="button button_secondary" asp-controller="Policies" asp-action="Policies"><p class="text font_bold">Cancelar</p></a>
+                    <button type="submit" class="button button_primary"><p class="text font_bold">Filtrar</p></button>
+                </div>
+            </form>
+            
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        let viewOptionsFilter = false;
+
+        const UrlFilter = 'FilterPolicies';
+
+        let filterInfo = {
+            Filter: {
+                Name: "",
+                Value: ""
+            },
+            ValueFilter: ""
+        }
+
+        const showOptions = () => {
+
+            viewOptionsFilter = !viewOptionsFilter;
+
+            if (viewOptionsFilter) {
+                document.getElementById('options').style.display = 'block';
+                document.getElementById('select_helper').style.display = 'block';
+            } else {
+                document.getElementById('options').style.display = 'none';
+                document.getElementById('select_helper').style.display = 'none';
+            }
+        }
+
+        const selectOption = (name, value) => {
+
+            if (name == null || value == null || name == '' || value == '') {
+                console.log("vacio");
+                document.getElementById("input_select_filter").value = '';
+                document.getElementById("input_select_filter_value").value = '';
+                document.getElementById("input_filter").value = '';
+                document.getElementById('field_secundary').style.display = 'none';
+                filterInfo.Filter.Name = "";
+                filterInfo.Filter.Value = "";
+                filterInfo.ValueFilter = document.getElementById("input_filter").value;
+                console.log(filterInfo);
+            } else {
+                console.log(value);
+                document.getElementById("input_select_filter").value = name;
+                document.getElementById("input_select_filter_value").value = value;
+                document.getElementById("input_filter").value = '';
+                document.getElementById('field_secundary').style.display = 'block';
+                filterInfo.Filter.Name = name;
+                filterInfo.Filter.Value = value;
+                console.log(filterInfo);
+            }
+
+            showOptions();
+        }
+
+        const selectValue = () => {
+            const value = document.getElementById("input_filter").value;
+            if (value == null || value == "") {
+                console.log("vacio");
+                filterInfo.ValueFilter = "";
+                console.log(filterInfo);
+            } else {
+                console.log(value);
+                filterInfo.ValueFilter = document.getElementById("input_filter").value;
+                console.log(filterInfo);
+            }
+        }
+
+        // const filter = () => {
+        //     console.log(UrlFilter)
+        //     sendFilterBack(filterInfo);
+        // }
+
+        // const sendFilterBack = async (filter) => {
+        //     var data = JSON.stringify(filter);
+
+        //     await fetch(UrlFilter, {
+        //         method: 'POST',
+        //         body: data,
+        //         headers: {
+        //             "Content-Type": "application/json"
+        //         }
+        //     })
+        // }
+    </script>
+}

@@ -2,6 +2,10 @@
     display: block;
 }
 
+#box_policies_filter .form__container .card__container .content_filter{
+    height: 200px;
+    margin-top: -50px;
+}
 
 #box_policies_filter .form__container .card__container .content_filter .filter_secondary .field{
     margin: 16px;

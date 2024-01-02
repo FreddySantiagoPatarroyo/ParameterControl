@@ -5,6 +5,7 @@ using ParameterControl.Models.Policy;
 using ParameterControl.Models.Rows;
 using ParameterControl.Services.Policies;
 using ParameterControl.Services.Rows;
+using System.Collections.Generic;
 
 namespace ParameterControl.Controllers.Policies
 {
@@ -28,23 +29,11 @@ namespace ParameterControl.Controllers.Policies
         }
 
         [HttpGet]
-        public async Task<ActionResult> Policies(int id)
+        public async Task<ActionResult> Policies()
         {
-            _logger.LogInformation("Hola");
+
+            TablePolicies.Data = await policiesServices.GetPolicies();
             
-            _logger.LogInformation(id.ToString());
-            
-            
-            if (id > 0)
-            {
-                _logger.LogInformation("No Es nulo");
-                TablePolicies.Data = new List<Policy>();
-                //TablePolicies.Data = policies;
-            }
-            else
-            {
-                TablePolicies.Data = await policiesServices.GetPolicies();
-            }
 
             TablePolicies.Rows = rows.RowsPolicies();
 
@@ -54,7 +43,42 @@ namespace ParameterControl.Controllers.Policies
             TablePolicies.IsEdit = true;
             TablePolicies.IsInactivate = true;
 
+            ViewBag.ApplyFilter = false;
+
             return View("Policies", TablePolicies);
+        }
+
+        public async Task<ActionResult> PoliciesFilter(string filterColunm = "", string filterValue = "")
+        {
+
+            _logger.LogInformation(filterColunm);
+            _logger.LogInformation(filterValue);
+
+            if(filterColunm == null || filterColunm == "" || filterValue == null || filterValue =="")
+            {
+                return RedirectToAction("Policies");
+            }
+
+            FilterViewModel filter = new FilterViewModel()
+            {
+                ColumValue = filterColunm,
+                ValueFilter = filterValue
+            };
+
+            List<Policy> policiesFilter = await policiesServices.GetFilterPolicies(filter);
+            TablePolicies.Data = policiesFilter;
+
+            TablePolicies.Rows = rows.RowsPolicies();
+
+            TablePolicies.Filter = true;
+            TablePolicies.IsCreate = false;
+            TablePolicies.IsActivate = true;
+            TablePolicies.IsEdit = true;
+            TablePolicies.IsInactivate = true;
+
+            ViewBag.ApplyFilter = true;
+
+            return View("PoliciesFilter", TablePolicies);
         }
 
         [HttpGet]
@@ -63,6 +87,13 @@ namespace ParameterControl.Controllers.Policies
             Policy policy = await policiesServices.GetPolicyById(id);
 
             return View("Actions/DesactivePolicy", policy);
+        }
+
+
+        [HttpPost]
+        public async Task<ActionResult> DesactivePolicy(string id)
+        {
+            return RedirectToAction("Policies");
         }
 
         [HttpGet]
@@ -81,6 +112,13 @@ namespace ParameterControl.Controllers.Policies
             return View("Actions/EditPolicy", policy);
         }
 
+        [HttpPost]
+        public async Task<ActionResult> Edit(Policy policy)
+        {
+            Console.WriteLine(policy.Description);
+            return RedirectToAction("Policies");
+        }
+
         [HttpGet]
         public async Task<ActionResult> View(string id)
         {
@@ -90,31 +128,30 @@ namespace ParameterControl.Controllers.Policies
         }
 
         [HttpGet]
-        public async Task<ActionResult> FilterPolicies()
+        public ActionResult Filter()
         {
-            List<Row> Rows = rows.RowsPolicies();
+            FilterViewModel model = new FilterViewModel()
+            {
+                Rows = rows.RowsPolicies()
 
-            return View("FilterPolicies", Rows);
+        };
+
+            return View("Actions/Filter", model);
         }
 
         [HttpPost]
-        public async Task<ActionResult> FilterTable([FromBody] FilterViewModel dataFilter)
+        public async Task<ActionResult> FilterPolicies(FilterViewModel filter)
         {
-            List<Policy> policiesFilter = await policiesServices.GetFilterPolicies(dataFilter);
 
-            _logger.LogWarning(policiesFilter.Count().ToString());
+            Console.WriteLine(filter.ColumValue);
 
-            TablePolicies.Data = await policiesServices.GetFilterPolicies(dataFilter);
+            Console.WriteLine(filter.ValueFilter);
 
-            TablePolicies.Rows = rows.RowsPolicies();
-
-            TablePolicies.Filter = true;
-            TablePolicies.IsCreate = false;
-            TablePolicies.IsActivate = true;
-            TablePolicies.IsEdit = true;
-            TablePolicies.IsInactivate = true;
-
-            return RedirectToAction("Policies", new { id=1 });
+            return RedirectToAction("PoliciesFilter", new
+            {
+                filterColunm = filter.ColumValue,
+                filterValue= filter.ValueFilter
+            });
         }
     }
 }
