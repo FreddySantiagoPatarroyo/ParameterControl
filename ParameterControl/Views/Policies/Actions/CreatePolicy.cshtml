@@ -1,5 +1,5 @@
 ﻿@using ParameterControl.Models.Policy;
-@model Policy;
+@model PolicyCreateViewModel;
 
 @{
     ViewData["Title"] = "Crear Politicas";
@@ -77,12 +77,12 @@
                             <li onclick="selectOption('@null', '@null')" class="option">
                                 <p class="option_text">Seleccione una opción</p>
                             </li>
-                            @* @foreach (var Colunm in Model.Rows)
+                            @foreach (var Colunm in Model.OperationTypeOptions)
                             {
-                                <li onclick="selectOption('@Colunm.Name', '@Colunm.Value')" class="option">
-                                    <p class="option_text">@Colunm.Name</p>
+                                <li onclick="selectOption('@Colunm', '@Colunm')" class="option">
+                                    <p class="option_text">@Colunm</p>
                                 </li>
-                            } *@
+                            }
                         </ul>
                     </div>
                     <div id="select_helper" class="select_helper" onclick="showOptions()"></div>
@@ -107,11 +107,11 @@
     <script>
         let viewOptionsFilter = false;
 
-        let widthOption = document.getElementById("input_select").clientWidth;
-        let options = document.getElementById("options");
-        options.style.width = widthOption+"px";
-
         const showOptions = () => {
+
+            let widthOption = document.getElementById("input_select").clientWidth;
+            let options = document.getElementById("options");
+            options.style.width = widthOption + "px";
 
             viewOptionsFilter = !viewOptionsFilter;
 

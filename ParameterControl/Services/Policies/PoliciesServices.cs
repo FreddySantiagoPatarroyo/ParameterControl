@@ -108,6 +108,16 @@ namespace ParameterControl.Services.Policies
             return policy;
         }
 
+        public async Task<List<string>> GetOperationsType()
+        {
+           List<string> operationsType = new List<string>()
+           {
+               "Movil",
+               "Fija"
+           };
+            return operationsType;
+        }
+
         public async Task<List<Policy>> GetFilterPolicies(FilterViewModel filterModel)
         {
             List<Policy> policiesFilter = new List<Policy>();

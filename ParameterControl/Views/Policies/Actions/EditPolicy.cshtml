@@ -20,19 +20,31 @@
             </div>
 
             <div class="form_group">
-                <label for="code--polices" asp-for="Code" class="label_form">Código*</label>
-                <input type="text" class="code" id="code--policies" name="Code" asp-for="Code" placeholder="COD_001" readonly/>
-                <span asp-validation-for="Code" class="text_error"></span>
+                <div class="field">
+                    <label for="code--polices" asp-for="Code" class="label_form">Código*</label>
+                    <div class="input">
+                        <input type="text" class="code" id="code--policies" name="Code" asp-for="Code" placeholder="COD_001" readonly />
+                    </div>
+                    <span asp-validation-for="Code" class="text_error"></span>
+                </div>
             </div>
             <div class="form_group">
-                <label for="description--policies" asp-for="Name" class="label_form">Nombre*</label>
-                <input type="text" class="description" id="description--policies" name="Name" asp-for="Name" placeholder="Descripcion" readonly/>
-                <span asp-validation-for="Name" class="text_error"></span>
+                <div class="field">
+                    <label for="description--policies" asp-for="Name" class="label_form">Nombre*</label>
+                    <div class="input">
+                        <input type="text" class="description" id="description--policies" name="Name" asp-for="Name" placeholder="Descripcion" readonly />
+                    </div>
+                    <span asp-validation-for="Name" class="text_error"></span>
+                </div>
             </div>
             <div class="form_group">
-                <label for="objective--policies" asp-for="Description" class="label_form">Descripcion*</label>
-                <textarea class="objective" id="objective--policies" name="Description" asp-for="Description" placeholder="Descripcion"></textarea>
-                <span asp-validation-for="Description" class="text_error"></span>
+                <div class="field">
+                    <label for="objective--policies" asp-for="Description" class="label_form">Descripcion*</label>
+                    <div class="textarea">
+                        <textarea id="objective--policies" name="Description" asp-for="Description" placeholder="Descripcion"></textarea>
+                    </div>
+                    <span asp-validation-for="Description" class="text_error"></span>
+                </div>
             </div>
 
             <p class="note_text"><span>Nota: </span>Los campos con (*) son obligatorios</p>

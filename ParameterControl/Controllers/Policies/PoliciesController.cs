@@ -104,9 +104,17 @@ namespace ParameterControl.Controllers.Policies
         }
 
         [HttpGet]
-        public ActionResult Create()
+        public async Task<ActionResult> Create()
         {
-            return View("Actions/CreatePolicy", new Policy());
+
+            List<string> OperationTypeOptionsList = await policiesServices.GetOperationsType();
+
+            PolicyCreateViewModel model = new PolicyCreateViewModel()
+            {
+                OperationTypeOptions = OperationTypeOptionsList
+            };
+
+            return View("Actions/CreatePolicy", model);
         }
 
         [HttpGet]

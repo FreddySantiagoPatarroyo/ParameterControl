@@ -65,11 +65,11 @@
     <script>
         let viewOptionsFilter = false;
 
-        let widthOption = document.getElementById("input_select").clientWidth;
-        let options = document.getElementById("options");
-        options.style.width = widthOption + "px";
-
         const showOptions = () => {
+
+            let widthOption = document.getElementById("input_select").clientWidth;
+            let options = document.getElementById("options");
+            options.style.width = widthOption + "px";
 
             viewOptionsFilter = !viewOptionsFilter;
 
