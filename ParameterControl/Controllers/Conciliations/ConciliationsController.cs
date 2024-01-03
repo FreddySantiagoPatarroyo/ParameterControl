@@ -63,6 +63,14 @@ namespace ParameterControl.Controllers.Conciliations
         }
 
         [HttpGet]
+        public async Task<ActionResult> Create(string id)
+        {
+            Conciliation conciliation = await conciliationsServices.GetConciliationsById(id);
+
+            return View("Actions/CreateConciliation", conciliation);
+        }
+
+        [HttpGet]
         public async Task<ActionResult> Edit(string id)
         {
             Conciliation conciliation = await conciliationsServices.GetConciliationsById(id);

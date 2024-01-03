@@ -11,9 +11,9 @@
             <p class="title_table font_bold">Politicas</p>
             @if (Model.IsCreate)
             {
-                <button class="button button_primary">
+                <a class="button button_primary" asp-controller="Policies" asp-action="Create">
                     <p class="text font_bold">Crear</p>
-                </button>
+                </a>
             }
         </div>
         <div class="list">

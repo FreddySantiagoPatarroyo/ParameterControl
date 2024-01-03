@@ -112,11 +112,39 @@
     border: 1px solid var(--br_inputs);
     border-radius: var(--radius_inputs);
     z-index: 1;
+    color: var(--tx_inputs);
+}
+
+.field .textarea {
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    align-content: center;
+    justify-content: flex-start;
+    width: calc(100% - 0px);
+    height: 100px;
+    padding: 2px 16px;
+    background-color: var(--bg_inputs);
+    border: 1px solid var(--br_inputs);
+    border-radius: var(--radius_inputs);
+    z-index: 1;
+    color: var(--tx_inputs);
 }
 
 .field .input input{
     border: none;
     background: transparent;
+    color: var(--tx_inputs);
+}
+
+.field .textarea textarea{
+    border: none;
+    background: transparent;
+    resize: none;
+    height: 80%;
+    overflow: auto;
+    color: var(--tx_inputs);
 }
 
 .field .input .input_select{
@@ -141,7 +169,6 @@
     background-color: var(--bg_inputs);
     border: 1px solid var(--br_inputs);
     border-radius: var(--radius_inputs);
-    width: 266px;
     display: none;
     z-index: 3;
 }
@@ -161,7 +188,6 @@
     align-items: center;
     align-content: center;
     justify-content: flex-start;
-    width: 266px;
     height: 40px;
     padding: 0px 16px;
     border-bottom: 1px solid var(--br_inputs);
@@ -190,10 +216,6 @@
 
     .field {
         width: auto;
-    }
-
-    .field .options{
-        min-width: 266px;
     }
 
     .field .options .options_list .option:hover{

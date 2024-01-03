@@ -89,7 +89,6 @@ namespace ParameterControl.Controllers.Policies
             return View("Actions/DesactivePolicy", policy);
         }
 
-
         [HttpPost]
         public async Task<ActionResult> DesactivePolicy(string id)
         {
@@ -102,6 +101,12 @@ namespace ParameterControl.Controllers.Policies
             Policy policy = await policiesServices.GetPolicyById(id);
 
             return View("Actions/ActivePolicy", policy);
+        }
+
+        [HttpGet]
+        public ActionResult Create()
+        {
+            return View("Actions/CreatePolicy", new Policy());
         }
 
         [HttpGet]

@@ -1,0 +1,15 @@
+﻿.box_filter {
+    display: block;
+}
+
+.box_filter .form__container .card__container .content_filter{
+    height: 250px;
+    margin-top: -40px;
+}
+
+.box_filter .form__container .card__container .content_filter .filter_secondary .field{
+    margin: 16px;
+    display: none;
+}
+
+
