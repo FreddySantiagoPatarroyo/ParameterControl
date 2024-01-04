@@ -17,6 +17,8 @@ namespace ParameterControl.Services.Conciliations
                     Id = "1",
                     Code = "COD_001",
                     Name = "Conciliacion_1",
+                    Package = "algo",
+                    Policies = "Fijo",
                     Description = "Descripcion ejemplo",
                     Conciliation_ = "111",
                     Result = false,

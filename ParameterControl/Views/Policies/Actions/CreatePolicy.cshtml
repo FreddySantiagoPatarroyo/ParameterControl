@@ -105,7 +105,7 @@
 @section Scripts {
     <partial name="_ValidationScriptsPartial.cshtml" />
     <script>
-        let viewOptionsFilter = false;
+        let viewOptions = false;
 
         const showOptions = () => {
 
@@ -113,9 +113,9 @@
             let options = document.getElementById("options");
             options.style.width = widthOption + "px";
 
-            viewOptionsFilter = !viewOptionsFilter;
+            viewOptions = !viewOptions;
 
-            if (viewOptionsFilter) {
+            if (viewOptions) {
                 document.getElementById('options').style.display = 'block';
                 document.getElementById('select_helper').style.display = 'block';
             } else {
@@ -130,12 +130,10 @@
                 console.log("vacio");
                 document.getElementById("input_select_filter").value = '';
                 document.getElementById("input_select_filter_value").value = '';
-                console.log(filterInfo);
             } else {
                 console.log(value);
                 document.getElementById("input_select_filter").value = name;
                 document.getElementById("input_select_filter_value").value = value;
-                console.log(filterInfo);
             }
 
             showOptions();

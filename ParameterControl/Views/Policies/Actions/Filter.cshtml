@@ -90,19 +90,12 @@
                 document.getElementById("input_select_filter_value").value = '';
                 document.getElementById("input_filter").value = '';
                 document.getElementById('field_secundary').style.display = 'none';
-                filterInfo.Filter.Name = "";
-                filterInfo.Filter.Value = "";
-                filterInfo.ValueFilter = document.getElementById("input_filter").value;
-                console.log(filterInfo);
             } else {
                 console.log(value);
                 document.getElementById("input_select_filter").value = name;
                 document.getElementById("input_select_filter_value").value = value;
                 document.getElementById("input_filter").value = '';
                 document.getElementById('field_secundary').style.display = 'block';
-                filterInfo.Filter.Name = name;
-                filterInfo.Filter.Value = value;
-                console.log(filterInfo);
             }
 
             showOptions();

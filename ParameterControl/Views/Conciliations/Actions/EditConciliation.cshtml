@@ -41,7 +41,7 @@
                 <div class="field">
                     <label for="package--conciliations" asp-for="Package" class="label_form">Paquete*</label>
                     <div class="input">
-                        <input type="text" class="objective" id="package--conciliations" name="Package" asp-for="Package">
+                        <input type="text" class="objective"asp-for="Package">
                     </div>
                     <span asp-validation-for="Package" class="text_error"></span>
                 </div>
@@ -51,7 +51,7 @@
                 <div class="field">
                     <label for="email--conciliations" asp-for="Email" class="label_form">Email Usuario Asignado*</label>
                     <div class="input">
-                        <input type="text" class="objective" id="email--conciliations" name="Email" asp-for="Email">
+                        <input type="text" class="objective" asp-for="Email">
                     </div>
                     <span asp-validation-for="Email" class="text_error"></span>
                 </div>
@@ -61,7 +61,7 @@
                 <div class="field">
                     <label for="destination--conciliations" asp-for="Destination" class="label_form">Destino</label>
                     <div class="input">
-                        <input type="text" class="objective" id="destination--conciliations" name="Destination" asp-for="Destination">
+                        <input type="text" class="objective" asp-for="Destination">
                     </div>
                 </div>
             </div>
@@ -70,8 +70,8 @@
                 <div class="field">
                     <label for="objective--policies" asp-for="Policies" class="label_form">Politicas*</label>
                     <div id="input_select" class="input">
-                        <input class="input_select" id="input_select_filter" name="input_select_filter" placeholder="Seleccione una opción" onclick="showOptions()" readonly />
-                        <input type="hidden" id="input_select_filter_value" name="ColumValue" asp-for="Policies" />
+                        <input class="input_select" id="input_select_filter" asp-for="Policies" name="Policies" placeholder="Seleccione una opción" onclick="showOptions()" readonly />
+                        <input type="hidden" id="input_select_filter_value" name="Policies" asp-for="Policies" />
                         <i class="icon icon_select icon_153"></i>
                     </div>
                     <div id="options" class="options">
@@ -118,18 +118,35 @@
 @section Scripts {
     <partial name="_ValidationScriptsPartial.cshtml" />
     <script>
+        let viewOptions = false;
+
+        const showOptions = () => {
+
+            let widthOption = document.getElementById("input_select").clientWidth;
+            let options = document.getElementById("options");
+            options.style.width = widthOption + "px";
+
+            viewOptions = !viewOptions;
+
+            if (viewOptions) {
+                document.getElementById('options').style.display = 'block';
+                document.getElementById('select_helper').style.display = 'block';
+            } else {
+                document.getElementById('options').style.display = 'none';
+                document.getElementById('select_helper').style.display = 'none';
+            }
+        }
+
         const selectOption = (name, value) => {
 
             if (name == null || value == null || name == '' || value == '') {
                 console.log("vacio");
                 document.getElementById("input_select_filter").value = '';
                 document.getElementById("input_select_filter_value").value = '';
-                console.log(filterInfo);
             } else {
                 console.log(value);
                 document.getElementById("input_select_filter").value = name;
                 document.getElementById("input_select_filter_value").value = value;
-                console.log(filterInfo);
             }
 
             showOptions();

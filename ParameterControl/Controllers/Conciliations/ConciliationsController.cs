@@ -77,7 +77,27 @@ namespace ParameterControl.Controllers.Conciliations
         {
             Conciliation conciliation = await conciliationsServices.GetConciliationsById(id);
 
-            return View("Actions/EditConciliation", conciliation);
+            List<string> PoliciesOptionsList = await conciliationsServices.GetPolicies();
+
+            ConciliationCreateViewModel model = new ConciliationCreateViewModel()
+            {
+                Id = conciliation.Id,
+                Code = conciliation.Code,
+                Name = conciliation.Name,
+                Description = conciliation.Description,
+                Conciliation_ = conciliation.Conciliation_,
+                Package = conciliation.Package,
+                Email = conciliation.Email,
+                Destination = conciliation.Destination,
+                Policies = conciliation.Policies,
+                Required = conciliation.Required,
+                Result = conciliation.Result,
+                State = conciliation.State
+            };
+
+            model.PoliciesOption = PoliciesOptionsList;
+
+            return View("Actions/EditConciliation", model);
         }
 
         [HttpGet]
