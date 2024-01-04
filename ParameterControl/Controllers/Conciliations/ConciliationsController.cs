@@ -48,7 +48,7 @@ namespace ParameterControl.Controllers.Conciliations
 
             TableConciliations.Rows = rows.RowsConciliations();
 
-            TableConciliations.IsCreate = false;
+            TableConciliations.IsCreate = true;
             TableConciliations.IsActivate = true;
             TableConciliations.IsEdit = true;
             TableConciliations.IsInactivate = true;
