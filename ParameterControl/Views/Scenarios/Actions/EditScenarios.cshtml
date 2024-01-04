@@ -8,7 +8,10 @@
 
 <div class="box_edit">
     <div class="bg__blur"></div>
-    <form asp-controller="Scenerios" class="form__container">
+
+    <div asp-validation-summary="ModelOnly" class="text_error"></div>
+
+    <form asp-controller="Scenarios" asp-action="Edit" class="form__container">
         <div class="card__container">
             <div class="header_form">
                 <img src="/images/iconApple.png" />
@@ -16,33 +19,57 @@
             </div>
 
             <div class="form_group">
-                <label for="code--scenarios" asp-for="Code" class="label_form">Código*</label>
-                <input type="text" class="code" id="code--scenarios" name="Code" asp-for="Code" readonly />
+                <div class="field">
+                    <label for="code--scenarios" asp-for="Code" class="label_form">Código*</label>
+                    <div class="input">
+                        <input type="text" class="code" id="code--scenarios" name="Code" asp-for="Code" readonly />
+                    </div>
+                    <span asp-validation-for="Code" class="text_error"></span>
+                </div>
             </div>
+
             <div class="form_group">
-                <label for="name--scenarios" asp-for="Name" class="label_form">Nombre*</label>
-                <input type="text" class="description" id="description--scenarios" name="Name" asp-for="Name" readonly />
+                <div class="field">
+                    <label for="name--scenarios" asp-for="Name" class="label_form">Nombre*</label>
+                    <div class="input">
+                        <input type="text" class="description" id="description--scenarios" name="Name" asp-for="Name" readonly />
+                    </div>
+                    <span asp-validation-for="Name" class="text_error"></span>
+                </div>
             </div>
+
             <div class="form_group">
-                <label for="impact--scenarios" asp-for="Impact" class="label_form">Impacto</label>
-                <textarea class="objective" id="impact--scenarios" name="Impact" asp-for="Impact"></textarea>
+                <div class="field">
+                    <label for="impact--scenarios" asp-for="Impact" class="label_form">Impacto</label>
+                    <div class="textarea">
+                        <textarea class="objective" id="impact--scenarios" name="Impact" asp-for="Impact"></textarea>
+                    </div>
+                </div>
             </div>
+
             <div class="form_group">
-                <label for="conciliation--scenarios" asp-for="Conciliation" class="label_form">Conciliación*</label>
-                <textarea class="objective" id="conciliation--scenarios" name="Conciliation" asp-for="Conciliation"></textarea>
+                <div class="field">
+                    <label for="conciliation--scenarios" asp-for="Conciliation" class="label_form">Conciliación*</label>
+                    <div class="textarea">
+                        <textarea class="objective" id="conciliation--scenarios" name="Conciliation" asp-for="Conciliation"></textarea>
+                    </div>
+                    <span asp-validation-for="Conciliation" class="text_error"></span>
+                </div>
             </div>
 
             <p class="note_text"><span>Nota: </span>Los campos con (*) son obligatorios</p>
 
             <div class="btn_container">
                 <a class="button button_secondary" asp-controller="Scenarios" asp-action="Scenarios"><p class="text font_bold">Cancelar</p></a>
-                <button class="button button_primary"><p class="text font_bold">Actualizar</p></button>
+                <button type="submit" class="button button_primary"><p class="text font_bold">Actualizar</p></button>
             </div>
         </div>
     </form>
 </div>
 
 
-<script>
 
-</script>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial.cshtml" />
+}
