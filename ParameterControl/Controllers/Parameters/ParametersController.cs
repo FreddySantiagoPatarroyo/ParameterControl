@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using ParameterControl.Models.Conciliation;
 using ParameterControl.Models.Parameter;
+using ParameterControl.Services.Conciliations;
 using ParameterControl.Services.Parameters;
 using ParameterControl.Services.Rows;
 
@@ -65,7 +67,25 @@ namespace ParameterControl.Controllers.Parameters
         {
             Parameter parameter = await parametersService.GetParameterById(id);
 
-            return View("Actions/EditParameter", parameter);
+            List<string> ParameterTypeList = await parametersService.GetParameterType();
+            List<string> ParameterList = await parametersService.GetListParameter();
+
+
+            ParameterCreateViewModel model = new ParameterCreateViewModel()
+            {
+                Id = parameter.Id,
+                ParameterType = parameter.ParameterType,
+                List = parameter.List,
+                _Parameters = parameter._Parameters,
+                Value = parameter.Value,
+                Description = parameter.Description,
+                State = parameter.State
+            };
+
+            model.ParameterTypeOption = ParameterTypeList;
+            model.ListParameter = ParameterList;
+
+            return View("Actions/EditParameter", model);
         }
 
         [HttpGet]

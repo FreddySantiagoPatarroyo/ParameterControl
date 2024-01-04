@@ -7,7 +7,7 @@ using System.Reflection;
 
 namespace ParameterControl.Services.Scenarios
 {
-    public class ScenariosServices: IScenariosServices
+    public class ScenariosServices : IScenariosServices
     {
         private List<Scenery> scenarios = new List<Scenery>();
         public ScenariosServices()
@@ -107,6 +107,27 @@ namespace ParameterControl.Services.Scenarios
             Scenery scenery = scenarios.Find(scenery => scenery.Id == id);
             return scenery;
         }
+        public async Task<List<string>> GetImpact()
+        {
+            List<string> impact = new List<string>()
+           {
+               "CLIENTE",
+                "COMPAÑIA ",
+                "CONFIGURACIÓN "
+           };
+            return impact;
+        }
+        public async Task<List<string>> GetConciliation()
+        {
+            List<string> conciliation = new List<string>()
+            {
+                "Conciliacion1",
+                "Conciliacion2",
+                "Conciliacion3"
+            };
+            return conciliation;
+        }
+
 
     }
 }

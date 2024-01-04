@@ -78,6 +78,8 @@ namespace ParameterControl.Controllers.Conciliations
             Conciliation conciliation = await conciliationsServices.GetConciliationsById(id);
 
             List<string> PoliciesOptionsList = await conciliationsServices.GetPolicies();
+            List<string> RequiredOptionsList = await conciliationsServices.GetRequired();
+
 
             ConciliationCreateViewModel model = new ConciliationCreateViewModel()
             {
@@ -96,6 +98,7 @@ namespace ParameterControl.Controllers.Conciliations
             };
 
             model.PoliciesOption = PoliciesOptionsList;
+            model.RequiredOption = RequiredOptionsList;
 
             return View("Actions/EditConciliation", model);
         }

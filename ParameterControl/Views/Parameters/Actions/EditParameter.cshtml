@@ -1,5 +1,5 @@
 ﻿@using ParameterControl.Models.Parameter;
-@model Parameter;
+@model ParameterCreateViewModel;
 
 @{
 }
@@ -16,7 +16,54 @@
                 <img src="/images/iconApple.png" />
                 <h1>Editar Parametro</h1>
             </div>
-
+            <div class="form_group">
+                <div class="field">
+                    <label for="objective--policies" asp-for="ParameterType" class="label_form">Tipo*</label>
+                    <div id="input_select" class="input">
+                        <input class="input_select" id="input_select_filter" asp-for="ParameterType" name="ParameterType" placeholder="Seleccione una opción" onclick="showOptions()" readonly />
+                        <input type="hidden" id="input_select_filter_value" name="ParameterType" asp-for="ParameterType" />
+                        <i class="icon icon_select icon_153"></i>
+                    </div>
+                    <div id="options" class="options">
+                        <ul class="options_list">
+                            <li onclick="selectOption('@null', '@null')" class="option">
+                                <p class="option_text">Seleccione una opción</p>
+                            </li>
+                            @foreach (var Colunm in Model.ParameterTypeOption)
+                            {
+                                <li onclick="selectOption('@Colunm', '@Colunm')" class="option">
+                                    <p class="option_text">@Colunm</p>
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                    <div id="select_helper" class="select_helper" onclick="showOptions()"></div>
+                </div>
+             </div>
+            <div class="form_group">
+                <div class="field">
+                    <label for="objective--policies" asp-for="ParameterType" class="label_form">Listado*</label>
+                    <div id="input_select_list" class="input">
+                        <input class="input_select" id="input_select_filter_list" asp-for="ParameterType" name="ParameterType" placeholder="Seleccione una opción" onclick="showOptionsList()" readonly />
+                        <input type="hidden" id="input_select_filter_value_list" name="ParameterType" asp-for="ParameterType" />
+                        <i class="icon icon_select icon_153"></i>
+                    </div>
+                    <div id="options_list" class="options">
+                        <ul class="options_list">
+                            <li onclick="selectOptionList('@null', '@null')" class="option">
+                                <p class="option_text">Seleccione una opción</p>
+                            </li>
+                            @foreach (var Colunm in Model.ListParameter)
+                            {
+                                <li onclick="selectOptionList('@Colunm', '@Colunm')" class="option">
+                                    <p class="option_text">@Colunm</p>
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                    <div id="select_helper_list" class="select_helper" onclick="showOptionsList()"></div>
+                </div>
+            </div>
             <div class="form_group">
                 <div class="field">
                     <label for="parameter--parameters" asp-for="_Parameters" class="label_form">Parámetro*</label>
@@ -47,16 +94,6 @@
                 </div>
             </div>
 
-            <div class="form_group">
-                <div class="field">
-                    <label for="type--parameters" asp-for="ParameterType" class="label_form">Tipo*</label>
-                    <div class="textarea">
-                        <textarea class="objective" id="type--parameters" name="ParameterType" asp-for="ParameterType"></textarea>
-                    </div>
-                    <span asp-validation-for="ParameterType" class="text_error"></span>
-                </div>
-            </div>
-
             <p class="note_text"><span>Nota: </span>Los campos con (*) son obligatorios</p>
 
             <div class="btn_container">
@@ -70,4 +107,73 @@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial.cshtml" />
+    <script>
+        let viewOptions = false;
+
+        const showOptions = () => {
+
+            let widthOption = document.getElementById("input_select").clientWidth;
+            let options = document.getElementById("options");
+            options.style.width = widthOption + "px";
+
+            viewOptions = !viewOptions;
+
+            if (viewOptions) {
+                document.getElementById('options').style.display = 'block';
+                document.getElementById('select_helper').style.display = 'block';
+            } else {
+                document.getElementById('options').style.display = 'none';
+                document.getElementById('select_helper').style.display = 'none';
+            }
+        }
+
+        const selectOption = (name, value) => {
+
+            if (name == null || value == null || name == '' || value == '') {
+                console.log("vacio");
+                document.getElementById("input_select_filter").value = '';
+                document.getElementById("input_select_filter_value").value = '';
+            } else {
+                console.log(value);
+                document.getElementById("input_select_filter").value = name;
+                document.getElementById("input_select_filter_value").value = value;
+            }
+
+            showOptions();
+        }
+
+        let viewOptionsList = false;
+
+        const showOptionsList = () => {
+
+            let widthOptionList = document.getElementById("input_select_list").clientWidth;
+            let optionsList = document.getElementById("options_list");
+            optionsList.style.width = widthOptionList + "px";
+
+            viewOptionsList = !viewOptionsList;
+
+            if (viewOptionsList) {
+                document.getElementById('options_list').style.display = 'block';
+                document.getElementById('select_helper_list').style.display = 'block';
+            } else {
+                document.getElementById('options_list').style.display = 'none';
+                document.getElementById('select_helper_list').style.display = 'none';
+            }
+        }
+
+        const selectOptionList = (name, value) => {
+
+            if (name == null || value == null || name == '' || value == '') {
+                console.log("vacio");
+                document.getElementById("input_select_filter_list").value = '';
+                document.getElementById("input_select_filter_value_list").value = '';
+            } else {
+                console.log(value);
+                document.getElementById("input_select_filter_list").value = name;
+                document.getElementById("input_select_filter_value_list").value = value;
+            }
+
+            showOptionsList();
+        }
+    </script>
 }

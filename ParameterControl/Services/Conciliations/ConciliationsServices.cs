@@ -18,7 +18,7 @@ namespace ParameterControl.Services.Conciliations
                     Code = "COD_001",
                     Name = "Conciliacion_1",
                     Package = "algo",
-                    Policies = "Fijo",
+                    Policies = "algo",
                     Description = "Descripcion ejemplo",
                     Conciliation_ = "111",
                     Result = false,
@@ -28,6 +28,8 @@ namespace ParameterControl.Services.Conciliations
                     Id = "2",
                     Code = "COD_006",
                     Name = "Name",
+                    Package = "algo",
+                    Policies = "algo",
                     Description = "Description",
                     Conciliation_ = "222",
                     Result = false,
@@ -37,6 +39,8 @@ namespace ParameterControl.Services.Conciliations
                     Id = "3",
                     Code = "COD_001",
                     Name = "Conciliacion_1",
+                    Package = "algo",
+                    Policies = "algo",
                     Description = "Descripcion ejemplo",
                     Conciliation_ = "333",
                     Result = false,
@@ -46,6 +50,8 @@ namespace ParameterControl.Services.Conciliations
                     Id = "4",
                     Code = "COD_006",
                     Name = "Name",
+                    Package = "algo",
+                    Policies = "algo",
                     Description = "Description",
                     Conciliation_ = "111",
                     Result = false,
@@ -55,6 +61,8 @@ namespace ParameterControl.Services.Conciliations
                     Id = "5",
                     Code = "COD_001",
                     Name = "Conciliacion_1",
+                    Package = "algo",
+                    Policies = "algo",
                     Description = "Descripcion ejemplo",
                     Conciliation_ = "123",
                     Result = false,
@@ -64,6 +72,8 @@ namespace ParameterControl.Services.Conciliations
                     Id = "6",
                     Code = "COD_006",
                     Name = "Name",
+                    Package = "algo",
+                    Policies = "algo",
                     Description = "Description",
                     Conciliation_ = "321",
                     Result = false,
@@ -73,6 +83,8 @@ namespace ParameterControl.Services.Conciliations
                     Id = "7",
                     Code = "COD_001",
                     Name = "Conciliacion_1",
+                    Package = "algo",
+                    Policies = "algo",
                     Description = "Descripcion ejemplo",
                     Conciliation_ = "234",
                     Result = false,
@@ -82,6 +94,8 @@ namespace ParameterControl.Services.Conciliations
                     Id = "8",
                     Code = "",
                     Name = "Name",
+                    Package = "algo",
+                    Policies = "algo",
                     Description = "Description",
                     Conciliation_ = "444",
                     Result = false,
@@ -104,10 +118,21 @@ namespace ParameterControl.Services.Conciliations
         {
             List<string> policies = new List<string>()
            {
-               "Movil",
-               "Fija"
+               "Politica1",
+               "Politica2",
+               "Politica3"
            };
             return policies;
         }
+        public async Task<List<string>> GetRequired()
+        {
+            List<string> required = new List<string>()
+           {
+               "Si",
+               "No"
+           };
+            return required;
+        }
+
     }
 }

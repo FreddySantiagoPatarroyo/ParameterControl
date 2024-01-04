@@ -2,6 +2,8 @@
 using ParameterControl.Models.Scenery;
 using ParameterControl.Services.Scenarios;
 using ParameterControl.Services.Rows;
+using ParameterControl.Models.Conciliation;
+using ParameterControl.Services.Conciliations;
 
 namespace ParameterControl.Controllers.Scenarios
 {
@@ -65,7 +67,26 @@ namespace ParameterControl.Controllers.Scenarios
         {
             Scenery scenery = await scenariosServices.GetSceneryById(id);
 
-            return View("Actions/EditScenarios", scenery);
+            List<string> ImpactOptionsList = await scenariosServices.GetImpact();
+            List<string> ConciliationOptionsList = await scenariosServices.GetConciliation();
+
+            SceneryCreateViewModel model = new SceneryCreateViewModel()
+            {
+                Id = scenery.Id,
+                Code = scenery.Code,
+                Name = scenery.Name,
+                Impact = scenery.Impact,
+                Conciliation = scenery.Conciliation,
+                Query = scenery.Query,
+                Parameter = scenery.Parameter,
+                State = scenery.State
+
+            };
+
+            model.ImpactOptions = ImpactOptionsList;
+            model.ConciliationOptions = ConciliationOptionsList;
+
+            return View("Actions/EditScenarios", model);
         }
 
         [HttpGet]

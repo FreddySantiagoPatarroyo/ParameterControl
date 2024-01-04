@@ -11,66 +11,74 @@ namespace ParameterControl.Services.Parameters
             {
                 new Parameter(){
                     Id = "1",
-                    _Parameters = "V_STATUS",
+                    ParameterType = "Emial",
+                    List = "Nombre",
+                     _Parameters = "V_STATUS",
                     Value = "ACT",
                     Description = "Descripcion ejemplo",
-                    ParameterType = "Emial",
                     State = true
                 },
                 new Parameter(){
                     Id = "2",
-                    _Parameters = "V_STATUS",
-                    Value = "DATA",
+                     ParameterType = "Emial",
+                    List = "Nombre",
+                     _Parameters = "V_STATUS",
+                    Value = "ACT",
                     Description = "Descripcion ejemplo",
-                    ParameterType = "ESCENARIO",
                     State = false
                 },
                 new Parameter(){
                     Id = "3",
-                    _Parameters = "V_STATUS",
+                    ParameterType = "Emial",
+                    List = "Nombre",
+                     _Parameters = "V_STATUS",
                     Value = "ACT",
                     Description = "Descripcion ejemplo",
-                    ParameterType = "ESCENARIO",
                     State = true
                 },
                 new Parameter(){
                     Id = "4",
-                    _Parameters = "V_STATUS",
-                    Value = "DATA",
+                     ParameterType = "Emial",
+                    List = "Nombre",
+                     _Parameters = "V_STATUS",
+                    Value = "ACT",
                     Description = "Descripcion ejemplo",
-                    ParameterType = "ESCENARIO",
                     State = false
                 },
                 new Parameter(){
                     Id = "5",
-                    _Parameters = "V_STATUS",
+                     ParameterType = "Emial",
+                    List = "Nombre",
+                     _Parameters = "V_STATUS",
                     Value = "ACT",
                     Description = "Descripcion ejemplo",
-                    ParameterType = "ESCENARIO",
                     State = true
                 },
                 new Parameter(){
                     Id = "6",
-                    _Parameters = "V_STATUS",
-                    Value = "DATA",
+                    ParameterType = "Emial",
+                    List = "Nombre",
+                     _Parameters = "V_STATUS",
+                    Value = "ACT",
                     Description = "Descripcion ejemplo",
-                    ParameterType = "ESCENARIO",
                     State = false
                 },
                 new Parameter(){
                     Id = "7",
-                    _Parameters = "V_STATUS",
+                     ParameterType = "Emial",
+                    List = "Nombre",
+                     _Parameters = "V_STATUS",
                     Value = "ACT",
                     Description = "Descripcion ejemplo",
-                    ParameterType = "ESCENARIO",
                     State = true
                 },
                 new Parameter(){
                     Id = "8",
-                    _Parameters = "V_STATUS",
-                    Value = "DATA",
+                    ParameterType = "Emial",
+                    List = "Nombre",
+                     _Parameters = "V_STATUS",
+                    Value = "ACT",
                     Description = "Descripcion ejemplo",
-                    ParameterType = "ESCENARIO",
                     State = false
                 }
             };
@@ -85,6 +93,29 @@ namespace ParameterControl.Services.Parameters
         {
             Parameter parameter = parameters.Find(parameter => parameter.Id == id);
             return parameter;
+        }
+        public async Task<List<string>> GetParameterType()
+        {
+            List<string> parameterType = new List<string>()
+           {
+               "GENERAL",
+               "ESCENARIO",
+               "PARÁMETROS ",
+               "SEGURIDAD",
+               "PARÁMETROS SISTEMA ",
+               "PARÁMETROS CONCILIACIÓN"
+
+           };
+            return parameterType;
+        }
+        public async Task<List<string>> GetListParameter()
+        {
+            List<string> listParameter = new List<string>()
+           {
+               "Ejemplo List",
+               "Ejemplo Lis 2"
+           };
+            return listParameter;
         }
     }
 }

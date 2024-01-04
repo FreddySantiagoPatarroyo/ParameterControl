@@ -95,13 +95,27 @@
 
             <div class="form_group">
                 <div class="field">
-                    <label for="required--conciliations" asp-for="Required" class="label_form">Requiere aprobación de resultado*</label>
-                    <div class="input">
-                        <input type="text" class="objective" id="required--conciliations" name="Required" asp-for="Required">
+                    <label for="objective--policies" asp-for="Policies" class="label_form">Requiere Aprobación de Resultado*</label>
+                    <div id="input_select_required" class="input">
+                        <input class="input_select" id="input_select_filter_required" asp-for="Policies" name="Policies" placeholder="Seleccione una opción" onclick="showOptionsRequired()" readonly />
+                        <input type="hidden" id="input_select_filter_value_required" name="Policies" asp-for="Policies" />
+                        <i class="icon icon_select icon_153"></i>
                     </div>
-                    <span asp-validation-for="Required" class="text_error"></span>
+                    <div id="options_required" class="options">
+                        <ul class="options_list">
+                            <li onclick="selectOptionRequired('@null', '@null')" class="option">
+                                <p class="option_text">Seleccione una opción</p>
+                            </li>
+                            @foreach (var Colunm in Model.RequiredOption)
+                            {
+                                <li onclick="selectOptionRequired('@Colunm', '@Colunm')" class="option">
+                                    <p class="option_text">@Colunm</p>
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                    <div id="select_helper_required" class="select_helper" onclick="showOptionsRequired()"></div>
                 </div>
-            </div>
 
             <p class="note_text"><span>Nota: </span>Los campos con (*) son obligatorios</p>
 
@@ -150,6 +164,40 @@
             }
 
             showOptions();
+        }
+
+        let viewOptionsRequired = false;
+
+        const showOptionsRequired = () => {
+
+            let widthOptionRequired = document.getElementById("input_select_required").clientWidth;
+            let optionsRequired = document.getElementById("options_required");
+            optionsRequired.style.width = widthOptionRequired + "px";
+
+            viewOptionsRequired = !viewOptionsRequired;
+
+            if (viewOptionsRequired) {
+                document.getElementById('options_required').style.display = 'block';
+                document.getElementById('select_helper_required').style.display = 'block';
+            } else {
+                document.getElementById('options_required').style.display = 'none';
+                document.getElementById('select_helper_required').style.display = 'none';
+            }
+        }
+
+        const selectOptionRequired = (name, value) => {
+
+            if (name == null || value == null || name == '' || value == '') {
+                console.log("vacio");
+                document.getElementById("input_select_filter_required").value = '';
+                document.getElementById("input_select_filter_value_required").value = '';
+            } else {
+                console.log(value);
+                document.getElementById("input_select_filter_required").value = name;
+                document.getElementById("input_select_filter_value_required").value = value;
+            }
+
+            showOptionsRequired();
         }
     </script>
 }
