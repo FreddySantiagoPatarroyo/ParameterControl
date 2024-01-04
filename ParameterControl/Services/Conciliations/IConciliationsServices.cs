@@ -5,6 +5,7 @@ namespace ParameterControl.Services.Conciliations
 {
     public interface IConciliationsServices
     {
+        Task<List<string>> GetPolicies();
         Task<List<Conciliation>> GetConciliations();
         Task<Conciliation> GetConciliationsById(string id);
     }

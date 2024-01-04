@@ -1,5 +1,5 @@
 ﻿@using ParameterControl.Models.Conciliation;
-@model Conciliation;
+@model ConciliationCreateViewModel;
 
 @{
 }
@@ -68,12 +68,29 @@
 
             <div class="form_group">
                 <div class="field">
-                    <label for="policies--conciliations" asp-for="Policies" class="label_form">Politica*</label>
-                    <div class="input">
-                        <input type="text" class="objective" id="policies--conciliations" name="Policies" asp-for="Policies">
+                    <label for="objective--policies" asp-for="Policies" class="label_form">Politicas*</label>
+                    <div id="input_select" class="input">
+                        <input class="input_select" id="input_select_filter" name="input_select_filter" placeholder="Seleccione una opción" onclick="showOptions()" readonly />
+                        <input type="hidden" id="input_select_filter_value" name="ColumValue" asp-for="Policies" />
+                        <i class="icon icon_select icon_153"></i>
                     </div>
-                    <span asp-validation-for="Policies" class="text_error"></span>
+                    <div id="options" class="options">
+                        <ul class="options_list">
+                            <li onclick="selectOption('@null', '@null')" class="option">
+                                <p class="option_text">Seleccione una opción</p>
+                            </li>
+                            @foreach (var Colunm in Model.PoliciesOption)
+                            {
+                                <li onclick="selectOption('@Colunm', '@Colunm')" class="option">
+                                    <p class="option_text">@Colunm</p>
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                    <div id="select_helper" class="select_helper" onclick="showOptions()"></div>
                 </div>
+
+                <span asp-validation-for="Policies" class="text_error"></span>
             </div>
 
             <div class="form_group">
@@ -100,4 +117,22 @@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial.cshtml" />
-}ipt>
+    <script>
+        const selectOption = (name, value) => {
+
+            if (name == null || value == null || name == '' || value == '') {
+                console.log("vacio");
+                document.getElementById("input_select_filter").value = '';
+                document.getElementById("input_select_filter_value").value = '';
+                console.log(filterInfo);
+            } else {
+                console.log(value);
+                document.getElementById("input_select_filter").value = name;
+                document.getElementById("input_select_filter_value").value = value;
+                console.log(filterInfo);
+            }
+
+            showOptions();
+        }
+    </script>
+}

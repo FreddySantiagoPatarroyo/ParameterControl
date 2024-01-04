@@ -5,6 +5,8 @@ using ParameterControl.Models.Conciliation;
 using ParameterControl.Models.Rows;
 using ParameterControl.Services.Conciliations;
 using ParameterControl.Services.Rows;
+using ParameterControl.Models.Policy;
+using ParameterControl.Services.Policies;
 
 namespace ParameterControl.Controllers.Conciliations
 {
@@ -84,6 +86,19 @@ namespace ParameterControl.Controllers.Conciliations
             Conciliation conciliation = await conciliationsServices.GetConciliationsById(id);
 
             return View("Actions/ViewConciliation", conciliation);
+        }
+        [HttpGet]
+        public async Task<ActionResult> Create()
+        {
+
+            List<string> PoliciesOptionsList = await conciliationsServices.GetPolicies();
+
+            ConciliationCreateViewModel model = new ConciliationCreateViewModel()
+            {
+                PoliciesOption = PoliciesOptionsList
+            };
+
+            return View("Actions/EditConciliation", model);
         }
     }
 }

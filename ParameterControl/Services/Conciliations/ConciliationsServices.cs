@@ -98,5 +98,14 @@ namespace ParameterControl.Services.Conciliations
             Conciliation conciliation = conciliations.Find(conciliation => conciliation.Id == id);
             return conciliation;
         }
+        public async Task<List<string>> GetPolicies()
+        {
+            List<string> policies = new List<string>()
+           {
+               "Movil",
+               "Fija"
+           };
+            return policies;
+        }
     }
 }
