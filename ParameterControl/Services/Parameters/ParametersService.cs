@@ -11,8 +11,8 @@ namespace ParameterControl.Services.Parameters
             {
                 new Parameter(){
                     Id = "1",
-                    ParameterType = "Emial",
-                    List = "Nombre",
+                    ParameterType = "GENERAL",
+                    List = "Ejemplo List",
                      _Parameters = "V_STATUS",
                     Value = "ACT",
                     Description = "Descripcion ejemplo",
@@ -20,8 +20,8 @@ namespace ParameterControl.Services.Parameters
                 },
                 new Parameter(){
                     Id = "2",
-                     ParameterType = "Emial",
-                    List = "Nombre",
+                     ParameterType = "GENERAL",
+                    List = "Ejemplo List",
                      _Parameters = "V_STATUS",
                     Value = "ACT",
                     Description = "Descripcion ejemplo",
@@ -29,8 +29,8 @@ namespace ParameterControl.Services.Parameters
                 },
                 new Parameter(){
                     Id = "3",
-                    ParameterType = "Emial",
-                    List = "Nombre",
+                    ParameterType = "GENERAL",
+                    List = "Ejemplo List",
                      _Parameters = "V_STATUS",
                     Value = "ACT",
                     Description = "Descripcion ejemplo",
@@ -38,8 +38,8 @@ namespace ParameterControl.Services.Parameters
                 },
                 new Parameter(){
                     Id = "4",
-                     ParameterType = "Emial",
-                    List = "Nombre",
+                     ParameterType = "GENERAL",
+                    List = "Ejemplo List",
                      _Parameters = "V_STATUS",
                     Value = "ACT",
                     Description = "Descripcion ejemplo",
@@ -47,8 +47,8 @@ namespace ParameterControl.Services.Parameters
                 },
                 new Parameter(){
                     Id = "5",
-                     ParameterType = "Emial",
-                    List = "Nombre",
+                     ParameterType = "GENERAL",
+                    List = "Ejemplo List",
                      _Parameters = "V_STATUS",
                     Value = "ACT",
                     Description = "Descripcion ejemplo",
@@ -56,8 +56,8 @@ namespace ParameterControl.Services.Parameters
                 },
                 new Parameter(){
                     Id = "6",
-                    ParameterType = "Emial",
-                    List = "Nombre",
+                    ParameterType = "GENERAL",
+                    List = "Ejemplo List",
                      _Parameters = "V_STATUS",
                     Value = "ACT",
                     Description = "Descripcion ejemplo",
@@ -65,8 +65,8 @@ namespace ParameterControl.Services.Parameters
                 },
                 new Parameter(){
                     Id = "7",
-                     ParameterType = "Emial",
-                    List = "Nombre",
+                     ParameterType = "GENERAL",
+                    List = "Ejemplo List",
                      _Parameters = "V_STATUS",
                     Value = "ACT",
                     Description = "Descripcion ejemplo",
@@ -74,8 +74,8 @@ namespace ParameterControl.Services.Parameters
                 },
                 new Parameter(){
                     Id = "8",
-                    ParameterType = "Emial",
-                    List = "Nombre",
+                    ParameterType = "GENERAL",
+                    List = "Ejemplo List",
                      _Parameters = "V_STATUS",
                     Value = "ACT",
                     Description = "Descripcion ejemplo",

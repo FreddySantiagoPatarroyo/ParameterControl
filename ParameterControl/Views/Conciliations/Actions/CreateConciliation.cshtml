@@ -1,16 +1,16 @@
 ﻿@using ParameterControl.Models.Conciliation;
 @model ConciliationCreateViewModel;
-
 @{
+    ViewData["Title"] = "Crear Conciliaciones";
 }
 
 <partial name="_Menu" />
 
-<div class="box_edit">
+<div class="box_create">
     <div class="bg__blur"></div>
     <div asp-validation-summary="ModelOnly" class="text_error"></div>
 
-    <form asp-controller="Conciliations" asp-action="Edit" class="form__container">
+    <form asp-controller="Conciliations" asp-action="Create" class="form__container">
         <div class="card__container">
             <div class="header_form">
                 <img src="/images/iconApple.png" />
@@ -21,7 +21,7 @@
                 <div class="field">
                     <label for="code--conciliations" asp-for="Code" class="label_form">Código*</label>
                     <div class="input">
-                        <input type="text" class="code" id="code--conciliations" name="Code" asp-for="Code" readonly />
+                        <input type="text" class="code" id="code--conciliations" name="Code" placeholder="Digite el Codigo" autocomplete="off" />
                     </div>
                     <span asp-validation-for="Code" class="text_error"></span>
                 </div>
@@ -31,7 +31,7 @@
                 <div class="field">
                     <label for="description--conciliations" asp-for="Name" class="label_form">Nombre*</label>
                     <div class="input">
-                        <input type="text" class="description" id="description--conciliations" name="Name" asp-for="Name" readonly />
+                        <input type="text" class="description" id="description--conciliations" name="Name" asp-for="Name" placeholder="Nombre de la conciliación" autocomplete="off" />
                     </div>
                     <span asp-validation-for="Name" class="text_error"></span>
                 </div>
@@ -41,7 +41,7 @@
                 <div class="field">
                     <label for="package--conciliations" asp-for="Package" class="label_form">Paquete*</label>
                     <div class="input">
-                        <input type="text" class="objective"asp-for="Package">
+                        <input type="text" class="objective" asp-for="Package" placeholder="Digite nombre del paquete ODI" autocomplete="off">
                     </div>
                     <span asp-validation-for="Package" class="text_error"></span>
                 </div>
@@ -51,7 +51,7 @@
                 <div class="field">
                     <label for="email--conciliations" asp-for="Email" class="label_form">Email Usuario Asignado*</label>
                     <div class="input">
-                        <input type="text" class="objective" asp-for="Email">
+                        <input type="text" class="objective" asp-for="Email" placeholder="Digite un correo válido" autocomplete="off">
                     </div>
                     <span asp-validation-for="Email" class="text_error"></span>
                 </div>
@@ -61,7 +61,7 @@
                 <div class="field">
                     <label for="destination--conciliations" asp-for="Destination" class="label_form">Destino</label>
                     <div class="input">
-                        <input type="text" class="objective" asp-for="Destination">
+                        <input type="text" class="objective" asp-for="Destination" placeholder="Digite la tabla de Destino" autocomplete="off">
                     </div>
                 </div>
             </div>
@@ -95,10 +95,10 @@
 
             <div class="form_group">
                 <div class="field">
-                    <label for="objective--policies" asp-for="Required" class="label_form">Requiere Aprobación de Resultado*</label>
+                    <label for="objective--policies" asp-for="Policies" class="label_form">Requiere Aprobación de Resultado*</label>
                     <div id="input_select_required" class="input">
-                        <input class="input_select" id="input_select_filter_required" asp-for="Required" name="Required" placeholder="Seleccione una opción" onclick="showOptionsRequired()" readonly />
-                        <input type="hidden" id="input_select_filter_value_required" name="Required" asp-for="Required" />
+                        <input class="input_select" id="input_select_filter_required" asp-for="Policies" name="Policies" placeholder="Seleccione una opción" onclick="showOptionsRequired()" readonly />
+                        <input type="hidden" id="input_select_filter_value_required" name="Policies" asp-for="Policies" />
                         <i class="icon icon_select icon_153"></i>
                     </div>
                     <div id="options_required" class="options">
@@ -117,13 +117,13 @@
                     <div id="select_helper_required" class="select_helper" onclick="showOptionsRequired()"></div>
                 </div>
                 </div>
-            <p class="note_text"><span>Nota: </span>Los campos con (*) son obligatorios</p>
+                <p class="note_text"><span>Nota: </span>Los campos con (*) son obligatorios</p>
 
-            <div class="btn_container">
-                <a class="button button_secondary" asp-controller="Conciliations" asp-action="Conciliations"><p class="text font_bold">Cancelar</p></a>
-                <button type="submit" class="button button_primary"><p class="text font_bold">Actualizar</p></button>
+                <div class="btn_container">
+                    <a class="button button_secondary" asp-controller="Conciliations" asp-action="Conciliations"><p class="text font_bold">Cancelar</p></a>
+                    <button type="submit" class="button button_primary"><p class="text font_bold">Crear</p></button>
+                </div>
             </div>
-        </div>
     </form>
 </div>
 

@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ParameterControl.Models.Conciliation;
 using ParameterControl.Models.Parameter;
+using ParameterControl.Models.Policy;
 using ParameterControl.Services.Conciliations;
 using ParameterControl.Services.Parameters;
+using ParameterControl.Services.Policies;
 using ParameterControl.Services.Rows;
 
 namespace ParameterControl.Controllers.Parameters
@@ -46,7 +48,7 @@ namespace ParameterControl.Controllers.Parameters
             TableParameters.Rows = rows.RowsParameters();
 
             TableParameters.Filter = true;
-            TableParameters.IsCreate = false;
+            TableParameters.IsCreate = true;
             TableParameters.IsActivate = true;
             TableParameters.IsEdit = true;
             TableParameters.IsInactivate = true;
@@ -94,6 +96,21 @@ namespace ParameterControl.Controllers.Parameters
             Parameter parameter = await parametersService.GetParameterById(id);
 
             return View("Actions/ViewParameter", parameter);
+        }
+        [HttpGet]
+        public async Task<ActionResult> Create()
+        {
+
+            List<string> ParameterTypeOptionList = await parametersService.GetParameterType();
+            List<string> GetListParameterList = await parametersService.GetListParameter();
+
+            ParameterCreateViewModel model = new ParameterCreateViewModel()
+            {
+                ParameterTypeOption = ParameterTypeOptionList,
+                ListParameter = GetListParameterList
+            };
+
+            return View("Actions/CreateParameter", model);
         }
     }
 }

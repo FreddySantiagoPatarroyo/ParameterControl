@@ -64,13 +64,7 @@ namespace ParameterControl.Controllers.Conciliations
             return View("Actions/DesactiveConciliation", conciliation);
         }
 
-        [HttpGet]
-        public async Task<ActionResult> Create(string id)
-        {
-            Conciliation conciliation = await conciliationsServices.GetConciliationsById(id);
-
-            return View("Actions/CreateConciliation", conciliation);
-        }
+      
 
         [HttpGet]
         public async Task<ActionResult> Edit(string id)
@@ -115,13 +109,16 @@ namespace ParameterControl.Controllers.Conciliations
         {
 
             List<string> PoliciesOptionsList = await conciliationsServices.GetPolicies();
+            List<string> RequiredOptionList = await conciliationsServices.GetRequired();
 
             ConciliationCreateViewModel model = new ConciliationCreateViewModel()
             {
-                PoliciesOption = PoliciesOptionsList
+                PoliciesOption = PoliciesOptionsList,
+                RequiredOption = RequiredOptionList
             };
 
-            return View("Actions/EditConciliation", model);
+            return View("Actions/CreateConciliation", model);
         }
+       
     }
 }
