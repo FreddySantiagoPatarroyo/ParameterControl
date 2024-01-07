@@ -8,25 +8,26 @@
 <div class="login">  
     <div class="box">
         <div _ngcontent-xow-c136="" class="card_element animate fadeIn one">
-            <form class="content" asp-action="login">
+
+            <div asp-validation-summary="ModelOnly" class="text_error"></div>
+
+            <form class="content" asp-controller="Login" asp-action="Login">
                 <p class="logo icon_281 "></p>
                 <p class="title">Inicio de sesión</p>
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <div class="form-group">
                     <label asp-for="user" class="">Usuario</label>
                     <input asp-for="user" class="input_login" placeholder = "Usuario"/>
-                    <span asp-validation-for="user" class="text-danger"></span>
+                    <span asp-validation-for="user" class="text_error"></span>
                 </div>
                 <div class="form-group">
                     <label asp-for="password" class="">Contraseña</label>
                     <input asp-for="password" type="password" class="input_login" placeholder="Contraseña" />
-                    <span asp-validation-for="password" class="text-danger"></span>
+                    <span asp-validation-for="password" class="text_error"></span>
                 </div>
                 <div class="box_btn">
-                    <a class="btn_login" asp-area="" asp-controller="Home" asp-action="Index">Acceder</a>
-
+                    <button type="submit" class="btn_login">Acceder</button>
                 </div>
-               
             </form>
         </div>
     </div>
@@ -35,7 +36,5 @@
         
 
 @section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
+    <partial name="_ValidationScriptsPartial.cshtml" />
 }

@@ -14,8 +14,11 @@ namespace ParameterControl.Controllers.Login
         [HttpPost]
         public IActionResult Login(LoginViewModel request)
         {
-            var user = request;
-            return View();
+            if(!ModelState.IsValid)
+            {
+                return View(request);
+            }
+            return RedirectToAction("Index", "Home");
         }
     }
 }

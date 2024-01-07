@@ -4,9 +4,6 @@
 @import url(../icons/css/icons-ie7-codes.css);
 @import url(../icons/css/icons-embedded.css);
 @import url(../icons/css/icons-codes.css);
-@import url('./login/login.css');
-@import url('./menu/menu.css');
-@import url(./policies/policies.css);
 
 * {
     padding: 0px 0px 0px;
@@ -88,8 +85,8 @@ body {
     --button_hover: rgba(0, 0, 0, .02);
     --button_primary: var(--red_600);
     --button_primary_hover: var(--red_800);
-    --button_secondary: var(--white);
-    --button_secondary_hover: var(--button_primary_hover);
+    --button_secondary: var(--gray_200);
+    --button_secondary_hover: var(--gray_300);
     --button_tertiary: var(--gray_400);
     --tx_button_tertiary: var(--gray_800);
     --button_tertiary_hover: var(--gray_900);
@@ -178,6 +175,8 @@ body {
     /*End*/
     color: var(--texts);
     background-color: var(--bg_card_element);
+    /*New*/
+    --radius_forms: 0px 20px 20px 20px;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -188,12 +187,14 @@ body {
         /*Buttons*/
         --button_hover: rgba(255, 255, 255, .02);
         --button_primary: var(--red_500);
-        --button_secondary_hover: var(--gray_800);
+        --button_secondary: var(--gray_300);
+        --button_secondary_hover: var(--gray_100);
         --tx_button_tertiary: var(--gray_400);
         --button_tertiary_hover: var(--gray_100);
         /*End*/
         /*Texts*/
         --texts: var(--gray_100);
+        --tx_error: var(--red_600);
         /*End*/
         /*Inputs fields and more inputs*/
         --br_inputs: var(--gray_700);
@@ -268,59 +269,5 @@ p {
     z-index: 1;
 }
 
-.flex_box {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    align-content: center;
-    justify-content: center;
-    align-items: center;
-}
-
-.card_element {
-    display: flex;
-    align-items: flex-start;
-    align-content: flex-start;
-    justify-content: flex-start;
-    flex-wrap: wrap;
-    padding: var(--padding_card_element);
-    background-color: var(--bg_card_element);
-    border: 1px solid var(--br_card_element);
-    border-radius: var(--radius_card_element);
-    box-shadow: var(--shadow);
-    height: 100%;
-}
-
-.button_icon {
-    display: flex;
-    align-items: center;
-    align-content: center;
-    justify-content: center;
-    flex-wrap: wrap;
-    width: 38px;
-    height: 38px;
-    background-color: transparent;
-    border: 1px solid transparent;
-    border-radius: var(--radius_icon_button);
-    cursor: pointer;
-    margin-left: 8px;
-}
-
-.button_icon .icon{
-    color: var(--pure_white);
-    font-size: 20px;
-}
-
-.button_icon:first-child{
-    margin-right: 0px;
-}
-
-.button_primary {
-    background-color: var(--button_primary);
-}
-
 @media (min-width:910px) {
-    .button_primary:hover {
-        background-color: var(--button_primary_hover);
-    }
 }

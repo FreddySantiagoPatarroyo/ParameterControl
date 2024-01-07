@@ -1,0 +1,203 @@
+﻿@using ParameterControl.Models.Conciliation;
+@model ConciliationCreateViewModel;
+
+@{
+}
+
+<partial name="_Menu" />
+
+<div class="box_edit">
+    <div class="bg__blur"></div>
+    <div asp-validation-summary="ModelOnly" class="text_error"></div>
+
+    <form asp-controller="Conciliations" asp-action="Edit" class="form__container">
+        <div class="card__container">
+            <div class="header_form">
+                <img src="/images/iconApple.png" />
+                <h1>Editar Conciliación</h1>
+            </div>
+
+            <div class="form_group">
+                <div class="field">
+                    <label for="code--conciliations" asp-for="Code" class="label_form">Código*</label>
+                    <div class="input">
+                        <input type="text" class="code" id="code--conciliations" name="Code" asp-for="Code" readonly />
+                    </div>
+                    <span asp-validation-for="Code" class="text_error"></span>
+                </div>
+            </div>
+
+            <div class="form_group">
+                <div class="field">
+                    <label for="description--conciliations" asp-for="Name" class="label_form">Nombre*</label>
+                    <div class="input">
+                        <input type="text" class="description" id="description--conciliations" name="Name" asp-for="Name" readonly />
+                    </div>
+                    <span asp-validation-for="Name" class="text_error"></span>
+                </div>
+            </div>
+
+            <div class="form_group">
+                <div class="field">
+                    <label for="package--conciliations" asp-for="Package" class="label_form">Paquete*</label>
+                    <div class="input">
+                        <input type="text" class="objective"asp-for="Package">
+                    </div>
+                    <span asp-validation-for="Package" class="text_error"></span>
+                </div>
+            </div>
+
+            <div class="form_group">
+                <div class="field">
+                    <label for="email--conciliations" asp-for="Email" class="label_form">Email Usuario Asignado*</label>
+                    <div class="input">
+                        <input type="text" class="objective" asp-for="Email">
+                    </div>
+                    <span asp-validation-for="Email" class="text_error"></span>
+                </div>
+            </div>
+
+            <div class="form_group">
+                <div class="field">
+                    <label for="destination--conciliations" asp-for="Destination" class="label_form">Destino</label>
+                    <div class="input">
+                        <input type="text" class="objective" asp-for="Destination">
+                    </div>
+                </div>
+            </div>
+
+            <div class="form_group">
+                <div class="field">
+                    <label for="objective--policies" asp-for="Policies" class="label_form">Politicas*</label>
+                    <div id="input_select" class="input">
+                        <input class="input_select" id="input_select_filter" asp-for="Policies" name="Policies" placeholder="Seleccione una opción" onclick="showOptions()" readonly />
+                        <input type="hidden" id="input_select_filter_value" name="Policies" asp-for="Policies" />
+                        <i class="icon icon_select icon_153"></i>
+                    </div>
+                    <div id="options" class="options">
+                        <ul class="options_list">
+                            <li onclick="selectOption('@null', '@null')" class="option">
+                                <p class="option_text">Seleccione una opción</p>
+                            </li>
+                            @foreach (var Colunm in Model.PoliciesOption)
+                            {
+                                <li onclick="selectOption('@Colunm', '@Colunm')" class="option">
+                                    <p class="option_text">@Colunm</p>
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                    <div id="select_helper" class="select_helper" onclick="showOptions()"></div>
+                </div>
+
+                <span asp-validation-for="Policies" class="text_error"></span>
+            </div>
+
+            <div class="form_group">
+                <div class="field">
+                    <label for="objective--policies" asp-for="Required" class="label_form">Requiere Aprobación de Resultado*</label>
+                    <div id="input_select_required" class="input">
+                        <input class="input_select" id="input_select_filter_required" asp-for="Required" name="Required" placeholder="Seleccione una opción" onclick="showOptionsRequired()" readonly />
+                        <input type="hidden" id="input_select_filter_value_required" name="Required" asp-for="Required" />
+                        <i class="icon icon_select icon_153"></i>
+                    </div>
+                    <div id="options_required" class="options">
+                        <ul class="options_list">
+                            <li onclick="selectOptionRequired('@null', '@null')" class="option">
+                                <p class="option_text">Seleccione una opción</p>
+                            </li>
+                            @foreach (var Colunm in Model.RequiredOption)
+                            {
+                                <li onclick="selectOptionRequired('@Colunm', '@Colunm')" class="option">
+                                    <p class="option_text">@Colunm</p>
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                    <div id="select_helper_required" class="select_helper" onclick="showOptionsRequired()"></div>
+                </div>
+                </div>
+            <p class="note_text"><span>Nota: </span>Los campos con (*) son obligatorios</p>
+
+            <div class="btn_container">
+                <a class="button button_secondary" asp-controller="Conciliations" asp-action="Conciliations"><p class="text font_bold">Cancelar</p></a>
+                <button type="submit" class="button button_primary"><p class="text font_bold">Actualizar</p></button>
+            </div>
+        </div>
+    </form>
+</div>
+
+
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial.cshtml" />
+    <script>
+        let viewOptions = false;
+
+        const showOptions = () => {
+
+            let widthOption = document.getElementById("input_select").clientWidth;
+            let options = document.getElementById("options");
+            options.style.width = widthOption + "px";
+
+            viewOptions = !viewOptions;
+
+            if (viewOptions) {
+                document.getElementById('options').style.display = 'block';
+                document.getElementById('select_helper').style.display = 'block';
+            } else {
+                document.getElementById('options').style.display = 'none';
+                document.getElementById('select_helper').style.display = 'none';
+            }
+        }
+
+        const selectOption = (name, value) => {
+
+            if (name == null || value == null || name == '' || value == '') {
+                console.log("vacio");
+                document.getElementById("input_select_filter").value = '';
+                document.getElementById("input_select_filter_value").value = '';
+            } else {
+                console.log(value);
+                document.getElementById("input_select_filter").value = name;
+                document.getElementById("input_select_filter_value").value = value;
+            }
+
+            showOptions();
+        }
+
+        let viewOptionsRequired = false;
+
+        const showOptionsRequired = () => {
+
+            let widthOptionRequired = document.getElementById("input_select_required").clientWidth;
+            let optionsRequired = document.getElementById("options_required");
+            optionsRequired.style.width = widthOptionRequired + "px";
+
+            viewOptionsRequired = !viewOptionsRequired;
+
+            if (viewOptionsRequired) {
+                document.getElementById('options_required').style.display = 'block';
+                document.getElementById('select_helper_required').style.display = 'block';
+            } else {
+                document.getElementById('options_required').style.display = 'none';
+                document.getElementById('select_helper_required').style.display = 'none';
+            }
+        }
+
+        const selectOptionRequired = (name, value) => {
+
+            if (name == null || value == null || name == '' || value == '') {
+                console.log("vacio");
+                document.getElementById("input_select_filter_required").value = '';
+                document.getElementById("input_select_filter_value_required").value = '';
+            } else {
+                console.log(value);
+                document.getElementById("input_select_filter_required").value = name;
+                document.getElementById("input_select_filter_value_required").value = value;
+            }
+
+            showOptionsRequired();
+        }
+    </script>
+}

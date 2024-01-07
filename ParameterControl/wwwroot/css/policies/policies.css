@@ -1,10 +1,10 @@
-﻿.content_policies{
+﻿.content_policies {
     margin-top: 65px;
-    position: relative;
+    position: absolute;
     width: 100%;
     padding-top: 16px;
     padding-bottom: 16px;
-    z-index:-1;
+    z-index: -11;
     max-width: calc(100% - 2px);
 }
 
@@ -16,6 +16,26 @@
     margin-left: auto;
     margin-right: auto;
     z-index: 1;
+    border-radius: var(--radius_card_element);
+}
+
+.content_policies .card_policies .titulation {
+    display: block;
+    width: 100%;
+    margin-bottom: 24px;
+}
+
+.content_policies .card_policies .titulation .title_table {
+    width: 100%;
+    text-align: center;
+    color: var(--texts);
+    font-size: 24px;
+}
+
+.content_policies .card_policies .titulation .button {
+    width: 100%;
+    padding: 0px;
+    color: var(--pure-white);
 }
 
 .content_policies .card_policies .list {
@@ -29,11 +49,38 @@
     height: 100%;
 }
 
+.content_policies .card_policies .list .element_table .content_filter{
+    justify-content: flex-start;
+    position: relative;
+    width: auto;
+    margin-bottom: 12px;
+    z-index: 3;
+}
+
+.content_policies .card_policies .list .element_table .content_filter .button{
+    width: 100%;
+    text-align:center;
+}
+
+.content_policies .card_policies .list .element_table .content_filter .button_secondary{
+    margin-top: 8px;
+}
+
+/*.content_policies .card_policies .list .element_table .content_filter .filter_primary,
+.content_policies .card_policies .list .element_table .content_filter .filter_secondary{
+    display: contents;
+}
+
+.content_policies .card_policies .list .element_table .content_filter .filter_secondary .field{
+    margin-left: 8px;
+    display: none;
+}*/
+
 .content_policies .card_policies .list .element_table .content_table {
     position: relative;
     width: 100%;
     max-width: calc(100vw - 2px);
-    max-height: calc(100% - 84px);
+    height: calc(100vh - 470px);
     border: 1px solid var(--br_table);
     border-radius: var(--radius_table);
     overflow-x: auto;
@@ -118,11 +165,24 @@
     z-index: 1;
 }
 
+.content_policies .card_policies .list .element_table .content_table .tables .rows.disabled{
+    background-color: var(--bg_row_blocked);
+}
+
 .content_policies .card_policies .list .element_table .content_table .tables .rows .row_table.actions{
     width: 194px;
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+.content_policies .card_policies .list .element_table .content_table .tables .rows.disabled .row_table.actions .button_icon.disabled{
+    background-color: transparent;
+    cursor: not-allowed;
+}
+
+.content_policies .card_policies .list .element_table .content_table .tables .rows.disabled .row_table.actions .button_icon.disabled .icon{
+    color: var(--tx_disabled);
 }
 
 .content_policies .card_policies .list .element_table .content_table .tables .rows .row_table .text {
@@ -143,6 +203,50 @@
     text-transform: uppercase;
 }
 
+.content_policies .card_policies .list .element_table .pagination{
+    position: relative;
+    width: auto;
+    max-width: 100%;
+    margin-top: 16px;
+    z-index: 1;
+}
+
+.content_policies .card_policies .list .element_table .pagination .custom_pagination.pagination_mobile{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.content_policies .card_policies .list .element_table .pagination .custom_pagination.pagination_mobile .button{
+    width: 96px;
+}
+
+.content_policies .card_policies .list .element_table .pagination .custom_pagination.pagination_mobile .button .icon{
+    margin: 0px 4px;
+}
+
+.content_policies .card_policies .list .element_table .pagination .custom_pagination.pagination_mobile .button .text{
+    max-width: calc(100% - 24px);
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.content_policies .card_policies .list .element_table .pagination .custom_pagination.pagination_mobile .pages{
+    width: auto;
+    color: var(--texts);
+    font-size: 16px;
+    text-align: center;
+    text-overflow: Ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    opacity: .48;
+}
+
+.content_policies .card_policies .list .element_table .pagination .custom_pagination.pagination_desktop{
+    display: none;
+}
+
 @media (min-width:910px) {
     .content_policies {
         max-width: calc(100% - 40px);
@@ -154,18 +258,71 @@
         margin-left: 20px;
     }
 
+    .content_policies .card_policies .titulation {
+        display: flex;
+        justify-content: flex-start;
+        width: 100%;
+        margin-bottom: 24px;
+    }
+
+    .content_policies .card_policies .titulation .title_table {
+        width: auto;
+        text-align: start;
+    }
+
+    .content_policies .card_policies .titulation .button {
+        width: auto;
+        padding: 0 16px;
+        margin-left: 16px;
+    }
+
     .content_policies .card_policies .list {
         height: calc(100% - 64px);
         max-height: calc(100vh - 296px);
         padding-right: 4px;
     }
 
+    .content_policies .card_policies .list .element_table .content_filter {
+        align-content: flex-end;
+        align-items: flex-end;
+        justify-content: flex-start;
+    }
+
+    .content_policies .card_policies .list .element_table .content_filter .button {
+        width: auto;
+        text-align: center;
+    }
+
+    .content_policies .card_policies .list .element_table .content_filter .button_secondary {
+        margin-left: 8px;
+    }
+
     .content_policies .card_policies .list .element_table .content_table {
         max-width: -webkit-min-content;
         max-width: -moz-min-content;
         max-width: min-content;
-        max-height: calc(100% - 106px);
+        max-height: calc(100% - 116px);
         overflow-y: auto;
         overflow-x: auto;
+    }
+
+    .content_policies .card_policies .list .element_table .pagination .custom_pagination.pagination_mobile{
+        display: none;
+    }
+
+    .content_policies .card_policies .list .element_table .pagination .custom_pagination.pagination_desktop{
+        width: 100%;
+        display: flex;
+    }
+
+    .content_policies .card_policies .list .element_table .pagination .custom_pagination.pagination_desktop .navigator{
+        justify-content: flex-start;
+        width: 100%;
+        margin-top: 8px;
+    }
+
+    
+    .content_policies .card_policies .list .element_table .pagination .custom_pagination.pagination_desktop .navigator .button:last-child{
+        margin-left: 8px;
     }
 }

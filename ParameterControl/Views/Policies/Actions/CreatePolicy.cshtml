@@ -1,0 +1,143 @@
+﻿@using ParameterControl.Models.Policy;
+@model PolicyCreateViewModel;
+
+@{
+    ViewData["Title"] = "Crear Politicas";
+}
+
+<partial name="_Menu" />
+
+<div class="box_create">
+    <div class="bg__blur"></div>
+
+    <div asp-validation-summary="ModelOnly" class="text_error"></div>
+
+    <form asp-controller="Policies" asp-action="Create" class="form__container">
+        <div class="card__container">
+            <div class="header_form">
+                <img src="/images/iconApple.png" />
+                <h1>Crear Politica</h1>
+            </div>
+
+            <div class="form_group">
+                <div class="field">
+                    <label for="code--polices" asp-for="Code" class="label_form">Código*</label>
+                    <div class="input">
+                        <input type="text" id="code--policies" name="Code" asp-for="Code" placeholder="Codigo" autocomplete="off" />
+                    </div>
+                    <span asp-validation-for="Code" class="text_error"></span>
+                </div>
+            </div>
+            <div class="form_group">
+                <div class="field">
+                    <label for="description--policies" asp-for="Name" class="label_form">Nombre*</label>
+                    <div class="input">
+                        <input type="text" id="description--policies" name="Name" asp-for="Name" placeholder="Nombre" autocomplete="off" />
+                    </div>
+                    <span asp-validation-for="Name" class="text_error"></span>
+                </div>
+            </div>
+            <div class="form_group">
+                <div class="field">
+                    <label for="objective--policies" asp-for="Description" class="label_form">Descripcion*</label>
+                    <div class="textarea">
+                        <textarea id="objective--policies" name="Description" asp-for="Description" placeholder="Descripcion"></textarea>
+                    </div>
+                    <span asp-validation-for="Description" class="text_error"></span>
+                </div>
+            </div>
+            <div class="form_group">
+                <div class="field">
+                    <label for="objective--policies" asp-for="Conciliation" class="label_form">Conciliacion*</label>
+                    <div class="input">
+                        <input type="text" value="" id="objective--policies" name="Description" asp-for="Conciliation" placeholder="Conciliacion" autocomplete="off" />
+                    </div>
+                    <span asp-validation-for="Conciliation" class="text_error"></span>
+                </div>
+            </div>
+            <div class="form_group">
+                <div class="field">
+                    <label for="objective--policies" asp-for="ControlType" class="label_form">Tipo control*</label>
+                    <div class="input">
+                        <input type="text" id="objective--policies" name="Description" asp-for="ControlType" placeholder="Tipo de control" autocomplete="off" />
+                    </div>
+                    <span asp-validation-for="ControlType" class="text_error"></span>
+                </div>
+            </div>
+            <div class="form_group">
+                <div class="field">
+                    <label for="objective--policies" asp-for="OperationType" class="label_form">Tipo de operacion*</label>
+                    <div id="input_select" class="input">
+                        <input class="input_select" id="input_select_filter" name="input_select_filter" placeholder="Seleccione una opción" onclick="showOptions()" readonly />
+                        <input type="hidden" id="input_select_filter_value" name="ColumValue" asp-for="OperationType" />
+                        <i class="icon icon_select icon_153"></i>
+                    </div>
+                    <div id="options" class="options">
+                        <ul class="options_list">
+                            <li onclick="selectOption('@null', '@null')" class="option">
+                                <p class="option_text">Seleccione una opción</p>
+                            </li>
+                            @foreach (var Colunm in Model.OperationTypeOptions)
+                            {
+                                <li onclick="selectOption('@Colunm', '@Colunm')" class="option">
+                                    <p class="option_text">@Colunm</p>
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                    <div id="select_helper" class="select_helper" onclick="showOptions()"></div>
+                </div>
+                
+                <span asp-validation-for="OperationType" class="text_error"></span>
+            </div>
+
+            <p class="note_text"><span>Nota: </span>Los campos con (*) son obligatorios</p>
+
+            <div class="btn_container">
+                <a class="button button_secondary" asp-controller="Policies" asp-action="Policies"><p class="text font_bold">Cancelar</p></a>
+                <button type="submit" class="button button_primary"><p class="text font_bold">Crear</p></button>
+            </div>
+        </div>
+    </form>
+</div>
+
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial.cshtml" />
+    <script>
+        let viewOptions = false;
+
+        const showOptions = () => {
+
+            let widthOption = document.getElementById("input_select").clientWidth;
+            let options = document.getElementById("options");
+            options.style.width = widthOption + "px";
+
+            viewOptions = !viewOptions;
+
+            if (viewOptions) {
+                document.getElementById('options').style.display = 'block';
+                document.getElementById('select_helper').style.display = 'block';
+            } else {
+                document.getElementById('options').style.display = 'none';
+                document.getElementById('select_helper').style.display = 'none';
+            }
+        }
+
+        const selectOption = (name, value) => {
+
+            if (name == null || value == null || name == '' || value == '') {
+                console.log("vacio");
+                document.getElementById("input_select_filter").value = '';
+                document.getElementById("input_select_filter_value").value = '';
+            } else {
+                console.log(value);
+                document.getElementById("input_select_filter").value = name;
+                document.getElementById("input_select_filter_value").value = value;
+            }
+
+            showOptions();
+        }
+    </script>
+}
+

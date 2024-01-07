@@ -5,6 +5,11 @@ VisualStudioVersion = 17.8.34309.116
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ParameterControl", "ParameterControl\ParameterControl.csproj", "{DE383B5E-4639-4625-A510-FD8FAB7689A0}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{598DF5E1-8F09-4586-9694-C70551A7486B}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
+EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ParameterControl.Auth", "ParameterControl.Auth", "{91079B39-5F50-456A-805D-3800C3F2B7EF}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ParameterControl.Auth.Entities", "ParameterControl.Auth.Entities\ParameterControl.Auth.Entities.csproj", "{A116EB3A-DA1A-42C3-BFEA-116E083930A8}"

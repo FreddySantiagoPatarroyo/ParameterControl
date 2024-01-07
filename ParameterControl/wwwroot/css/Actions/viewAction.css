@@ -1,0 +1,12 @@
+﻿.box__view{
+    display:block;
+}
+
+.btn_container .btn_cancel-view {
+    margin-left: 0px;
+}
+
+.form__container .title_form{
+    font-weight: 400;
+    margin-top:20px;
+}
