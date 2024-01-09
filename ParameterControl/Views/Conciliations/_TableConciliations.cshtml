@@ -4,6 +4,12 @@
 @model TableConciliationViewModel
 
 @{
+    PropertyInfo GetRowInfo(string RowValue)
+    {
+        var property = typeof(Conciliation).GetProperty(RowValue);
+
+        return property;
+    }
 }
 <div class="content_conciliations">
     <div class="card_conciliations card_element flex_box" id="card_conciliation">
@@ -86,10 +92,10 @@
                                 @if (Conciliation.State)
                                 {
                                     <div class="rows">
-                                        @foreach (var Row in Conciliation.GetProperties(Model.Rows))
+                                        @foreach (var Row in Model.Rows)
                                         {
                                             <div class="row_table flex_box">
-                                                <p id="text_row" class="text flex_box">@Row?.GetValue(Conciliation)?.ToString()</p>
+                                                <p id="text_row" class="text flex_box">@GetRowInfo(Row.Value)?.GetValue(Conciliation)?.ToString()</p>
                                             </div>
                                         }
                                         <div class="row_table flex_box actions">
@@ -108,10 +114,10 @@
                                 else
                                 {
                                     <div class="rows disabled">
-                                        @foreach (var Row in Conciliation.GetProperties(Model.Rows))
+                                        @foreach (var Row in Model.Rows)
                                         {
                                             <div class="row_table flex_box">
-                                                <p id="text_row" class="text flex_box">@Row?.GetValue(Conciliation)?.ToString()</p>
+                                                <p id="text_row" class="text flex_box">@GetRowInfo(Row.Value)?.GetValue(Conciliation)?.ToString()</p>
                                             </div>
                                         }
                                         <div class="row_table flex_box actions">

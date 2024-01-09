@@ -103,9 +103,28 @@ namespace ParameterControl.Services.Policies
             return policies;
         }
 
-        public List<Policy> GetPolicesFormatTable(List<Policy> policies)
+        public List<PolicyViewModel> GetPolicesFormatTable(List<Policy> policies)
         {
-            return null;
+            List<PolicyViewModel> policiesModel  = new List<PolicyViewModel>();
+
+            foreach (Policy policy in policies)
+            {
+                PolicyViewModel policyModel = new PolicyViewModel();
+
+                policyModel.Id = policy.Id;
+                policyModel.Code = policy.Code;
+                policyModel.Name = policy.Name; 
+                policyModel.Description = policy.Description;
+                policyModel.Conciliation = policy.Conciliation;
+                policyModel.ControlType = policy.ControlType;
+                policyModel.OperationType = policy.OperationType;
+                policyModel.State = policy.State;
+                policyModel.StateFormat = policy.State ? "Activo" : "Inactivo";
+
+                policiesModel.Add(policyModel);
+            }
+
+            return policiesModel;
         }
 
         public async Task<Policy> GetPolicyById(string id)
@@ -124,13 +143,13 @@ namespace ParameterControl.Services.Policies
             return operationsType;
         }
 
-        public async Task<List<Policy>> GetFilterPolicies(FilterViewModel filterModel)
+        public async Task<List<PolicyViewModel>> GetFilterPolicies(FilterViewModel filterModel)
         {
-            List<Policy> policiesFilter = new List<Policy>();
+            List<PolicyViewModel> policiesFilter = new List<PolicyViewModel>();
 
             if((filterModel.ColumValue == null || filterModel.ColumValue == "" || filterModel.ValueFilter == null || filterModel.ValueFilter == ""))
             {
-                policiesFilter = policies;
+                policiesFilter = GetPolicesFormatTable(policies);
             }
             else
             {
@@ -162,13 +181,15 @@ namespace ParameterControl.Services.Policies
             return policiesFilter;
         }
 
-        private List<Policy> applyFilter(FilterViewModel filterModel)
+        private List<PolicyViewModel> applyFilter(FilterViewModel filterModel)
         {
-            var property = typeof(Policy).GetProperty(filterModel.ColumValue);
+            var property = typeof(PolicyViewModel).GetProperty(filterModel.ColumValue);
 
-            List<Policy> policiesFilter = new List<Policy>();
+            List<PolicyViewModel> policiesFilter = new List<PolicyViewModel>();
 
-            foreach (Policy policy in policies)
+            List<PolicyViewModel> Policies = GetPolicesFormatTable(policies);
+
+            foreach (PolicyViewModel policy in Policies)
             {
                 if (property.GetValue(policy).ToString().ToUpper().Contains(filterModel.ValueFilter.ToUpper()))
                 {

@@ -4,6 +4,12 @@
 @model TableScenariosViewModel
 
 @{
+    PropertyInfo GetRowInfo(string RowValue)
+    {
+        var property = typeof(Scenery).GetProperty(RowValue);
+
+        return property;
+    }
 }
 <div class="content_scenarios">
     <div class="card_scenarios card_element flex_box" id="card_scenarios">
@@ -86,10 +92,10 @@
                                 @if (Scenary.State)
                                 {
                                     <div class="rows">
-                                        @foreach (var Row in Scenary.GetProperties(Model.Rows))
+                                        @foreach (var Row in Model.Rows)
                                         {
                                             <div class="row_table flex_box">
-                                                <p id="text_row" class="text flex_box">@Row?.GetValue(Scenary)?.ToString()</p>
+                                                <p id="text_row" class="text flex_box">@GetRowInfo(Row.Value)?.GetValue(Scenary)?.ToString()</p>
                                             </div>
                                         }
                                         <div class="row_table flex_box actions">
@@ -108,10 +114,10 @@
                                 else
                                 {
                                     <div class="rows disabled">
-                                        @foreach (var Row in Scenary.GetProperties(Model.Rows))
+                                        @foreach (var Row in Model.Rows)
                                         {
                                             <div class="row_table flex_box">
-                                                <p id="text_row" class="text flex_box">@Row?.GetValue(Scenary)?.ToString()</p>
+                                                <p id="text_row" class="text flex_box">@GetRowInfo(Row.Value)?.GetValue(Scenary)?.ToString()</p>
                                             </div>
                                         }
                                         <div class="row_table flex_box actions">

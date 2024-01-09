@@ -40,7 +40,7 @@ namespace ParameterControl.Services.Rows
                 },
                 new Row()
                 {
-                    Value = "State",
+                    Value = "StateFormat",
                     Name = "Estado"
                 },
 
