@@ -9,5 +9,6 @@ namespace ParameterControl.Services.Conciliations
         Task<List<string>> GetRequired();
         Task<List<Conciliation>> GetConciliations();
         Task<Conciliation> GetConciliationsById(string id);
+        Task<List<Conciliation>> GetFilterConciliations(FilterViewModel filterModel);
     }
 }

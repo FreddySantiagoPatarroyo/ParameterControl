@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json.Linq;
 using ParameterControl.Models.Filter;
 using ParameterControl.Models.Policy;
+using ParameterControl.Models.Rows;
 using System.Collections.Generic;
 using System.Data.Common;
 using System.Reflection;
@@ -102,6 +103,11 @@ namespace ParameterControl.Services.Policies
             return policies;
         }
 
+        public List<Policy> GetPolicesFormatTable(List<Policy> policies)
+        {
+            return null;
+        }
+
         public async Task<Policy> GetPolicyById(string id)
         {
             Policy policy = policies.Find(policy => policy.Id == id);
@@ -156,7 +162,7 @@ namespace ParameterControl.Services.Policies
             return policiesFilter;
         }
 
-        public List<Policy> applyFilter(FilterViewModel filterModel)
+        private List<Policy> applyFilter(FilterViewModel filterModel)
         {
             var property = typeof(Policy).GetProperty(filterModel.ColumValue);
 

@@ -33,7 +33,6 @@ namespace ParameterControl.Controllers.Policies
         {
 
             TablePolicies.Data = await policiesServices.GetPolicies();
-            
 
             TablePolicies.Rows = rows.RowsPolicies();
 

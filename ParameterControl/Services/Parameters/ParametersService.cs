@@ -1,4 +1,6 @@
-﻿using ParameterControl.Models.Parameter;
+﻿using ParameterControl.Models.Filter;
+using ParameterControl.Models.Parameter;
+using ParameterControl.Models.Policy;
 
 namespace ParameterControl.Services.Parameters
 {
@@ -11,18 +13,18 @@ namespace ParameterControl.Services.Parameters
             {
                 new Parameter(){
                     Id = "1",
-                    ParameterType = "GENERAL",
+                    ParameterType = "OTRO",
                     List = "Ejemplo List",
-                     _Parameters = "V_STATUS",
+                    Parameters_ = "V_STATUS",
                     Value = "ACT",
                     Description = "Descripcion ejemplo",
                     State = true
                 },
                 new Parameter(){
                     Id = "2",
-                     ParameterType = "GENERAL",
+                    ParameterType = "GENERAL",
                     List = "Ejemplo List",
-                     _Parameters = "V_STATUS",
+                    Parameters_ = "V_STATUS",
                     Value = "ACT",
                     Description = "Descripcion ejemplo",
                     State = false
@@ -31,25 +33,25 @@ namespace ParameterControl.Services.Parameters
                     Id = "3",
                     ParameterType = "GENERAL",
                     List = "Ejemplo List",
-                     _Parameters = "V_STATUS",
+                    Parameters_ = "V_STATUS",
                     Value = "ACT",
                     Description = "Descripcion ejemplo",
                     State = true
                 },
                 new Parameter(){
                     Id = "4",
-                     ParameterType = "GENERAL",
+                    ParameterType = "GENERAL",
                     List = "Ejemplo List",
-                     _Parameters = "V_STATUS",
+                    Parameters_ = "V_STATUS",
                     Value = "ACT",
                     Description = "Descripcion ejemplo",
                     State = false
                 },
                 new Parameter(){
                     Id = "5",
-                     ParameterType = "GENERAL",
+                    ParameterType = "GENERAL",
                     List = "Ejemplo List",
-                     _Parameters = "V_STATUS",
+                    Parameters_ = "V_STATUS",
                     Value = "ACT",
                     Description = "Descripcion ejemplo",
                     State = true
@@ -58,16 +60,16 @@ namespace ParameterControl.Services.Parameters
                     Id = "6",
                     ParameterType = "GENERAL",
                     List = "Ejemplo List",
-                     _Parameters = "V_STATUS",
-                    Value = "ACT",
+                    Parameters_ = "V_STATUS",
                     Description = "Descripcion ejemplo",
+                    Value = "ACT",
                     State = false
                 },
                 new Parameter(){
                     Id = "7",
-                     ParameterType = "GENERAL",
+                    ParameterType = "GENERAL",
                     List = "Ejemplo List",
-                     _Parameters = "V_STATUS",
+                    Parameters_ = "V_STATUS",
                     Value = "ACT",
                     Description = "Descripcion ejemplo",
                     State = true
@@ -76,7 +78,7 @@ namespace ParameterControl.Services.Parameters
                     Id = "8",
                     ParameterType = "GENERAL",
                     List = "Ejemplo List",
-                     _Parameters = "V_STATUS",
+                    Parameters_ = "GENERAL",
                     Value = "ACT",
                     Description = "Descripcion ejemplo",
                     State = false
@@ -94,6 +96,56 @@ namespace ParameterControl.Services.Parameters
             Parameter parameter = parameters.Find(parameter => parameter.Id == id);
             return parameter;
         }
+
+        public async Task<List<Parameter>> GetFilterParameters(FilterViewModel filterModel)
+        {
+            List<Parameter> parametersFilter = new List<Parameter>();
+
+            if ((filterModel.ColumValue == null || filterModel.ColumValue == "" || filterModel.ValueFilter == null || filterModel.ValueFilter == ""))
+            {
+                parametersFilter = parameters;
+            }
+            else
+            {
+                switch (filterModel.ColumValue)
+                {
+                    case "ParameterType":
+                        parametersFilter = applyFilter(filterModel);
+                        break;
+                    case "Value":
+                        parametersFilter = applyFilter(filterModel);
+                        break;
+                    case "Description":
+                        parametersFilter = applyFilter(filterModel);
+                        break;
+                    case "Parameters_":
+                        parametersFilter = applyFilter(filterModel);
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            return parametersFilter;
+        }
+
+        private List<Parameter> applyFilter(FilterViewModel filterModel)
+        {
+            var property = typeof(Parameter).GetProperty(filterModel.ColumValue);
+
+            List<Parameter> parametersFilter = new List<Parameter>();
+
+            foreach (Parameter parameter in parameters)
+            {
+                if (property.GetValue(parameter).ToString().ToUpper().Contains(filterModel.ValueFilter.ToUpper()))
+                {
+                    parametersFilter.Add(parameter);
+                }
+            }
+
+            return parametersFilter;
+        }
+
         public async Task<List<string>> GetParameterType()
         {
             List<string> parameterType = new List<string>()

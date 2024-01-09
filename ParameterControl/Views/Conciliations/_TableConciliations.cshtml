@@ -18,8 +18,8 @@
         </div>
         <div class="list">
             <div class="element_table">
-               @*  <div class="content_filter flex_box">
-                    <div class="filter_primary">
+               <div class="content_filter flex_box">
+                   @*  <div class="filter_primary">
                         <div id="field_primary" class="field">
                             <label class="name font_normal" for="select_filter">Filtrar Por :</label>
                             <div id="input" class="input">
@@ -49,8 +49,18 @@
                                 <input class="input_select" id="input_filter" name="input_filter" type="text" placeholder="Filtro" onkeyup="selectValue()" />
                             </div>
                         </div>
-                    </div>
-                </div> *@
+                    </div> *@
+                    <a class="button button_primary" title="Filtrar" asp-controller="Conciliations" asp-action="Filter">
+                        <p class="text font_bold">Filtrar Tabla</p>
+                    </a>
+
+                    @if (ViewBag.ApplyFilter)
+                    {
+                        <a class="button button_secondary" title="Filtrar" asp-controller="Conciliations" asp-action="Conciliations">
+                            <p class="text font_bold">Eliminar filtros</p>
+                        </a>
+                    }
+                </div>
 
                 <div id="table" class="content_table">
                     <div class="tables flex_box">
@@ -67,8 +77,7 @@
                         </div>
                         @if (Model.Data.Count() == 0)
                         {
-                            <p>No hay data</p>
-                            <p>@Model.Data.Count()</p>
+                            <p>No existe informacion</p>
                         }
                         else
                         {

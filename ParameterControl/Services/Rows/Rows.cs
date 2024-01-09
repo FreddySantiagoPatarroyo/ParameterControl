@@ -37,7 +37,13 @@ namespace ParameterControl.Services.Rows
                 {
                     Value = "OperationType",
                     Name = "Tipo de operacion"
-                }
+                },
+                new Row()
+                {
+                    Value = "State",
+                    Name = "Estado"
+                },
+
             };
 
             return rows;
@@ -69,8 +75,8 @@ namespace ParameterControl.Services.Rows
                 },
                 new Row()
                 {
-                    Value = "Result",
-                    Name = "Req Resultado"
+                    Value = "Required",
+                    Name = "Resultado Requerido"
                 }
             };
 
@@ -83,7 +89,7 @@ namespace ParameterControl.Services.Rows
             {
                  new Row()
                 {
-                    Value = "_Parameters",
+                    Value = "Parameters_",
                     Name = "Parametros"
                 },
                 new Row()

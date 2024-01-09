@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ParameterControl.Models.Conciliation;
+using ParameterControl.Models.Filter;
 using ParameterControl.Models.Parameter;
 using ParameterControl.Models.Policy;
 using ParameterControl.Services.Conciliations;
@@ -28,22 +29,10 @@ namespace ParameterControl.Controllers.Parameters
         }
 
         [HttpGet]
-        public async Task<ActionResult> Parameters(int id)
+        public async Task<ActionResult> Parameters()
         {
-            _logger.LogInformation("Hola");
 
-            _logger.LogInformation(id.ToString());
-
-
-            if (id > 0)
-            {
-                _logger.LogInformation("No Es nulo");
-                TableParameters.Data = new List<Parameter>();
-            }
-            else
-            {
-                TableParameters.Data = await parametersService.GetParameters();
-            }
+            TableParameters.Data = await parametersService.GetParameters();
 
             TableParameters.Rows = rows.RowsParameters();
 
@@ -53,8 +42,45 @@ namespace ParameterControl.Controllers.Parameters
             TableParameters.IsEdit = true;
             TableParameters.IsInactivate = true;
 
+            ViewBag.ApplyFilter = false;
+
             return View("Parameters", TableParameters);
         }
+
+        [HttpGet]
+        public async Task<ActionResult> ParametersFilter(string filterColunm = "", string filterValue = "")
+        {
+            _logger.LogInformation(filterColunm);
+            _logger.LogInformation(filterValue);
+
+            if (filterColunm == null || filterColunm == "" || filterValue == null || filterValue == "")
+            {
+                return RedirectToAction("Parameters");
+            }
+
+            FilterViewModel filter = new FilterViewModel()
+            {
+                ColumValue = filterColunm,
+                ValueFilter = filterValue
+            };
+
+            List<Parameter> parametersFilter = await parametersService.GetFilterParameters(filter);
+            TableParameters.Data = parametersFilter;
+
+            TableParameters.Rows = rows.RowsParameters();
+
+            TableParameters.Filter = true;
+            TableParameters.IsCreate = true;
+            TableParameters.IsActivate = true;
+            TableParameters.IsEdit = true;
+            TableParameters.IsInactivate = true;
+
+            ViewBag.ApplyFilter = true;
+
+            return View("ParametersFilter", TableParameters);
+        }
+
+        
 
         [HttpGet]
         public async Task<ActionResult> Desactive(string id)
@@ -78,7 +104,7 @@ namespace ParameterControl.Controllers.Parameters
                 Id = parameter.Id,
                 ParameterType = parameter.ParameterType,
                 List = parameter.List,
-                _Parameters = parameter._Parameters,
+                Parameters_ = parameter.Parameters_,
                 Value = parameter.Value,
                 Description = parameter.Description,
                 State = parameter.State
@@ -111,6 +137,33 @@ namespace ParameterControl.Controllers.Parameters
             };
 
             return View("Actions/CreateParameter", model);
+        }
+
+        [HttpGet]
+        public ActionResult Filter()
+        {
+            FilterViewModel model = new FilterViewModel()
+            {
+                Rows = rows.RowsParameters()
+
+            };
+
+            return View("Actions/Filter", model);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> FilterParameters(FilterViewModel filter)
+        {
+
+            Console.WriteLine(filter.ColumValue);
+
+            Console.WriteLine(filter.ValueFilter);
+
+            return RedirectToAction("ParametersFilter", new
+            {
+                filterColunm = filter.ColumValue,
+                filterValue = filter.ValueFilter
+            });
         }
     }
 }

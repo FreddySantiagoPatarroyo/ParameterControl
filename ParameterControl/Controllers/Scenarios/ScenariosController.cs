@@ -4,6 +4,9 @@ using ParameterControl.Services.Scenarios;
 using ParameterControl.Services.Rows;
 using ParameterControl.Models.Conciliation;
 using ParameterControl.Services.Conciliations;
+using ParameterControl.Models.Filter;
+using ParameterControl.Models.Policy;
+using ParameterControl.Services.Policies;
 
 namespace ParameterControl.Controllers.Scenarios
 {
@@ -26,23 +29,10 @@ namespace ParameterControl.Controllers.Scenarios
         }
 
         [HttpGet]
-        public async Task<ActionResult> Scenarios(int id)
+        public async Task<ActionResult> Scenarios()
         {
-            _logger.LogInformation("Hola");
-
-            _logger.LogInformation(id.ToString());
-
-
-            if (id > 0)
-            {
-                _logger.LogInformation("No Es nulo");
-                TableScenarios.Data = new List<Scenery>();
-                //TablePolicies.Data = policies;
-            }
-            else
-            {
-                TableScenarios.Data = await scenariosServices.GetScenarios();
-            }
+           
+            TableScenarios.Data = await scenariosServices.GetScenarios();
 
             TableScenarios.Rows = rows.RowsScenarios();
 
@@ -50,6 +40,40 @@ namespace ParameterControl.Controllers.Scenarios
             TableScenarios.IsActivate = true;
             TableScenarios.IsEdit = true;
             TableScenarios.IsInactivate = true;
+
+            ViewBag.ApplyFilter = false;
+
+            return View("Scenarios", TableScenarios);
+        }
+
+        [HttpGet]
+        public async Task<ActionResult> ScenariosFilter(string filterColunm = "", string filterValue = "")
+        {
+            _logger.LogInformation(filterColunm);
+            _logger.LogInformation(filterValue);
+
+            if (filterColunm == null || filterColunm == "" || filterValue == null || filterValue == "")
+            {
+                return RedirectToAction("Scenarios");
+            }
+
+            FilterViewModel filter = new FilterViewModel()
+            {
+                ColumValue = filterColunm,
+                ValueFilter = filterValue
+            };
+
+            List<Scenery> scenariosFilter = await scenariosServices.GetFilterScenarios(filter);
+            TableScenarios.Data = scenariosFilter;
+
+            TableScenarios.Rows = rows.RowsScenarios();
+
+            TableScenarios.IsCreate = false;
+            TableScenarios.IsActivate = true;
+            TableScenarios.IsEdit = true;
+            TableScenarios.IsInactivate = true;
+
+            ViewBag.ApplyFilter = true;
 
             return View("Scenarios", TableScenarios);
         }
@@ -95,6 +119,33 @@ namespace ParameterControl.Controllers.Scenarios
             Scenery scenery = await scenariosServices.GetSceneryById(id);
 
             return View("Actions/ViewScenarios", scenery);
+        }
+
+        [HttpGet]
+        public ActionResult Filter()
+        {
+            FilterViewModel model = new FilterViewModel()
+            {
+                Rows = rows.RowsScenarios()
+
+            };
+
+            return View("Actions/Filter", model);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> FilterScenarios(FilterViewModel filter)
+        {
+
+            Console.WriteLine(filter.ColumValue);
+
+            Console.WriteLine(filter.ValueFilter);
+
+            return RedirectToAction("ScenariosFilter", new
+            {
+                filterColunm = filter.ColumValue,
+                filterValue = filter.ValueFilter
+            });
         }
     }
 }
