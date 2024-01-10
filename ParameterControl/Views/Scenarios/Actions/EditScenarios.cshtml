@@ -22,7 +22,7 @@
                 <div class="field">
                     <label for="code--scenarios" asp-for="Code" class="label_form">Código*</label>
                     <div class="input">
-                        <input type="text" class="code" id="code--scenarios" name="Code" asp-for="Code" readonly />
+                        <input class="code" id="code--scenarios" asp-for="Code" />
                     </div>
                     <span asp-validation-for="Code" class="text_error"></span>
                 </div>
@@ -32,7 +32,7 @@
                 <div class="field">
                     <label for="name--scenarios" asp-for="Name" class="label_form">Nombre*</label>
                     <div class="input">
-                        <input type="text" class="description" id="description--scenarios" name="Name" asp-for="Name" readonly />
+                        <input class="description" id="description--scenarios" asp-for="Name" />
                     </div>
                     <span asp-validation-for="Name" class="text_error"></span>
                 </div>
@@ -42,8 +42,8 @@
                 <div class="field">
                     <label for="objective--policies" asp-for="Impact" class="label_form">Impacto*</label>
                     <div id="input_select" class="input">
-                        <input class="input_select" id="input_select_filter" asp-for="Impact" name="Impact" placeholder="Seleccione una opción" onclick="showOptionsImpact()" readonly />
-                        <input type="hidden" id="input_select_filter_value" name="Impact" asp-for="Impact" />
+                        <input class="input_select" id="input_select_filter" asp-for="Impact"  placeholder="Seleccione una opción" onclick="showOptionsImpact()" />
+                        <input class="oculte" id="input_select_filter_value" asp-for="Impact" />
                         <i class="icon icon_select icon_153"></i>
                     </div>
                     <div id="options" class="options">
@@ -66,8 +66,8 @@
                 <div class="field">
                     <label for="objective--policies" asp-for="Conciliation" class="label_form">Conciliacion*</label>
                     <div id="input_select_conciliation" class="input">
-                        <input class="input_select" id="input_select_filter_conciliation" asp-for="Conciliation" name="Conciliation" placeholder="Seleccione una opción" onclick="showOptionsConciliation()" readonly />
-                        <input type="hidden" id="input_select_filter_value_conciliation" name="Conciliation" asp-for="Conciliation" />
+                        <input class="input_select" id="input_select_filter_conciliation" asp-for="Conciliation" placeholder="Seleccione una opción" onclick="showOptionsConciliation()"/>
+                        <input class="oculte" id="input_select_filter_value_conciliation" asp-for="Conciliation" />
                         <i class="icon icon_select icon_153"></i>
                     </div>
                     <div id="options_conciliation" class="options">
@@ -85,6 +85,7 @@
                     </div>
                     <div id="select_helper_conciliation" class="select_helper" onclick="showOptionsConciliation()"></div>
                 </div>
+                <span asp-validation-for="Conciliation" class="text_error"></span>
             </div>
 
      

@@ -20,8 +20,8 @@
                 <div class="field">
                     <label for="objective--policies" asp-for="ParameterType" class="label_form">Tipo*</label>
                     <div id="input_select" class="input">
-                        <input class="input_select" id="input_select_filter" asp-for="ParameterType" name="ParameterType" placeholder="Seleccione una opción" onclick="showOptions()" readonly />
-                        <input type="hidden" id="input_select_filter_value" name="ParameterType" asp-for="ParameterType" />
+                        <input class="input_select" id="input_select_filter" asp-for="ParameterType" placeholder="Seleccione una opción" onclick="showOptions()" readonly />
+                        <input class="oculte" id="input_select_filter_value" asp-for="ParameterType" />
                         <i class="icon icon_select icon_153"></i>
                     </div>
                     <div id="options" class="options">
@@ -39,13 +39,14 @@
                     </div>
                     <div id="select_helper" class="select_helper" onclick="showOptions()"></div>
                 </div>
+                <span asp-validation-for="ParameterType" class="text_error"></span>
             </div>
             <div class="form_group">
                 <div class="field">
-                    <label for="objective--policies" asp-for="ParameterType" class="label_form">Listado*</label>
+                    <label for="objective--policies" asp-for="List" class="label_form">Listado*</label>
                     <div id="input_select_list" class="input">
-                        <input class="input_select" id="input_select_filter_list" asp-for="ParameterType" name="ParameterType" placeholder="Seleccione una opción" onclick="showOptionsList()" readonly />
-                        <input type="hidden" id="input_select_filter_value_list" name="ParameterType" asp-for="ParameterType" />
+                        <input class="input_select" id="input_select_filter_list" asp-for="List" placeholder="Seleccione una opción" onclick="showOptionsList()" readonly />
+                        <input class="oculte" id="input_select_filter_value_list" asp-for="List" />
                         <i class="icon icon_select icon_153"></i>
                     </div>
                     <div id="options_list" class="options">
@@ -63,12 +64,13 @@
                     </div>
                     <div id="select_helper_list" class="select_helper" onclick="showOptionsList()"></div>
                 </div>
+                <span asp-validation-for="List" class="text_error"></span>
             </div>
             <div class="form_group">
                 <div class="field">
                     <label for="parameter--parameters" asp-for="Parameters_" class="label_form">Parámetro*</label>
                     <div class="input">
-                        <input type="text" class="code" id="parameter--parameters" name="Parameters_" asp-for="Parameters_" placeholder="CO_AIC_245_FS" autocomplete="off"  />
+                        <input class="code" id="parameter--parameters" asp-for="Parameters_" placeholder="CO_AIC_245_FS" autocomplete="off"  />
                     </div>
                     <span asp-validation-for="Parameters_" class="text_error"></span>
                 </div>
@@ -78,7 +80,7 @@
                 <div class="field">
                     <label for="value--parameters" asp-for="Value" class="label_form">Valor*</label>
                     <div class="input">
-                        <input type="text" class="description" id="value--parameters" name="Value" asp-for="Value" placeholder="Digite el valor del parametro" autocomplete="off" />
+                        <input class="description" id="value--parameters" asp-for="Value" placeholder="Digite el valor del parametro" autocomplete="off" />
                     </div>
                     <span asp-validation-for="Value" class="text_error"></span>
                 </div>
@@ -88,7 +90,7 @@
                 <div class="field">
                     <label for="description--parameters" asp-for="Description" class="label_form">Descripción*</label>
                     <div class="textarea">
-                        <textarea class="objective" id="description--parameters" name="Description" asp-for="Description" placeholder="Digite la descripción" autocomplete="off" ></textarea>
+                        <textarea class="objective" id="description--parameters" asp-for="Description" placeholder="Digite la descripción" autocomplete="off" ></textarea>
                     </div>
                     <span asp-validation-for="Description" class="text_error"></span>
                 </div>
