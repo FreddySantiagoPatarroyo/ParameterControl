@@ -149,5 +149,43 @@ namespace ParameterControl.Services.Rows
 
             return rows;
         }
+        public List<Row> RowsUsers()
+        {
+            List<Row> rows = new List<Row>()
+            {
+                 new Row()
+                {
+                    Value = "CodeUser",
+                    Name = "Codigo Usuario"
+                },
+                new Row()
+                {
+                    Value = "User_",
+                    Name = "Usuario"
+                },
+                new Row()
+                {
+                    Value = "Email",
+                    Name = "Email"
+                },
+                new Row()
+                {
+                    Value = "NameUser",
+                    Name = "Nombre Usuario"
+                },
+                new Row()
+                {
+                    Value = "CreationDate",
+                    Name = "Fecha Creacion"
+                },
+                 new Row()
+                {
+                    Value = "UpdateDate",
+                    Name = "Fecha Actualizacion"
+                }
+            };
+
+            return rows;
+        }
     }
 }
