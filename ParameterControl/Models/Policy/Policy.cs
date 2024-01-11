@@ -27,7 +27,5 @@ namespace ParameterControl.Models.Policy
         public string OperationType { get; set; } = string.Empty;
 
         public bool State {  get; set; } = false;
-
-       
     }
 }

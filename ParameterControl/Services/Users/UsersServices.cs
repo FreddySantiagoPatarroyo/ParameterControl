@@ -15,6 +15,7 @@ namespace ParameterControl.Services.Users
                    CodeUser = "COD_001",
                    User_ = "EjemploUsuario",
                    Email = "ejemplo@gmail.com",
+                   NameUser = "name1",
                    CreationDate = DateTime.Parse("2024-01-10"),
                    UpdateDate = DateTime.Parse("2023-11-09"),
                    State = true
@@ -24,6 +25,7 @@ namespace ParameterControl.Services.Users
                    CodeUser = "COD_002",
                    User_ = "EjemploUsuario",
                    Email = "ejemplo@gmail.com",
+                   NameUser = "name2",
                    CreationDate = DateTime.Parse("2024-01-10"),
                    UpdateDate = DateTime.Parse("2023-11-09"),
                    State = true
@@ -33,6 +35,7 @@ namespace ParameterControl.Services.Users
                    CodeUser = "COD_003",
                    User_ = "EjemploUsuario",
                    Email = "ejemplo@gmail.com",
+                   NameUser = "name3",
                    CreationDate = DateTime.Parse("2024-01-10"),
                    UpdateDate = DateTime.Parse("2023-11-09"),
                    State = false
@@ -42,6 +45,7 @@ namespace ParameterControl.Services.Users
                    CodeUser = "COD_004",
                    User_ = "EjemploUsuario1",
                    Email = "ejemplo@gmail.com",
+                   NameUser = "name4",
                    CreationDate = DateTime.Parse("2024-01-10"),
                    UpdateDate = DateTime.Parse("2023-11-09"),
                    State = false
@@ -51,6 +55,7 @@ namespace ParameterControl.Services.Users
                    CodeUser = "COD_005",
                    User_ = "EjemploUsuario1",
                    Email = "ejemplo@gmail.com",
+                   NameUser = "name5",
                    CreationDate = DateTime.Parse("2024-01-10"),
                    UpdateDate = DateTime.Parse("2023-11-09"),
                    State = true
