@@ -37,7 +37,13 @@ namespace ParameterControl.Services.Rows
                 {
                     Value = "OperationType",
                     Name = "Tipo de operacion"
-                }
+                },
+                new Row()
+                {
+                    Value = "StateFormat",
+                    Name = "Estado"
+                },
+
             };
 
             return rows;
@@ -69,8 +75,8 @@ namespace ParameterControl.Services.Rows
                 },
                 new Row()
                 {
-                    Value = "Result",
-                    Name = "Req Resultado"
+                    Value = "Required",
+                    Name = "Resultado Requerido"
                 }
             };
 
@@ -83,7 +89,7 @@ namespace ParameterControl.Services.Rows
             {
                  new Row()
                 {
-                    Value = "_Parameters",
+                    Value = "Parameters_",
                     Name = "Parametros"
                 },
                 new Row()
@@ -138,6 +144,44 @@ namespace ParameterControl.Services.Rows
                 {
                     Value = "Parameter",
                     Name = "Parametro"
+                }
+            };
+
+            return rows;
+        }
+        public List<Row> RowsUsers()
+        {
+            List<Row> rows = new List<Row>()
+            {
+                 new Row()
+                {
+                    Value = "CodeUser",
+                    Name = "Codigo Usuario"
+                },
+                new Row()
+                {
+                    Value = "User_",
+                    Name = "Usuario"
+                },
+                new Row()
+                {
+                    Value = "Email",
+                    Name = "Email"
+                },
+                new Row()
+                {
+                    Value = "NameUser",
+                    Name = "Nombre Usuario"
+                },
+                new Row()
+                {
+                    Value = "CreationDate",
+                    Name = "Fecha Creacion"
+                },
+                 new Row()
+                {
+                    Value = "UpdateDate",
+                    Name = "Fecha Actualizacion"
                 }
             };
 

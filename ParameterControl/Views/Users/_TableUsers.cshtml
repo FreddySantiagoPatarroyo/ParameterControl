@@ -1,0 +1,169 @@
+﻿@using System;
+@using System.Reflection;
+@using ParameterControl.Models.User
+@model TableUserViewModel
+
+@{
+    PropertyInfo GetRowInfo(string RowValue)
+    {
+        var property = typeof(User).GetProperty(RowValue);
+
+        return property;
+    }
+}
+<div class="content_users">
+    <div class="card_users card_element flex_box" id="card_users">
+        <div class="flex_box titulation">
+            <p class="title_table font_bold">Usuarios</p>
+            @if (Model.IsCreate)
+            {
+                <a class="button button_primary" asp-controller="Users" asp-action="Create">
+                    <p class="text font_bold">Crear</p>
+                </a>
+            }
+        </div>
+        <div class="list">
+            <div class="element_table">
+                <div class="content_filter flex_box">
+                        <a class="button button_primary" title="Filtrar" asp-controller="Users" asp-action="Filter">
+                        <p class="text font_bold">Filtrar Tabla</p>
+                    </a>
+
+                    @if (ViewBag.ApplyFilter)
+                    {
+                        <a class="button button_secondary" title="Filtrar" asp-controller="Users" asp-action="Users">
+                            <p class="text font_bold">Eliminar filtros</p>
+                        </a>
+                    }
+                </div>
+
+                <div id="table" class="content_table">
+                    <div class="tables flex_box">
+                        <div class="columns">
+                            @foreach (var Colunm in Model.Rows)
+                            {
+                                <div class="@Colunm.Name column flex_box order">
+                                    <p class="text font_bold">@Colunm.Name</p>
+                                </div>
+                            }
+                            <div class="column actions flex_box">
+                                <p class="text font_bold">Acciones</p>
+                            </div>
+                        </div>
+                        @if (Model.Data.Count() == 0)
+                        {
+                            <p>No existe informacion</p>
+                        }
+                        else
+                        {
+                            @foreach (var User in Model.Data)
+                            {
+                                @if (User.State)
+                                {
+                                    <div class="rows">
+                                        @foreach (var Row in Model.Rows)
+                                        {
+                                            <div class="row_table flex_box">
+                                                <p id="text_row" class="text flex_box">@GetRowInfo(Row.Value)?.GetValue(User)?.ToString()</p>
+                                            </div>
+                                        }
+                                        <div class="row_table flex_box actions">
+                                            <a class="button_icon button_primary" title="Ver" asp-controller="Users" asp-action="View" asp-route-id="@User.Id">
+                                                <i class="icon icon_041"></i>
+                                            </a>
+                                            <a class="button_icon button_primary" title="Editar" asp-controller="Users" asp-action="Edit" asp-route-id="@User.Id">
+                                                <i class="icon icon_106"></i>
+                                            </a>
+                                            <a class="button_icon button_primary" title="Inactivar" asp-controller="Users" asp-action="Desactive" asp-route-id="@User.Id">
+                                                <i class="icon icon_196"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="rows disabled">
+                                        @foreach (var Row in Model.Rows)
+                                        {
+                                            <div class="row_table flex_box">
+                                                <p id="text_row" class="text flex_box">@GetRowInfo(Row.Value)?.GetValue(User)?.ToString()</p>
+                                            </div>
+                                        }
+                                        <div class="row_table flex_box actions">
+                                            <button class="button_icon button_primary disabled" title="Ver" disabled>
+                                                <i class="icon icon_041"></i>
+                                            </button>
+                                            <button class="button_icon button_primary disabled" title="Editar" disabled>
+                                                <i class="icon icon_106"></i>
+                                            </button>
+                                            <button class="button_icon button_primary" title="Activar" onclick="usersDeleteShow()">
+                                                <i class="icon icon_199"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                }
+                            }
+                        }
+                    </div>
+                </div>
+                <div class="pagination flex_box">
+                    <div id="pagination_mobile" class="custom_pagination pagination_mobile flex_box">
+                        <button class="button button_primary">
+                            <i class="icon text icon_160"></i>
+                            <p class="text font_bold">Anterior</p>
+                        </button>
+                        <p class="pages font_light">
+                            pagina 1 de 2
+                        </p>
+                        <button class="button button_primary">
+                            <p class="text font_bold">Siguiente</p>
+                            <i class="icon text icon_158"></i>
+                        </button>
+                    </div>
+                    <div id="pagination_desktop" class="custom_pagination pagination_desktop flex_box">
+                        <div class="navigator flex_box">
+                            <button class="button button_primary">
+                                <p class="text font_bold">Primera</p>
+                            </button>
+                            <button class="button_icon button_primary">
+                                <i class="icon text icon_152"></i>
+                            </button>
+                            <div class="pages flex_box">
+                                <button class="button_icon button_primary">
+                                    <p class="text font_bold">1</p>
+                                </button>
+                                <button class="button_icon button_primary">
+                                    <p class="text font_bold">2</p>
+                                </button>
+                                <button class="button_icon button_primary">
+                                    <p class="text font_bold">3</p>
+                                </button>
+                                <button class="button_icon button_primary">
+                                    <p class="text font_bold">4</p>
+                                </button>
+                                <button class="button_icon button_primary">
+                                    <p class="text font_bold">5</p>
+                                </button>
+                            </div>
+                            <button class="button_icon button_primary">
+                                <i class="icon text icon_151"></i>
+                            </button>
+                            <button class="button button_primary">
+                                <p class="text font_bold">Ultima</p>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    var x = document.getElementById("table");
+    var w = x.contentDocument;
+    console.log(x);
+    w.location.reload();
+</script>
+
+<script src="~/js/helpers/Filter.js" asp-append-version="true"></script>

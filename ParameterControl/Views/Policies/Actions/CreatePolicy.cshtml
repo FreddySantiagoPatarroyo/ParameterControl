@@ -23,7 +23,7 @@
                 <div class="field">
                     <label for="code--polices" asp-for="Code" class="label_form">Código*</label>
                     <div class="input">
-                        <input type="text" id="code--policies" name="Code" asp-for="Code" placeholder="Codigo" autocomplete="off" />
+                        <input id="code--policies" asp-for="Code" placeholder="Codigo" autocomplete="off" />
                     </div>
                     <span asp-validation-for="Code" class="text_error"></span>
                 </div>
@@ -32,7 +32,7 @@
                 <div class="field">
                     <label for="description--policies" asp-for="Name" class="label_form">Nombre*</label>
                     <div class="input">
-                        <input type="text" id="description--policies" name="Name" asp-for="Name" placeholder="Nombre" autocomplete="off" />
+                        <input id="description--policies" asp-for="Name" placeholder="Nombre" autocomplete="off" />
                     </div>
                     <span asp-validation-for="Name" class="text_error"></span>
                 </div>
@@ -41,7 +41,7 @@
                 <div class="field">
                     <label for="objective--policies" asp-for="Description" class="label_form">Descripcion*</label>
                     <div class="textarea">
-                        <textarea id="objective--policies" name="Description" asp-for="Description" placeholder="Descripcion"></textarea>
+                        <textarea id="objective--policies" asp-for="Description" placeholder="Descripcion"></textarea>
                     </div>
                     <span asp-validation-for="Description" class="text_error"></span>
                 </div>
@@ -50,7 +50,7 @@
                 <div class="field">
                     <label for="objective--policies" asp-for="Conciliation" class="label_form">Conciliacion*</label>
                     <div class="input">
-                        <input type="text" value="" id="objective--policies" name="Description" asp-for="Conciliation" placeholder="Conciliacion" autocomplete="off" />
+                        <input id="objective--policies" asp-for="Conciliation" placeholder="Conciliacion" autocomplete="off" />
                     </div>
                     <span asp-validation-for="Conciliation" class="text_error"></span>
                 </div>
@@ -59,7 +59,7 @@
                 <div class="field">
                     <label for="objective--policies" asp-for="ControlType" class="label_form">Tipo control*</label>
                     <div class="input">
-                        <input type="text" id="objective--policies" name="Description" asp-for="ControlType" placeholder="Tipo de control" autocomplete="off" />
+                        <input id="objective--policies" asp-for="ControlType" placeholder="Tipo de control" autocomplete="off" />
                     </div>
                     <span asp-validation-for="ControlType" class="text_error"></span>
                 </div>
@@ -69,7 +69,7 @@
                     <label for="objective--policies" asp-for="OperationType" class="label_form">Tipo de operacion*</label>
                     <div id="input_select" class="input">
                         <input class="input_select" id="input_select_filter" name="input_select_filter" placeholder="Seleccione una opción" onclick="showOptions()" readonly />
-                        <input type="hidden" id="input_select_filter_value" name="ColumValue" asp-for="OperationType" />
+                        <input id="input_select_filter_value" asp-for="OperationType" class="oculte"/>
                         <i class="icon icon_select icon_153"></i>
                     </div>
                     <div id="options" class="options">
@@ -95,11 +95,13 @@
 
             <div class="btn_container">
                 <a class="button button_secondary" asp-controller="Policies" asp-action="Policies"><p class="text font_bold">Cancelar</p></a>
-                <button type="submit" class="button button_primary"><p class="text font_bold">Crear</p></button>
+                <button class="button button_primary"><p class="text font_bold">Crear</p></button>
             </div>
         </div>
     </form>
 </div>
+
+
 
 
 @section Scripts {

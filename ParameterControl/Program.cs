@@ -1,3 +1,4 @@
+using ParameterControl.Services.Users;
 using ParameterControl.Services.Scenarios;
 using ParameterControl.Services.Parameters;
 using ParameterControl.Services.Conciliations;
@@ -12,6 +13,8 @@ builder.Services.AddTransient<IPoliciesServices, PoliciesServices>();
 builder.Services.AddTransient<IConciliationsServices, ConciliationsServices>();
 builder.Services.AddTransient<IParametersService, ParametersService>();
 builder.Services.AddTransient<IScenariosServices, ScenariosServices>();
+builder.Services.AddTransient<IUsersServices, UsersServices>();
+
 builder.Services.AddScoped<Rows>();
 
 var app = builder.Build();

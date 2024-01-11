@@ -9,5 +9,6 @@ namespace ParameterControl.Services.Scenarios
         Task<List<string>> GetConciliation();
         Task<List<Scenery>> GetScenarios();
         Task<Scenery> GetSceneryById(string id);
+        Task<List<Scenery>> GetFilterScenarios(FilterViewModel filterModel);
     }
 }

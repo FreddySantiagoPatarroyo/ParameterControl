@@ -9,5 +9,6 @@ namespace ParameterControl.Services.Parameters
         Task<List<string>> GetListParameter();
         Task<List<Parameter>> GetParameters();
         Task<Parameter> GetParameterById(string id);
+        Task<List<Parameter>> GetFilterParameters(FilterViewModel filterModel);
     }
 }

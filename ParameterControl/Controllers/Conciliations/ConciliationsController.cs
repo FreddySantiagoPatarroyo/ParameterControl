@@ -29,22 +29,10 @@ namespace ParameterControl.Controllers.Conciliations
         }
 
         [HttpGet]
-        public async Task<ActionResult> Conciliations(int id)
+        public async Task<ActionResult> Conciliations()
         {
-            _logger.LogInformation("Hola");
-
-            _logger.LogInformation(id.ToString());
-
-
-            if (id > 0)
-            {
-                _logger.LogInformation("No Es nulo");
-                TableConciliations.Data = new List<Conciliation>();
-            }
-            else
-            {
-                TableConciliations.Data = await conciliationsServices.GetConciliations();
-            }
+            
+            TableConciliations.Data = await conciliationsServices.GetConciliations();
 
             TableConciliations.Rows = rows.RowsConciliations();
 
@@ -53,7 +41,43 @@ namespace ParameterControl.Controllers.Conciliations
             TableConciliations.IsEdit = true;
             TableConciliations.IsInactivate = true;
 
+            ViewBag.ApplyFilter = false;
+
             return View("Conciliations", TableConciliations);
+        }
+
+
+        [HttpGet]
+        public async Task<ActionResult> ConciliationsFilter(string filterColunm = "", string filterValue = "")
+        {
+            _logger.LogInformation(filterColunm);
+            _logger.LogInformation(filterValue);
+
+            if (filterColunm == null || filterColunm == "" || filterValue == null || filterValue == "")
+            {
+                return RedirectToAction("Conciliations");
+            }
+
+            FilterViewModel filter = new FilterViewModel()
+            {
+                ColumValue = filterColunm,
+                ValueFilter = filterValue
+            };
+
+            List<Conciliation> conciliationsFilter = await conciliationsServices.GetFilterConciliations(filter);
+
+            TableConciliations.Data = conciliationsFilter;
+
+            TableConciliations.Rows = rows.RowsConciliations();
+
+            TableConciliations.IsCreate = true;
+            TableConciliations.IsActivate = true;
+            TableConciliations.IsEdit = true;
+            TableConciliations.IsInactivate = true;
+
+            ViewBag.ApplyFilter = true;
+
+            return View("ConciliationsFilter", TableConciliations);
         }
 
         [HttpGet]
@@ -119,6 +143,33 @@ namespace ParameterControl.Controllers.Conciliations
 
             return View("Actions/CreateConciliation", model);
         }
-       
+
+        [HttpGet]
+        public ActionResult Filter()
+        {
+            FilterViewModel model = new FilterViewModel()
+            {
+                Rows = rows.RowsConciliations()
+
+            };
+
+            return View("Actions/Filter", model);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> FilterConciliations(FilterViewModel filter)
+        {
+
+            Console.WriteLine(filter.ColumValue);
+
+            Console.WriteLine(filter.ValueFilter);
+
+            return RedirectToAction("ConciliationsFilter", new
+            {
+                filterColunm = filter.ColumValue,
+                filterValue = filter.ValueFilter
+            });
+        }
+
     }
 }

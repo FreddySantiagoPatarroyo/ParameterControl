@@ -31,9 +31,9 @@ namespace ParameterControl.Controllers.Policies
         [HttpGet]
         public async Task<ActionResult> Policies()
         {
+            List<Policy> policies = await policiesServices.GetPolicies();
 
-            TablePolicies.Data = await policiesServices.GetPolicies();
-            
+            TablePolicies.Data = policiesServices.GetPolicesFormatTable(policies);
 
             TablePolicies.Rows = rows.RowsPolicies();
 
@@ -65,7 +65,7 @@ namespace ParameterControl.Controllers.Policies
                 ValueFilter = filterValue
             };
 
-            List<Policy> policiesFilter = await policiesServices.GetFilterPolicies(filter);
+            List<PolicyViewModel> policiesFilter = await policiesServices.GetFilterPolicies(filter);
             TablePolicies.Data = policiesFilter;
 
             TablePolicies.Rows = rows.RowsPolicies();

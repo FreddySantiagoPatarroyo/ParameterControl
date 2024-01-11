@@ -1,4 +1,5 @@
-﻿using ParameterControl.Models.Policy;
+﻿using ParameterControl.Models.Filter;
+using ParameterControl.Models.Policy;
 using ParameterControl.Models.Scenery;
 using ParameterControl.Services.Conciliations;
 using System.Data.Common;
@@ -107,6 +108,62 @@ namespace ParameterControl.Services.Scenarios
             Scenery scenery = scenarios.Find(scenery => scenery.Id == id);
             return scenery;
         }
+
+        public async Task<List<Scenery>> GetFilterScenarios(FilterViewModel filterModel)
+        {
+            List<Scenery> scenariosFilter = new List<Scenery>();
+
+            if ((filterModel.ColumValue == null || filterModel.ColumValue == "" || filterModel.ValueFilter == null || filterModel.ValueFilter == ""))
+            {
+                scenariosFilter = scenarios;
+            }
+            else
+            {
+                switch (filterModel.ColumValue)
+                {
+                    case "Code":
+                        scenariosFilter = applyFilter(filterModel);
+                        break;
+                    case "Name":
+                        scenariosFilter = applyFilter(filterModel);
+                        break;
+                    case "Impact":
+                        scenariosFilter = applyFilter(filterModel);
+                        break;
+                    case "Conciliation":
+                        scenariosFilter = applyFilter(filterModel);
+                        break;
+                    case "Query":
+                        scenariosFilter = applyFilter(filterModel);
+                        break;
+                    case "Parameter":
+                        scenariosFilter = applyFilter(filterModel);
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            return scenariosFilter;
+        }
+
+        private List<Scenery> applyFilter(FilterViewModel filterModel)
+        {
+            var property = typeof(Scenery).GetProperty(filterModel.ColumValue);
+
+            List<Scenery> scenariosFilter = new List<Scenery>();
+
+            foreach (Scenery scenery in scenarios)
+            {
+                if (property.GetValue(scenery).ToString().ToUpper().Contains(filterModel.ValueFilter.ToUpper()))
+                {
+                    scenariosFilter.Add(scenery);
+                }
+            }
+
+            return scenariosFilter;
+        }
+
         public async Task<List<string>> GetImpact()
         {
             List<string> impact = new List<string>()

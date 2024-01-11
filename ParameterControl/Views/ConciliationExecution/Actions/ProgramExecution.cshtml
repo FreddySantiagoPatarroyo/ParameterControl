@@ -1,0 +1,38 @@
+﻿@using ParameterControl.Models.ReconciliationExecution;
+@model ReconciliationExecution;
+
+@{
+    ViewData["Title"] = "Programar Ejecución";
+}
+
+<partial name="_Menu" />
+
+<div class="box_create">
+    <div class="bg__blur"></div>
+    <div asp-validation-summary="ModelOnly" class="text_error"></div>
+
+    <form asp-controller="Conciliations" asp-action="Create" class="form__container">
+        <div class="card__container">
+            <div class="header_form">
+                <img src="/images/iconApple.png" />
+                <h1>Programar Ejecución</h1>
+            </div>
+            <div class="form_group">
+                <div class="field">
+                    <div class="input">
+                        <input class="objective color_icon_calendar" asp-for="DateExecution" placeholder="Seleccione la fecha y hora de ejecución" autocomplete="off">
+                    </div>
+                    <span asp-validation-for="DateExecution" class="text_error"></span>
+                </div>
+            </div>
+            
+            
+            <p class="note_text"><span>Nota: </span>Los campos con (*) son obligatorios</p>
+
+            <div class="btn_container">
+                <a class="button button_primary" asp-controller="ConciliationExecution" asp-action="SuccesfulTransaction"><p class="text font_bold">Guardar</p></a>
+                <a class="button button_secondary" asp-controller="ConciliationExecution" asp-action="ConciliationExecution"><p class="text font_bold">Cancelar</p></a>
+            </div>
+        </div>
+    </form>
+</div>

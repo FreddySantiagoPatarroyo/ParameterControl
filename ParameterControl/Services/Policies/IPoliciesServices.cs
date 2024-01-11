@@ -5,8 +5,9 @@ namespace ParameterControl.Services.Policies
 {
     public interface IPoliciesServices
     {
-        Task<List<Policy>> GetFilterPolicies(FilterViewModel filterModel);
+        Task<List<PolicyViewModel>> GetFilterPolicies(FilterViewModel filterModel);
         Task<List<string>> GetOperationsType();
+        List<PolicyViewModel> GetPolicesFormatTable(List<Policy> policies);
         Task<List<Policy>> GetPolicies();
         Task<Policy> GetPolicyById(string id);
     }

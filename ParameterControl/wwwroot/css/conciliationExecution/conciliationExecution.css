@@ -1,0 +1,26 @@
+﻿.button_green {
+    background-color: #0E6400;
+}
+
+.button_yellow {
+    background-color: #EB7100;
+}
+
+.button_green .text {
+    color: var(--pure_white);
+}
+
+.button_yellow .text {
+    color: var(--pure_white);
+}
+
+.button_green:hover {
+    background-color: #0B5300;
+}
+
+.button_yellow:hover {
+    background-color: #C86200;
+}
+.color-icon::-webkit-calendar-picker-indicator {
+    filter: invert(1); /* Invierte los colores, convierte el ícono a blanco */
+}

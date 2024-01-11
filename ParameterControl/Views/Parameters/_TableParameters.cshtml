@@ -4,6 +4,12 @@
 @model TableParametersViewModel
 
 @{
+    PropertyInfo GetRowInfo(string RowValue)
+    {
+        var property = typeof(Parameter).GetProperty(RowValue);
+
+        return property;
+    }
 }
 <div class="content_parameters">
     <div class="card_parameters card_element flex_box" id="card_parameters">
@@ -18,8 +24,8 @@
         </div>
         <div class="list">
             <div class="element_table">
-               @*  <div class="content_filter flex_box">
-                    <div class="filter_primary">
+               <div class="content_filter flex_box">
+                    @* <div class="filter_primary">
                         <div id="field_primary" class="field">
                             <label class="name font_normal" for="select_filter">Filtrar Por :</label>
                             <div id="input" class="input">
@@ -49,8 +55,18 @@
                                 <input class="input_select" id="input_filter" name="input_filter" type="text" placeholder="Filtro" onkeyup="selectValue()" />
                             </div>
                         </div>
-                    </div>
-                </div> *@
+                    </div> *@
+                        <a class="button button_primary" title="Filtrar" asp-controller="Parameters" asp-action="Filter">
+                            <p class="text font_bold">Filtrar Tabla</p>
+                        </a>
+
+                        @if (ViewBag.ApplyFilter)
+                        {
+                            <a class="button button_secondary" title="Filtrar" asp-controller="Parameters" asp-action="Parameters">
+                                <p class="text font_bold">Eliminar filtros</p>
+                            </a>
+                        }
+                </div>
 
                 <div id="table" class="content_table">
                     <div class="tables flex_box">
@@ -67,8 +83,7 @@
                         </div>
                         @if (Model.Data.Count() == 0)
                         {
-                            <p>No hay data</p>
-                            <p>@Model.Data.Count()</p>
+                            <p>No existe informacion</p>
                         }
                         else
                         {
@@ -77,10 +92,10 @@
                                 @if (Parameter.State)
                                 {
                                     <div class="rows">
-                                        @foreach (var Row in Parameter.GetProperties(Model.Rows))
+                                        @foreach (var Row in Model.Rows)
                                         {
                                             <div class="row_table flex_box">
-                                                <p id="text_row" class="text flex_box">@Row?.GetValue(Parameter)?.ToString()</p>
+                                                <p id="text_row" class="text flex_box">@GetRowInfo(Row.Value)?.GetValue(Parameter)?.ToString()</p>
                                             </div>
                                         }
                                         <div class="row_table flex_box actions">
@@ -99,10 +114,10 @@
                                 else
                                 {
                                     <div class="rows disabled">
-                                        @foreach (var Row in Parameter.GetProperties(Model.Rows))
+                                        @foreach (var Row in Model.Rows)
                                         {
                                             <div class="row_table flex_box">
-                                                <p id="text_row" class="text flex_box">@Row?.GetValue(Parameter)?.ToString()</p>
+                                                <p id="text_row" class="text flex_box">@GetRowInfo(Row.Value)?.GetValue(Parameter)?.ToString()</p>
                                             </div>
                                         }
                                         <div class="row_table flex_box actions">
