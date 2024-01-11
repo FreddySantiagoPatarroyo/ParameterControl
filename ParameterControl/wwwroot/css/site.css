@@ -240,6 +240,9 @@ body {
         -webkit-filter: brightness(.8) contrast(1.2);
         filter: brightness(.8) contrast(1.2);
     }
+    .color_icon_calendar::-webkit-calendar-picker-indicator {
+        filter: invert(1); /* Invierte los colores del icono de los inputs tipo fecha, y convierte el ícono a blanco */
+    }
 }
 
 ::-webkit-scrollbar {
