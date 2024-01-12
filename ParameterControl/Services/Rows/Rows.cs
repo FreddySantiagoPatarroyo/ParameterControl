@@ -186,6 +186,36 @@ namespace ParameterControl.Services.Rows
             };
 
             return rows;
+
+        }
+        public List<Row> RowsIndicators()
+        {
+            List<Row> rows = new List<Row>()
+            {
+                 new Row()
+                {
+                    Value = "Name",
+                    Name = "Nombre"
+                },
+                new Row()
+                {
+                    Value = "Description",
+                    Name = "Descripcion"
+                },
+                new Row()
+                {
+                    Value = "Formula",
+                    Name = "Formula"
+                },
+                new Row()
+                {
+                    Value = "Scenery",
+                    Name = "Escenario"
+                },
+
+            };
+
+            return rows;
         }
     }
 }

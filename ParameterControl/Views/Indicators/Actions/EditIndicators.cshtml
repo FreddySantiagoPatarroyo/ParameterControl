@@ -1,0 +1,91 @@
+﻿@using ParameterControl.Models.Indicator;
+@model Indicator;
+
+@{
+}
+
+<partial name="_Menu" />
+
+<div class="box_edit">
+    <div class="bg__blur"></div>
+    <div asp-validation-summary="ModelOnly" class="text_error"></div>
+
+    <form asp-controller="Indicators" asp-action="Edit" class="form__container">
+        <div class="card__container">
+            <div class="header_form">
+                <img src="/images/iconApple.png" />
+                <h1>Editar Indicador</h1>
+            </div>
+
+
+            <div class="form_group">
+                <div class="field">
+                    <label for="description--indicators" asp-for="Name" class="label_form">Nombre*</label>
+                    <div class="input">
+                        <input class="description" asp-for="Name" />
+                    </div>
+                    <span asp-validation-for="Name" class="text_error"></span>
+                </div>
+            </div>
+
+            <div class="form_group">
+                <div class="field">
+                    <label for="package--indicators" asp-for="Description" class="label_form">Descripción*</label>
+                    <div class="input">
+                        <input class="objective" asp-for="Description">
+                    </div>
+                    <span asp-validation-for="Description" class="text_error"></span>
+                </div>
+            </div>
+
+            <div class="form_group">
+                <div class="field">
+                    <label for="email--indicators" asp-for="Scenery" class="label_form">Escenario*</label>
+                    <div class="input">
+                        <input class="objective" asp-for="Scenery">
+                    </div>
+                    <span asp-validation-for="Scenery" class="text_error"></span>
+                </div>
+            </div>
+
+            <div class="form_group">
+                <div class="field">
+                    <label for="email--indicators" asp-for="Parameter" class="label_form">Parametro*</label>
+                    <div class="input">
+                        <input class="objective" asp-for="Parameter">
+                    </div>
+                    <span asp-validation-for="Parameter" class="text_error"></span>
+                </div>
+            </div>
+
+            <div class="form_group">
+                <div class="field">
+                    <label for="destination--indicators" asp-for="Formula" class="label_form">Formula*</label>
+                    <div class="input">
+                        <input class="objective" asp-for="Formula">
+                    </div>
+                </div>
+                <span asp-validation-for="Formula" class="text_error"></span>
+
+            </div>
+
+
+
+
+            <p class="note_text"><span>Nota: </span>Los campos con (*) son obligatorios</p>
+
+            <div class="btn_container">
+                <a class="button button_secondary" asp-controller="Indicators" asp-action="Indicators"><p class="text font_bold">Cancelar</p></a>
+                <button type="submit" class="button button_primary"><p class="text font_bold">Actualizar</p></button>
+            </div>
+        </div>
+    </form>
+</div>
+
+
+
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial.cshtml" />
+    
+}
