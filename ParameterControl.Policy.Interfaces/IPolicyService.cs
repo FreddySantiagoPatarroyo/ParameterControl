@@ -4,6 +4,10 @@ namespace ParameterControl.Policy.Interfaces
 {
     public interface IPolicyService
     {
-        int InsertPolicy(PolicyModel entity);
+        Task<int> InsertPolicy(PolicyModel entity);
+        Task<int> UpdatePolicy(PolicyModel entity);
+        Task<int> DeletePolicy(PolicyModel entity);
+        Task<int> SelectAllPolicy(int page, int row);
+        Task<int> SelectByIdPolicy(PolicyModel entity);
     }
 }

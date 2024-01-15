@@ -2,20 +2,27 @@
 using ParameterControl.Models.Filter;
 using ParameterControl.Models.Policy;
 using ParameterControl.Models.Rows;
+using ParameterControl.Policy.Impl;
+using ParameterControl.Policy.Interfaces;
 using System.Collections.Generic;
 using System.Data.Common;
 using System.Reflection;
+using ent = ParameterControl.Policy.Entities;
+using modPolicy = ParameterControl.Models.Policy;
 
 namespace ParameterControl.Services.Policies
 {
     public class PoliciesServices: IPoliciesServices
     {
-        private List<Policy> policies = new List<Policy>();
-        public PoliciesServices()
+        private List<modPolicy.Policy> policies = new List<modPolicy.Policy>();
+        private readonly PolicyService _policyService;
+
+        public PoliciesServices(IConfiguration configuration)
         {
-            policies = new List<Policy>()
+            _policyService = new PolicyService(configuration);
+            policies = new List<modPolicy.Policy>()
             {
-                new Policy(){
+                new modPolicy.Policy(){
                     Id = "1",
                     Code = "COD_001",
                     Name = "Politica_1",
@@ -25,7 +32,7 @@ namespace ParameterControl.Services.Policies
                     OperationType = "OperationType_1asdasdasdasdasdadasdasdasdad",
                     State = true
                 },
-                new Policy(){
+                new modPolicy.Policy(){
                     Id = "2",
                     Code = "COD_006",
                     Name = "Name",
@@ -35,7 +42,7 @@ namespace ParameterControl.Services.Policies
                     OperationType = "OperationType",
                     State = false
                 },
-                new Policy(){
+                new modPolicy.Policy(){
                     Id = "3",
                     Code = "COD_001",
                     Name = "Politica_1",
@@ -45,7 +52,7 @@ namespace ParameterControl.Services.Policies
                     OperationType = "OperationType_1asdasdasdasdasdadasdasdasdad",
                     State = true
                 },
-                new Policy(){
+                new modPolicy.Policy(){
                     Id = "4",
                     Code = "COD_006",
                     Name = "Name",
@@ -55,7 +62,7 @@ namespace ParameterControl.Services.Policies
                     OperationType = "OperationType",
                     State = false
                 },
-                new Policy(){
+                new modPolicy.Policy(){
                     Id = "5",
                     Code = "COD_001",
                     Name = "Politica_1",
@@ -65,7 +72,7 @@ namespace ParameterControl.Services.Policies
                     OperationType = "OperationType_1asdasdasdasdasdadasdasdasdad",
                     State = true
                 },
-                new Policy(){
+                new modPolicy.Policy(){
                     Id = "6",
                     Code = "COD_006",
                     Name = "Name",
@@ -75,7 +82,7 @@ namespace ParameterControl.Services.Policies
                     OperationType = "OperationType",
                     State = false
                 },
-                new Policy(){
+                new modPolicy.Policy(){
                     Id = "7",
                     Code = "COD_001",
                     Name = "Politica_1",
@@ -85,7 +92,7 @@ namespace ParameterControl.Services.Policies
                     OperationType = "OperationType_1asdasdasdasdasdadasdasdasdad",
                     State = true
                 },
-                new Policy(){
+                new modPolicy.Policy(){
                     Id = "8",
                     Code = "",
                     Name = "Name",
@@ -98,16 +105,16 @@ namespace ParameterControl.Services.Policies
             };
         }
 
-        public async Task<List<Policy>> GetPolicies()
+        public async Task<List<modPolicy.Policy>> GetPolicies()
         {
             return policies;
         }
 
-        public List<PolicyViewModel> GetPolicesFormatTable(List<Policy> policies)
+        public List<PolicyViewModel> GetPolicesFormatTable(List<modPolicy.Policy> policies)
         {
             List<PolicyViewModel> policiesModel  = new List<PolicyViewModel>();
 
-            foreach (Policy policy in policies)
+            foreach (modPolicy.Policy policy in policies)
             {
                 PolicyViewModel policyModel = new PolicyViewModel();
 
@@ -127,9 +134,9 @@ namespace ParameterControl.Services.Policies
             return policiesModel;
         }
 
-        public async Task<Policy> GetPolicyById(string id)
+        public async Task<modPolicy.Policy> GetPolicyById(string id)
         {
-            Policy policy = policies.Find(policy => policy.Id == id);
+            modPolicy.Policy policy = policies.Find(policy => policy.Id == id);
             return policy;
         }
 
@@ -198,6 +205,30 @@ namespace ParameterControl.Services.Policies
             }
 
             return policiesFilter;
+        }
+
+        public async Task<string> InsertPolicy(modPolicy.Policy request)
+        {
+            try
+            {
+                var policy = new ent.PolicyModel
+                {
+                    Code = request.Code,
+                    Name = request.Name,
+                    Description = request.Description,
+                    CreationDate = DateTime.Now,
+                    ModifieldDate = DateTime.Now,
+                    ModifieldBy = "CreateToUserDev"
+                };
+
+                var response = await _policyService.InsertPolicy(policy);
+
+                return response.Equals(1) ? "Politica creada correctamente" : "Error creando la politica";
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
         }
     }
 }

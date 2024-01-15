@@ -21,7 +21,7 @@ namespace ParameterControl.Policy.DataAccess
             _configuration = configuration;
         }
 
-        public int InsertPolicy(PolicyModel entity)
+        public int DeletePolicy(PolicyModel entity)
         {
             int response = 0;
 
@@ -31,13 +31,10 @@ namespace ParameterControl.Policy.DataAccess
                 {
                     connection.Open();
 
-                    using (OracleCommand command = new OracleCommand("INSERT_POLICY",connection))
+                    using (OracleCommand command = new OracleCommand("DELETE_POLICY",connection))
                     {
                         command.CommandType = CommandType.StoredProcedure;
                         command.Parameters.Add(new OracleParameter("PARAM_CODE", entity.Code));
-                        command.Parameters.Add(new OracleParameter("PARAM_NAME", entity.Name));
-                        command.Parameters.Add(new OracleParameter("PARAM_DESCRIPTION", entity.Description));
-                        command.Parameters.Add(new OracleParameter("PARAM_MODIFIELDBY", entity.ModifieldBy));
                         OracleDataReader reader = command.ExecuteReader();
                         response = 1;
                     }

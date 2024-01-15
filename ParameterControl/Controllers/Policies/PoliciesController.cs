@@ -1,11 +1,14 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using ParameterControl.Models.Filter;
 using ParameterControl.Models.Policy;
 using ParameterControl.Models.Rows;
 using ParameterControl.Services.Policies;
 using ParameterControl.Services.Rows;
 using System.Collections.Generic;
+using modPolicy = ParameterControl.Models.Policy;
+
 
 namespace ParameterControl.Controllers.Policies
 {
@@ -31,7 +34,7 @@ namespace ParameterControl.Controllers.Policies
         [HttpGet]
         public async Task<ActionResult> Policies()
         {
-            List<Policy> policies = await policiesServices.GetPolicies();
+            List<modPolicy.Policy> policies = await policiesServices.GetPolicies();
 
             TablePolicies.Data = policiesServices.GetPolicesFormatTable(policies);
 
@@ -54,7 +57,7 @@ namespace ParameterControl.Controllers.Policies
             _logger.LogInformation(filterColunm);
             _logger.LogInformation(filterValue);
 
-            if(filterColunm == null || filterColunm == "" || filterValue == null || filterValue =="")
+            if (filterColunm == null || filterColunm == "" || filterValue == null || filterValue == "")
             {
                 return RedirectToAction("Policies");
             }
@@ -84,7 +87,7 @@ namespace ParameterControl.Controllers.Policies
         [HttpGet]
         public async Task<ActionResult> Desactive(string id)
         {
-            Policy policy = await policiesServices.GetPolicyById(id);
+            modPolicy.Policy policy = await policiesServices.GetPolicyById(id);
 
             return View("Actions/DesactivePolicy", policy);
         }
@@ -98,7 +101,7 @@ namespace ParameterControl.Controllers.Policies
         [HttpGet]
         public async Task<ActionResult> Active(string id)
         {
-            Policy policy = await policiesServices.GetPolicyById(id);
+            modPolicy.Policy policy = await policiesServices.GetPolicyById(id);
 
             return View("Actions/ActivePolicy", policy);
         }
@@ -117,16 +120,33 @@ namespace ParameterControl.Controllers.Policies
             return View("Actions/CreatePolicy", model);
         }
 
+        [HttpPost]
+        public async Task<ActionResult> Create(modPolicy.Policy request)
+        {
+            try
+            {
+                _logger.LogInformation($"Inicia método PoliciesController.Create {JsonConvert.SerializeObject(request)}");
+                var responseIn = await policiesServices.InsertPolicy(request);
+                _logger.LogInformation($"Finaliza método PoliciesController.Create {responseIn}");
+                return Ok(View("Actions/CreatePolicy", responseIn));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error en el método PoliciesController.Create : {JsonConvert.SerializeObject(ex.Message)}");
+                return BadRequest();
+            }
+        }
+
         [HttpGet]
         public async Task<ActionResult> Edit(string id)
         {
-            Policy policy = await policiesServices.GetPolicyById(id);
+            modPolicy.Policy policy = await policiesServices.GetPolicyById(id);
 
             return View("Actions/EditPolicy", policy);
         }
 
         [HttpPost]
-        public async Task<ActionResult> Edit(Policy policy)
+        public async Task<ActionResult> Edit(modPolicy.Policy policy)
         {
             Console.WriteLine(policy.Description);
             return RedirectToAction("Policies");
@@ -135,7 +155,7 @@ namespace ParameterControl.Controllers.Policies
         [HttpGet]
         public async Task<ActionResult> View(string id)
         {
-            Policy policy = await policiesServices.GetPolicyById(id);
+            modPolicy.Policy policy = await policiesServices.GetPolicyById(id);
 
             return View("Actions/ViewPolicy", policy);
         }
@@ -147,7 +167,7 @@ namespace ParameterControl.Controllers.Policies
             {
                 Rows = rows.RowsPolicies()
 
-        };
+            };
 
             return View("Actions/Filter", model);
         }
@@ -163,7 +183,7 @@ namespace ParameterControl.Controllers.Policies
             return RedirectToAction("PoliciesFilter", new
             {
                 filterColunm = filter.ColumValue,
-                filterValue= filter.ValueFilter
+                filterValue = filter.ValueFilter
             });
         }
     }

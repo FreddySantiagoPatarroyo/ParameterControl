@@ -12,16 +12,16 @@ using System.Threading.Tasks;
 
 namespace ParameterControl.Policy.DataAccess
 {
-    public class AllPolicy
+    public class GetAllPolicy
     {
         private readonly IConfiguration _configuration;
 
-        public AllPolicy(IConfiguration configuration)
+        public GetAllPolicy(IConfiguration configuration)
         {
             _configuration = configuration;
         }
 
-        public int InsertPolicy(PolicyModel entity)
+        public int SelectAllPolicy(int page, int row)
         {
             int response = 0;
 
@@ -31,13 +31,11 @@ namespace ParameterControl.Policy.DataAccess
                 {
                     connection.Open();
 
-                    using (OracleCommand command = new OracleCommand("INSERT_POLICY",connection))
+                    using (OracleCommand command = new OracleCommand("ALL_POLICY",connection))
                     {
                         command.CommandType = CommandType.StoredProcedure;
-                        command.Parameters.Add(new OracleParameter("PARAM_CODE", entity.Code));
-                        command.Parameters.Add(new OracleParameter("PARAM_NAME", entity.Name));
-                        command.Parameters.Add(new OracleParameter("PARAM_DESCRIPTION", entity.Description));
-                        command.Parameters.Add(new OracleParameter("PARAM_MODIFIELDBY", entity.ModifieldBy));
+                        command.Parameters.Add(new OracleParameter("PARAM_PAGE", page));
+                        command.Parameters.Add(new OracleParameter("PARAM_ROW", row));
                         OracleDataReader reader = command.ExecuteReader();
                         response = 1;
                     }
