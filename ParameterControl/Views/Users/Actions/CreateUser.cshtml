@@ -1,0 +1,85 @@
+﻿@using ParameterControl.Models.User
+@model User;
+
+@{
+    ViewData["Title"] = "Crear Usuarios";
+}
+
+<partial name="_Menu" />
+
+<div class="box_create">
+    <div class="bg__blur"></div>
+
+    <div asp-validation-summary="ModelOnly" class="text_error"></div>
+
+    <form asp-controller="Users" asp-action="Create" class="form__container">
+        <div class="card__container">
+            <div class="header_form">
+                <img src="/images/iconApple.png" />
+                <h1>Crear Usuario</h1>
+            </div>
+
+            <div class="form_group">
+                <div class="field">
+                    <label for="code--polices" asp-for="CodeUser" class="label_form">Código usuario*</label>
+                    <div class="input">
+                        <input id="code--policies" asp-for="CodeUser" placeholder="Codigo" autocomplete="off" />
+                    </div>
+                    <span asp-validation-for="CodeUser" class="text_error"></span>
+                </div>
+            </div>
+            <div class="form_group">
+                <div class="field">
+                    <label for="description--policies" asp-for="User_" class="label_form">Usuario*</label>
+                    <div class="input">
+                        <input id="description--policies" asp-for="User_" placeholder="usuario" autocomplete="off" />
+                    </div>
+                    <span asp-validation-for="User_" class="text_error"></span>
+                </div>
+            </div>
+            <div class="form_group">
+                <div class="field">
+                    <label for="objective--policies" asp-for="Email" class="label_form">Email*</label>
+                    <div class="textarea">
+                        <textarea id="objective--policies" asp-for="Email" placeholder="Email"></textarea>
+                    </div>
+                    <span asp-validation-for="Email" class="text_error"></span>
+                </div>
+            </div>
+            <div class="form_group">
+                <div class="field">
+                    <label for="objective--policies" asp-for="NameUser" class="label_form">Nombre de usuario*</label>
+                    <div class="input">
+                        <input id="objective--policies" asp-for="NameUser" placeholder="Nombre de usuario" autocomplete="off" />
+                    </div>
+                    <span asp-validation-for="NameUser" class="text_error"></span>
+                </div>
+            </div>
+            <div class="form_group">
+                <div class="field">
+                    <label for="objective--policies" asp-for="CreationDate" class="label_form">Fecha de creacion*</label>
+                    <div class="input">
+                        <input id="objective--policies" asp-for="CreationDate" placeholder="fecha" autocomplete="off" />
+                    </div>
+                    <span asp-validation-for="CreationDate" class="text_error"></span>
+                </div>
+            </div>
+            <div class="form_group">
+                <div class="field">
+                    <label for="objective--policies" asp-for="UpdateDate" class="label_form">Fecha de actualizacion*</label>
+                    <div class="input">
+                        <input id="objective--policies" asp-for="UpdateDate" placeholder="fecha" autocomplete="off" />
+                    </div>
+                    <span asp-validation-for="UpdateDate" class="text_error"></span>
+                </div>
+            </div>
+
+            <p class="note_text"><span>Nota: </span>Los campos con (*) son obligatorios</p>
+
+            <div class="btn_container">
+                <a class="button button_secondary" asp-controller="Users" asp-action="Users"><p class="text font_bold">Cancelar</p></a>
+                <button class="button button_primary"><p class="text font_bold">Crear</p></button>
+            </div>
+        </div>
+    </form>
+</div>

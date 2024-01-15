@@ -77,14 +77,33 @@ namespace ParameterControl.Controllers.Users
         }
 
         [HttpGet]
+        public async Task<ActionResult> Create()
+        {
+            User user = new User();
+
+            user.CreationDate = DateTime.Now;
+            user.UpdateDate = DateTime.Now;
+
+            return View("Actions/CreateUser", user);
+        }
+
+        [HttpGet]
+        public async Task<ActionResult> Edit(string id)
+        {
+            User user = await usersServices.GetUsersById(id);
+
+            user.UpdateDate = DateTime.Now;
+
+            return View("Actions/EditUser", user);
+        }
+
+        [HttpGet]
         public async Task<ActionResult> Desactive(string id)
         {
             User user = await usersServices.GetUsersById(id);
 
             return View("Actions/DesactiveUser", user);
         }
-
-
 
         [HttpGet]
         public async Task<ActionResult> View(string id)
