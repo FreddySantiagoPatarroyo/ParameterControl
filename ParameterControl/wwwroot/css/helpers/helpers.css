@@ -86,13 +86,6 @@
     width: 100%;
 }
 
-.oculte{
-    margin: 0px;
-    padding: 0px;
-    height: 0px;
-    width: 0px;
-}
-
 .field .name{
     width: 100%;
     height: auto;
@@ -143,7 +136,13 @@
     border: none;
     background: transparent;
     color: var(--tx_inputs);
-    width: 100%;
+}
+
+.oculte {
+    margin: 0px;
+    padding: 0px;
+    height: 0px;
+    width: 0px;
 }
 
 .field .input input[type=number]::-webkit-inner-spin-button,

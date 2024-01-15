@@ -16,6 +16,9 @@
                 <img src="/images/iconApple.png" />
                 <h1>Filtar Tabla Politicas</h1>
             </div>
+
+            <div asp-validation-summary="ModelOnly" class="text_error"></div>
+
             <form asp-controller="Policies" asp-action="FilterPolicies">
                 <div class="content_filter flex_box">
                     <div class="filter_primary">
@@ -23,9 +26,10 @@
                             <label asp-for="ColumValue" class="name font_normal" for="select_filter">Filtrar Por :</label>
                             <div id="input_select" class="input">
                                 <input class="input_select" id="input_select_filter" name="input_select_filter" placeholder="Seleccione una opción" onclick="showOptions()" readonly />
-                                <input type="hidden" id="input_select_filter_value" name="ColumValue" asp-for="ColumValue" />
+                                <input class="oculte" id="input_select_filter_value" asp-for="ColumValue" />
                                 <i class="icon icon_select icon_153"></i>
                             </div>
+                            <span asp-validation-for="ColumValue" class="text_error"></span>
                             <div id="options" class="options">
                                 <ul class="options_list">
                                     <li onclick="selectOption('@null', '@null')" class="option">
@@ -48,6 +52,7 @@
                             <div id="input" class="input">
                                 <input id="input_filter" name="ValueFilter" asp-for="ValueFilter" placeholder="Valor filtro" autocomplete="off" />
                             </div>
+                            <span asp-validation-for="ValueFilter" class="text_error"></span>
                         </div>
                     </div>
                 </div>
