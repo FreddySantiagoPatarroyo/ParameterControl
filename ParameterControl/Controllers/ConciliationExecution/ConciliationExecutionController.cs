@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using ParameterControl.Models.Conciliation;
 using ParameterControl.Models.ReconciliationExecution;
-using ParameterControl.Services.Conciliations;
+using System.Reflection;
 using static System.Collections.Specialized.BitVector32;
+
 
 namespace ParameterControl.Controllers.ConciliationExecution
 {
@@ -26,6 +26,7 @@ namespace ParameterControl.Controllers.ConciliationExecution
 
             return View("Actions/SuccesfulTransaction");
         }
+       
     }
 }
 

@@ -1,0 +1,27 @@
+﻿@using ParameterControl.Models.Scenery;
+@model Scenery;
+
+@{
+    ViewData["Title"] = "Activar Escenarios";
+}
+
+<partial name="_Menu" />
+
+<div class="box_delete">
+    <div class="bg__blur"></div>
+    <form class="form__container">
+
+        <div class="card__container">
+            <div class="header_form">
+                <img src="/images/iconApple.png" />
+                <h1>Activar Escenario</h1>
+                <h2>¿Está seguro de activar el escenario @Model.Name?</h2>
+            </div>
+
+            <div class="btn_container">
+                <a class="button button_secondary" asp-controller="Scenarios" asp-action="Scenarios"><p class="text font_bold">Cancelar</p></a>
+                <button class="button button_primary"><p class="text font_bold">Activar</p></button>
+            </div>
+        </div>
+    </form>
+</div>

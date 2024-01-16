@@ -7,6 +7,8 @@ using ParameterControl.Services.Conciliations;
 using ParameterControl.Models.Filter;
 using ParameterControl.Models.Policy;
 using ParameterControl.Services.Policies;
+using modScenery = ParameterControl.Models.Scenery;
+
 
 namespace ParameterControl.Controllers.Scenarios
 {
@@ -132,6 +134,15 @@ namespace ParameterControl.Controllers.Scenarios
 
             return View("Actions/Filter", model);
         }
+
+        [HttpGet]
+        public async Task<ActionResult> Active(string id)
+        {
+            modScenery.Scenery scenery = await scenariosServices.GetSceneryById(id);
+
+            return View("Actions/ActiveScenery", scenery);
+        }
+
 
         [HttpPost]
         public async Task<ActionResult> FilterScenarios(FilterViewModel filter)

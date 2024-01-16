@@ -7,6 +7,7 @@ using ParameterControl.Services.Conciliations;
 using ParameterControl.Services.Rows;
 using ParameterControl.Models.Policy;
 using ParameterControl.Services.Policies;
+using modConciliation = ParameterControl.Models.Conciliation;
 
 namespace ParameterControl.Controllers.Conciliations
 {
@@ -143,6 +144,15 @@ namespace ParameterControl.Controllers.Conciliations
 
             return View("Actions/CreateConciliation", model);
         }
+
+        [HttpGet]
+        public async Task<ActionResult> Active(string id)
+        {
+            modConciliation.Conciliation conciliation = await conciliationsServices.GetConciliationsById(id);
+
+            return View("Actions/ActiveConciliation", conciliation);
+        }
+
 
         [HttpGet]
         public ActionResult Filter()

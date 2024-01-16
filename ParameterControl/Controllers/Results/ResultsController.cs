@@ -3,6 +3,10 @@ using ParameterControl.Models.Result;
 using ParameterControl.Models.Filter;
 using ParameterControl.Services.Results;
 using ParameterControl.Services.Rows;
+using modResult = ParameterControl.Models.Result;
+using ParameterControl.Services.Users;
+using System.Reflection;
+
 
 namespace ParameterControl.Controllers.Results
 {
@@ -84,6 +88,13 @@ namespace ParameterControl.Controllers.Results
             return View("Actions/DesactiveResult", result);
         }
 
+        [HttpGet]
+        public async Task<ActionResult> Active(string id)
+        {
+            modResult.Result result = await resultsServices.GetResultsById(id);
+
+            return View("Actions/ActiveResult", result);
+        }
 
 
         [HttpGet]

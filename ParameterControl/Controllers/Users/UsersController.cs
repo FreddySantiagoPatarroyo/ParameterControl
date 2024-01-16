@@ -3,6 +3,8 @@ using ParameterControl.Models.User;
 using ParameterControl.Models.Filter;
 using ParameterControl.Services.Users;
 using ParameterControl.Services.Rows;
+using modUser = ParameterControl.Models.User;
+
 
 namespace ParameterControl.Controllers.Users
 {
@@ -103,6 +105,14 @@ namespace ParameterControl.Controllers.Users
             User user = await usersServices.GetUsersById(id);
 
             return View("Actions/DesactiveUser", user);
+        }
+
+        [HttpGet]
+        public async Task<ActionResult> Active(string id)
+        {
+            modUser.User user = await usersServices.GetUsersById(id);
+
+            return View("Actions/ActiveUser", user);
         }
 
         [HttpGet]

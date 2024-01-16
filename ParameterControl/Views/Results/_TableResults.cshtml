@@ -97,9 +97,9 @@
                                            @*  <button class="button_icon button_primary disabled" title="Editar" disabled>
                                                 <i class="icon icon_106"></i>
                                             </button> *@
-                                            <button class="button_icon button_primary" title="Activar" onclick="resultsDeleteShow()">
+                                            <a class="button_icon button_primary" title="Activar" asp-controller="Results" asp-action="Active" asp-route-id="@Result.Id">
                                                 <i class="icon icon_199"></i>
-                                            </button>
+                                            </a>
                                         </div>
                                     </div>
                                 }
