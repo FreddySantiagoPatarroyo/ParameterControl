@@ -1,3 +1,4 @@
+using ParameterControl.Services.Results;
 using ParameterControl.Services.Indicators;
 using ParameterControl.Services.Users;
 using ParameterControl.Services.Scenarios;
@@ -16,6 +17,8 @@ builder.Services.AddTransient<IParametersService, ParametersService>();
 builder.Services.AddTransient<IScenariosServices, ScenariosServices>();
 builder.Services.AddTransient<IUsersServices, UsersServices>();
 builder.Services.AddTransient<IIndicatorsService, IndicatorsService>();
+builder.Services.AddTransient<IResultsServices, ResultsServices>();
+
 
 
 builder.Services.AddScoped<Rows>();
