@@ -21,8 +21,13 @@
     height: 100%;
 }
 
-.text_error {
+.text_error,
+.icon_error{
     color: var(--tx_error);
+}
+
+.text_success {
+    color: var(--tx_success);
 }
 
 .button {
@@ -136,6 +141,7 @@
     border: none;
     background: transparent;
     color: var(--tx_inputs);
+    width: 100%;
 }
 
 .oculte {
@@ -230,10 +236,6 @@
 
     .button_secondary:hover {
         background-color: var(--button_secondary_hover);
-    }
-
-    .field {
-        width: auto;
     }
 
     .field .options .options_list .option:hover{

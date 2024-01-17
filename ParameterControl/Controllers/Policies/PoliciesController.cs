@@ -121,20 +121,28 @@ namespace ParameterControl.Controllers.Policies
         }
 
         [HttpPost]
-        public async Task<ActionResult> Create(modPolicy.Policy request)
+        public async Task<IActionResult> Create([FromBody] modPolicy.Policy request)
         {
-            try
+            if (!ModelState.IsValid)
             {
-                _logger.LogInformation($"Inicia método PoliciesController.Create {JsonConvert.SerializeObject(request)}");
-                var responseIn = await policiesServices.InsertPolicy(request);
-                _logger.LogInformation($"Finaliza método PoliciesController.Create {responseIn}");
-                return Ok(View("Actions/CreatePolicy", responseIn));
+                return BadRequest(new { message = "Error en la informacion enviada", state = "Error" });
             }
-            catch (Exception ex)
+            else
             {
-                _logger.LogError($"Error en el método PoliciesController.Create : {JsonConvert.SerializeObject(ex.Message)}");
-                return BadRequest();
+                try
+                {
+                    _logger.LogInformation($"Inicia método PoliciesController.Create {JsonConvert.SerializeObject(request)}");
+                    var responseIn = await policiesServices.InsertPolicy(request);
+                    _logger.LogInformation($"Finaliza método PoliciesController.Create {responseIn}");
+                    return Ok(new { message = "Se creo la politica de manera exitosa", state = "Success" });
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError($"Error en el método PoliciesController.Create : {JsonConvert.SerializeObject(ex.Message)}");
+                    return BadRequest(new { message = "Error al crear politica", state = "Error" });
+                }
             }
+            
         }
 
         [HttpGet]

@@ -82,6 +82,20 @@
     margin-right: 0px;
 }
 
+.loading {
+    display: none;
+    justify-content: center;
+    align-items: center;
+    margin-top: 25px;
+}
+
+.layout_content {
+    display: none;
+    justify-content: center;
+    align-items: center;
+    margin-top: 25px;
+}
+
 @media (max-width:910px) {
     .form__container {
         margin: 80px auto;

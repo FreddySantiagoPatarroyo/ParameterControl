@@ -17,7 +17,7 @@ namespace ParameterControl.Models.Policy
         [Required(ErrorMessage = "La descripcion es requerido")]
         public string Description { get; set; } = string.Empty;
 
-        [Range(1, int.MaxValue, ErrorMessage = "Esta conciliacion no es valida")]
+        [Range(0, int.MaxValue, ErrorMessage = "Esta conciliacion no es valida")]
         public int Conciliation { get; set; }
 
         [Required(ErrorMessage = "El tipo de algo es requerido")]

@@ -7,8 +7,13 @@
     margin-top: -40px;
 }
 
-.box_filter .form__container .card__container .content_filter .filter_secondary .field{
-    margin: 16px;
+.box_filter .form__container .card__container .content_filter .filter_primary,
+.box_filter .form__container .card__container .content_filter .filter_secondary{
+    width:100%;
+}
+
+.box_filter .form__container .card__container .content_filter .filter_secondary .field {
+    margin-top: 16px;
     display: none;
 }
 
