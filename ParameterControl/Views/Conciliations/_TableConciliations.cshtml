@@ -127,9 +127,9 @@
                                             <button class="button_icon button_primary disabled" title="Editar" disabled>
                                                 <i class="icon icon_106"></i>
                                             </button>
-                                            <button class="button_icon button_primary" title="Activar" onclick="conciliationsDeleteShow()">
+                                            <a class="button_icon button_primary" title="Activar" asp-controller="Conciliations" asp-action="Active" asp-route-id="@Conciliation.Id">
                                                 <i class="icon icon_199"></i>
-                                            </button>
+                                            </a>
                                         </div>
                                     </div>
                                 }

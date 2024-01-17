@@ -14,7 +14,7 @@
         <div class="card__container">
             <div class="header_form">
                 <img src="/images/iconApple.png" />
-                <h1>Editar Conciliación</h1>
+                <h1>Crear Conciliación</h1>
             </div>
 
             <div class="form_group">
@@ -29,9 +29,9 @@
 
             <div class="form_group">
                 <div class="field">
-                    <label for="description--conciliations" asp-for="Name" class="label_form">Nombre*</label>
+                    <label for="name--conciliations" asp-for="Name" class="label_form">Nombre*</label>
                     <div class="input">
-                        <input class="description" id="description--conciliations" asp-for="Name" placeholder="Nombre de la conciliación" autocomplete="off" />
+                        <input class="name" id="name--conciliations" asp-for="Name" placeholder="Nombre de la conciliación" autocomplete="off" />
                     </div>
                     <span asp-validation-for="Name" class="text_error"></span>
                 </div>

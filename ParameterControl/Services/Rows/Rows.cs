@@ -217,5 +217,64 @@ namespace ParameterControl.Services.Rows
 
             return rows;
         }
+        public List<Row> RowsResults()
+        {
+            List<Row> rows = new List<Row>()
+            {
+                 new Row()
+                {
+                    Value = "Conciliation",
+                    Name = "Conciliaciones"
+                },
+                new Row()
+                {
+                    Value = "Scenery",
+                    Name = "Escenario"
+                },
+                new Row()
+                {
+                    Value = "Status",
+                    Name = "Estado"
+                },
+                new Row()
+                {
+                    Value = "StartDate",
+                    Name = "Fecha Inicio"
+                },
+                new Row()
+                {
+                    Value = "EndDate",
+                    Name = "Fecha Fin"
+                },
+                new Row()
+                {
+                    Value = "StartDate",
+                    Name = "Fecha Inicio"
+                },
+                new Row()
+                {
+                    Value = "BeneValue",
+                    Name = "Valor Bene"
+                },
+                new Row()
+                {
+                    Value = "IncoValue",
+                    Name = "Valor Inco"
+                },
+                new Row()
+                {
+                    Value = "PQValue",
+                    Name = "Valor PQ"
+                },
+                new Row()
+                {
+                    Value = "ReinValue",
+                    Name = "Valor Rein"
+                },
+
+            };
+
+            return rows;
+        }
     }
 }

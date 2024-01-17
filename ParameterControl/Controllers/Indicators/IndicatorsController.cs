@@ -3,8 +3,9 @@ using ParameterControl.Models.Indicator;
 using ParameterControl.Models.Filter;
 using ParameterControl.Services.Indicators;
 using ParameterControl.Services.Rows;
-using ParameterControl.Models.Policy;
-using ParameterControl.Services.Policies;
+using modIndicator = ParameterControl.Models.Indicator;
+using ParameterControl.Services.Results;
+
 
 namespace ParameterControl.Controllers.Indicators
 {
@@ -87,6 +88,15 @@ namespace ParameterControl.Controllers.Indicators
             }
 
             [HttpGet]
+            public async Task<ActionResult> Active(string id)
+            {
+                modIndicator.Indicator indicator = await indicatorsService.GetIndicatorsById(id);
+
+                return View("Actions/ActiveIndicators", indicator);
+            }
+    
+
+             [HttpGet]
             public async Task<ActionResult> View(string id)
             {
                 Indicator indicator = await indicatorsService.GetIndicatorsById(id);

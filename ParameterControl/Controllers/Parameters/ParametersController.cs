@@ -7,6 +7,8 @@ using ParameterControl.Services.Conciliations;
 using ParameterControl.Services.Parameters;
 using ParameterControl.Services.Policies;
 using ParameterControl.Services.Rows;
+using modParameter = ParameterControl.Models.Parameter;
+
 
 namespace ParameterControl.Controllers.Parameters
 {
@@ -89,6 +91,14 @@ namespace ParameterControl.Controllers.Parameters
 
             return View("Actions/DesactiveParameter", parameter);
         }
+        [HttpGet]
+        public async Task<ActionResult> Active(string id)
+        {
+            modParameter.Parameter parameter = await parametersService.GetParameterById(id);
+
+            return View("Actions/ActiveParameter", parameter);
+        }
+
 
         [HttpGet]
         public async Task<ActionResult> Edit(string id)
