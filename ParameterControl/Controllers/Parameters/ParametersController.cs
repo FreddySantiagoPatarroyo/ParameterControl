@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using ParameterControl.Models.Conciliation;
 using ParameterControl.Models.Filter;
 using ParameterControl.Models.Parameter;
@@ -82,23 +83,44 @@ namespace ParameterControl.Controllers.Parameters
             return View("ParametersFilter", TableParameters);
         }
 
-        
-
         [HttpGet]
-        public async Task<ActionResult> Desactive(string id)
+        public async Task<ActionResult> Create()
         {
-            Parameter parameter = await parametersService.GetParameterById(id);
 
-            return View("Actions/DesactiveParameter", parameter);
+            List<string> ParameterTypeOptionList = await parametersService.GetParameterType();
+            List<string> GetListParameterList = await parametersService.GetListParameter();
+
+            ParameterCreateViewModel model = new ParameterCreateViewModel()
+            {
+                ParameterTypeOption = ParameterTypeOptionList,
+                ListParameter = GetListParameterList
+            };
+
+            return View("Actions/CreateParameter", model);
         }
-        [HttpGet]
-        public async Task<ActionResult> Active(string id)
+
+        [HttpPost]
+        public async Task<IActionResult> Create([FromBody] Parameter request)
         {
-            modParameter.Parameter parameter = await parametersService.GetParameterById(id);
-
-            return View("Actions/ActiveParameter", parameter);
+            if (!ModelState.IsValid)
+            {
+                _logger.LogError($"Error en el modelo : {JsonConvert.SerializeObject(request)}");
+                return BadRequest(new { message = "Error en la informacion enviada", state = "Error" });
+            }
+            else
+            {
+                try
+                {
+                    _logger.LogInformation($"Inicia método ParametersController.Create {JsonConvert.SerializeObject(request)}");
+                    return Ok(new { message = "Se creo el parametro de manera exitosa", state = "Success" });
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError($"Error en el método ParametersController.Create : {JsonConvert.SerializeObject(ex.Message)}");
+                    return BadRequest(new { message = "Error al crear el parametro", state = "Error" });
+                }
+            }
         }
-
 
         [HttpGet]
         public async Task<ActionResult> Edit(string id)
@@ -126,6 +148,29 @@ namespace ParameterControl.Controllers.Parameters
             return View("Actions/EditParameter", model);
         }
 
+        [HttpPost]
+        public async Task<IActionResult> Edit([FromBody] Parameter request)
+        {
+            if (!ModelState.IsValid)
+            {
+                _logger.LogError($"Error en el modelo : {JsonConvert.SerializeObject(request)}");
+                return BadRequest(new { message = "Error en la informacion enviada", state = "Error" });
+            }
+            else
+            {
+                try
+                {
+                    _logger.LogInformation($"Inicia método ParametersController.Edit {JsonConvert.SerializeObject(request)}");
+                    return Ok(new { message = "Se actualizo el parametro de manera exitosa", state = "Success" });
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError($"Error en el método ParametersController.Edit : {JsonConvert.SerializeObject(ex.Message)}");
+                    return BadRequest(new { message = "Error al actualizar el parametro", state = "Error" });
+                }
+            }
+        }
+
         [HttpGet]
         public async Task<ActionResult> View(string id)
         {
@@ -133,20 +178,51 @@ namespace ParameterControl.Controllers.Parameters
 
             return View("Actions/ViewParameter", parameter);
         }
+
         [HttpGet]
-        public async Task<ActionResult> Create()
+        public async Task<ActionResult> Active(string id)
         {
+            modParameter.Parameter parameter = await parametersService.GetParameterById(id);
 
-            List<string> ParameterTypeOptionList = await parametersService.GetParameterType();
-            List<string> GetListParameterList = await parametersService.GetListParameter();
+            return View("Actions/ActiveParameter", parameter);
+        }
 
-            ParameterCreateViewModel model = new ParameterCreateViewModel()
+        [HttpPost]
+        public async Task<ActionResult> ActiveParameter([FromBody] string request)
+        {
+            try
             {
-                ParameterTypeOption = ParameterTypeOptionList,
-                ListParameter = GetListParameterList
-            };
+                _logger.LogInformation($"Inicia método ParametersController.Active {JsonConvert.SerializeObject(request)}");
+                return Ok(new { message = "Se activo el parametro de manera exitosa", state = "Success" });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error en el método ParametersController.Active : {JsonConvert.SerializeObject(ex.Message)}");
+                return BadRequest(new { message = "Error al activar el parametro", state = "Error" });
+            }
+        }
 
-            return View("Actions/CreateParameter", model);
+        [HttpGet]
+        public async Task<ActionResult> Desactive(string id)
+        {
+            Parameter parameter = await parametersService.GetParameterById(id);
+
+            return View("Actions/DesactiveParameter", parameter);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> DesactiveParameter([FromBody] string request)
+        {
+            try
+            {
+                _logger.LogInformation($"Inicia método ParametersController.Deactive {JsonConvert.SerializeObject(request)}");
+                return Ok(new { message = "Se desactivo el parametro de manera exitosa", state = "Success" });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error en el método ParametersController.Deactive : {JsonConvert.SerializeObject(ex.Message)}");
+                return BadRequest(new { message = "Error al desactivar el parametro", state = "Error" });
+            }
         }
 
         [HttpGet]

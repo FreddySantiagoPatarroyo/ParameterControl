@@ -70,7 +70,7 @@
                 <div class="field">
                     <label asp-for="OperationType" class="label_form">Tipo de operacion*</label>
                     <div id="input_select" class="input">
-                        <input class="input_select" id="input_select_filter" name="input_select_filter" placeholder="Seleccione una opción" onclick="showOptions()" readonly />
+                        <input class="input_select" id="input_select_filter" name="input_select_filter" asp-for="OperationType" placeholder="Seleccione una opción" onclick="showOptions()" readonly />
                         <input asp-for="OperationType" class="oculte" />
                         <i class="icon icon_select icon_153"></i>
                     </div>
@@ -177,7 +177,8 @@
                     Description: $('#Description').val(),
                     Conciliation: parseInt($('#Conciliation').val()),
                     ControlType: $('#ControlType').val(),
-                    OperationType: $('#OperationType').val()
+                    OperationType: $('#OperationType').val(),
+                    State: true
                 }
 
                 console.log(data)
