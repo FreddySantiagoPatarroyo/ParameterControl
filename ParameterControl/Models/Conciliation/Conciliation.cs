@@ -31,7 +31,6 @@ namespace ParameterControl.Models.Conciliation
         [Required(ErrorMessage = "Este campo es requerido")]
         public string Required { get; set; } = string.Empty;
         
-        public bool Result { get; set; } = false;
         public bool State { get; set; } = false;
     }
 }

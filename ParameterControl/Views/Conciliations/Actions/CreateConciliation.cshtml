@@ -2,15 +2,18 @@
 @model ConciliationCreateViewModel;
 @{
     ViewData["Title"] = "Crear Conciliaciones";
+    string MessageError = "Error al crear una conciliación";
+    string MessageSuccess = "La conciliación se creo correctamente";
 }
 
 <partial name="_Menu" />
 
 <div class="box_create">
     <div class="bg__blur"></div>
+
     <div asp-validation-summary="ModelOnly" class="text_error"></div>
 
-    <form asp-controller="Conciliations" asp-action="Create" class="form__container">
+    <form class="form__container">
         <div class="card__container">
             <div class="header_form">
                 <img src="/images/iconApple.png" />
@@ -19,59 +22,59 @@
 
             <div class="form_group">
                 <div class="field">
-                    <label for="code--conciliations" asp-for="Code" class="label_form">Código*</label>
+                    <label asp-for="Code" class="label_form">Código*</label>
                     <div class="input">
-                        <input class="code" id="code--conciliations" asp-for="Code" placeholder="Digite el Codigo" autocomplete="off" />
+                        <input  asp-for="Code" placeholder="Digite el Codigo" autocomplete="off" />
                     </div>
-                    <span asp-validation-for="Code" class="text_error"></span>
+                    <span id="CodeError" class="text_error"></span>
                 </div>
             </div>
 
             <div class="form_group">
                 <div class="field">
-                    <label for="name--conciliations" asp-for="Name" class="label_form">Nombre*</label>
+                    <label asp-for="Name" class="label_form">Nombre*</label>
                     <div class="input">
-                        <input class="name" id="name--conciliations" asp-for="Name" placeholder="Nombre de la conciliación" autocomplete="off" />
+                        <input  asp-for="Name" placeholder="Nombre de la conciliación" autocomplete="off" />
                     </div>
-                    <span asp-validation-for="Name" class="text_error"></span>
+                    <span id="NameError" class="text_error"></span>
                 </div>
             </div>
 
             <div class="form_group">
                 <div class="field">
-                    <label for="package--conciliations" asp-for="Package" class="label_form">Paquete*</label>
+                    <label for="Package" asp-for="Package" class="label_form">Paquete*</label>
                     <div class="input">
-                        <input class="objective" asp-for="Package" placeholder="Digite nombre del paquete ODI" autocomplete="off">
+                        <input asp-for="Package" placeholder="Digite nombre del paquete ODI" autocomplete="off">
                     </div>
-                    <span asp-validation-for="Package" class="text_error"></span>
+                    <span id="PackageError" class="text_error"></span>
                 </div>
             </div>
 
             <div class="form_group">
                 <div class="field">
-                    <label for="email--conciliations" asp-for="Email" class="label_form">Email Usuario Asignado*</label>
+                    <label asp-for="Email" class="label_form">Email Usuario Asignado*</label>
                     <div class="input">
-                        <input class="objective" asp-for="Email" placeholder="Digite un correo válido" autocomplete="off">
+                        <input  asp-for="Email" placeholder="Digite un correo válido" autocomplete="off">
                     </div>
-                    <span asp-validation-for="Email" class="text_error"></span>
+                    <span id="EmailError" class="text_error"></span>
                 </div>
             </div>
 
             <div class="form_group">
                 <div class="field">
-                    <label for="destination--conciliations" asp-for="Destination" class="label_form">Destino</label>
+                    <label asp-for="Destination" class="label_form">Destino</label>
                     <div class="input">
-                        <input class="objective" asp-for="Destination" placeholder="Digite la tabla de Destino" autocomplete="off">
+                        <input  asp-for="Destination" placeholder="Digite la tabla de Destino" autocomplete="off">
                     </div>                    
                 </div>
             </div>
 
             <div class="form_group">
                 <div class="field">
-                    <label for="objective--policies" asp-for="Policies" class="label_form">Politicas*</label>
+                    <label asp-for="Policies" class="label_form">Politicas*</label>
                     <div id="input_select" class="input">
-                        <input class="input_select" id="input_select_filter" asp-for="Policies" placeholder="Seleccione una opción" onclick="showOptions()" readonly />
-                        <input class="oculte" id="input_select_filter_value" asp-for="Policies" />
+                        <input class="input_select" id="input_select_filter" name="input_select_filter" placeholder="Seleccione una opción" onclick="showOptions()" readonly />
+                        <input asp-for="Policies" class="oculte" />
                         <i class="icon icon_select icon_153"></i>
                     </div>
                     <div id="options" class="options">
@@ -90,15 +93,15 @@
                     <div id="select_helper" class="select_helper" onclick="showOptions()"></div>
                 </div>
 
-                <span asp-validation-for="Policies" class="text_error"></span>
+                <span id="PoliciesError" class="text_error"></span>
             </div>
 
             <div class="form_group">
                 <div class="field">
-                    <label for="objective--policies" asp-for="Required" class="label_form">Requiere Aprobación de Resultado*</label>
+                    <label asp-for="Required" class="label_form">Requiere Aprobación de Resultado*</label>
                     <div id="input_select_required" class="input">
-                        <input class="input_select" id="input_select_filter_required" asp-for="Required" placeholder="Seleccione una opción" onclick="showOptionsRequired()" readonly />
-                        <input class="oculte" id="input_select_filter_value_required" asp-for="Required" />
+                        <input class="input_select" id="input_select_filter_required" name="input_select_filter_required" placeholder="Seleccione una opción" onclick="showOptionsRequired()" readonly />
+                        <input asp-for="Required" class="oculte" />
                         <i class="icon icon_select icon_153"></i>
                     </div>
                     <div id="options_required" class="options">
@@ -116,13 +119,23 @@
                     </div>
                     <div id="select_helper_required" class="select_helper" onclick="showOptionsRequired()"></div>
                 </div>
-                    <span asp-validation-for="Required" class="text_error"></span>
-                </div>
+                <span id="RequiredError" class="text_error"></span>
+            </div>
                 <p class="note_text"><span>Nota: </span>Los campos con (*) son obligatorios</p>
 
-                <div class="btn_container">
+            <div id="btn_container" class="btn_container">
                     <a class="button button_secondary" asp-controller="Conciliations" asp-action="Conciliations"><p class="text font_bold">Cancelar</p></a>
-                    <button type="submit" class="button button_primary"><p class="text font_bold">Crear</p></button>
+                     <a href="javascript:void(0)" onclick="sendData()" class="button button_primary"><p class="text font_bold">Crear</p></a>
+            </div>
+
+                <div id="loading" class="loading">
+                    <span class="loader"></span>
+                </div>
+                <div id="LayoytError" class="layout_content">
+                    <partial name="_MessageError" model="MessageError" />
+                </div>
+                <div id="LayoytSuccess" class="layout_content">
+                    <partial name="_MessageSuccess" model="MessageSuccess" />
                 </div>
             </div>
     </form>
@@ -157,11 +170,11 @@
             if (name == null || value == null || name == '' || value == '') {
                 console.log("vacio");
                 document.getElementById("input_select_filter").value = '';
-                document.getElementById("input_select_filter_value").value = '';
+                document.getElementById("Policies").value = '';
             } else {
                 console.log(value);
                 document.getElementById("input_select_filter").value = name;
-                document.getElementById("input_select_filter_value").value = value;
+                document.getElementById("Policies").value = value;
             }
 
             showOptions();
@@ -191,14 +204,96 @@
             if (name == null || value == null || name == '' || value == '') {
                 console.log("vacio");
                 document.getElementById("input_select_filter_required").value = '';
-                document.getElementById("input_select_filter_value_required").value = '';
+                document.getElementById("Required").value = '';
             } else {
                 console.log(value);
                 document.getElementById("input_select_filter_required").value = name;
-                document.getElementById("input_select_filter_value_required").value = value;
+                document.getElementById("Required").value = value;
             }
 
             showOptionsRequired();
         }
     </script>
+
+
+    <script>
+        const urlCreateConciliation = '@Url.Action("Create")';
+        let data;
+        let isValidCode = false;
+        let isValidName = false;
+        let isValidPackage = false;
+        let isValidEmail = false;
+        let isValidDestination = false;
+        let isValidPolicies = false;
+        let isValidRequired = false;
+
+
+
+        const sendData = async () => {
+            isValidCode = validateInputEmpty("Code", "El codigo es requerido", "CodeError");
+            isValidName = validateInputEmpty("Name", "El nombre es requerido", "NameError");
+            isValidPackage = validateInputEmpty("Package", "El paquete es requerido", "PackageError");
+            isValidEmail = validateInputEmpty("Email", "El email del usuario asignado es requerido", "EmailError");
+            // isValidDestination = validateInputEmpty("Destination", "El destino es requerido", "DestinationError");
+            isValidPolicies = validateInputEmpty("Policies", "La politica es requerida", "PoliciesError");
+            isValidRequired = validateInputEmpty("Required", "Este campo es requerido", "RequiredError");
+
+
+
+            if (isValidCode && isValidName && isValidPackage && isValidEmail && isValidPolicies && isValidRequired) {
+                document.getElementById('btn_container').style.display = 'none';
+                document.getElementById('loading').style.display = 'flex';
+
+                data = {
+                    Code: $('#Code').val(),
+                    Name: $('#Name').val(),
+                    Package: $('#Package').val(),
+                    Email: parseInt($('#Email').val()),
+                    Destination: $('#Destination').val(),
+                    Policies: $('#Policies').val(),
+                    Required: $('#Required').val()
+
+                }
+
+                console.log(data)
+
+                const result = await fetch(urlCreateConciliation, {
+                    method: 'POST',
+                    body: JSON.stringify(data),
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                })
+
+                const json = await result.json();
+
+                console.log(json);
+
+                if (json.state == "Success") {
+                    document.getElementById('LayoytSuccess').style.display = 'block';
+                    document.getElementById('loading').style.display = 'none';
+                    setTimeout(() => {
+                        location.href = '/Conciliations/Conciliations';
+                    }, 3000)
+                } else {
+                    document.getElementById('LayoytError').style.display = 'block';
+                    document.getElementById('loading').style.display = 'none';
+                }
+            }
+        }
+
+        const validateInputEmpty = (idInput, messaje, idError) => {
+            if ($(`#${idInput}`).val() == "" || $(`#${idInput}`).val() == null) {
+                $(`#${idError}`).text(`${messaje}`);
+                return false;
+            } else {
+                $(`#${idError}`).text("");
+                return true;
+            }
+        }
+    </script>
+
+
+
 }
+    

@@ -8,6 +8,7 @@ using ParameterControl.Services.Rows;
 using ParameterControl.Models.Policy;
 using ParameterControl.Services.Policies;
 using modConciliation = ParameterControl.Models.Conciliation;
+using Newtonsoft.Json;
 
 namespace ParameterControl.Controllers.Conciliations
 {
@@ -112,7 +113,6 @@ namespace ParameterControl.Controllers.Conciliations
                 Destination = conciliation.Destination,
                 Policies = conciliation.Policies,
                 Required = conciliation.Required,
-                Result = conciliation.Result,
                 State = conciliation.State
             };
 
@@ -129,6 +129,8 @@ namespace ParameterControl.Controllers.Conciliations
 
             return View("Actions/ViewConciliation", conciliation);
         }
+
+
         [HttpGet]
         public async Task<ActionResult> Create()
         {
@@ -144,6 +146,31 @@ namespace ParameterControl.Controllers.Conciliations
 
             return View("Actions/CreateConciliation", model);
         }
+        [HttpPost]
+        public async Task<IActionResult> Create([FromBody] modConciliation.Conciliation request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(new { message = "Error en la informacion enviada", state = "Error" });
+            }
+            else
+            {
+                try
+                {
+                    _logger.LogInformation($"Inicia método ConciliationController.Create {JsonConvert.SerializeObject(request)}");
+                    //var responseIn = await conciliationsServices.InsertConciliation(request);
+                    //_logger.LogInformation($"Finaliza método ConciliationController.Create {responseIn}");
+                    return Ok(new { message = "Se creo la politica de manera exitosa", state = "Success" });
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError($"Error en el método ConciliationController.Create : {JsonConvert.SerializeObject(ex.Message)}");
+                    return BadRequest(new { message = "Error al crear la conciliación", state = "Error" });
+                }
+            }
+
+        }
+
 
         [HttpGet]
         public async Task<ActionResult> Active(string id)
