@@ -23,7 +23,7 @@
 
             <div class="form_group">
                 <div class="field">
-                    <label for="Code" asp-for="Code" class="label_form">Código*</label>
+                    <label asp-for="Code" class="label_form">Código*</label>
                     <div class="input">
                         <input asp-for="Code" placeholder="Codigo" autocomplete="off" />
                     </div>
@@ -32,7 +32,7 @@
             </div>
             <div class="form_group">
                 <div class="field">
-                    <label for="Name" asp-for="Name" class="label_form">Nombre*</label>
+                    <label asp-for="Name" class="label_form">Nombre*</label>
                     <div class="input">
                         <input asp-for="Name" placeholder="Nombre" autocomplete="off" />
                     </div>
@@ -41,7 +41,7 @@
             </div>
             <div class="form_group">
                 <div class="field">
-                    <label for="Description" asp-for="Description" class="label_form">Descripcion*</label>
+                    <label asp-for="Description" class="label_form">Descripcion*</label>
                     <div class="textarea">
                         <textarea asp-for="Description" placeholder="Descripcion"></textarea>
                     </div>
@@ -50,7 +50,7 @@
             </div>
             <div class="form_group">
                 <div class="field">
-                    <label for="objective--policies" asp-for="Conciliation" class="label_form">Conciliacion*</label>
+                    <label asp-for="Conciliation" class="label_form">Conciliacion*</label>
                     <div class="input">
                         <input asp-for="Conciliation" placeholder="Conciliacion" autocomplete="off" />
                     </div>
@@ -59,7 +59,7 @@
             </div>
             <div class="form_group">
                 <div class="field">
-                    <label for="objective--policies" asp-for="ControlType" class="label_form">Tipo control*</label>
+                    <label asp-for="ControlType" class="label_form">Tipo control*</label>
                     <div class="input">
                         <input asp-for="ControlType" placeholder="Tipo de control" autocomplete="off" />
                     </div>
@@ -68,7 +68,7 @@
             </div>
             <div class="form_group">
                 <div class="field">
-                    <label for="objective--policies" asp-for="OperationType" class="label_form">Tipo de operacion*</label>
+                    <label asp-for="OperationType" class="label_form">Tipo de operacion*</label>
                     <div id="input_select" class="input">
                         <input class="input_select" id="input_select_filter" name="input_select_filter" placeholder="Seleccione una opción" onclick="showOptions()" readonly />
                         <input asp-for="OperationType" class="oculte" />
@@ -150,7 +150,7 @@
     </script>
 
     <script>
-        const urlCreatePolicy = '@Url.Action("Create")';
+        const urlPolicy = '@Url.Action("Create")';
         let data;
         let isValidCode = false;
         let isValidName = false;
@@ -182,7 +182,7 @@
 
                 console.log(data)
 
-                const result = await fetch(urlCreatePolicy, {
+                const result = await fetch(urlPolicy, {
                     method: 'POST',
                     body: JSON.stringify(data),
                     headers: {

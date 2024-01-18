@@ -85,28 +85,6 @@ namespace ParameterControl.Controllers.Policies
         }
 
         [HttpGet]
-        public async Task<ActionResult> Desactive(string id)
-        {
-            modPolicy.Policy policy = await policiesServices.GetPolicyById(id);
-
-            return View("Actions/DesactivePolicy", policy);
-        }
-
-        [HttpPost]
-        public async Task<ActionResult> DesactivePolicy(string id)
-        {
-            return RedirectToAction("Policies");
-        }
-
-        [HttpGet]
-        public async Task<ActionResult> Active(string id)
-        {
-            modPolicy.Policy policy = await policiesServices.GetPolicyById(id);
-
-            return View("Actions/ActivePolicy", policy);
-        }
-
-        [HttpGet]
         public async Task<ActionResult> Create()
         {
 
@@ -139,10 +117,10 @@ namespace ParameterControl.Controllers.Policies
                 catch (Exception ex)
                 {
                     _logger.LogError($"Error en el método PoliciesController.Create : {JsonConvert.SerializeObject(ex.Message)}");
-                    return BadRequest(new { message = "Error al crear politica", state = "Error" });
+                    return BadRequest(new { message = "Error al crear la politica", state = "Error" });
                 }
             }
-            
+
         }
 
         [HttpGet]
@@ -154,10 +132,25 @@ namespace ParameterControl.Controllers.Policies
         }
 
         [HttpPost]
-        public async Task<ActionResult> Edit(modPolicy.Policy policy)
+        public async Task<ActionResult> Edit([FromBody] modPolicy.Policy request)
         {
-            Console.WriteLine(policy.Description);
-            return RedirectToAction("Policies");
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(new { message = "Error en la informacion enviada", state = "Error" });
+            }
+            else
+            {
+                try
+                {
+                    _logger.LogInformation($"Inicia método PoliciesController.Edit {JsonConvert.SerializeObject(request)}");
+                    return Ok(new { message = "Se actualizo la politica de manera exitosa", state = "Success" });
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError($"Error en el método PoliciesController.Edit : {JsonConvert.SerializeObject(ex.Message)}");
+                    return BadRequest(new { message = "Error al actualizar la politica", state = "Error" });
+                }
+            }
         }
 
         [HttpGet]
@@ -166,6 +159,52 @@ namespace ParameterControl.Controllers.Policies
             modPolicy.Policy policy = await policiesServices.GetPolicyById(id);
 
             return View("Actions/ViewPolicy", policy);
+        }
+
+        [HttpGet]
+        public async Task<ActionResult> Active(string id)
+        {
+            modPolicy.Policy policy = await policiesServices.GetPolicyById(id);
+
+            return View("Actions/ActivePolicy", policy);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> ActivePolicy([FromBody] modPolicy.Policy request)
+        {
+            try
+            {
+                _logger.LogInformation($"Inicia método PoliciesController.Active {JsonConvert.SerializeObject(request)}");
+                return Ok(new { message = "Se activo la politica de manera exitosa", state = "Success" });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error en el método PoliciesController.Active : {JsonConvert.SerializeObject(ex.Message)}");
+                return BadRequest(new { message = "Error al activar la politica", state = "Error" });
+            }
+        }
+
+        [HttpGet]
+        public async Task<ActionResult> Desactive(string id)
+        {
+            modPolicy.Policy policy = await policiesServices.GetPolicyById(id);
+
+            return View("Actions/DesactivePolicy", policy);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> DesactivePolicy([FromBody] modPolicy.Policy request)
+        {
+            try
+            {
+                _logger.LogInformation($"Inicia método PoliciesController.Desactive {JsonConvert.SerializeObject(request)}");
+                return Ok(new { message = "Se desactivo la politica de manera exitosa", state = "Success" });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error en el método PoliciesController.Desactive : {JsonConvert.SerializeObject(ex.Message)}");
+                return BadRequest(new { message = "Error al desactivar la politica", state = "Error" });
+            }
         }
 
         [HttpGet]

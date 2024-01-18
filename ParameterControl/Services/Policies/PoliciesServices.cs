@@ -28,7 +28,7 @@ namespace ParameterControl.Services.Policies
                     Name = "Politica_1",
                     Description = "Descripcion ejemplo",
                     Conciliation = 123,
-                    ControlType = "Emial",
+                    ControlType = "Voz",
                     OperationType = "OperationType_1asdasdasdasdasdadasdasdasdad",
                     State = true
                 },

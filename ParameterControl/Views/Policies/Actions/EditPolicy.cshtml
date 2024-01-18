@@ -3,6 +3,8 @@
 
 @{
     ViewData["Title"] = "Editar Politicas";
+    string MessageError = "Error al actualizar una politica";
+    string MessageSuccess = "La politica se actualizo correctamente";
 }
 
 <partial name="_Menu" />
@@ -12,46 +14,60 @@
 
     <div asp-validation-summary="ModelOnly" class="text_error"></div>
 
-    <form asp-controller="Policies" asp-action="Edit" class="form__container">
+    <form class="form__container">
         <div class="card__container">
             <div class="header_form">
                 <img src="/images/iconApple.png" />
                 <h1>Editar Politica</h1>
             </div>
 
+            <input type="hidden" asp-for="Id"/>
+            <input type="hidden" asp-for="Conciliation" />
+            <input type="hidden" asp-for="ControlType" />
+            <input type="hidden" asp-for="OperationType" />
+
             <div class="form_group">
                 <div class="field">
-                    <label for="code--polices" asp-for="Code" class="label_form">Código*</label>
+                    <label asp-for="Code" class="label_form">Código*</label>
                     <div class="input">
-                        <input type="text" class="code" id="code--policies" name="Code" asp-for="Code" placeholder="COD_001" readonly />
+                        <input asp-for="Code" placeholder="COD_001" readonly />
                     </div>
-                    <span asp-validation-for="Code" class="text_error"></span>
+                    <span id="CodeError" class="text_error"></span>
                 </div>
             </div>
             <div class="form_group">
                 <div class="field">
-                    <label for="description--policies" asp-for="Name" class="label_form">Nombre*</label>
+                    <label asp-for="Name" class="label_form">Nombre*</label>
                     <div class="input">
-                        <input type="text" class="description" id="description--policies" name="Name" asp-for="Name" placeholder="Descripcion" readonly />
+                        <input asp-for="Name" placeholder="Descripcion" readonly />
                     </div>
-                    <span asp-validation-for="Name" class="text_error"></span>
+                    <span id="NameError" class="text_error"></span>
                 </div>
             </div>
             <div class="form_group">
                 <div class="field">
-                    <label for="objective--policies" asp-for="Description" class="label_form">Descripcion*</label>
+                    <label asp-for="Description" class="label_form">Descripcion*</label>
                     <div class="textarea">
-                        <textarea id="objective--policies" name="Description" asp-for="Description" placeholder="Descripcion"></textarea>
+                        <textarea asp-for="Description" placeholder="Descripcion"></textarea>
                     </div>
-                    <span asp-validation-for="Description" class="text_error"></span>
+                    <span id="DescriptionError" class="text_error"></span>
                 </div>
             </div>
 
             <p class="note_text"><span>Nota: </span>Los campos con (*) son obligatorios</p>
 
-            <div class="btn_container">
+            <div id="btn_container" class="btn_container">
                 <a class="button button_secondary" asp-controller="Policies" asp-action="Policies"><p class="text font_bold">Cancelar</p></a>
-                <button type="submit" class="button button_primary"><p class="text font_bold">Actualizar</p></button>
+                <a href="javascript:void(0)" onclick="sendData()" class="button button_primary"><p class="text font_bold">Actualizar</p></a>
+            </div>
+            <div id="loading" class="loading">
+                <span class="loader"></span>
+            </div>
+            <div id="LayoytError" class="layout_content">
+                <partial name="_MessageError" model="MessageError" />
+            </div>
+            <div id="LayoytSuccess" class="layout_content">
+                <partial name="_MessageSuccess" model="MessageSuccess" />
             </div>
         </div>
     </form>
@@ -60,4 +76,74 @@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial.cshtml" />
+
+    <script>
+        const urlPolicy = '@Url.Action("Edit")';
+        let data;
+        let isValidCode = false;
+        let isValidName = false;
+        let isValidDescription = false;
+        // let isValidConciliation = false;
+        // let isValidControlType = false;
+        // let isValidOperationType = false;
+
+        const sendData = async () => {
+            isValidCode = validateInputEmpty("Code", "El codigo es requerido", "CodeError");
+            isValidName = validateInputEmpty("Name", "El nombre es requerido", "NameError");
+            isValidDescription = validateInputEmpty("Description", "La descripcion es requerido", "DescriptionError");
+            // isValidConciliation = validateInputEmpty("Conciliation", "La conciliacion es requerido", "ConciliationError");
+            // isValidControlType = validateInputEmpty("ControlType", "El tipo de control es requerido", "ControlTypeError");
+            // isValidOperationType = validateInputEmpty("OperationType", "El tipo de operacion es requerido", "OperationTypeError");
+
+            if (isValidCode && isValidName && isValidDescription) {
+                document.getElementById('btn_container').style.display = 'none';
+                document.getElementById('loading').style.display = 'flex';
+
+                data = {
+                    Id: $('#Id').val(),
+                    Code: $('#Code').val(),
+                    Name: $('#Name').val(),
+                    Description: $('#Description').val(),
+                    Conciliation: $('#Conciliation').val(),
+                    ControlType: $('#ControlType').val(),
+                    OperationType: $('#OperationType').val()
+                }
+
+                console.log(data)
+
+                const result = await fetch(urlPolicy, {
+                    method: 'POST',
+                    body: JSON.stringify(data),
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                })
+
+                const json = await result.json();
+
+                console.log(json);
+
+                if (json.state == "Success") {
+                    document.getElementById('LayoytSuccess').style.display = 'block';
+                    document.getElementById('loading').style.display = 'none';
+                    setTimeout(() => {
+                        location.href = '/Policies/Policies';
+                    }, 3000)
+                } else {
+                    document.getElementById('LayoytError').style.display = 'block';
+                    document.getElementById('loading').style.display = 'none';
+                }
+            }
+        }
+
+        const validateInputEmpty = (idInput, messaje, idError) => {
+            if ($(`#${idInput}`).val() == "" || $(`#${idInput}`).val() == null) {
+                $(`#${idError}`).text(`${messaje}`);
+                return false;
+            } else {
+                $(`#${idError}`).text("");
+                return true;
+            }
+        }
+    </script>
 }
