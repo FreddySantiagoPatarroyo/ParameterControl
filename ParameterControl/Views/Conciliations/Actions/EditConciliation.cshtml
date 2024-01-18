@@ -71,7 +71,7 @@
                     <label for="objective--policies" asp-for="Policies" class="label_form">Politicas*</label>
                     <div id="input_select" class="input">
                         <input class="input_select" id="input_select_filter" asp-for="Policies" placeholder="Seleccione una opción" onclick="showOptions()" readonly />
-                        <input class="oculte" id="input_select_filter_value" asp-for="Policies" />
+                        <input class="oculte" asp-for="Policies" />
                         <i class="icon icon_select icon_153"></i>
                     </div>
                     <div id="options" class="options">
@@ -98,7 +98,7 @@
                     <label for="objective--policies" asp-for="Required" class="label_form">Requiere Aprobación de Resultado*</label>
                     <div id="input_select_required" class="input">
                         <input class="input_select" id="input_select_filter_required" asp-for="Required" placeholder="Seleccione una opción" onclick="showOptionsRequired()" />
-                        <input class="oculte" id="input_select_filter_value_required" asp-for="Required" />
+                        <input class="oculte" asp-for="Required" />
                         <i class="icon icon_select icon_153"></i>
                     </div>
                     <div id="options_required" class="options">
@@ -157,11 +157,11 @@
             if (name == null || value == null || name == '' || value == '') {
                 console.log("vacio");
                 document.getElementById("input_select_filter").value = '';
-                document.getElementById("input_select_filter_value").value = '';
+                document.getElementById("Policies").value = '';
             } else {
                 console.log(value);
                 document.getElementById("input_select_filter").value = name;
-                document.getElementById("input_select_filter_value").value = value;
+                document.getElementById("Policies").value = value;
             }
 
             showOptions();
@@ -191,11 +191,11 @@
             if (name == null || value == null || name == '' || value == '') {
                 console.log("vacio");
                 document.getElementById("input_select_filter_required").value = '';
-                document.getElementById("input_select_filter_value_required").value = '';
+                document.getElementById("Required").value = '';
             } else {
                 console.log(value);
                 document.getElementById("input_select_filter_required").value = name;
-                document.getElementById("input_select_filter_value_required").value = value;
+                document.getElementById("Required").value = value;
             }
 
             showOptionsRequired();
