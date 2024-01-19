@@ -4,8 +4,6 @@ using ParameterControl.Models.Filter;
 using ParameterControl.Services.Results;
 using ParameterControl.Services.Rows;
 using modResult = ParameterControl.Models.Result;
-using ParameterControl.Services.Users;
-using System.Reflection;
 
 
 namespace ParameterControl.Controllers.Results
