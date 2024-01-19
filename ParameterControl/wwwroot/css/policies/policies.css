@@ -80,7 +80,7 @@
     position: relative;
     width: 100%;
     max-width: calc(100vw - 2px);
-    height: calc(100vh - 470px);
+    height: calc(100vh - 420px);
     border: 1px solid var(--br_table);
     border-radius: var(--radius_table);
     overflow-x: auto;
@@ -158,7 +158,7 @@
 .content_policies .card_policies .list .element_table .content_table .tables .rows {
     display: inline-flex;
     position: relative;
-    min-height: 58px;
+    min-height: 54px;
     background-color: var(--bg_rows_table);
     border-top: 1px solid transparent;
     border-bottom: 1px solid var(--br_table);

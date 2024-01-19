@@ -4,6 +4,7 @@ using ParameterControl.Models.Filter;
 using ParameterControl.Services.Results;
 using ParameterControl.Services.Rows;
 using modResult = ParameterControl.Models.Result;
+using Newtonsoft.Json;
 
 
 namespace ParameterControl.Controllers.Results
@@ -78,12 +79,29 @@ namespace ParameterControl.Controllers.Results
             return View("ResultsFilter", TableResults);
         }
 
+        //[HttpGet]
+        //public async Task<ActionResult> Create()
+        //{
+
+        //    Result result = new Result();
+
+        //    return View("Actions/CreateResult", result);
+        //}
+
+        //[HttpGet]
+        //public async Task<ActionResult> Edit(string id)
+        //{
+        //    Result result = await resultsServices.GetResultsById(id);
+
+        //    return View("Actions/EditResult", result);
+        //}
+
         [HttpGet]
-        public async Task<ActionResult> Desactive(string id)
+        public async Task<ActionResult> View(string id)
         {
             Result result = await resultsServices.GetResultsById(id);
 
-            return View("Actions/DesactiveResult", result);
+            return View("Actions/ViewResult", result);
         }
 
         [HttpGet]
@@ -94,30 +112,42 @@ namespace ParameterControl.Controllers.Results
             return View("Actions/ActiveResult", result);
         }
 
-
-        [HttpGet]
-        public async Task<ActionResult> Edit(string id)
+        [HttpPost]
+        public async Task<ActionResult> ActiveResult([FromBody] string request)
         {
-            Result result = await resultsServices.GetResultsById(id);
-
-            return View("Actions/EditResult", result);
+            try
+            {
+                _logger.LogInformation($"Inicia método ResultController.Active {JsonConvert.SerializeObject(request)}");
+                return Ok(new { message = "Se activo el resultado de manera exitosa", state = "Success" });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error en el método ResultController.Active : {JsonConvert.SerializeObject(ex.Message)}");
+                return BadRequest(new { message = "Error al activar el resultado", state = "Error" });
+            }
         }
 
         [HttpGet]
-        public async Task<ActionResult> View(string id)
+        public async Task<ActionResult> Desactive(string id)
         {
             Result result = await resultsServices.GetResultsById(id);
 
-            return View("Actions/ViewResult", result);
+            return View("Actions/DesactiveResult", result);
         }
-        [HttpGet]
-        public async Task<ActionResult> Create(string id)
+
+        [HttpPost]
+        public async Task<ActionResult> DesactiveResult([FromBody] string request)
         {
-
-            Result result = await resultsServices.GetResultsById(id);
-
-
-            return View("Actions/CreateResult", result);
+            try
+            {
+                _logger.LogInformation($"Inicia método ResultController.Active {JsonConvert.SerializeObject(request)}");
+                return Ok(new { message = "Se desactivo el resultado de manera exitosa", state = "Success" });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error en el método ResultController.Active : {JsonConvert.SerializeObject(ex.Message)}");
+                return BadRequest(new { message = "Error al desactivar el resultado", state = "Error" });
+            }
         }
 
         [HttpGet]
