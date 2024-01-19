@@ -8,6 +8,7 @@ using ParameterControl.Models.Filter;
 using ParameterControl.Models.Policy;
 using ParameterControl.Services.Policies;
 using modScenery = ParameterControl.Models.Scenery;
+using Newtonsoft.Json;
 
 
 namespace ParameterControl.Controllers.Scenarios
@@ -83,15 +84,30 @@ namespace ParameterControl.Controllers.Scenarios
         [HttpGet]
         public async Task<ActionResult> Desactive(string id)
         {
-            Scenery scenery = await scenariosServices.GetSceneryById(id);
+            modScenery.Scenery scenery = await scenariosServices.GetSceneryById(id);
 
             return View("Actions/DesactiveScenarios", scenery);
         }
+        [HttpPost]
+        public async Task<ActionResult> DesactiveScenery([FromBody] string request)
+        {
+            try
+            {
+                _logger.LogInformation($"Inicia método ScenariosController.Desactive {JsonConvert.SerializeObject(request)}");
+                return Ok(new { message = "Se desactivo el escenario de manera exitosa", state = "Success" });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error en el método ScenariosController.Desactive : {JsonConvert.SerializeObject(ex.Message)}");
+                return BadRequest(new { message = "Error al desactivar el escenario", state = "Error" });
+            }
+        }
+
 
         [HttpGet]
         public async Task<ActionResult> Edit(string id)
         {
-            Scenery scenery = await scenariosServices.GetSceneryById(id);
+            modScenery.Scenery scenery = await scenariosServices.GetSceneryById(id);
 
             List<string> ImpactOptionsList = await scenariosServices.GetImpact();
             List<string> ConciliationOptionsList = await scenariosServices.GetConciliation();
@@ -113,6 +129,29 @@ namespace ParameterControl.Controllers.Scenarios
             model.ConciliationOptions = ConciliationOptionsList;
 
             return View("Actions/EditScenarios", model);
+        }
+        
+        [HttpPost]
+        public async Task<ActionResult> Edit([FromBody] modScenery.Scenery request)
+        {
+            if (!ModelState.IsValid)
+            {
+                _logger.LogError($"Error en el modelo : {JsonConvert.SerializeObject(request)}");
+                return BadRequest(new { message = "Error en la informacion enviada", state = "Error" });
+            }
+            else
+            {
+                try
+                {
+                    _logger.LogInformation($"Inicia método ScenariosController.Edit {JsonConvert.SerializeObject(request)}");
+                    return Ok(new { message = "Se actualizo el escenario de manera exitosa", state = "Success" });
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError($"Error en el método ScenariosController.Edit : {JsonConvert.SerializeObject(ex.Message)}");
+                    return BadRequest(new { message = "Error al actualizar el escenario", state = "Error" });
+                }
+            }
         }
 
         [HttpGet]
@@ -142,6 +181,21 @@ namespace ParameterControl.Controllers.Scenarios
 
             return View("Actions/ActiveScenery", scenery);
         }
+        [HttpPost]
+        public async Task<ActionResult> ActiveScenery([FromBody] string request)
+        {
+            try
+            {
+                _logger.LogInformation($"Inicia método ScenariosController.Active {JsonConvert.SerializeObject(request)}");
+                return Ok(new { message = "Se activo el escenario de manera exitosa", state = "Success" });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error en el método ScenariosController.Active : {JsonConvert.SerializeObject(ex.Message)}");
+                return BadRequest(new { message = "Error al activar el escenario", state = "Error" });
+            }
+        }
+
 
 
         [HttpPost]

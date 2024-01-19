@@ -2,6 +2,9 @@
 @model SceneryCreateViewModel;
 
 @{
+    ViewData["Title"] = "Editar Escenarios";
+    string MessageError = "Error al actualizar el escenario";
+    string MessageSuccess = "El escenario se actualizo correctamente";
 }
 
 <partial name="_Menu" />
@@ -11,39 +14,41 @@
 
     <div asp-validation-summary="ModelOnly" class="text_error"></div>
 
-    <form asp-controller="Scenarios" asp-action="Edit" class="form__container">
+    <form class="form__container">
         <div class="card__container">
             <div class="header_form">
                 <img src="/images/iconApple.png" />
                 <h1>Editar Escenario</h1>
             </div>
 
+            <input type="hidden" asp-for="Id" />
+
             <div class="form_group">
                 <div class="field">
-                    <label for="code--scenarios" asp-for="Code" class="label_form">Código*</label>
+                    <label asp-for="Code" class="label_form">Código*</label>
                     <div class="input">
-                        <input class="code" id="code--scenarios" asp-for="Code" />
+                        <input asp-for="Code" placehoder="Codigo" />
                     </div>
-                    <span asp-validation-for="Code" class="text_error"></span>
+                    <span id="CodeError" class="text_error"></span>
                 </div>
             </div>
 
             <div class="form_group">
                 <div class="field">
-                    <label for="name--scenarios" asp-for="Name" class="label_form">Nombre*</label>
+                    <label asp-for="Name" class="label_form">Nombre*</label>
                     <div class="input">
-                        <input class="description" id="description--scenarios" asp-for="Name" />
+                        <input asp-for="Name" placeholder="Nombre" />
                     </div>
-                    <span asp-validation-for="Name" class="text_error"></span>
+                    <span id="NameError" class="text_error"></span>
                 </div>
             </div>
 
             <div class="form_group">
                 <div class="field">
-                    <label for="objective--policies" asp-for="Impact" class="label_form">Impacto*</label>
+                    <label asp-for="Impact" class="label_form">Impacto*</label>
                     <div id="input_select" class="input">
                         <input class="input_select" id="input_select_filter" asp-for="Impact"  placeholder="Seleccione una opción" onclick="showOptionsImpact()" />
-                        <input class="oculte" id="input_select_filter_value" asp-for="Impact" />
+                        <input class="oculte" asp-for="Impact" />
                         <i class="icon icon_select icon_153"></i>
                     </div>
                     <div id="options" class="options">
@@ -64,10 +69,10 @@
             </div>
             <div class="form_group">
                 <div class="field">
-                    <label for="objective--policies" asp-for="Conciliation" class="label_form">Conciliacion*</label>
+                    <label asp-for="Conciliation" class="label_form">Conciliacion*</label>
                     <div id="input_select_conciliation" class="input">
                         <input class="input_select" id="input_select_filter_conciliation" asp-for="Conciliation" placeholder="Seleccione una opción" onclick="showOptionsConciliation()"/>
-                        <input class="oculte" id="input_select_filter_value_conciliation" asp-for="Conciliation" />
+                        <input class="oculte" asp-for="Conciliation" />
                         <i class="icon icon_select icon_153"></i>
                     </div>
                     <div id="options_conciliation" class="options">
@@ -85,16 +90,25 @@
                     </div>
                     <div id="select_helper_conciliation" class="select_helper" onclick="showOptionsConciliation()"></div>
                 </div>
-                <span asp-validation-for="Conciliation" class="text_error"></span>
+                <span id="ConciliationError" class="text_error"></span>
             </div>
 
      
 
             <p class="note_text"><span>Nota: </span>Los campos con (*) son obligatorios</p>
 
-            <div class="btn_container">
+            <div id="btn_container" class="btn_container">
                 <a class="button button_secondary" asp-controller="Scenarios" asp-action="Scenarios"><p class="text font_bold">Cancelar</p></a>
-                <button type="submit" class="button button_primary"><p class="text font_bold">Actualizar</p></button>
+                <a href="javascript:void(0)" onclick="sendData()" class="button button_primary"><p class="text font_bold">Crear</p></a>
+            </div>
+            <div id="loading" class="loading">
+                <span class="loader"></span>
+            </div>
+            <div id="LayoytError" class="layout_content">
+                <partial name="_MessageError" model="MessageError" />
+            </div>
+            <div id="LayoytSuccess" class="layout_content">
+                <partial name="_MessageSuccess" model="MessageSuccess" />
             </div>
         </div>
     </form>
@@ -130,11 +144,11 @@
             if (name == null || value == null || name == '' || value == '') {
                 console.log("vacio");
                 document.getElementById("input_select_filter").value = '';
-                document.getElementById("input_select_filter_value").value = '';
+                document.getElementById("Impact").value = '';
             } else {
                 console.log(value);
                 document.getElementById("input_select_filter").value = name;
-                document.getElementById("input_select_filter_value").value = value;
+                document.getElementById("Impact").value = value;
             }
 
             showOptionsImpact();
@@ -167,15 +181,81 @@
             if (name == null || value == null || name == '' || value == '') {
                 console.log("vacio");
                 document.getElementById("input_select_filter_conciliation").value = '';
-                document.getElementById("input_select_filter_value_conciliation").value = '';
+                document.getElementById("Conciliation").value = '';
             } else {
                 console.log(value);
                 document.getElementById("input_select_filter_conciliation").value = name;
-                document.getElementById("input_select_filter_value_conciliation").value = value;
+                document.getElementById("Conciliation").value = value;
             }
 
             showOptionsConciliation();
 
+        }
+    </script>
+
+    <script>
+        const urlScenery = '@Url.Action("Edit")';
+        let data;
+        let isValidCode = false;
+        let isValidName = false;
+        // let isValidImpact = false;
+        let isValidConciliation = false;
+
+        const sendData = async () => {
+            isValidCode = validateInputEmpty("Code", "El codigo es requerido", "CodeError");
+            isValidName = validateInputEmpty("Name", "El nombre es requerido", "NameError");
+            // isValidImpact = validateInputEmpty("Impact", "El impacto es requerido", "ImpactError");
+            isValidConciliation = validateInputEmpty("Conciliation", "La conciliacion es requerido", "ConciliationError");
+            
+
+            if (isValidCode && isValidName && isValidConciliation) {
+                document.getElementById('btn_container').style.display = 'none';
+                document.getElementById('loading').style.display = 'flex';
+
+                data = {
+                    Id: $('#Id').val(),
+                    Code: $('#Code').val(),
+                    Name: $('#Name').val(),
+                    Impact: $('#Inpact').val(),
+                    Conciliation: $('#Conciliation').val(),
+                    State: true
+                }
+
+                console.log(data)
+
+                const result = await fetch(urlScenery, {
+                    method: 'POST',
+                    body: JSON.stringify(data),
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                })
+
+                const json = await result.json();
+
+                console.log(json);
+
+                if (json.state == "Success") {
+                    document.getElementById('LayoytSuccess').style.display = 'block';
+                    document.getElementById('loading').style.display = 'none';
+                    setTimeout(() => {
+                        location.href = '/Scenarios/Scenarios';
+                    }, 3000)
+                } else {
+                    document.getElementById('LayoytError').style.display = 'block';
+                    document.getElementById('loading').style.display = 'none';
+                }
+            }
+        }
+
+        const validateInputEmpty = (idInput, messaje, idError) => {
+            if ($(`#${idInput}`).val() == "" || $(`#${idInput}`).val() == null) {
+                $(`#${idError}`).text(`${messaje}`);
+                return false;
+            } else {
+                $(`#${idError}`).text("");
+                return true;
+            }
         }
     </script>
 }
