@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json.Linq;
 using ParameterControl.Models.Filter;
+using ParameterControl.Models.Pagination;
 using ParameterControl.Models.Policy;
 using ParameterControl.Models.Rows;
 using ParameterControl.Policy.Impl;
@@ -110,11 +111,27 @@ namespace ParameterControl.Services.Policies
             return policies;
         }
 
-        public List<PolicyViewModel> GetPolicesFormatTable(List<modPolicy.Policy> policies)
+        public async Task<List<modPolicy.Policy>> GetPoliciesPagination(PaginationViewModel pagination)
         {
+            try
+            {
+                var response = await _policyService.SelectAllPolicy(pagination.Page, pagination.RecordPage);
+
+                //return response.Equals(1) ? "Politica creada correctamente" : "Error creando la politica";
+                return null;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
+        public async Task<List<PolicyViewModel>> GetPolicesFormatTable(List<modPolicy.Policy> policies)
+        {
+            List<modPolicy.Policy> listPolicies = await GetPolicies();
             List<PolicyViewModel> policiesModel  = new List<PolicyViewModel>();
 
-            foreach (modPolicy.Policy policy in policies)
+            foreach (modPolicy.Policy policy in listPolicies)
             {
                 PolicyViewModel policyModel = new PolicyViewModel();
 
@@ -140,75 +157,6 @@ namespace ParameterControl.Services.Policies
             return policy;
         }
 
-        public async Task<List<string>> GetOperationsType()
-        {
-           List<string> operationsType = new List<string>()
-           {
-               "Movil",
-               "Fija"
-           };
-            return operationsType;
-        }
-
-
-
-        public async Task<List<PolicyViewModel>> GetFilterPolicies(FilterViewModel filterModel)
-        {
-            List<PolicyViewModel> policiesFilter = new List<PolicyViewModel>();
-
-            if((filterModel.ColumValue == null || filterModel.ColumValue == "" || filterModel.ValueFilter == null || filterModel.ValueFilter == ""))
-            {
-                policiesFilter = GetPolicesFormatTable(policies);
-            }
-            else
-            {
-                switch (filterModel.ColumValue)
-                {
-                    case "Code":
-                        policiesFilter = applyFilter(filterModel);
-                        break;
-                    case "Name":
-                        policiesFilter = applyFilter(filterModel);
-                        break;
-                    case "Description":
-                        policiesFilter = applyFilter(filterModel);
-                        break;
-                    case "Conciliation":
-                        policiesFilter = applyFilter(filterModel);
-                        break;
-                    case "ControlType":
-                        policiesFilter = applyFilter(filterModel);
-                        break;
-                    case "OperationType":
-                        policiesFilter = applyFilter(filterModel);
-                        break;
-                    default:
-                        break;
-                }
-            }
-
-            return policiesFilter;
-        }
-
-        private List<PolicyViewModel> applyFilter(FilterViewModel filterModel)
-        {
-            var property = typeof(PolicyViewModel).GetProperty(filterModel.ColumValue);
-
-            List<PolicyViewModel> policiesFilter = new List<PolicyViewModel>();
-
-            List<PolicyViewModel> Policies = GetPolicesFormatTable(policies);
-
-            foreach (PolicyViewModel policy in Policies)
-            {
-                if (property.GetValue(policy).ToString().ToUpper().Contains(filterModel.ValueFilter.ToUpper()))
-                {
-                    policiesFilter.Add(policy);
-                }
-            }
-
-            return policiesFilter;
-        }
-
         public async Task<string> InsertPolicy(modPolicy.Policy request)
         {
             try
@@ -231,6 +179,75 @@ namespace ParameterControl.Services.Policies
             {
                 throw;
             }
+        }
+
+        public async Task<List<string>> GetOperationsType()
+        {
+           List<string> operationsType = new List<string>()
+           {
+               "Movil",
+               "Fija"
+           };
+            return operationsType;
+        }
+
+
+
+        public async Task<List<PolicyViewModel>> GetFilterPolicies(FilterViewModel filterModel)
+        {
+            List<PolicyViewModel> policiesFilter = new List<PolicyViewModel>();
+
+            if((filterModel.ColumValue == null || filterModel.ColumValue == "" || filterModel.ValueFilter == null || filterModel.ValueFilter == ""))
+            {
+                policiesFilter = await GetPolicesFormatTable(policies);
+            }
+            else
+            {
+                switch (filterModel.ColumValue)
+                {
+                    case "Code":
+                        policiesFilter = await applyFilter(filterModel);
+                        break;
+                    case "Name":
+                        policiesFilter = await applyFilter(filterModel);
+                        break;
+                    case "Description":
+                        policiesFilter = await applyFilter(filterModel);
+                        break;
+                    case "Conciliation":
+                        policiesFilter = await applyFilter(filterModel);
+                        break;
+                    case "ControlType":
+                        policiesFilter = await applyFilter(filterModel);
+                        break;
+                    case "OperationType":
+                        policiesFilter = await applyFilter(filterModel);
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            return policiesFilter;
+        }
+
+        private async Task<List<PolicyViewModel>> applyFilter(FilterViewModel filterModel)
+        {
+            var property = typeof(PolicyViewModel).GetProperty(filterModel.ColumValue);
+
+            List<PolicyViewModel> policiesFilter = new List<PolicyViewModel>();
+
+            List<PolicyViewModel> Policies = await GetPolicesFormatTable(policies);
+
+            foreach (PolicyViewModel policy in Policies)
+            {
+                if (property.GetValue(policy).ToString().ToUpper().Contains(filterModel.ValueFilter.ToUpper()))
+                {
+                    policiesFilter.Add(policy);
+                }
+            }
+
+            return policiesFilter;
         }
     }
 }
