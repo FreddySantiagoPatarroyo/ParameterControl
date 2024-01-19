@@ -3,6 +3,8 @@
 
 @{
     ViewData["Title"] = "Activar Conciliacion";
+    string MessageError = "Error al activar una conciliación";
+    string MessageSuccess = "La conciliación se activo correctamente";
 }
 
 <partial name="_Menu" />
@@ -18,10 +20,65 @@
                 <h2>¿Está seguro de activar la conciliación @Model.Name?</h2>
             </div>
 
-            <div class="btn_container">
+            <input type="hidden" asp-for="Id" />
+
+            <div id="btn_container" class="btn_container">
                 <a class="button button_secondary" asp-controller="Conciliations" asp-action="Conciliations"><p class="text font_bold">Cancelar</p></a>
-                <button class="button button_primary"><p class="text font_bold">Activar</p></button>
+                <a href="javascript:void(0)" onclick="sendData()" class="button button_primary"><p class="text font_bold">Activar</p></a>
+            </div>
+            <div id="loading" class="loading">
+                <span class="loader"></span>
+            </div>
+            <div id="LayoytError" class="layout_content">
+                <partial name="_MessageError" model="MessageError" />
+            </div>
+            <div id="LayoytSuccess" class="layout_content">
+                <partial name="_MessageSuccess" model="MessageSuccess" />
             </div>
         </div>
     </form>
 </div>
+
+
+@section Scripts {
+    <script>
+        const urlConciliation = '@Url.Action("ActiveConciliation")';
+        let data;
+
+        const sendData = async () => {
+
+            document.getElementById('btn_container').style.display = 'none';
+            document.getElementById('loading').style.display = 'flex';
+
+            data = {
+                Id: $('#Id').val(),
+            }
+
+            console.log(data)
+
+            const result = await fetch(urlConciliation, {
+                method: 'POST',
+                body: JSON.stringify(data),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+
+            const json = await result.json();
+
+            console.log(json);
+
+            if (json.state == "Success") {
+                document.getElementById('LayoytSuccess').style.display = 'block';
+                document.getElementById('loading').style.display = 'none';
+                setTimeout(() => {
+                    location.href = '/Conciliations/Conciliations';
+                }, 3000)
+            } else {
+                document.getElementById('LayoytError').style.display = 'block';
+                document.getElementById('loading').style.display = 'none';
+            }
+
+        }
+    </script>
+}
