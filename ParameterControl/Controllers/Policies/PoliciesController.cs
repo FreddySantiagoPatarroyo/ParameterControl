@@ -33,7 +33,7 @@ namespace ParameterControl.Controllers.Policies
         {
             List<modPolicy.Policy> policies = await policiesServices.GetPolicies();
 
-            TablePolicies.Data = policiesServices.GetPolicesFormatTable(policies);
+            TablePolicies.Data = await policiesServices.GetPolicesFormatTable(policies);
 
             TablePolicies.Rows = rows.RowsPolicies();
 
