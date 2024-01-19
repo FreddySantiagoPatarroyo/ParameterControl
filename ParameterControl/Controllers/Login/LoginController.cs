@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ParameterControl.Models.Login;
-using System.Xml.Serialization;
 
 namespace ParameterControl.Controllers.Login
 {

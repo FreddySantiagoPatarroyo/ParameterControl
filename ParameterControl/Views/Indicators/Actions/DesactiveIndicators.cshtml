@@ -2,6 +2,11 @@
 @model Indicator;
 
 @{
+    ViewData["Title"] = "Desctivar Indicadores";
+
+    string MessageError = "Error al desactivar un indicador";
+    string MessageSuccess = "El indicador se desactivo correctamente";
+}
 }
 
 <partial name="_Menu" />
@@ -17,10 +22,64 @@
                 <h2>¿Está seguro de desactivar el Indicador @Model.Name?</h2>
             </div>
 
-            <div class="btn_container">
+            <input type="hidden" asp-for="Id"/>
+
+            <div id="btn_container" class="btn_container">
                 <a class="button button_secondary" asp-controller="Indicators" asp-action="Indicators"><p class="text font_bold">Cancelar</p></a>
-                <button class="button button_primary"><p class="text font_bold">Desactivar</p></button>
+                <a href="javascript:void(0)" onclick="sendData()" class="button button_primary"><p class="text font_bold">Desactivar</p></a>
+            </div>
+            <div id="loading" class="loading">
+                <span class="loader"></span>
+            </div>
+            <div id="LayoytError" class="layout_content">
+                <partial name="_MessageError" model="MessageError" />
+            </div>
+            <div id="LayoytSuccess" class="layout_content">
+                <partial name="_MessageSuccess" model="MessageSuccess" />
             </div>
         </div>
     </form>
 </div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial.cshtml" />
+
+    <script>
+        const urlPolicy = '@Url.Action("DesactiveIndicator")';
+        let data;
+
+        const sendData = async () => {
+
+            document.getElementById('btn_container').style.display = 'none';
+            document.getElementById('loading').style.display = 'flex';
+
+            data = $('#Id').val();
+
+            console.log(data)
+
+            const result = await fetch(urlPolicy, {
+                method: 'POST',
+                body: JSON.stringify(data),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+
+            const json = await result.json();
+
+            console.log(json);
+
+            if (json.state == "Success") {
+                document.getElementById('LayoytSuccess').style.display = 'block';
+                document.getElementById('loading').style.display = 'none';
+                setTimeout(() => {
+                    location.href = '/Indicators/Indicators';
+                }, 3000)
+            } else {
+                document.getElementById('LayoytError').style.display = 'block';
+                document.getElementById('loading').style.display = 'none';
+            }
+
+        }
+    </script>
+}

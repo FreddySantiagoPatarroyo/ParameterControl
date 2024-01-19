@@ -150,6 +150,8 @@ namespace ParameterControl.Services.Policies
             return operationsType;
         }
 
+
+
         public async Task<List<PolicyViewModel>> GetFilterPolicies(FilterViewModel filterModel)
         {
             List<PolicyViewModel> policiesFilter = new List<PolicyViewModel>();

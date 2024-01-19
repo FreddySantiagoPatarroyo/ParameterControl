@@ -1,12 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using ParameterControl.Models.Filter;
 using ParameterControl.Models.Policy;
-using ParameterControl.Models.Rows;
 using ParameterControl.Services.Policies;
 using ParameterControl.Services.Rows;
-using System.Collections.Generic;
 using modPolicy = ParameterControl.Models.Policy;
 
 
@@ -103,6 +100,7 @@ namespace ParameterControl.Controllers.Policies
         {
             if (!ModelState.IsValid)
             {
+                _logger.LogError($"Error en el modelo : {JsonConvert.SerializeObject(request)}");
                 return BadRequest(new { message = "Error en la informacion enviada", state = "Error" });
             }
             else
@@ -136,6 +134,7 @@ namespace ParameterControl.Controllers.Policies
         {
             if (!ModelState.IsValid)
             {
+                _logger.LogError($"Error en el modelo : {JsonConvert.SerializeObject(request)}");
                 return BadRequest(new { message = "Error en la informacion enviada", state = "Error" });
             }
             else
@@ -170,7 +169,7 @@ namespace ParameterControl.Controllers.Policies
         }
 
         [HttpPost]
-        public async Task<ActionResult> ActivePolicy([FromBody] modPolicy.Policy request)
+        public async Task<ActionResult> ActivePolicy([FromBody] string request)
         {
             try
             {
@@ -193,7 +192,7 @@ namespace ParameterControl.Controllers.Policies
         }
 
         [HttpPost]
-        public async Task<ActionResult> DesactivePolicy([FromBody] modPolicy.Policy request)
+        public async Task<ActionResult> DesactivePolicy([FromBody] string request)
         {
             try
             {
