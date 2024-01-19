@@ -82,29 +82,6 @@ namespace ParameterControl.Controllers.Scenarios
         }
 
         [HttpGet]
-        public async Task<ActionResult> Desactive(string id)
-        {
-            modScenery.Scenery scenery = await scenariosServices.GetSceneryById(id);
-
-            return View("Actions/DesactiveScenarios", scenery);
-        }
-        [HttpPost]
-        public async Task<ActionResult> DesactiveScenery([FromBody] string request)
-        {
-            try
-            {
-                _logger.LogInformation($"Inicia método ScenariosController.Desactive {JsonConvert.SerializeObject(request)}");
-                return Ok(new { message = "Se desactivo el escenario de manera exitosa", state = "Success" });
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Error en el método ScenariosController.Desactive : {JsonConvert.SerializeObject(ex.Message)}");
-                return BadRequest(new { message = "Error al desactivar el escenario", state = "Error" });
-            }
-        }
-
-
-        [HttpGet]
         public async Task<ActionResult> Edit(string id)
         {
             modScenery.Scenery scenery = await scenariosServices.GetSceneryById(id);
@@ -130,7 +107,7 @@ namespace ParameterControl.Controllers.Scenarios
 
             return View("Actions/EditScenarios", model);
         }
-        
+
         [HttpPost]
         public async Task<ActionResult> Edit([FromBody] modScenery.Scenery request)
         {
@@ -163,24 +140,13 @@ namespace ParameterControl.Controllers.Scenarios
         }
 
         [HttpGet]
-        public ActionResult Filter()
-        {
-            FilterViewModel model = new FilterViewModel()
-            {
-                Rows = rows.RowsScenarios()
-
-            };
-
-            return View("Actions/Filter", model);
-        }
-
-        [HttpGet]
         public async Task<ActionResult> Active(string id)
         {
             modScenery.Scenery scenery = await scenariosServices.GetSceneryById(id);
 
             return View("Actions/ActiveScenery", scenery);
         }
+
         [HttpPost]
         public async Task<ActionResult> ActiveScenery([FromBody] string request)
         {
@@ -196,7 +162,40 @@ namespace ParameterControl.Controllers.Scenarios
             }
         }
 
+        [HttpGet]
+        public async Task<ActionResult> Desactive(string id)
+        {
+            modScenery.Scenery scenery = await scenariosServices.GetSceneryById(id);
 
+            return View("Actions/DesactiveScenarios", scenery);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> DesactiveScenery([FromBody] string request)
+        {
+            try
+            {
+                _logger.LogInformation($"Inicia método ScenariosController.Desactive {JsonConvert.SerializeObject(request)}");
+                return Ok(new { message = "Se desactivo el escenario de manera exitosa", state = "Success" });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error en el método ScenariosController.Desactive : {JsonConvert.SerializeObject(ex.Message)}");
+                return BadRequest(new { message = "Error al desactivar el escenario", state = "Error" });
+            }
+        }
+
+        [HttpGet]
+        public ActionResult Filter()
+        {
+            FilterViewModel model = new FilterViewModel()
+            {
+                Rows = rows.RowsScenarios()
+
+            };
+
+            return View("Actions/Filter", model);
+        }
 
         [HttpPost]
         public async Task<ActionResult> FilterScenarios(FilterViewModel filter)
