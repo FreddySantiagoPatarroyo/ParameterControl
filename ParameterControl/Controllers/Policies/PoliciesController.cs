@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using ParameterControl.Models.Filter;
+using ParameterControl.Models.Pagination;
 using ParameterControl.Models.Policy;
 using ParameterControl.Services.Policies;
 using ParameterControl.Services.Rows;
@@ -11,11 +13,10 @@ namespace ParameterControl.Controllers.Policies
 {
     public class PoliciesController : Controller
     {
-
         public TablePoliciesViewModel TablePolicies = new TablePoliciesViewModel();
         private readonly ILogger<HomeController> _logger;
         private readonly IPoliciesServices policiesServices;
-        private readonly Rows rows;
+        private readonly Rows rows;        
 
         public PoliciesController(
             ILogger<HomeController> logger,
@@ -25,7 +26,7 @@ namespace ParameterControl.Controllers.Policies
         {
             this._logger = logger;
             this.policiesServices = policiesServices;
-            this.rows = rows;
+            this.rows = rows;            
         }
 
         [HttpGet]
@@ -231,6 +232,38 @@ namespace ParameterControl.Controllers.Policies
                 filterColunm = filter.ColumValue,
                 filterValue = filter.ValueFilter
             });
+        }
+
+        [HttpGet]
+        public async Task<ActionResult> Index()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Index([FromBody] PaginationViewModel pagination)
+        {
+            if (!ModelState.IsValid)
+            {
+                _logger.LogError($"Error en el modelo : {JsonConvert.SerializeObject(pagination)}");
+                return BadRequest(new { message = "Error en la consulta enviada", state = "Error" });
+            }
+            else
+            {
+                try
+                {
+                    _logger.LogInformation($"Inicia método PoliciesController.Index {JsonConvert.SerializeObject(pagination)}");
+                    var responseIn = await policiesServices.GetPoliciesPagination(pagination);
+                    _logger.LogInformation($"Finaliza método PoliciesController.Index {responseIn}");
+                    return Ok(new { message = "Se creo la politica de manera exitosa", state = "Success" });
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError($"Error en el método PoliciesController.Index : {JsonConvert.SerializeObject(ex.Message)}");
+                    return BadRequest(new { message = "Error al crear la politica", state = "Error" });
+                }
+            }
+
         }
     }
 }

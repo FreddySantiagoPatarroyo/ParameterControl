@@ -2,7 +2,7 @@
 
 namespace ParameterControl.Models.Scenery
 {
-    public class TableScenariosViewModel
+    public class TableScenariesViewModel
     {
         public List<Scenery> Data { get; set; } = new List<Scenery>();
         public List<Row> Rows { get; set; } = new List<Row>();

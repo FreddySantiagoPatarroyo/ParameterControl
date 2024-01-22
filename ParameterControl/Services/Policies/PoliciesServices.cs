@@ -1,8 +1,10 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using AutoMapper;
+using Newtonsoft.Json.Linq;
 using ParameterControl.Models.Filter;
 using ParameterControl.Models.Pagination;
 using ParameterControl.Models.Policy;
 using ParameterControl.Models.Rows;
+using ParameterControl.Policy.Entities;
 using ParameterControl.Policy.Impl;
 using ParameterControl.Policy.Interfaces;
 using System.Collections.Generic;
@@ -17,9 +19,11 @@ namespace ParameterControl.Services.Policies
     {
         private List<modPolicy.Policy> policies = new List<modPolicy.Policy>();
         private readonly PolicyService _policyService;
+        private readonly IMapper _mapper;
 
-        public PoliciesServices(IConfiguration configuration)
+        public PoliciesServices(IConfiguration configuration, IMapper mapper)
         {
+            _mapper = mapper;
             _policyService = new PolicyService(configuration);
             policies = new List<modPolicy.Policy>()
             {
@@ -115,10 +119,9 @@ namespace ParameterControl.Services.Policies
         {
             try
             {
-                var response = await _policyService.SelectAllPolicy(pagination.Page, pagination.RecordPage);
-
-                //return response.Equals(1) ? "Politica creada correctamente" : "Error creando la politica";
-                return null;
+                var response = await _policyService.SelectPaginatorPolicy(pagination.Page, pagination.RecordPage);
+                var result = _mapper.Map<List<modPolicy.Policy>>(response);
+                return result;
             }
             catch (Exception ex)
             {

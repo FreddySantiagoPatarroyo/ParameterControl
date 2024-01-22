@@ -2,11 +2,8 @@
 using ParameterControl.Policy.DataAccess;
 using ParameterControl.Policy.Entities;
 using ParameterControl.Policy.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Data;
+using System.Xml.Linq;
 
 namespace ParameterControl.Policy.Impl
 {
@@ -17,6 +14,7 @@ namespace ParameterControl.Policy.Impl
         private readonly ModifyPolicy _modifyPolicy;
         private readonly GetByIdPolicy _getByIdPolicy;
         private readonly GetAllPolicy _getAllPolicy;
+        private readonly GetPaginatorPolicy _getPaginatorPolicy;
 
         public PolicyService(IConfiguration configuration)
         {
@@ -25,6 +23,7 @@ namespace ParameterControl.Policy.Impl
             _modifyPolicy = new ModifyPolicy(configuration);
             _getByIdPolicy = new GetByIdPolicy(configuration);
             _getAllPolicy = new GetAllPolicy(configuration);
+            _getPaginatorPolicy = new GetPaginatorPolicy(configuration);
         }
 
         public async Task<int> InsertPolicy(PolicyModel entity)
@@ -46,7 +45,7 @@ namespace ParameterControl.Policy.Impl
         {
             try
             {
-                return await Task.Run(()=>
+                return await Task.Run(() =>
                 {
                     return _removePolicy.DeletePolicy(entity);
                 });
@@ -57,13 +56,13 @@ namespace ParameterControl.Policy.Impl
             }
         }
 
-        public async Task<int> SelectAllPolicy(int page, int row)
+        public async Task<int> SelectAllPolicy()
         {
             try
             {
                 return await Task.Run(() =>
                 {
-                    return _getAllPolicy.SelectAllPolicy(page, row);
+                    return _getAllPolicy.SelectAllPolicy();
                 });
             }
             catch (Exception ex)
@@ -100,6 +99,53 @@ namespace ParameterControl.Policy.Impl
             {
                 throw;
             }
+        }
+
+        public async Task<List<PolicyModel>> SelectPaginatorPolicy(int page, int row)
+        {
+            try
+            {
+                return await Task.Run(async () =>
+                {
+                    var response = await _getPaginatorPolicy.SelectPaginatorPolicy(page, row);
+                    var mapper = await MapperToPolicy(response);
+                    return mapper;
+                });
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
+        private async Task<List<PolicyModel>> MapperToPolicy(DataTable dt)
+        {
+            return await Task.Run(() =>
+            {
+                if (dt.Rows.Count > 0)
+                {
+                    List<PolicyModel> policies = new List<PolicyModel>();
+                    foreach (DataRow row in dt.Rows)
+                    {
+                        PolicyModel model = new PolicyModel
+                        {
+                            IdPolicy = Convert.ToInt32(row["CODE"]),
+                            Code = row["CODE"].ToString(),
+                            Name = row["CODE"].ToString(),
+                            Description = row["CODE"].ToString(),
+                            CreationDate = Convert.ToDateTime(row["CODE"]),
+                            ModifieldDate = Convert.ToDateTime(row["CODE"]),
+                            ModifieldBy = row["CODE"].ToString()
+                        };
+                        policies.Add(model);
+                    }
+                    return policies;
+                }
+                else
+                {
+                    return new List<PolicyModel>();
+                }
+            });
         }
     }
 }

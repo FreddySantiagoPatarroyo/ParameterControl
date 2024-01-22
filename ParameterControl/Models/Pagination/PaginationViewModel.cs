@@ -3,19 +3,19 @@
     public class PaginationViewModel
     {
         public int Page { get; set; }
-        private int recordPage { get; set; } = 10;
+        private int RecordPageSize { get; set; } = 10;
         private readonly int MaxRecordPage = 50;
         public int RecordPage { 
             get 
             { 
-                return recordPage;
+                return RecordPageSize;
             } 
             set 
-            { 
-                recordPage = (value > MaxRecordPage) ? MaxRecordPage : value;
+            {
+                RecordPageSize = (value > MaxRecordPage) ? MaxRecordPage : value;
             } 
         }
 
-        public int IgnoreRecords => recordPage * (Page - 1);
+        public int IgnoreRecords => RecordPageSize * (Page - 1);
     }
 }

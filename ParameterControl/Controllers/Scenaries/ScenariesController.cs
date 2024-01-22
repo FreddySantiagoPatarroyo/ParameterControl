@@ -13,14 +13,14 @@ using Newtonsoft.Json;
 
 namespace ParameterControl.Controllers.Scenarios
 {
-    public class ScenariosController : Controller
+    public class ScenariesController : Controller
     {
-        public TableScenariosViewModel TableScenarios = new TableScenariosViewModel();
+        public TableScenariesViewModel TableScenarios = new TableScenariesViewModel();
         private readonly ILogger<HomeController> _logger;
         private readonly IScenariosServices scenariosServices;
         private readonly Rows rows;
 
-        public ScenariosController(
+        public ScenariesController(
         ILogger<HomeController> logger,
             IScenariosServices scenariosServices,
             Rows rows

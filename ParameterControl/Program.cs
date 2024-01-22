@@ -19,7 +19,7 @@ builder.Services.AddTransient<IUsersServices, UsersServices>();
 builder.Services.AddTransient<IIndicatorsService, IndicatorsService>();
 builder.Services.AddTransient<IResultsServices, ResultsServices>();
 
-
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 builder.Services.AddScoped<Rows>();
 

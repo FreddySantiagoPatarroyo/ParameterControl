@@ -21,7 +21,7 @@ namespace ParameterControl.Policy.DataAccess
             _configuration = configuration;
         }
 
-        public int SelectAllPolicy(int page, int row)
+        public int SelectAllPolicy()
         {
             int response = 0;
 
@@ -34,8 +34,6 @@ namespace ParameterControl.Policy.DataAccess
                     using (OracleCommand command = new OracleCommand("ALL_POLICY",connection))
                     {
                         command.CommandType = CommandType.StoredProcedure;
-                        command.Parameters.Add(new OracleParameter("PARAM_PAGE", page));
-                        command.Parameters.Add(new OracleParameter("PARAM_ROW", row));
                         OracleDataReader reader = command.ExecuteReader();
                         response = 1;
                     }
