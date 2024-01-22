@@ -115,7 +115,7 @@ namespace ParameterControl.Services.Policies
         {
             try
             {
-                var response = await _policyService.SelectAllPolicy(pagination.Page, pagination.RecordPage);
+                var response = await _policyService.SelectAllPolicy(pagination.Page, pagination.RecordsPage);
 
                 //return response.Equals(1) ? "Politica creada correctamente" : "Error creando la politica";
                 return null;

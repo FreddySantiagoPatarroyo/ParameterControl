@@ -2,20 +2,21 @@
 {
     public class PaginationViewModel
     {
-        public int Page { get; set; }
-        private int recordPage { get; set; } = 10;
+        public int Page { get; set; } = 1;
+        private int recordsPage { get; set; } = 10;
         private readonly int MaxRecordPage = 50;
-        public int RecordPage { 
+        public int RecordsPage
+        { 
             get 
             { 
-                return recordPage;
+                return recordsPage;
             } 
             set 
-            { 
-                recordPage = (value > MaxRecordPage) ? MaxRecordPage : value;
+            {
+                recordsPage = (value > MaxRecordPage) ? MaxRecordPage : value;
             } 
         }
 
-        public int IgnoreRecords => recordPage * (Page - 1);
+        public int IgnoreRecords => recordsPage * (Page - 1);
     }
 }
