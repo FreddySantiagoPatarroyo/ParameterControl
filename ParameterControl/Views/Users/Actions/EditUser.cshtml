@@ -3,6 +3,8 @@
 
 @{
     ViewData["Title"] = "Editar Usuarios";
+    string MessageError = "Error al crear un usuario";
+    string MessageSuccess = "El usuario se creo correctamente";
 }
 
 <partial name="_Menu" />
@@ -12,7 +14,7 @@
 
     <div asp-validation-summary="ModelOnly" class="text_error"></div>
 
-    <form asp-controller="Users" asp-action="Edit" class="form__container">
+    <form class="form__container">
         <div class="card__container">
             <div class="header_form">
                 <img src="/images/iconApple.png" />
@@ -21,65 +23,147 @@
 
             <div class="form_group">
                 <div class="field">
-                    <label for="code--polices" asp-for="CodeUser" class="label_form">Código usuario*</label>
+                    <label asp-for="CodeUser" class="label_form">Código usuario*</label>
                     <div class="input">
-                        <input id="code--policies" asp-for="CodeUser" placeholder="Codigo" autocomplete="off" />
+                        <input asp-for="CodeUser" placeholder="Codigo" autocomplete="off" />
                     </div>
-                    <span asp-validation-for="CodeUser" class="text_error"></span>
+                    <span id="CodeUserError" class="text_error"></span>
                 </div>
             </div>
             <div class="form_group">
                 <div class="field">
-                    <label for="description--policies" asp-for="User_" class="label_form">Usuario*</label>
+                    <label asp-for="User_" class="label_form">Usuario*</label>
                     <div class="input">
-                        <input id="description--policies" asp-for="User_" placeholder="usuario" autocomplete="off" />
+                        <input asp-for="User_" placeholder="usuario" autocomplete="off" />
                     </div>
-                    <span asp-validation-for="User_" class="text_error"></span>
+                    <span id="User_Error" class="text_error"></span>
                 </div>
             </div>
             <div class="form_group">
                 <div class="field">
-                    <label for="objective--policies" asp-for="Email" class="label_form">Email*</label>
+                    <label asp-for="Email" class="label_form">Email*</label>
                     <div class="textarea">
-                        <textarea id="objective--policies" asp-for="Email" placeholder="Email"></textarea>
+                        <textarea asp-for="Email" placeholder="Email"></textarea>
                     </div>
-                    <span asp-validation-for="Email" class="text_error"></span>
+                    <span id="EmailError" class="text_error"></span>
                 </div>
             </div>
             <div class="form_group">
                 <div class="field">
-                    <label for="objective--policies" asp-for="NameUser" class="label_form">Nombre de usuario*</label>
+                    <label asp-for="NameUser" class="label_form">Nombre de usuario*</label>
                     <div class="input">
-                        <input id="objective--policies" asp-for="NameUser" placeholder="Nombre de usuario" autocomplete="off" />
+                        <input asp-for="NameUser" placeholder="Nombre de usuario" autocomplete="off" />
                     </div>
-                    <span asp-validation-for="NameUser" class="text_error"></span>
+                    <span id="NameUserError" class="text_error"></span>
                 </div>
             </div>
             <div class="form_group">
                 <div class="field">
-                    <label for="objective--policies" asp-for="CreationDate" class="label_form">Fecha de creacion*</label>
+                    <label asp-for="CreationDate" class="label_form">Fecha de creacion*</label>
                     <div class="input">
-                        <input id="objective--policies" asp-for="CreationDate" placeholder="fecha" autocomplete="off" />
+                        <input asp-for="CreationDate" placeholder="fecha" autocomplete="off" class="color_icon_calendar" />
                     </div>
-                    <span asp-validation-for="CreationDate" class="text_error"></span>
+                    <span id="CreationDateError" class="text_error"></span>
                 </div>
             </div>
             <div class="form_group">
                 <div class="field">
-                    <label for="objective--policies" asp-for="UpdateDate" class="label_form">Fecha de actualizacion*</label>
+                    <label asp-for="UpdateDate" class="label_form">Fecha de actualizacion*</label>
                     <div class="input">
-                        <input id="objective--policies" asp-for="UpdateDate" placeholder="fecha" autocomplete="off" />
+                        <input asp-for="UpdateDate" placeholder="fecha" autocomplete="off" class="color_icon_calendar" />
                     </div>
-                    <span asp-validation-for="UpdateDate" class="text_error"></span>
+                    <span id="UpdateDateError" class="text_error"></span>
                 </div>
             </div>
 
             <p class="note_text"><span>Nota: </span>Los campos con (*) son obligatorios</p>
 
-            <div class="btn_container">
+            <div id="btn_container" class="btn_container">
                 <a class="button button_secondary" asp-controller="Users" asp-action="Users"><p class="text font_bold">Cancelar</p></a>
-                <button class="button button_primary"><p class="text font_bold">Crear</p></button>
+                <a href="javascript:void(0)" onclick="sendData()" class="button button_primary"><p class="text font_bold">Actualizar</p></a>
+            </div>
+            <div id="loading" class="loading">
+                <span class="loader"></span>
+            </div>
+            <div id="LayoytError" class="layout_content">
+                <partial name="_MessageError" model="MessageError" />
+            </div>
+            <div id="LayoytSuccess" class="layout_content">
+                <partial name="_MessageSuccess" model="MessageSuccess" />
             </div>
         </div>
     </form>
 </div>
+
+
+@section Scripts {
+    <script>
+        const urlUser = '@Url.Action("EditUser")';
+        let data;
+        let isValidCodeUser = false;
+        let isValidUser_ = false;
+        let isValidEmail = false;
+        let isValidNameUser = false;
+        let isValidCreationDate = false;
+        let isValidUpdateDate = false;
+
+        const sendData = async () => {
+            isValidCodeUser = validateInputEmpty("CodeUser", "El codigo de usuario es requerido", "CodeUserError");
+            isValidUser_ = validateInputEmpty("User_", "El usuario es requerido", "User_Error");
+            isValidEmail = validateInputEmpty("Email", "El email es requerido", "EmailError");
+            isValidNameUser = validateInputEmpty("NameUser", "El nombre de usuario es requerido", "NameUserError");
+            isValidCreationDate = validateInputEmpty("CreationDate", "La fecha de creación es requerida", "CreationDateError");
+            isValidUpdateDate = validateInputEmpty("UpdateDate", "La fecha de actualización es requerida", "UpdateDateError");
+
+            if (isValidCodeUser && isValidUser_ && isValidEmail && isValidNameUser && isValidCreationDate && isValidUpdateDate) {
+                document.getElementById('btn_container').style.display = 'none';
+                document.getElementById('loading').style.display = 'flex';
+
+                data = {
+                    CodeUser: $('#CodeUser').val(),
+                    User_: $('#User_').val(),
+                    Email: $('#Email').val(),
+                    NameUser: $('#NameUser').val(),
+                    CreationDate: $('#CreationDate').val(),
+                    UpdateDate: $('#UpdateDate').val(),
+                    State: true
+                }
+
+                console.log(data)
+
+                const result = await fetch(urlUser, {
+                    method: 'POST',
+                    body: JSON.stringify(data),
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                })
+
+                const json = await result.json();
+
+                console.log(json);
+
+                if (json.state == "Success") {
+                    document.getElementById('LayoytSuccess').style.display = 'block';
+                    document.getElementById('loading').style.display = 'none';
+                    setTimeout(() => {
+                        location.href = '/Users/Users';
+                    }, 3000)
+                } else {
+                    document.getElementById('LayoytError').style.display = 'block';
+                    document.getElementById('loading').style.display = 'none';
+                }
+            }
+        }
+
+        const validateInputEmpty = (idInput, messaje, idError) => {
+            if ($(`#${idInput}`).val() == "" || $(`#${idInput}`).val() == null) {
+                $(`#${idError}`).text(`${messaje}`);
+                return false;
+            } else {
+                $(`#${idError}`).text("");
+                return true;
+            }
+        }
+    </script>
+}

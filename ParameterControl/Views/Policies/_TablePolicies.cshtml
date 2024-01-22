@@ -1,5 +1,6 @@
 ﻿@using System;
 @using System.Reflection;
+@using ParameterControl.Models.Pagination
 @using ParameterControl.Models.Policy
 @model TablePoliciesViewModel
 
@@ -137,52 +138,7 @@
                     </div>
                 </div>
                 <div class="pagination flex_box">
-                    <div id="pagination_mobile" class="custom_pagination pagination_mobile flex_box">
-                        <button class="button button_primary">
-                            <i class="icon text icon_160"></i>
-                            <p class="text font_bold">Anterior</p>
-                        </button>
-                        <p class="pages font_light">
-                            pagina 1 de 2
-                        </p>
-                        <button class="button button_primary">
-                            <p class="text font_bold">Siguiente</p>
-                            <i class="icon text icon_158"></i>
-                        </button>
-                    </div>
-                    <div id="pagination_desktop" class="custom_pagination pagination_desktop flex_box">
-                        <div class="navigator flex_box">
-                            <button class="button button_primary">
-                                <p class="text font_bold">Primera</p>
-                            </button>
-                            <button class="button_icon button_primary">
-                                <i class="icon text icon_152"></i>
-                            </button>
-                            <div class="pages flex_box">
-                                <button class="button_icon button_primary">
-                                    <p class="text font_bold">1</p>
-                                </button>
-                                <button class="button_icon button_primary">
-                                    <p class="text font_bold">2</p>
-                                </button>
-                                <button class="button_icon button_primary">
-                                    <p class="text font_bold">3</p>
-                                </button>
-                                <button class="button_icon button_primary">
-                                    <p class="text font_bold">4</p>
-                                </button>
-                                <button class="button_icon button_primary">
-                                    <p class="text font_bold">5</p>
-                                </button>
-                            </div>
-                            <button class="button_icon button_primary">
-                                <i class="icon text icon_151"></i>
-                            </button>
-                            <button class="button button_primary">
-                                <p class="text font_bold">Ultima</p>
-                            </button>
-                        </div>
-                    </div>
+                    <partial name="_Pagination" model="new PaginationResult<Policy>()"/>
                 </div>
             </div>
         </div>

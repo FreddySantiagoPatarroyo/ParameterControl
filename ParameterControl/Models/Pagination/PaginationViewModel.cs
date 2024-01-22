@@ -5,7 +5,8 @@
         public int Page { get; set; }
         private int RecordPageSize { get; set; } = 10;
         private readonly int MaxRecordPage = 50;
-        public int RecordPage { 
+        public int RecordsPage
+        { 
             get 
             { 
                 return RecordPageSize;
