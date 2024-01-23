@@ -119,7 +119,7 @@ namespace ParameterControl.Services.Policies
         {
             try
             {
-                var response = await _policyService.SelectPaginatorPolicy(pagination.Page, pagination.RecordPage);
+                var response = await _policyService.SelectPaginatorPolicy(pagination.Page, pagination.RecordsPage);
                 var result = _mapper.Map<List<modPolicy.Policy>>(response);
                 return result;
             }
@@ -193,8 +193,6 @@ namespace ParameterControl.Services.Policies
            };
             return operationsType;
         }
-
-
 
         public async Task<List<PolicyViewModel>> GetFilterPolicies(FilterViewModel filterModel)
         {
