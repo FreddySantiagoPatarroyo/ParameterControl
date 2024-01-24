@@ -43,7 +43,16 @@ namespace ParameterControl.Services.Rows
                     Value = "StateFormat",
                     Name = "Estado"
                 },
-
+                new Row()
+                {
+                    Value = "CreationDate",
+                    Name = "Fecha Creacion"
+                },
+                 new Row()
+                {
+                    Value = "UpdateDate",
+                    Name = "Fecha Actualizacion"
+                }
             };
 
             return rows;
@@ -75,8 +84,23 @@ namespace ParameterControl.Services.Rows
                 },
                 new Row()
                 {
-                    Value = "Required",
+                    Value = "RequiredFormat",
                     Name = "Resultado Requerido"
+                },
+                new Row()
+                {
+                    Value = "StateFormat",
+                    Name = "Estado"
+                },
+                new Row()
+                {
+                    Value = "CreationDate",
+                    Name = "Fecha Creacion"
+                },
+                 new Row()
+                {
+                    Value = "UpdateDate",
+                    Name = "Fecha Actualizacion"
                 }
             };
 
@@ -106,11 +130,27 @@ namespace ParameterControl.Services.Rows
                 {
                     Value = "ParameterType",
                     Name = "Tipo Parametro"
+                },
+                 new Row()
+                {
+                    Value = "StateFormat",
+                    Name = "Estado"
+                },
+                new Row()
+                {
+                    Value = "CreationDate",
+                    Name = "Fecha Creacion"
+                },
+                 new Row()
+                {
+                    Value = "UpdateDate",
+                    Name = "Fecha Actualizacion"
                 }
             };
 
             return rows;
         }
+
         public List<Row> RowsScenarios()
         {
             List<Row> rows = new List<Row>()
@@ -137,18 +177,24 @@ namespace ParameterControl.Services.Rows
                 },
                  new Row()
                 {
-                    Value = "Query",
-                    Name = "Query"
+                    Value = "StateFormat",
+                    Name = "Estado"
                 },
-                  new Row()
+                new Row()
                 {
-                    Value = "Parameter",
-                    Name = "Parametro"
+                    Value = "CreationDate",
+                    Name = "Fecha Creacion"
+                },
+                 new Row()
+                {
+                    Value = "UpdateDate",
+                    Name = "Fecha Actualizacion"
                 }
             };
 
             return rows;
         }
+
         public List<Row> RowsUsers()
         {
             List<Row> rows = new List<Row>()
@@ -173,6 +219,11 @@ namespace ParameterControl.Services.Rows
                     Value = "NameUser",
                     Name = "Nombre Usuario"
                 },
+                  new Row()
+                {
+                    Value = "StateFormat",
+                    Name = "Estado"
+                },
                 new Row()
                 {
                     Value = "CreationDate",
@@ -186,8 +237,8 @@ namespace ParameterControl.Services.Rows
             };
 
             return rows;
-
         }
+
         public List<Row> RowsIndicators()
         {
             List<Row> rows = new List<Row>()
@@ -212,11 +263,26 @@ namespace ParameterControl.Services.Rows
                     Value = "Scenery",
                     Name = "Escenario"
                 },
-
+                 new Row()
+                {
+                    Value = "StateFormat",
+                    Name = "Estado"
+                },
+                new Row()
+                {
+                    Value = "CreationDate",
+                    Name = "Fecha Creacion"
+                },
+                 new Row()
+                {
+                    Value = "UpdateDate",
+                    Name = "Fecha Actualizacion"
+                }
             };
 
             return rows;
         }
+
         public List<Row> RowsResults()
         {
             List<Row> rows = new List<Row>()
@@ -271,7 +337,21 @@ namespace ParameterControl.Services.Rows
                     Value = "ReinValue",
                     Name = "Valor Rein"
                 },
-
+                 new Row()
+                {
+                    Value = "StateFormat",
+                    Name = "Estado"
+                },
+                new Row()
+                {
+                    Value = "CreationDate",
+                    Name = "Fecha Creacion"
+                },
+                 new Row()
+                {
+                    Value = "UpdateDate",
+                    Name = "Fecha Actualizacion"
+                }
             };
 
             return rows;

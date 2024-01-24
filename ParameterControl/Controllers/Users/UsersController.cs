@@ -90,6 +90,7 @@ namespace ParameterControl.Controllers.Users
 
             return View("Actions/CreateUser", user);
         }
+
         [HttpPost]
         public async Task<IActionResult> CreateUser([FromBody] modUser.User request)
         {

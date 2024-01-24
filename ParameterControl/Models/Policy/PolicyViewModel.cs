@@ -5,7 +5,6 @@ namespace ParameterControl.Models.Policy
 {
     public class PolicyViewModel:Policy
     {
-
         public string StateFormat { get; set; } = string.Empty;
 
     }

@@ -1,9 +1,11 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
 using ParameterControl.Models.Filter;
 using ParameterControl.Models.Pagination;
 using ParameterControl.Models.Policy;
+using ParameterControl.Services.Authenticated;
 using ParameterControl.Services.Policies;
 using ParameterControl.Services.Rows;
 using modPolicy = ParameterControl.Models.Policy;
@@ -16,17 +18,20 @@ namespace ParameterControl.Controllers.Policies
         public TablePoliciesViewModel TablePolicies = new TablePoliciesViewModel();
         private readonly ILogger<HomeController> _logger;
         private readonly IPoliciesServices policiesServices;
-        private readonly Rows rows;        
+        private readonly Rows rows;
+        private readonly AuthenticatedUser authenticatedUser;
 
         public PoliciesController(
             ILogger<HomeController> logger,
             IPoliciesServices policiesServices,
-            Rows rows
+            Rows rows,
+            AuthenticatedUser authenticatedUser
         )
         {
             this._logger = logger;
             this.policiesServices = policiesServices;
-            this.rows = rows;            
+            this.rows = rows;
+            this.authenticatedUser = authenticatedUser;
         }
 
         [HttpGet]
@@ -34,7 +39,7 @@ namespace ParameterControl.Controllers.Policies
         {
             List<modPolicy.Policy> policies = await policiesServices.GetPolicies();
 
-            TablePolicies.Data = await policiesServices.GetPolicesFormatTable(policies);
+            TablePolicies.Data = await policiesServices.GetPolicesFormat(policies);
 
             TablePolicies.Rows = rows.RowsPolicies();
 
@@ -86,7 +91,7 @@ namespace ParameterControl.Controllers.Policies
         public async Task<ActionResult> Create()
         {
 
-            List<string> OperationTypeOptionsList = await policiesServices.GetOperationsType();
+            List<SelectListItem> OperationTypeOptionsList = await policiesServices.GetOperationsType();
 
             PolicyCreateViewModel model = new PolicyCreateViewModel()
             {
@@ -108,6 +113,9 @@ namespace ParameterControl.Controllers.Policies
             {
                 try
                 {
+                    request.UserOwner = authenticatedUser.GetUserOwnerId();
+                    request.CreationDate = DateTime.Now;
+                    request.UpdateDate = DateTime.Now;
                     _logger.LogInformation($"Inicia método PoliciesController.Create {JsonConvert.SerializeObject(request)}");
                     var responseIn = await policiesServices.InsertPolicy(request);
                     _logger.LogInformation($"Finaliza método PoliciesController.Create {responseIn}");
@@ -142,6 +150,8 @@ namespace ParameterControl.Controllers.Policies
             {
                 try
                 {
+                    request.UserOwner = authenticatedUser.GetUserOwnerId();
+                    request.UpdateDate = DateTime.Now;
                     _logger.LogInformation($"Inicia método PoliciesController.Edit {JsonConvert.SerializeObject(request)}");
                     return Ok(new { message = "Se actualizo la politica de manera exitosa", state = "Success" });
                 }
@@ -170,10 +180,14 @@ namespace ParameterControl.Controllers.Policies
         }
 
         [HttpPost]
-        public async Task<ActionResult> ActivePolicy([FromBody] string request)
+        public async Task<ActionResult> ActivePolicy([FromBody] string id)
         {
             try
             {
+                modPolicy.Policy request = await policiesServices.GetPolicyById(id);
+                request.UserOwner = authenticatedUser.GetUserOwnerId();
+                request.UpdateDate = DateTime.Now;
+                request.State = true;
                 _logger.LogInformation($"Inicia método PoliciesController.Active {JsonConvert.SerializeObject(request)}");
                 return Ok(new { message = "Se activo la politica de manera exitosa", state = "Success" });
             }
@@ -193,10 +207,14 @@ namespace ParameterControl.Controllers.Policies
         }
 
         [HttpPost]
-        public async Task<ActionResult> DesactivePolicy([FromBody] string request)
+        public async Task<ActionResult> DesactivePolicy([FromBody] string id)
         {
             try
             {
+                modPolicy.Policy request = await policiesServices.GetPolicyById(id);
+                request.UserOwner = authenticatedUser.GetUserOwnerId();
+                request.UpdateDate = DateTime.Now;
+                request.State = true;
                 _logger.LogInformation($"Inicia método PoliciesController.Desactive {JsonConvert.SerializeObject(request)}");
                 return Ok(new { message = "Se desactivo la politica de manera exitosa", state = "Success" });
             }

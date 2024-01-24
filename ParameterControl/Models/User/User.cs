@@ -2,7 +2,7 @@
 
 namespace ParameterControl.Models.User
 {
-    public class User
+    public class User:GeneralData
     {
         public string Id { get; set; } = string.Empty;
         [Required(ErrorMessage = "El campo codigo usuario es requerido")]
@@ -14,11 +14,5 @@ namespace ParameterControl.Models.User
         public string Email { get; set; } = string.Empty;
         [Required(ErrorMessage = "El campo nombre de usuario usuario es requerido")]
         public string NameUser { get; set; } = string.Empty;
-        [DataType(DataType.Date)]
-        public DateTime CreationDate { get; set; } = DateTime.MinValue;
-        [DataType(DataType.Date)]
-        public DateTime UpdateDate { get; set; } = DateTime.MinValue; 
-        public bool State { get; set; } = false;
-
     }
 }

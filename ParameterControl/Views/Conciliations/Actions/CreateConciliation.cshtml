@@ -82,10 +82,10 @@
                             <li onclick="selectOption('@null', '@null')" class="option">
                                 <p class="option_text">Seleccione una opción</p>
                             </li>
-                            @foreach (var Colunm in Model.PoliciesOption)
+                            @foreach (var Option in Model.PoliciesOption)
                             {
-                                <li onclick="selectOption('@Colunm', '@Colunm')" class="option">
-                                    <p class="option_text">@Colunm</p>
+                                <li onclick="selectOption('@Option.Text', '@Option.Value')" class="option">
+                                    <p class="option_text">@Option.Text</p>
                                 </li>
                             }
                         </ul>
@@ -100,7 +100,7 @@
                 <div class="field">
                     <label asp-for="Required" class="label_form">Requiere Aprobación de Resultado*</label>
                     <div id="input_select_required" class="input">
-                        <input class="input_select" id="input_select_filter_required" asp-for="Required" placeholder="Seleccione una opción" onclick="showOptionsRequired()" readonly />
+                        <input class="input_select" id="input_select_filter_required" asp-for="RequiredFormat" placeholder="Seleccione una opción" onclick="showOptionsRequired()" readonly />
                         <input asp-for="Required" class="oculte" />
                         <i class="icon icon_select icon_153"></i>
                     </div>
@@ -109,10 +109,10 @@
                             <li onclick="selectOptionRequired('@null', '@null')" class="option">
                                 <p class="option_text">Seleccione una opción</p>
                             </li>
-                            @foreach (var Colunm in Model.RequiredOption)
+                            @foreach (var Option in Model.RequiredOption)
                             {
-                                <li onclick="selectOptionRequired('@Colunm', '@Colunm')" class="option">
-                                    <p class="option_text">@Colunm</p>
+                                <li onclick="selectOptionRequired('@Option.Text', '@Option.Value')" class="option">
+                                    <p class="option_text">@Option.Text</p>
                                 </li>
                             }
                         </ul>
@@ -238,7 +238,7 @@
             isValidEmail = validateInputEmpty("Email", "El email del usuario asignado es requerido", "EmailError");
             // isValidDestination = validateInputEmpty("Destination", "El destino es requerido", "DestinationError");
             isValidPolicies = validateInputEmpty("Policies", "La politica es requerida", "PoliciesError");
-            isValidRequired = validateInputEmpty("Required", "Este campo es requerido", "RequiredError");
+            isValidRequired = validateInputEmpty("input_select_filter_required", "Este campo es requerido", "RequiredError");
 
 
 
@@ -253,8 +253,8 @@
                     Email: parseInt($('#Email').val()),
                     Destination: $('#Destination').val(),
                     Policies: $('#Policies').val(),
-                    Required: $('#Required').val()
-
+                    Required: $('#Required').val() === "True" ? true : false,
+                    State: true
                 }
 
                 console.log(data)

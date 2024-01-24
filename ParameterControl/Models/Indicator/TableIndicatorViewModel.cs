@@ -10,5 +10,6 @@ namespace ParameterControl.Models.Indicator
         public bool IsEdit { get; set; } = false;
         public bool IsInactivate { get; set; } = false;
         public bool IsActivate { get; set; } = false;
+        public bool Filter { get; set; } = false;
     }
 }

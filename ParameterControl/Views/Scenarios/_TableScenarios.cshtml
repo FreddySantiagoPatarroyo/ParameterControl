@@ -6,7 +6,7 @@
 @{
     PropertyInfo GetRowInfo(string RowValue)
     {
-        var property = typeof(Scenery).GetProperty(RowValue);
+        var property = typeof(SceneryViewModel).GetProperty(RowValue);
 
         return property;
     }
@@ -17,9 +17,9 @@
             <p class="title_table font_bold">Escenarios</p>
             @if (Model.IsCreate)
             {
-                <button class="button button_primary">
+                <a asp-controller="Scenarios" asp-action="Create" class="button button_primary">
                     <p class="text font_bold">Crear</p>
-                </button>
+                </a>
             }
         </div>
         <div class="list">

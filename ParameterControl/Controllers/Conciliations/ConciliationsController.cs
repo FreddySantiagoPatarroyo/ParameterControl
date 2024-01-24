@@ -4,7 +4,12 @@ using ParameterControl.Models.Conciliation;
 using ParameterControl.Services.Conciliations;
 using ParameterControl.Services.Rows;
 using modConciliation = ParameterControl.Models.Conciliation;
+using modPolicy = ParameterControl.Models.Policy;
 using Newtonsoft.Json;
+using ParameterControl.Services.Policies;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
+using ParameterControl.Services.Authenticated;
 
 namespace ParameterControl.Controllers.Conciliations
 {
@@ -14,23 +19,31 @@ namespace ParameterControl.Controllers.Conciliations
         private readonly ILogger<HomeController> _logger;
         private readonly IConciliationsServices conciliationsServices;
         private readonly Rows rows;
+        private readonly IPoliciesServices policiesServices;
+        private readonly AuthenticatedUser authenticatedUser;
 
         public ConciliationsController(
             ILogger<HomeController> logger,
             IConciliationsServices conciliationsServices,
-            Rows rows
+            Rows rows,
+            IPoliciesServices policiesServices,
+            AuthenticatedUser authenticatedUser
         )
         {
             this._logger = logger;
             this.conciliationsServices = conciliationsServices;
             this.rows = rows;
+            this.policiesServices = policiesServices;
+            this.authenticatedUser = authenticatedUser;
         }
 
         [HttpGet]
         public async Task<ActionResult> Conciliations()
         {
-            
-            TableConciliations.Data = await conciliationsServices.GetConciliations();
+
+            List<modConciliation.Conciliation> Conciliations = await conciliationsServices.GetConciliations();
+
+            TableConciliations.Data = await conciliationsServices.GetConciliationsFormat(Conciliations);
 
             TableConciliations.Rows = rows.RowsConciliations();
 
@@ -61,7 +74,7 @@ namespace ParameterControl.Controllers.Conciliations
                 ValueFilter = filterValue
             };
 
-            List<Conciliation> conciliationsFilter = await conciliationsServices.GetFilterConciliations(filter);
+            List<ConciliationViewModel> conciliationsFilter = await conciliationsServices.GetFilterConciliations(filter);
 
             TableConciliations.Data = conciliationsFilter;
 
@@ -81,8 +94,8 @@ namespace ParameterControl.Controllers.Conciliations
         public async Task<ActionResult> Create()
         {
 
-            List<string> PoliciesOptionsList = await conciliationsServices.GetPolicies();
-            List<string> RequiredOptionList = await conciliationsServices.GetRequired();
+            List<SelectListItem> PoliciesOptionsList = await GetPolicies();
+            List <SelectListItem> RequiredOptionList = await conciliationsServices.GetRequired();
 
             ConciliationCreateViewModel model = new ConciliationCreateViewModel()
             {
@@ -104,6 +117,9 @@ namespace ParameterControl.Controllers.Conciliations
             {
                 try
                 {
+                    request.UserOwner = authenticatedUser.GetUserOwnerId();
+                    request.CreationDate = DateTime.Now;
+                    request.UpdateDate = DateTime.Now;
                     _logger.LogInformation($"Inicia método ConciliationController.Create {JsonConvert.SerializeObject(request)}");
                     //var responseIn = await conciliationsServices.InsertConciliation(request);
                     //_logger.LogInformation($"Finaliza método ConciliationController.Create {responseIn}");
@@ -123,8 +139,8 @@ namespace ParameterControl.Controllers.Conciliations
         {
             Conciliation conciliation = await conciliationsServices.GetConciliationsById(id);
 
-            List<string> PoliciesOptionsList = await conciliationsServices.GetPolicies();
-            List<string> RequiredOptionsList = await conciliationsServices.GetRequired();
+            List<SelectListItem> PoliciesOptionsList = await GetPolicies();
+            List<SelectListItem> RequiredOptionsList = await conciliationsServices.GetRequired();
 
 
             ConciliationCreateViewModel model = new ConciliationCreateViewModel()
@@ -139,7 +155,9 @@ namespace ParameterControl.Controllers.Conciliations
                 Destination = conciliation.Destination,
                 Policies = conciliation.Policies,
                 Required = conciliation.Required,
-                State = conciliation.State
+                RequiredFormat = conciliation.Required ? "Si" : "No",
+                State = conciliation.State,
+                CreationDate = conciliation.CreationDate
             };
 
             model.PoliciesOption = PoliciesOptionsList;
@@ -159,6 +177,8 @@ namespace ParameterControl.Controllers.Conciliations
             {
                 try
                 {
+                    request.UserOwner = authenticatedUser.GetUserOwnerId();
+                    request.UpdateDate = DateTime.Now;
                     _logger.LogInformation($"Inicia método ConciliationsController.Edit {JsonConvert.SerializeObject(request)}");
                     return Ok(new { message = "Se actualizo la conciliación de manera exitosa", state = "Success" });
                 }
@@ -187,10 +207,14 @@ namespace ParameterControl.Controllers.Conciliations
         }
 
         [HttpPost]
-        public async Task<ActionResult> ActiveConciliation([FromBody] string request)
+        public async Task<ActionResult> ActiveConciliation([FromBody] string id)
         {
             try
             {
+                Conciliation request = await conciliationsServices.GetConciliationsById(id);
+                request.UserOwner = authenticatedUser.GetUserOwnerId();
+                request.UpdateDate = DateTime.Now;
+                request.State = true;
                 _logger.LogInformation($"Inicia método ConciliationsController.Active {JsonConvert.SerializeObject(request)}");
                 return Ok(new { message = "Se activo la conciliación de manera exitosa", state = "Success" });
             }
@@ -210,10 +234,14 @@ namespace ParameterControl.Controllers.Conciliations
         }
 
         [HttpPost]
-        public async Task<ActionResult> DesactiveConciliation([FromBody] string request)
+        public async Task<ActionResult> DesactiveConciliation([FromBody] string id)
         {
             try
             {
+                Conciliation request = await conciliationsServices.GetConciliationsById(id);
+                request.UserOwner = authenticatedUser.GetUserOwnerId();
+                request.UpdateDate = DateTime.Now;
+                request.State = false;
                 _logger.LogInformation($"Inicia método ConciliationsController.Desactive {JsonConvert.SerializeObject(request)}");
                 return Ok(new { message = "Se desactivo la conciliación de manera exitosa", state = "Success" });
             }
@@ -251,5 +279,10 @@ namespace ParameterControl.Controllers.Conciliations
             });
         }
 
+        public async Task<List<SelectListItem>> GetPolicies()
+        {
+            List<modPolicy.Policy> policies = await policiesServices.GetPolicies();
+            return policies.Select(policy => new SelectListItem(policy.Name, policy.Id.ToString())).ToList();
+        }
     }
 }

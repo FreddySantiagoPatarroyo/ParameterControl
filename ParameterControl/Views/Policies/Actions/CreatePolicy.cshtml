@@ -79,10 +79,10 @@
                             <li onclick="selectOption('@null', '@null')" class="option">
                                 <p class="option_text">Seleccione una opción</p>
                             </li>
-                            @foreach (var Colunm in Model.OperationTypeOptions)
+                            @foreach (var Option in Model.OperationTypeOptions)
                             {
-                                <li onclick="selectOption('@Colunm', '@Colunm')" class="option">
-                                    <p class="option_text">@Colunm</p>
+                                <li onclick="selectOption('@Option.Text', '@Option.Value')" class="option">
+                                    <p class="option_text">@Option.Text</p>
                                 </li>
                             }
                         </ul>

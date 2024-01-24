@@ -4,7 +4,7 @@ using System.Reflection;
 
 namespace ParameterControl.Models.Scenery
 {
-    public class Scenery
+    public class Scenery:GeneralData
     {
         public string Id { get; set; } = string.Empty;
 
@@ -17,8 +17,5 @@ namespace ParameterControl.Models.Scenery
 
         [Required(ErrorMessage = "El campo conciliación es requerido")]
         public string Conciliation { get; set; } = string.Empty;
-        public string Query { get; set; } = string.Empty;
-        public string Parameter { get; set; } = string.Empty;
-        public bool State { get; set; } = false;
     }
 }

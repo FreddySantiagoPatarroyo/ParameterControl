@@ -9,6 +9,9 @@ using ParameterControl.Models.Policy;
 using ParameterControl.Services.Policies;
 using modScenery = ParameterControl.Models.Scenery;
 using Newtonsoft.Json;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using modConciliation = ParameterControl.Models.Conciliation;
+using ParameterControl.Services.Authenticated;
 
 
 namespace ParameterControl.Controllers.Scenarios
@@ -19,27 +22,31 @@ namespace ParameterControl.Controllers.Scenarios
         private readonly ILogger<HomeController> _logger;
         private readonly IScenariosServices scenariosServices;
         private readonly Rows rows;
+        private readonly AuthenticatedUser authenticatedUser;
 
         public ScenariosController(
         ILogger<HomeController> logger,
             IScenariosServices scenariosServices,
-            Rows rows
+            Rows rows,
+            AuthenticatedUser authenticatedUser
         )
         {
             this._logger = logger;
             this.scenariosServices = scenariosServices;
             this.rows = rows;
+            this.authenticatedUser = authenticatedUser;
         }
 
         [HttpGet]
         public async Task<ActionResult> Scenarios()
         {
-           
-            TableScenarios.Data = await scenariosServices.GetScenarios();
+            List<modScenery.Scenery> Scenarios = await scenariosServices.GetScenarios();
+
+            TableScenarios.Data = await scenariosServices.GetScenariosFormat(Scenarios);
 
             TableScenarios.Rows = rows.RowsScenarios();
 
-            TableScenarios.IsCreate = false;
+            TableScenarios.IsCreate = true;
             TableScenarios.IsActivate = true;
             TableScenarios.IsEdit = true;
             TableScenarios.IsInactivate = true;
@@ -66,12 +73,12 @@ namespace ParameterControl.Controllers.Scenarios
                 ValueFilter = filterValue
             };
 
-            List<Scenery> scenariosFilter = await scenariosServices.GetFilterScenarios(filter);
+            List<SceneryViewModel> scenariosFilter = await scenariosServices.GetFilterScenarios(filter);
             TableScenarios.Data = scenariosFilter;
 
             TableScenarios.Rows = rows.RowsScenarios();
 
-            TableScenarios.IsCreate = false;
+            TableScenarios.IsCreate = true;
             TableScenarios.IsActivate = true;
             TableScenarios.IsEdit = true;
             TableScenarios.IsInactivate = true;
@@ -81,13 +88,58 @@ namespace ParameterControl.Controllers.Scenarios
             return View("Scenarios", TableScenarios);
         }
 
+
+        [HttpGet]
+        public async Task<ActionResult> Create()
+        {
+
+            List<SelectListItem> ImpactOptionsList = await scenariosServices.GetImpact();
+            List<SelectListItem> ConciliationOptionsList = await GetConciliation();
+
+            SceneryCreateViewModel model = new SceneryCreateViewModel()
+            {
+                ImpactOptions = ImpactOptionsList,
+                ConciliationOptions = ConciliationOptionsList
+            };
+
+            return View("Actions/CreateScenery", model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Create([FromBody] modScenery.Scenery request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(new { message = "Error en la informacion enviada", state = "Error" });
+            }
+            else
+            {
+                try
+                {
+                    request.UserOwner = authenticatedUser.GetUserOwnerId();
+                    request.CreationDate = DateTime.Now;
+                    request.UpdateDate = DateTime.Now;
+                    _logger.LogInformation($"Inicia método ConciliationController.Create {JsonConvert.SerializeObject(request)}");
+                    //var responseIn = await conciliationsServices.InsertConciliation(request);
+                    //_logger.LogInformation($"Finaliza método ConciliationController.Create {responseIn}");
+                    return Ok(new { message = "Se creo el escenario de manera exitosa", state = "Success" });
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError($"Error en el método ConciliationController.Create : {JsonConvert.SerializeObject(ex.Message)}");
+                    return BadRequest(new { message = "Error al crear el escenario", state = "Error" });
+                }
+            }
+
+        }
+
         [HttpGet]
         public async Task<ActionResult> Edit(string id)
         {
             modScenery.Scenery scenery = await scenariosServices.GetSceneryById(id);
 
-            List<string> ImpactOptionsList = await scenariosServices.GetImpact();
-            List<string> ConciliationOptionsList = await scenariosServices.GetConciliation();
+            List<SelectListItem> ImpactOptionsList = await scenariosServices.GetImpact();
+            List<SelectListItem> ConciliationOptionsList = await GetConciliation();
 
             SceneryCreateViewModel model = new SceneryCreateViewModel()
             {
@@ -96,16 +148,14 @@ namespace ParameterControl.Controllers.Scenarios
                 Name = scenery.Name,
                 Impact = scenery.Impact,
                 Conciliation = scenery.Conciliation,
-                Query = scenery.Query,
-                Parameter = scenery.Parameter,
-                State = scenery.State
-
+                State = scenery.State,
+                CreationDate = scenery.CreationDate
             };
 
             model.ImpactOptions = ImpactOptionsList;
             model.ConciliationOptions = ConciliationOptionsList;
 
-            return View("Actions/EditScenarios", model);
+            return View("Actions/EditScenary", model);
         }
 
         [HttpPost]
@@ -120,6 +170,8 @@ namespace ParameterControl.Controllers.Scenarios
             {
                 try
                 {
+                    request.UserOwner = authenticatedUser.GetUserOwnerId();
+                    request.UpdateDate = DateTime.Now;
                     _logger.LogInformation($"Inicia método ScenariosController.Edit {JsonConvert.SerializeObject(request)}");
                     return Ok(new { message = "Se actualizo el escenario de manera exitosa", state = "Success" });
                 }
@@ -136,7 +188,7 @@ namespace ParameterControl.Controllers.Scenarios
         {
             Scenery scenery = await scenariosServices.GetSceneryById(id);
 
-            return View("Actions/ViewScenarios", scenery);
+            return View("Actions/ViewScenery", scenery);
         }
 
         [HttpGet]
@@ -148,10 +200,14 @@ namespace ParameterControl.Controllers.Scenarios
         }
 
         [HttpPost]
-        public async Task<ActionResult> ActiveScenery([FromBody] string request)
+        public async Task<ActionResult> ActiveScenery([FromBody] string id)
         {
             try
             {
+                Scenery request = await scenariosServices.GetSceneryById(id);
+                request.UserOwner = authenticatedUser.GetUserOwnerId();
+                request.UpdateDate = DateTime.Now;
+                request.State = true;
                 _logger.LogInformation($"Inicia método ScenariosController.Active {JsonConvert.SerializeObject(request)}");
                 return Ok(new { message = "Se activo el escenario de manera exitosa", state = "Success" });
             }
@@ -167,14 +223,18 @@ namespace ParameterControl.Controllers.Scenarios
         {
             modScenery.Scenery scenery = await scenariosServices.GetSceneryById(id);
 
-            return View("Actions/DesactiveScenarios", scenery);
+            return View("Actions/DesactiveScenery", scenery);
         }
 
         [HttpPost]
-        public async Task<ActionResult> DesactiveScenery([FromBody] string request)
+        public async Task<ActionResult> DesactiveScenery([FromBody] string id)
         {
             try
             {
+                Scenery request = await scenariosServices.GetSceneryById(id);
+                request.UserOwner = authenticatedUser.GetUserOwnerId();
+                request.UpdateDate = DateTime.Now;
+                request.State = false;
                 _logger.LogInformation($"Inicia método ScenariosController.Desactive {JsonConvert.SerializeObject(request)}");
                 return Ok(new { message = "Se desactivo el escenario de manera exitosa", state = "Success" });
             }
@@ -210,6 +270,12 @@ namespace ParameterControl.Controllers.Scenarios
                 filterColunm = filter.ColumValue,
                 filterValue = filter.ValueFilter
             });
+        }
+
+        public async Task<List<SelectListItem>> GetConciliation()
+        {
+            List<modConciliation.Conciliation> conciliations = await scenariosServices.GetConciliation();
+            return conciliations.Select(policy => new SelectListItem(policy.Name, policy.Id.ToString())).ToList();
         }
     }
 }

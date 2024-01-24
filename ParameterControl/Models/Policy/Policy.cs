@@ -4,7 +4,7 @@ using System.Reflection;
 
 namespace ParameterControl.Models.Policy
 {
-    public class Policy
+    public class Policy: GeneralData
     {
         public string Id { get; set; } = string.Empty;
 
@@ -25,7 +25,5 @@ namespace ParameterControl.Models.Policy
 
         [Required(ErrorMessage = "El tipo de operacion es requerido")]
         public string OperationType { get; set; } = string.Empty;
-
-        public bool State {  get; set; } = false;
     }
 }

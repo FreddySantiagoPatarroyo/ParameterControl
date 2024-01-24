@@ -6,6 +6,7 @@ using ParameterControl.Services.Parameters;
 using ParameterControl.Services.Conciliations;
 using ParameterControl.Services.Policies;
 using ParameterControl.Services.Rows;
+using ParameterControl.Services.Authenticated;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,6 +19,7 @@ builder.Services.AddTransient<IScenariosServices, ScenariosServices>();
 builder.Services.AddTransient<IUsersServices, UsersServices>();
 builder.Services.AddTransient<IIndicatorsService, IndicatorsService>();
 builder.Services.AddTransient<IResultsServices, ResultsServices>();
+builder.Services.AddTransient<AuthenticatedUser>();
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 

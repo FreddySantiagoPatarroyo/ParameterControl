@@ -25,6 +25,7 @@
             <input type="hidden" asp-for="Conciliation" />
             <input type="hidden" asp-for="ControlType" />
             <input type="hidden" asp-for="OperationType" />
+            <input type="hidden" asp-for="CreationDate" />
 
             <div class="form_group">
                 <div class="field">
@@ -107,7 +108,8 @@
                     Conciliation: $('#Conciliation').val(),
                     ControlType: $('#ControlType').val(),
                     OperationType: $('#OperationType').val(),
-                    State: true
+                    State: true,
+                    CreationDate: new Date($('#CreationDate').val())
                 }
 
                 console.log(data)

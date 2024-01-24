@@ -4,7 +4,7 @@ using System.Reflection;
 
 namespace ParameterControl.Models.Parameter
 {
-    public class Parameter
+    public class Parameter:GeneralData
     {
         public string Id { get; set; } = string.Empty;
 
@@ -22,6 +22,5 @@ namespace ParameterControl.Models.Parameter
 
         [Required(ErrorMessage = "El listado es requerido")]
         public string List {  get; set; } = string.Empty;
-        public bool State { get; set; } = false;
     }
 }

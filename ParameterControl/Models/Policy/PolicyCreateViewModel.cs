@@ -1,7 +1,9 @@
-﻿namespace ParameterControl.Models.Policy
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+
+namespace ParameterControl.Models.Policy
 {
     public class PolicyCreateViewModel:Policy
     {
-        public List<string> OperationTypeOptions = new List<string>();
+        public List<SelectListItem> OperationTypeOptions = new List<SelectListItem>();
     }
 }
