@@ -183,6 +183,8 @@ namespace ParameterControl.Services.Conciliations
                 conciliationModel.RequiredFormat = conciliation.Required ? "Si" : "No";
                 conciliationModel.State = conciliation.State;
                 conciliationModel.StateFormat = conciliation.State ? "Activo" : "Inactivo";
+                conciliationModel.CreationDate = conciliation.CreationDate;
+                conciliationModel.UpdateDate = conciliation.UpdateDate;
 
                 conciliationsModel.Add(conciliationModel);
             }

@@ -201,7 +201,7 @@ namespace ParameterControl.Services.Rows
             {
                  new Row()
                 {
-                    Value = "CodeUser",
+                    Value = "Code",
                     Name = "Codigo Usuario"
                 },
                 new Row()
@@ -216,7 +216,7 @@ namespace ParameterControl.Services.Rows
                 },
                 new Row()
                 {
-                    Value = "NameUser",
+                    Value = "Name",
                     Name = "Nombre Usuario"
                 },
                   new Row()

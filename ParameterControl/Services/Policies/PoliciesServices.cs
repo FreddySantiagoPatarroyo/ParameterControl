@@ -171,6 +171,8 @@ namespace ParameterControl.Services.Policies
                 policyModel.OperationType = policy.OperationType;
                 policyModel.State = policy.State;
                 policyModel.StateFormat = policy.State ? "Activo" : "Inactivo";
+                policyModel.CreationDate = policy.CreationDate;
+                policyModel.UpdateDate = policy.UpdateDate;
 
                 policiesModel.Add(policyModel);
             }

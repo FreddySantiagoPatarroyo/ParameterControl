@@ -6,6 +6,9 @@ using ParameterControl.Services.Rows;
 using modUser = ParameterControl.Models.User;
 using Newtonsoft.Json;
 using ParameterControl.Services.Policies;
+using ParameterControl.Models.Policy;
+using ParameterControl.Services.Authenticated;
+using ParameterControl.Models.Conciliation;
 
 
 namespace ParameterControl.Controllers.Users
@@ -16,23 +19,27 @@ namespace ParameterControl.Controllers.Users
         private readonly ILogger<HomeController> _logger;
         private readonly IUsersServices usersServices;
         private readonly Rows rows;
+        private readonly AuthenticatedUser authenticatedUser;
 
         public UsersController(
             ILogger<HomeController> logger,
             IUsersServices usersServices,
-            Rows rows
+            Rows rows,
+            AuthenticatedUser authenticatedUser
         )
         {
             this._logger = logger;
             this.usersServices = usersServices;
             this.rows = rows;
+            this.authenticatedUser = authenticatedUser;
         }
 
         [HttpGet]
         public async Task<ActionResult> Users()
         {
 
-            TableUsers.Data = await usersServices.GetUsers();
+            List<User> Users = await usersServices.GetUsers();
+            TableUsers.Data = await usersServices.GetUsersFormat(Users);
 
             TableUsers.Rows = rows.RowsUsers();
 
@@ -64,7 +71,7 @@ namespace ParameterControl.Controllers.Users
                 ValueFilter = filterValue
             };
 
-            List<User> usersFilter = await usersServices.GetFilterUsers(filter);
+            List<UserViewModel> usersFilter = await usersServices.GetFilterUsers(filter);
 
             TableUsers.Data = usersFilter;
 
@@ -83,12 +90,9 @@ namespace ParameterControl.Controllers.Users
         [HttpGet]
         public async Task<ActionResult> Create()
         {
-            modUser.User user = new User();
+            UserCreateViewModel model = new UserCreateViewModel();
 
-            user.CreationDate = DateTime.Now;
-            user.UpdateDate = DateTime.Now;
-
-            return View("Actions/CreateUser", user);
+            return View("Actions/CreateUser", model);
         }
 
         [HttpPost]
@@ -103,6 +107,9 @@ namespace ParameterControl.Controllers.Users
             {
                 try
                 {
+                    request.UserOwner = authenticatedUser.GetUserOwnerId();
+                    request.CreationDate = DateTime.Now;
+                    request.UpdateDate = DateTime.Now;
                     _logger.LogInformation($"Inicia método UsersController.Create {JsonConvert.SerializeObject(request)}");
                     
                     return Ok(new { message = "Se creo el usuario de manera exitosa", state = "Success" });
@@ -116,16 +123,25 @@ namespace ParameterControl.Controllers.Users
 
         }
 
-
         [HttpGet]
         public async Task<ActionResult> Edit(string id)
         {
             modUser.User user = await usersServices.GetUsersById(id);
 
-            user.UpdateDate = DateTime.Now;
+            UserCreateViewModel model = new UserCreateViewModel()
+            {
+                Id = user.Id,
+                Code = user.Code,
+                Name = user.Name,
+                User_ = user.User_,
+                Email = user.Email,
+                State = user.State,
+                CreationDate = user.CreationDate
+            };
 
-            return View("Actions/EditUser", user);
+            return View("Actions/EditUser", model);
         }
+
         [HttpPost]
         public async Task<ActionResult> EditUser([FromBody] modUser.User request)
         {
@@ -138,6 +154,8 @@ namespace ParameterControl.Controllers.Users
             {
                 try
                 {
+                    request.UserOwner = authenticatedUser.GetUserOwnerId();
+                    request.UpdateDate = DateTime.Now;
                     _logger.LogInformation($"Inicia método UsersController.Edit {JsonConvert.SerializeObject(request)}");
                     return Ok(new { message = "Se actualizo el usuario de manera exitosa", state = "Success" });
                 }
@@ -150,27 +168,12 @@ namespace ParameterControl.Controllers.Users
         }
 
         [HttpGet]
-        public async Task<ActionResult> Desactive(string id)
+        public async Task<ActionResult> View(string id)
         {
             User user = await usersServices.GetUsersById(id);
 
-            return View("Actions/DesactiveUser", user);
+            return View("Actions/ViewUser", user);
         }
-        [HttpPost]
-        public async Task<ActionResult> DesactiveUser([FromBody] string request)
-        {
-            try
-            {
-                _logger.LogInformation($"Inicia método UsersController.Desactive {JsonConvert.SerializeObject(request)}");
-                return Ok(new { message = "Se desactivo el usuario de manera exitosa", state = "Success" });
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Error en el método UsersController.Desactive : {JsonConvert.SerializeObject(ex.Message)}");
-                return BadRequest(new { message = "Error al desactivar el usuario", state = "Error" });
-            }
-        }
-
 
         [HttpGet]
         public async Task<ActionResult> Active(string id)
@@ -179,11 +182,16 @@ namespace ParameterControl.Controllers.Users
 
             return View("Actions/ActiveUser", user);
         }
+
         [HttpPost]
-        public async Task<ActionResult> ActiveUser([FromBody] string request)
+        public async Task<ActionResult> ActiveUser([FromBody] string id)
         {
             try
             {
+                modUser.User request = await usersServices.GetUsersById(id);
+                request.UserOwner = authenticatedUser.GetUserOwnerId();
+                request.UpdateDate = DateTime.Now;
+                request.State = true;
                 _logger.LogInformation($"Inicia método UsersController.Active {JsonConvert.SerializeObject(request)}");
                 return Ok(new { message = "Se activo el usuario de manera exitosa", state = "Success" });
             }
@@ -194,13 +202,31 @@ namespace ParameterControl.Controllers.Users
             }
         }
 
-
         [HttpGet]
-        public async Task<ActionResult> View(string id)
+        public async Task<ActionResult> Desactive(string id)
         {
             User user = await usersServices.GetUsersById(id);
 
-            return View("Actions/ViewUser", user);
+            return View("Actions/DesactiveUser", user);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> DesactiveUser([FromBody] string id)
+        {
+            try
+            {
+                modUser.User request = await usersServices.GetUsersById(id);
+                request.UserOwner = authenticatedUser.GetUserOwnerId();
+                request.UpdateDate = DateTime.Now;
+                request.State = false;
+                _logger.LogInformation($"Inicia método UsersController.Desactive {JsonConvert.SerializeObject(request)}");
+                return Ok(new { message = "Se desactivo el usuario de manera exitosa", state = "Success" });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error en el método UsersController.Desactive : {JsonConvert.SerializeObject(ex.Message)}");
+                return BadRequest(new { message = "Error al desactivar el usuario", state = "Error" });
+            }
         }
 
         [HttpGet]

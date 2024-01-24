@@ -1,5 +1,5 @@
 ﻿@using ParameterControl.Models.User
-@model User;
+@model UserCreateViewModel;
 
 @{
     ViewData["Title"] = "Crear Usuarios";
@@ -21,13 +21,16 @@
                 <h1>Crear Usuario</h1>
             </div>
 
+            <input type="hidden" asp-for="Id"/>
+            <input type="hidden" asp-for="CreationDate"/>
+
             <div class="form_group">
                 <div class="field">
-                    <label asp-for="CodeUser" class="label_form">Código usuario*</label>
+                    <label asp-for="Code" class="label_form">Código usuario*</label>
                     <div class="input">
-                        <input asp-for="CodeUser" placeholder="Codigo" autocomplete="off" />
+                        <input asp-for="Code" placeholder="Codigo" autocomplete="off" />
                     </div>
-                    <span id="CodeUserError" class="text_error"></span>
+                    <span id="CodeError" class="text_error"></span>
                 </div>
             </div>
             <div class="form_group">
@@ -42,22 +45,22 @@
             <div class="form_group">
                 <div class="field">
                     <label asp-for="Email" class="label_form">Email*</label>
-                    <div class="textarea">
-                        <textarea asp-for="Email" placeholder="Email"></textarea>
+                    <div class="input">
+                        <input asp-for="Email" placeholder="Email"/>
                     </div>
                     <span id="EmailError" class="text_error"></span>
                 </div>
             </div>
             <div class="form_group">
                 <div class="field">
-                    <label asp-for="NameUser" class="label_form">Nombre de usuario*</label>
+                    <label asp-for="Name" class="label_form">Nombre de usuario*</label>
                     <div class="input">
-                        <input asp-for="NameUser" placeholder="Nombre de usuario" autocomplete="off" />
+                        <input asp-for="Name" placeholder="Nombre de usuario" autocomplete="off" />
                     </div>
-                    <span id="NameUserError" class="text_error"></span>
+                    <span id="NameError" class="text_error"></span>
                 </div>
             </div>
-            <div class="form_group">
+            @* <div class="form_group">
                 <div class="field">
                     <label asp-for="CreationDate" class="label_form">Fecha de creacion*</label>
                     <div class="input">
@@ -74,7 +77,7 @@
                     </div>
                     <span id="UpdateDateError" class="text_error"></span>
                 </div>
-            </div>
+            </div> *@
 
             <p class="note_text"><span>Nota: </span>Los campos con (*) son obligatorios</p>
 
@@ -99,32 +102,31 @@
     <script>
         const urlUser = '@Url.Action("CreateUser")';
         let data;
-        let isValidCodeUser = false;
+        let isValidCode = false;
         let isValidUser_ = false;
         let isValidEmail = false;
-        let isValidNameUser = false;
-        let isValidCreationDate = false;
-        let isValidUpdateDate = false;
+        let isValidName = false;
+        // let isValidCreationDate = false;
+        // let isValidUpdateDate = false;
 
         const sendData = async () => {
-            isValidCodeUser = validateInputEmpty("CodeUser", "El codigo de usuario es requerido", "CodeUserError");
+            isValidCode = validateInputEmpty("Code", "El codigo de usuario es requerido", "CodeError");
             isValidUser_ = validateInputEmpty("User_", "El usuario es requerido", "User_Error");
             isValidEmail = validateInputEmpty("Email", "El email es requerido", "EmailError");
-            isValidNameUser = validateInputEmpty("NameUser", "El nombre de usuario es requerido", "NameUserError");
-            isValidCreationDate = validateInputEmpty("CreationDate", "La fecha de creación es requerida", "CreationDateError");
-            isValidUpdateDate = validateInputEmpty("UpdateDate", "La fecha de actualización es requerida", "UpdateDateError");
+            isValidName = validateInputEmpty("Name", "El nombre de usuario es requerido", "NameError");
+            // isValidCreationDate = validateInputEmpty("CreationDate", "La fecha de creación es requerida", "CreationDateError");
+            // isValidUpdateDate = validateInputEmpty("UpdateDate", "La fecha de actualización es requerida", "UpdateDateError");
 
-            if (isValidCodeUser && isValidUser_ && isValidEmail && isValidNameUser && isValidCreationDate && isValidUpdateDate) {
+            if (isValidCode && isValidUser_ && isValidEmail && isValidName) {
                 document.getElementById('btn_container').style.display = 'none';
                 document.getElementById('loading').style.display = 'flex';
 
                 data = {
-                    CodeUser: $('#CodeUser').val(),
+                    Id: $('#Id').val(),
+                    Code: $('#Code').val(),
                     User_: $('#User_').val(),
                     Email: $('#Email').val(),
-                    NameUser: $('#NameUser').val(),
-                    CreationDate: $('#CreationDate').val(),
-                    UpdateDate: $('#UpdateDate').val(),
+                    Name: $('#Name').val(),
                     State: true
                 }
 

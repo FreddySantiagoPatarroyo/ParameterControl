@@ -135,6 +135,8 @@ namespace ParameterControl.Services.Scenarios
                 scenaryModel.Conciliation = scenary.Conciliation;
                 scenaryModel.State = scenary.State;
                 scenaryModel.StateFormat = scenary.State ? "Activo" : "Inactivo";
+                scenaryModel.CreationDate = scenary.CreationDate;
+                scenaryModel.UpdateDate = scenary.UpdateDate;
 
                 scenariosModel.Add(scenaryModel);
             }

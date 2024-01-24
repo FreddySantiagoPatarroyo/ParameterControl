@@ -7,6 +7,7 @@ namespace ParameterControl.Services.Users
     {
         Task<List<User>> GetUsers();
         Task<User> GetUsersById(string id);
-        Task<List<User>> GetFilterUsers(FilterViewModel filterModel);
+        Task<List<UserViewModel>> GetFilterUsers(FilterViewModel filterModel);
+        Task<List<UserViewModel>> GetUsersFormat(List<User> users);
     }
 }

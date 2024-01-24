@@ -132,6 +132,8 @@ namespace ParameterControl.Services.Parameters
                 parameterModel.List = parameter.List;
                 parameterModel.State = parameter.State;
                 parameterModel.StateFormat = parameter.State ? "Activo" : "Inactivo";
+                parameterModel.CreationDate = parameter.CreationDate;
+                parameterModel.UpdateDate = parameter.UpdateDate;
 
                 parametersModel.Add(parameterModel);
             }
