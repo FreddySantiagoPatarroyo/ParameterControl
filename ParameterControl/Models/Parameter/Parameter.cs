@@ -9,7 +9,7 @@ namespace ParameterControl.Models.Parameter
         public string Id { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "El parametro es requerido")]
-        public string Parameters_ { get; set; } = string.Empty;
+        public string Code { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "El valor es requerido")]
         public string Value { get; set; } = string.Empty;

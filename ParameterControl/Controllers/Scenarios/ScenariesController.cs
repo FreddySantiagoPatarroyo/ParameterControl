@@ -50,6 +50,7 @@ namespace ParameterControl.Controllers.Scenarios
             TableScenarios.IsActivate = true;
             TableScenarios.IsEdit = true;
             TableScenarios.IsInactivate = true;
+            TableScenarios.Filter = true;
 
             ViewBag.ApplyFilter = false;
 
@@ -82,6 +83,7 @@ namespace ParameterControl.Controllers.Scenarios
             TableScenarios.IsActivate = true;
             TableScenarios.IsEdit = true;
             TableScenarios.IsInactivate = true;
+            TableScenarios.Filter = true;
 
             ViewBag.ApplyFilter = true;
 

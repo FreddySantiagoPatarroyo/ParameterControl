@@ -51,6 +51,7 @@ namespace ParameterControl.Controllers.Conciliations
             TableConciliations.IsActivate = true;
             TableConciliations.IsEdit = true;
             TableConciliations.IsInactivate = true;
+            TableConciliations.Filter = true;
 
             ViewBag.ApplyFilter = false;
 
@@ -84,6 +85,7 @@ namespace ParameterControl.Controllers.Conciliations
             TableConciliations.IsActivate = true;
             TableConciliations.IsEdit = true;
             TableConciliations.IsInactivate = true;
+            TableConciliations.Filter = true;
 
             ViewBag.ApplyFilter = true;
 

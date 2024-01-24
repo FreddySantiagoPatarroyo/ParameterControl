@@ -32,17 +32,17 @@
                             <li onclick="selectOption('@null', '@null')" class="option">
                                 <p class="option_text">Seleccione una opción</p>
                             </li>
-                            @foreach (var Colunm in Model.ParameterTypeOption)
+                            @foreach (var Option in Model.ParameterTypeOption)
                             {
-                                <li onclick="selectOption('@Colunm', '@Colunm')" class="option">
-                                    <p class="option_text">@Colunm</p>
+                                <li onclick="selectOption('@Option.Text', '@Option.Value')" class="option">
+                                    <p class="option_text">@Option.Text</p>
                                 </li>
                             }
                         </ul>
                     </div>
                     <div id="select_helper" class="select_helper" onclick="showOptions()"></div>
                 </div>
-                <span asp-validation-for="ParameterType" class="text_error"></span>
+                <span id="ParameterTypeError" class="text_error"></span>
             </div>
             <div class="form_group">
                 <div class="field">
@@ -57,25 +57,25 @@
                             <li onclick="selectOptionList('@null', '@null')" class="option">
                                 <p class="option_text">Seleccione una opción</p>
                             </li>
-                            @foreach (var Colunm in Model.ListParameter)
+                            @foreach (var Option in Model.ListParameter)
                             {
-                                <li onclick="selectOptionList('@Colunm', '@Colunm')" class="option">
-                                    <p class="option_text">@Colunm</p>
+                                <li onclick="selectOptionList('@Option.Text', '@Option.Value')" class="option">
+                                    <p class="option_text">@Option.Text</p>
                                 </li>
                             }
                         </ul>
                     </div>
                     <div id="select_helper_list" class="select_helper" onclick="showOptionsList()"></div>
                 </div>
-                <span asp-validation-for="List" class="text_error"></span>
+                <span id="ListError" class="text_error"></span>
             </div>
             <div class="form_group">
                 <div class="field">
-                    <label asp-for="Parameters_" class="label_form">Parámetro*</label>
+                    <label asp-for="Code" class="label_form">Parámetro*</label>
                     <div class="input">
-                        <input class="code" asp-for="Parameters_" placeholder="CO_AIC_245_FS" autocomplete="off"  />
+                        <input class="code" asp-for="Code" placeholder="CO_AIC_245_FS" autocomplete="off"  />
                     </div>
-                    <span asp-validation-for="Parameters_" class="text_error"></span>
+                    <span id="CodeError" class="text_error"></span>
                 </div>
             </div>
 
@@ -85,7 +85,7 @@
                     <div class="input">
                         <input class="description" asp-for="Value" placeholder="Digite el valor del parametro" autocomplete="off" />
                     </div>
-                    <span asp-validation-for="Value" class="text_error"></span>
+                    <span id="ValueError" class="text_error"></span>
                 </div>
             </div>
 
@@ -196,25 +196,26 @@
     <script>
         const urlParameter = '@Url.Action("Create")';
         let data;
-        let isValidParameters_ = false;
-        let isValidValue = false;
-        let isValidDescription = false;
+
         let isValidParameterType = false;
         let isValidList = false;
+        let isValidCode = false;
+        let isValidValue = false;
+        let isValidDescription = false;
 
         const sendData = async () => {
-            isValidParameters_ = validateInputEmpty("Parameters_", "El parametro es requerido", "Parameters_Error");
-            isValidValue = validateInputEmpty("Value", "El valor es requerido", "ValueError");
-            isValidDescription = validateInputEmpty("Description", "La descripcion es requerido", "DescriptionError");
             isValidParameterType = validateInputEmpty("ParameterType", "El tipo de parametro es requerido", "ParameterTypeError");
             isValidList = validateInputEmpty("List", "La lista es requerido", "ListError");
+            isValidCode = validateInputEmpty("Code", "El parametro es requerido", "CodeError");
+            isValidValue = validateInputEmpty("Value", "El valor es requerido", "ValueError");
+            isValidDescription = validateInputEmpty("Description", "La descripcion es requerido", "DescriptionError");
 
-            if (isValidParameters_ && isValidValue && isValidDescription && isValidParameterType && isValidList) {
+            if (isValidCode && isValidValue && isValidDescription && isValidParameterType && isValidList) {
                 document.getElementById('btn_container').style.display = 'none';
                 document.getElementById('loading').style.display = 'flex';
 
                 data = {
-                    Parameters_: $('#Parameters_').val(),
+                    Code: $('#Code').val(),
                     Value: $('#Value').val(),
                     Description: $('#Description').val(),
                     ParameterType: $('#ParameterType').val(),
