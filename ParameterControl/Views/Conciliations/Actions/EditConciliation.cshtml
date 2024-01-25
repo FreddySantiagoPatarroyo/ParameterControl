@@ -20,8 +20,10 @@
                 <h1>Editar Conciliación</h1>
             </div>
 
-           <input type="hidden" asp-for="Id"/> 
+           <input type="hidden" asp-for="Code"/> 
            <input type="hidden" asp-for="CreationDate"/>
+
+           <p>@Model.CreationDate</p>
 
             <div class="form_group">
                 <div class="field">
@@ -241,7 +243,6 @@
                 document.getElementById('loading').style.display = 'flex';
 
                 data = {
-                    Id: $('#Id').val(),
                     Code: $('#Code').val(),
                     Name: $('#Name').val(),
                     Package: $('#Package').val(),

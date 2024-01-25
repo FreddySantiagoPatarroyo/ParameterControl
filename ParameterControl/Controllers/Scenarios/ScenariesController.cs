@@ -277,7 +277,7 @@ namespace ParameterControl.Controllers.Scenarios
         public async Task<List<SelectListItem>> GetConciliation()
         {
             List<modConciliation.Conciliation> conciliations = await scenariosServices.GetConciliation();
-            return conciliations.Select(policy => new SelectListItem(policy.Name, policy.Id.ToString())).ToList();
+            return conciliations.Select(policy => new SelectListItem(policy.Name, policy.Code.ToString())).ToList();
         }
     }
 }

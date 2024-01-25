@@ -20,7 +20,7 @@
                 <h1>Crear Conciliación</h1>
             </div>
 
-            <div class="form_group">
+           @*  <div class="form_group">
                 <div class="field">
                     <label asp-for="Code" class="label_form">Código*</label>
                     <div class="input">
@@ -28,7 +28,7 @@
                     </div>
                     <span id="CodeError" class="text_error"></span>
                 </div>
-            </div>
+            </div> *@
 
             <div class="form_group">
                 <div class="field">
@@ -221,7 +221,7 @@
     <script>
         const urlCreateConciliation = '@Url.Action("Create")';
         let data;
-        let isValidCode = false;
+        // let isValidCode = false;
         let isValidName = false;
         let isValidPackage = false;
         let isValidEmail = false;
@@ -232,7 +232,7 @@
 
 
         const sendData = async () => {
-            isValidCode = validateInputEmpty("Code", "El codigo es requerido", "CodeError");
+            // isValidCode = validateInputEmpty("Code", "El codigo es requerido", "CodeError");
             isValidName = validateInputEmpty("Name", "El nombre es requerido", "NameError");
             isValidPackage = validateInputEmpty("Package", "El paquete es requerido", "PackageError");
             isValidEmail = validateInputEmpty("Email", "El email del usuario asignado es requerido", "EmailError");
@@ -242,12 +242,12 @@
 
 
 
-            if (isValidCode && isValidName && isValidPackage && isValidEmail && isValidPolicies && isValidRequired) {
+            if (isValidName && isValidPackage && isValidEmail && isValidPolicies && isValidRequired) {
                 document.getElementById('btn_container').style.display = 'none';
                 document.getElementById('loading').style.display = 'flex';
 
                 data = {
-                    Code: $('#Code').val(),
+                    // Code: $('#Code').val(),
                     Name: $('#Name').val(),
                     Package: $('#Package').val(),
                     Email: parseInt($('#Email').val()),

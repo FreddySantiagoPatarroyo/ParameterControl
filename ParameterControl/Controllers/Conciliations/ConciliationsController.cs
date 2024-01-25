@@ -137,36 +137,39 @@ namespace ParameterControl.Controllers.Conciliations
         }
 
         [HttpGet]
-        public async Task<ActionResult> Edit(string id)
+        public async Task<ActionResult> Edit(int code)
         {
-            Conciliation conciliation = await conciliationsServices.GetConciliationsById(id);
+            modConciliation.Conciliation conciliation = await conciliationsServices.GetConciliationsByCode(code);
 
             List<SelectListItem> PoliciesOptionsList = await GetPolicies();
             List<SelectListItem> RequiredOptionsList = await conciliationsServices.GetRequired();
 
+            ConciliationCreateViewModel model = await conciliationsServices.GetConciliationFormatCreate(conciliation);
 
-            ConciliationCreateViewModel model = new ConciliationCreateViewModel()
-            {
-                Id = conciliation.Id,
-                Code = conciliation.Code,
-                Name = conciliation.Name,
-                Description = conciliation.Description,
-                Conciliation_ = conciliation.Conciliation_,
-                Package = conciliation.Package,
-                Email = conciliation.Email,
-                Destination = conciliation.Destination,
-                Policies = conciliation.Policies,
-                Required = conciliation.Required,
-                RequiredFormat = conciliation.Required ? "Si" : "No",
-                State = conciliation.State,
-                CreationDate = conciliation.CreationDate
-            };
-
+            Console.WriteLine(model.CreationDate);
+            //ConciliationCreateViewModel model = new ConciliationCreateViewModel()
+            //{
+            //    Code = conciliation.Code,
+            //    Name = conciliation.Name,
+            //    Description = conciliation.Description,
+            //    Conciliation_ = conciliation.Conciliation_,
+            //    Package = conciliation.Package,
+            //    Email = conciliation.Email,
+            //    Destination = conciliation.Destination,
+            //    Policies = conciliation.Policies,
+            //    Required = conciliation.Required,
+            //    RequiredFormat = conciliation.Required ? "Si" : "No",
+            //    State = conciliation.State,
+            //    CodeFormat = "CO_" + conciliation.Code,
+            //    CreationDate = conciliation.CreationDate,
+            //    UpdateDate = conciliation.UpdateDate
+            //};
             model.PoliciesOption = PoliciesOptionsList;
             model.RequiredOption = RequiredOptionsList;
 
             return View("Actions/EditConciliation", model);
         }
+
 
         [HttpPost]
         public async Task<ActionResult> Edit([FromBody] modConciliation.Conciliation request)
@@ -193,27 +196,27 @@ namespace ParameterControl.Controllers.Conciliations
         }
 
         [HttpGet]
-        public async Task<ActionResult> View(string id)
+        public async Task<ActionResult> View(int code)
         {
-            Conciliation conciliation = await conciliationsServices.GetConciliationsById(id);
+            Conciliation conciliation = await conciliationsServices.GetConciliationsByCode(code);
 
             return View("Actions/ViewConciliation", conciliation);
         }
 
         [HttpGet]
-        public async Task<ActionResult> Active(string id)
+        public async Task<ActionResult> Active(int code)
         {
-            modConciliation.Conciliation conciliation = await conciliationsServices.GetConciliationsById(id);
+            modConciliation.Conciliation conciliation = await conciliationsServices.GetConciliationsByCode(code);
 
             return View("Actions/ActiveConciliation", conciliation);
         }
 
         [HttpPost]
-        public async Task<ActionResult> ActiveConciliation([FromBody] string id)
+        public async Task<ActionResult> ActiveConciliation([FromBody] int code)
         {
             try
             {
-                Conciliation request = await conciliationsServices.GetConciliationsById(id);
+                Conciliation request = await conciliationsServices.GetConciliationsByCode(code);
                 request.UserOwner = authenticatedUser.GetUserOwnerId();
                 request.UpdateDate = DateTime.Now;
                 request.State = true;
@@ -228,19 +231,19 @@ namespace ParameterControl.Controllers.Conciliations
         }
 
         [HttpGet]
-        public async Task<ActionResult> Desactive(string id)
+        public async Task<ActionResult> Desactive(int code)
         {
-            modConciliation.Conciliation conciliation = await conciliationsServices.GetConciliationsById(id);
+            modConciliation.Conciliation conciliation = await conciliationsServices.GetConciliationsByCode(code);
 
             return View("Actions/DesactiveConciliation", conciliation);
         }
 
         [HttpPost]
-        public async Task<ActionResult> DesactiveConciliation([FromBody] string id)
+        public async Task<ActionResult> DesactiveConciliation([FromBody] int code)
         {
             try
             {
-                Conciliation request = await conciliationsServices.GetConciliationsById(id);
+                Conciliation request = await conciliationsServices.GetConciliationsByCode(code);
                 request.UserOwner = authenticatedUser.GetUserOwnerId();
                 request.UpdateDate = DateTime.Now;
                 request.State = false;

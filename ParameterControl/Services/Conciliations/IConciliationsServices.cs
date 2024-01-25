@@ -12,8 +12,12 @@ namespace ParameterControl.Services.Conciliations
         Task<List<modPolicy.Policy>> GetPolicies();
         Task<List<SelectListItem>> GetRequired();
         Task<List<modConciliation.Conciliation>> GetConciliations();
-        Task<modConciliation.Conciliation> GetConciliationsById(string id);
+        Task<modConciliation.Conciliation> GetConciliationsByCode(int code);
         Task<List<ConciliationViewModel>> GetFilterConciliations(FilterViewModel filterModel);
-        Task<List<ConciliationViewModel>> GetConciliationsFormat(List<Conciliation> conciliations);
+        Task<List<ConciliationViewModel>> GetConciliationsFormat(List<modConciliation.Conciliation> conciliations);
+        Task<ConciliationViewModel> GetConciliationFormat(modConciliation.Conciliation conciliation);
+        Task<ConciliationCreateViewModel> GetConciliationFormatCreate(modConciliation.Conciliation conciliation);
+
+
     }
 }

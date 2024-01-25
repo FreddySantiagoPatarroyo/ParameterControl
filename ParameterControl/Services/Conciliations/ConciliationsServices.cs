@@ -26,8 +26,7 @@ namespace ParameterControl.Services.Conciliations
             conciliations = new List<Conciliation>()
             {
                 new Conciliation(){
-                    Id = "1",
-                    Code = "COD_001",
+                    Code = 1,
                     Name = "Conciliacion_1",
                     Description = "Description",
                     Package = "paqueteEjemplo",
@@ -42,8 +41,7 @@ namespace ParameterControl.Services.Conciliations
                     UserOwner = 1
                 },
                 new Conciliation(){
-                    Id = "2",
-                    Code = "COD_001",
+                    Code = 2,
                     Name = "Conciliacion_1",
                     Description = "Description",
                     Package = "paqueteEjemplo",
@@ -58,8 +56,7 @@ namespace ParameterControl.Services.Conciliations
                     UserOwner = 1
                 },
                 new Conciliation(){
-                    Id = "3",
-                    Code = "COD_001",
+                    Code = 3,
                     Name = "Conciliacion_1",
                     Description = "Description",
                     Package = "paqueteEjemplo",
@@ -74,8 +71,7 @@ namespace ParameterControl.Services.Conciliations
                     UserOwner = 1
                 },
                 new Conciliation(){
-                    Id = "4",
-                    Code = "COD_001",
+                    Code = 4,
                     Name = "Conciliacion_1",
                     Description = "Description",
                     Package = "paqueteEjemplo",
@@ -90,8 +86,7 @@ namespace ParameterControl.Services.Conciliations
                     UserOwner = 1
                 },
                 new Conciliation(){
-                    Id = "5",
-                    Code = "COD_001",
+                    Code = 5,
                     Name = "Conciliacion_1",
                     Description = "Description",
                     Package = "paqueteEjemplo",
@@ -106,8 +101,7 @@ namespace ParameterControl.Services.Conciliations
                     UserOwner = 1
                 },
                 new Conciliation(){
-                    Id = "6",
-                    Code = "COD_001",
+                    Code = 6,
                     Name = "Conciliacion_1",
                     Description = "Description",
                     Package = "paqueteEjemplo",
@@ -122,8 +116,7 @@ namespace ParameterControl.Services.Conciliations
                     UserOwner = 1
                 },
                 new Conciliation(){
-                    Id = "7",
-                    Code = "COD_001",
+                    Code = 7,
                     Name = "Conciliacion_1",
                     Description = "Description",
                     Package = "paqueteEjemplo",
@@ -138,8 +131,7 @@ namespace ParameterControl.Services.Conciliations
                     UserOwner = 1
                 },
                 new Conciliation(){
-                    Id = "8",
-                    Code = "COD_001",
+                    Code = 8,
                     Name = "Conciliacion_1",
                     Description = "Description",
                     Package = "paqueteEjemplo",
@@ -170,18 +162,18 @@ namespace ParameterControl.Services.Conciliations
             {
                 ConciliationViewModel conciliationModel = new ConciliationViewModel();
 
-                conciliationModel.Id = conciliation.Id;
                 conciliationModel.Code = conciliation.Code;
                 conciliationModel.Name = conciliation.Name;
                 conciliationModel.Description = conciliation.Description;
                 conciliationModel.Conciliation_ = conciliation.Conciliation_;
                 conciliationModel.Package = conciliation.Package;
                 conciliationModel.Email = conciliation.Email;
-                conciliationModel.Description = conciliation.Description;
+                conciliationModel.Destination = conciliation.Destination;
                 conciliationModel.Policies = conciliation.Policies;
                 conciliationModel.Required = conciliation.Required;
                 conciliationModel.RequiredFormat = conciliation.Required ? "Si" : "No";
                 conciliationModel.State = conciliation.State;
+                conciliationModel.CodeFormat = "CO_" + conciliation.Code;
                 conciliationModel.StateFormat = conciliation.State ? "Activo" : "Inactivo";
                 conciliationModel.CreationDate = conciliation.CreationDate;
                 conciliationModel.UpdateDate = conciliation.UpdateDate;
@@ -192,9 +184,60 @@ namespace ParameterControl.Services.Conciliations
             return conciliationsModel;
         }
 
-        public async Task<modConciliation.Conciliation> GetConciliationsById(string id)
+
+        public async Task<ConciliationViewModel> GetConciliationFormat(modConciliation.Conciliation conciliation)
         {
-            Conciliation conciliation = conciliations.Find(conciliation => conciliation.Id == id);
+           
+                ConciliationViewModel conciliationModel = new ConciliationViewModel();
+
+                conciliationModel.Code = conciliation.Code;
+                conciliationModel.Name = conciliation.Name;
+                conciliationModel.Description = conciliation.Description;
+                conciliationModel.Conciliation_ = conciliation.Conciliation_;
+                conciliationModel.Package = conciliation.Package;
+                conciliationModel.Email = conciliation.Email;
+                conciliationModel.Destination = conciliation.Destination;
+                conciliationModel.Policies = conciliation.Policies;
+                conciliationModel.Required = conciliation.Required;
+                conciliationModel.RequiredFormat = conciliation.Required ? "Si" : "No";
+                conciliationModel.State = conciliation.State;
+                conciliationModel.CodeFormat = "CO_" + conciliation.Code;
+                conciliationModel.StateFormat = conciliation.State ? "Activo" : "Inactivo";
+                conciliationModel.CreationDate = conciliation.CreationDate;
+                conciliationModel.UpdateDate = conciliation.UpdateDate;
+
+            
+                return conciliationModel;
+        }
+
+
+        public async Task<ConciliationCreateViewModel> GetConciliationFormatCreate(modConciliation.Conciliation conciliation)
+        {
+
+            ConciliationCreateViewModel conciliationModel = new ConciliationCreateViewModel();
+
+            conciliationModel.Code = conciliation.Code;
+            conciliationModel.Name = conciliation.Name;
+            conciliationModel.Description = conciliation.Description;
+            conciliationModel.Conciliation_ = conciliation.Conciliation_;
+            conciliationModel.Package = conciliation.Package;
+            conciliationModel.Email = conciliation.Email;
+            conciliationModel.Destination = conciliation.Destination;
+            conciliationModel.Policies = conciliation.Policies;
+            conciliationModel.Required = conciliation.Required;
+            conciliationModel.RequiredFormat = conciliation.Required ? "Si" : "No";
+            conciliationModel.State = conciliation.State;
+            conciliationModel.CodeFormat = "CO_" + conciliation.Code;
+            conciliationModel.CreationDate = conciliation.CreationDate;
+            conciliationModel.UpdateDate = conciliation.UpdateDate;
+
+
+            return conciliationModel;
+        }
+
+        public async Task<modConciliation.Conciliation> GetConciliationsByCode(int code)
+        {
+            Conciliation conciliation = conciliations.Find(conciliation => conciliation.Code == code);
             return conciliation;
         }
         public async Task<List<modPolicy.Policy>> GetPolicies()
