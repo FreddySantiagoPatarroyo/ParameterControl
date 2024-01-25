@@ -21,6 +21,15 @@
                 <h1>Crear Politica</h1>
             </div>
 
+            @* <div class="form_group">
+                <div class="field">
+                    <label asp-for="Code" class="label_form">Codigo*</label>
+                    <div class="input">
+                        <input asp-for="Code" placeholder="Codigo" autocomplete="off" />
+                    </div>
+                    <span id="CodeError" class="text_error"></span>
+                </div>
+            </div> *@
             <div class="form_group">
                 <div class="field">
                     <label asp-for="Name" class="label_form">Nombre*</label>
@@ -163,6 +172,7 @@
                 document.getElementById('loading').style.display = 'flex';
 
                 data = {
+                    //Code: $('Code').val(),
                     Name: $('#Name').val(),
                     Description: $('#Description').val(),
                     Conciliation: parseInt($('#Conciliation').val()),

@@ -64,7 +64,7 @@ namespace ParameterControl.Services.Rows
             {
                  new Row()
                 {
-                    Value = "Code",
+                    Value = "CodeFormat",
                     Name = "Codigo"
                 },
                 new Row()
@@ -113,7 +113,7 @@ namespace ParameterControl.Services.Rows
             {
                  new Row()
                 {
-                    Value = "Code",
+                    Value = "Parametre",
                     Name = "Parametros"
                 },
                 new Row()
@@ -157,7 +157,7 @@ namespace ParameterControl.Services.Rows
             {
                  new Row()
                 {
-                    Value = "Code",
+                    Value = "CodeFormat",
                     Name = "Codigo"
                 },
                 new Row()
@@ -201,7 +201,7 @@ namespace ParameterControl.Services.Rows
             {
                  new Row()
                 {
-                    Value = "Code",
+                    Value = "CodeFormat",
                     Name = "Codigo Usuario"
                 },
                 new Row()
