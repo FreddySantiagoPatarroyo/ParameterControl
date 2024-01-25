@@ -71,11 +71,12 @@
             </div>
             <div class="form_group">
                 <div class="field">
-                    <label asp-for="Code" class="label_form">Parámetro*</label>
-                    <div class="input">
-                        <input class="code" asp-for="Code" placeholder="CO_AIC_245_FS" autocomplete="off"  />
+                    <label asp-for="Parameter_" class="label_form">Parámetro*</label>
+                    <div class="input input_aditional">
+                        <span class="text_aditional_input">V_</span>
+                        <input class="code" asp-for="Parameter_" placeholder="Nombre Parametro" autocomplete="off"  />
                     </div>
-                    <span id="CodeError" class="text_error"></span>
+                    <span id="ParameterError" class="text_error"></span>
                 </div>
             </div>
 
@@ -199,23 +200,23 @@
 
         let isValidParameterType = false;
         let isValidList = false;
-        let isValidCode = false;
+        let isValidParameter = false;
         let isValidValue = false;
         let isValidDescription = false;
 
         const sendData = async () => {
             isValidParameterType = validateInputEmpty("ParameterType", "El tipo de parametro es requerido", "ParameterTypeError");
             isValidList = validateInputEmpty("List", "La lista es requerido", "ListError");
-            isValidCode = validateInputEmpty("Code", "El parametro es requerido", "CodeError");
+            isValidParameter = validateInputEmpty("Parameter_", "El parametro es requerido", "ParameterError");
             isValidValue = validateInputEmpty("Value", "El valor es requerido", "ValueError");
             isValidDescription = validateInputEmpty("Description", "La descripcion es requerido", "DescriptionError");
 
-            if (isValidCode && isValidValue && isValidDescription && isValidParameterType && isValidList) {
+            if (isValidParameter && isValidValue && isValidDescription && isValidParameterType && isValidList) {
                 document.getElementById('btn_container').style.display = 'none';
                 document.getElementById('loading').style.display = 'flex';
 
                 data = {
-                    Code: $('#Code').val(),
+                    Parameter_: $('#Parameter_').val(),
                     Value: $('#Value').val(),
                     Description: $('#Description').val(),
                     ParameterType: $('#ParameterType').val(),

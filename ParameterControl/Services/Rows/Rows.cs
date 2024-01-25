@@ -113,7 +113,7 @@ namespace ParameterControl.Services.Rows
             {
                  new Row()
                 {
-                    Value = "Parametre",
+                    Value = "ParameterFormat",
                     Name = "Parametros"
                 },
                 new Row()

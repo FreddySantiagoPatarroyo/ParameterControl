@@ -144,6 +144,10 @@
     width: 100%;
 }
 
+.field .input.input_aditional input{
+    width: calc(100% - 24px);
+}
+
 .oculte {
     margin: 0px;
     padding: 0px;

@@ -131,25 +131,15 @@ namespace ParameterControl.Controllers.Parameters
         }
 
         [HttpGet]
-        public async Task<ActionResult> Edit(string id)
+        public async Task<ActionResult> Edit(int code)
         {
-            Parameter parameter = await parametersService.GetParameterById(id);
+            Parameter parameter = await parametersService.GetParameterByCode(code);
 
             List<SelectListItem> ParameterTypeList = await parametersService.GetParameterType();
             List<SelectListItem> ParameterList = await GetParameters();
 
 
-            ParameterCreateViewModel model = new ParameterCreateViewModel()
-            {
-                Id = parameter.Id,
-                ParameterType = parameter.ParameterType,
-                List = parameter.List,
-                Code = parameter.Code,
-                Value = parameter.Value,
-                Description = parameter.Description,
-                State = parameter.State,
-                CreationDate = parameter.CreationDate
-            };
+            ParameterCreateViewModel model = await parametersService.GetParameterFormatCreate(parameter);
 
             model.ParameterTypeOption = ParameterTypeList;
             model.ListParameter = ParameterList;
@@ -183,27 +173,29 @@ namespace ParameterControl.Controllers.Parameters
         }
 
         [HttpGet]
-        public async Task<ActionResult> View(string id)
+        public async Task<ActionResult> View(int code)
         {
-            Parameter parameter = await parametersService.GetParameterById(id);
+            Parameter parameter = await parametersService.GetParameterByCode(code);
 
-            return View("Actions/ViewParameter", parameter);
+            ParameterViewModel model = await parametersService.GetParameterFormat(parameter);
+
+            return View("Actions/ViewParameter", model);
         }
 
         [HttpGet]
-        public async Task<ActionResult> Active(string id)
+        public async Task<ActionResult> Active(int code)
         {
-            modParameter.Parameter parameter = await parametersService.GetParameterById(id);
+            modParameter.Parameter parameter = await parametersService.GetParameterByCode(code);
 
             return View("Actions/ActiveParameter", parameter);
         }
 
         [HttpPost]
-        public async Task<ActionResult> ActiveParameter([FromBody] string id)
+        public async Task<ActionResult> ActiveParameter([FromBody] int code)
         {
             try
             {
-                modParameter.Parameter request = await parametersService.GetParameterById(id);
+                modParameter.Parameter request = await parametersService.GetParameterByCode(code);
 
                 request.UserOwner = authenticatedUser.GetUserOwnerId();
                 request.UpdateDate = DateTime.Now;
@@ -219,19 +211,19 @@ namespace ParameterControl.Controllers.Parameters
         }
 
         [HttpGet]
-        public async Task<ActionResult> Desactive(string id)
+        public async Task<ActionResult> Desactive(int code)
         {
-            Parameter parameter = await parametersService.GetParameterById(id);
+            Parameter parameter = await parametersService.GetParameterByCode(code);
 
             return View("Actions/DesactiveParameter", parameter);
         }
 
         [HttpPost]
-        public async Task<ActionResult> DesactiveParameter([FromBody] string id)
+        public async Task<ActionResult> DesactiveParameter([FromBody] int code)
         {
             try
             {
-                modParameter.Parameter request = await parametersService.GetParameterById(id);
+                modParameter.Parameter request = await parametersService.GetParameterByCode(code);
 
                 request.UserOwner = authenticatedUser.GetUserOwnerId();
                 request.UpdateDate = DateTime.Now;
@@ -276,7 +268,10 @@ namespace ParameterControl.Controllers.Parameters
         public async Task<List<SelectListItem>> GetParameters()
         {
             List<modParameter.Parameter> parameters = await parametersService.GetListParameter();
-            return parameters.Select(policy => new SelectListItem(policy.Code, policy.Id.ToString())).ToList();
+
+            List<ParameterViewModel> parametersModel = await parametersService.GetParametersFormat(parameters);
+
+            return parametersModel.Select(parameter => new SelectListItem(parameter.ParameterFormat, parameter.Code.ToString())).ToList();
         }
     }
 }

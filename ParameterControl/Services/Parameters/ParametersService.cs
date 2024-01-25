@@ -13,10 +13,10 @@ namespace ParameterControl.Services.Parameters
             parameters = new List<Parameter>()
             {
                 new Parameter(){
-                    Id = "1",
+                    Code = 1,
+                    Parameter_ = "Parameter1",
                     ParameterType = "OTRO",
                     List = "Ejemplo List",
-                    Code = "V_STATUS",
                     Value = "ACT",
                     Description = "Descripcion ejemplo",
                     State = true,
@@ -25,10 +25,10 @@ namespace ParameterControl.Services.Parameters
                     UserOwner = 1
                 },
                 new Parameter(){
-                    Id = "2",
+                    Code = 2,
+                    Parameter_ = "Parameter2",
                     ParameterType = "GENERAL",
                     List = "Ejemplo List",
-                    Code = "V_STATUS",
                     Value = "ACT",
                     Description = "Descripcion ejemplo",
                     State = false,
@@ -37,10 +37,10 @@ namespace ParameterControl.Services.Parameters
                     UserOwner = 1
                 },
                 new Parameter(){
-                    Id = "3",
+                    Code = 3,
+                    Parameter_ = "Parameter3",
                     ParameterType = "GENERAL",
                     List = "Ejemplo List",
-                    Code = "V_STATUS",
                     Value = "ACT",
                     Description = "Descripcion ejemplo",
                     State = true,
@@ -49,10 +49,10 @@ namespace ParameterControl.Services.Parameters
                     UserOwner = 1
                 },
                 new Parameter(){
-                    Id = "4",
+                    Code = 4,
+                    Parameter_ = "Parameter4",
                     ParameterType = "GENERAL",
                     List = "Ejemplo List",
-                    Code = "V_STATUS",
                     Value = "ACT",
                     Description = "Descripcion ejemplo",
                     State = false,
@@ -61,10 +61,10 @@ namespace ParameterControl.Services.Parameters
                     UserOwner = 1
                 },
                 new Parameter(){
-                    Id = "5",
+                    Code = 5,
+                    Parameter_ = "Parameter5",
                     ParameterType = "GENERAL",
                     List = "Ejemplo List",
-                    Code = "V_STATUS",
                     Value = "ACT",
                     Description = "Descripcion ejemplo",
                     State = true,
@@ -73,10 +73,10 @@ namespace ParameterControl.Services.Parameters
                     UserOwner = 1
                 },
                 new Parameter(){
-                    Id = "6",
+                    Code = 6,
+                    Parameter_ = "Parameter6",
                     ParameterType = "GENERAL",
                     List = "Ejemplo List",
-                    Code = "V_STATUS",
                     Description = "Descripcion ejemplo",
                     Value = "ACT",
                     State = false,
@@ -85,10 +85,10 @@ namespace ParameterControl.Services.Parameters
                     UserOwner = 1
                 },
                 new Parameter(){
-                    Id = "7",
+                    Code = 7,
+                    Parameter_ = "Parameter7",
                     ParameterType = "GENERAL",
                     List = "Ejemplo List",
-                    Code = "V_STATUS",
                     Value = "ACT",
                     Description = "Descripcion ejemplo",
                     State = true,
@@ -97,10 +97,10 @@ namespace ParameterControl.Services.Parameters
                     UserOwner = 1
                 },
                 new Parameter(){
-                    Id = "8",
+                    Code = 8,
+                    Parameter_ = "Parameter8",
                     ParameterType = "GENERAL",
                     List = "Ejemplo List",
-                    Code = "GENERAL",
                     Value = "ACT",
                     Description = "Descripcion ejemplo",
                     State = false,
@@ -124,13 +124,13 @@ namespace ParameterControl.Services.Parameters
             {
                 ParameterViewModel parameterModel = new ParameterViewModel();
 
-                parameterModel.Id = parameter.Id;
                 parameterModel.Code = parameter.Code;
                 parameterModel.Value = parameter.Value;
                 parameterModel.Description = parameter.Description;
                 parameterModel.ParameterType = parameter.ParameterType;
                 parameterModel.List = parameter.List;
                 parameterModel.State = parameter.State;
+                parameterModel.ParameterFormat = "V_" + parameter.Parameter_;
                 parameterModel.StateFormat = parameter.State ? "Activo" : "Inactivo";
                 parameterModel.CreationDate = parameter.CreationDate;
                 parameterModel.UpdateDate = parameter.UpdateDate;
@@ -141,9 +141,46 @@ namespace ParameterControl.Services.Parameters
             return parametersModel;
         }
 
-        public async Task<Parameter> GetParameterById(string id)
+        public async Task<ParameterViewModel> GetParameterFormat(modParameter.Parameter parameter)
         {
-            Parameter parameter = parameters.Find(parameter => parameter.Id == id);
+            ParameterViewModel parameterModel = new ParameterViewModel();
+
+            parameterModel.Code = parameter.Code;
+            parameterModel.Parameter_ = parameter.Parameter_;
+            parameterModel.Value = parameter.Value;
+            parameterModel.Description = parameter.Description;
+            parameterModel.ParameterType = parameter.ParameterType;
+            parameterModel.List = parameter.List;
+            parameterModel.State = parameter.State;
+            parameterModel.ParameterFormat = "V_" + parameter.Parameter_;
+            parameterModel.StateFormat = parameter.State ? "Activo" : "Inactivo";
+            parameterModel.CreationDate = parameter.CreationDate;
+            parameterModel.UpdateDate = parameter.UpdateDate;
+
+            return parameterModel;
+        }
+
+        public async Task<ParameterCreateViewModel> GetParameterFormatCreate(modParameter.Parameter parameter)
+        {
+            ParameterCreateViewModel parameterModel = new ParameterCreateViewModel();
+
+            parameterModel.Code = parameter.Code;
+            parameterModel.Parameter_ = parameter.Parameter_;
+            parameterModel.Value = parameter.Value;
+            parameterModel.Description = parameter.Description;
+            parameterModel.ParameterType = parameter.ParameterType;
+            parameterModel.List = parameter.List;
+            parameterModel.ParameterFormat = "V_" + parameter.Parameter_;
+            parameterModel.State = parameter.State;
+            parameterModel.CreationDate = parameter.CreationDate;
+            parameterModel.UpdateDate = parameter.UpdateDate;
+
+            return parameterModel;
+        }
+
+        public async Task<Parameter> GetParameterByCode(int code)
+        {
+            Parameter parameter = parameters.Find(parameter => parameter.Code == code);
             return parameter;
         }
 

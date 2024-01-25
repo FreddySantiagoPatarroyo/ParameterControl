@@ -20,7 +20,7 @@
                 <h1>Editar Parametro</h1>
             </div>
 
-            <input type="hidden" asp-for="Id"/>
+            <input type="hidden" asp-for="Code"/>
             <input type="hidden" asp-for="CreationDate" />
 
             <div class="form_group">
@@ -75,11 +75,11 @@
             </div>
             <div class="form_group">
                 <div class="field">
-                    <label asp-for="Code" class="label_form">Parámetro*</label>
+                    <label asp-for="ParameterFormat" class="label_form">Parámetro*</label>
                     <div class="input">
-                        <input class="code" asp-for="Code" placeholder="CO_AIC_245_FS" autocomplete="off" />
+                        <input asp-for="ParameterFormat" placeholder="CO_AIC_245_FS" autocomplete="off" readonly/>
                     </div>
-                    <span id="CodeError" class="text_error"></span>
+                    <span id="ParameterError" class="text_error"></span>
                 </div>
             </div>
 
@@ -87,7 +87,7 @@
                 <div class="field">
                     <label asp-for="Value" class="label_form">Valor*</label>
                     <div class="input">
-                        <input class="description" asp-for="Value" placeholder="Digite el valor del parametro" autocomplete="off" />
+                        <input asp-for="Value" placeholder="Digite el valor del parametro" autocomplete="off" />
                     </div>
                     <span id="ValueError" class="text_error"></span>
                 </div>
@@ -97,7 +97,7 @@
                 <div class="field">
                     <label asp-for="Description" class="label_form">Descripción*</label>
                     <div class="textarea">
-                        <textarea class="objective" asp-for="Description" placeholder="Digite la descripción" autocomplete="off"></textarea>
+                        <textarea asp-for="Description" placeholder="Digite la descripción" autocomplete="off"></textarea>
                     </div>
                     <span id="DescriptionError" class="text_error"></span>
                 </div>
@@ -200,25 +200,26 @@
     <script>
         const urlParameter = '@Url.Action("Edit")';
         let data;
-        let isValidCode = false;
+        let isValidPatameter = false;
         let isValidValue = false;
         let isValidDescription = false;
         let isValidParameterType = false;
         let isValidList = false;
 
         const sendData = async () => {
-            isValidCode = validateInputEmpty("Code", "El parametro es requerido", "CodeError");
+            isValidPatameter = validateInputEmpty("Parameter_", "El parametro es requerido", "ParameterError");
             isValidValue = validateInputEmpty("Value", "El valor es requerido", "ValueError");
             isValidDescription = validateInputEmpty("Description", "La descripcion es requerido", "DescriptionError");
             isValidParameterType = validateInputEmpty("ParameterType", "El tipo de parametro es requerido", "ParameterTypeError");
             isValidList = validateInputEmpty("List", "La lista es requerido", "ListError");
 
-            if (isValidCode && isValidValue && isValidDescription && isValidParameterType && isValidList) {
+            if (isValidPatameter && isValidValue && isValidDescription && isValidParameterType && isValidList) {
                 document.getElementById('btn_container').style.display = 'none';
                 document.getElementById('loading').style.display = 'flex';
 
                 data = {
                     Code: $('#Code').val(),
+                    Parameter_: $('#Parameter_').val(),
                     Value: $('#Value').val(),
                     Description: $('#Description').val(),
                     ParameterType: $('#ParameterType').val(),

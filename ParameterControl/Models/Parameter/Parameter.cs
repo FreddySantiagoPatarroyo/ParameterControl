@@ -6,10 +6,10 @@ namespace ParameterControl.Models.Parameter
 {
     public class Parameter:GeneralData
     {
-        public string Id { get; set; } = string.Empty;
+        public int Code { get; set; }
 
         [Required(ErrorMessage = "El parametro es requerido")]
-        public string Code { get; set; } = string.Empty;
+        public string Parameter_ { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "El valor es requerido")]
         public string Value { get; set; } = string.Empty;

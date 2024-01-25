@@ -9,8 +9,10 @@ namespace ParameterControl.Services.Parameters
         Task<List<SelectListItem>> GetParameterType();
         Task<List<Parameter>> GetListParameter();
         Task<List<Parameter>> GetParameters();
-        Task<Parameter> GetParameterById(string id);
+        Task<Parameter> GetParameterByCode(int code);
         Task<List<ParameterViewModel>> GetFilterParameters(FilterViewModel filterModel);
         Task<List<ParameterViewModel>> GetParametersFormat(List<Parameter> parameters);
+        Task<ParameterViewModel> GetParameterFormat(Parameter parameter);
+        Task<ParameterCreateViewModel> GetParameterFormatCreate(Parameter parameter);
     }
 }
