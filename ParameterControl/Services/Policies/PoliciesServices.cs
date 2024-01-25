@@ -29,10 +29,9 @@ namespace ParameterControl.Services.Policies
             policies = new List<modPolicy.Policy>()
             {
                 new modPolicy.Policy(){
-                    Id = "1",
-                    Code = "COD_001",
+                    Code = 1,
                     Name = "Politica_1",
-                    Description = "Descripcion ejemplo",
+                    Description = "Descripcion ejemplo asdasdasdasdasdasdasdasdasdadasdasdasdasdads",
                     Conciliation = 123,
                     ControlType = "Voz",
                     OperationType = "OperationType_1asdasdasdasdasdadasdasdasdad",
@@ -42,8 +41,7 @@ namespace ParameterControl.Services.Policies
                     UserOwner = 1
                 },
                 new modPolicy.Policy(){
-                    Id = "2",
-                    Code = "COD_006",
+                    Code = 2,
                     Name = "Name",
                     Description = "Description",
                     Conciliation = 123,
@@ -55,8 +53,7 @@ namespace ParameterControl.Services.Policies
                     UserOwner = 1
                 },
                 new modPolicy.Policy(){
-                    Id = "3",
-                    Code = "COD_001",
+                    Code = 3,
                     Name = "Politica_1",
                     Description = "Descripcion ejemplo",
                     Conciliation = 123,
@@ -68,8 +65,7 @@ namespace ParameterControl.Services.Policies
                     UserOwner = 1
                 },
                 new modPolicy.Policy(){
-                    Id = "4",
-                    Code = "COD_006",
+                    Code = 4,
                     Name = "Name",
                     Description = "Description",
                     Conciliation = 123,
@@ -81,8 +77,7 @@ namespace ParameterControl.Services.Policies
                     UserOwner = 1
                 },
                 new modPolicy.Policy(){
-                    Id = "5",
-                    Code = "COD_001",
+                    Code = 5,
                     Name = "Politica_1",
                     Description = "Descripcion ejemplo",
                     Conciliation = 123,
@@ -94,8 +89,7 @@ namespace ParameterControl.Services.Policies
                     UserOwner = 1
                 },
                 new modPolicy.Policy(){
-                    Id = "6",
-                    Code = "COD_006",
+                    Code = 6,
                     Name = "Name",
                     Description = "Description",
                     Conciliation = 123,
@@ -107,8 +101,7 @@ namespace ParameterControl.Services.Policies
                     UserOwner = 1
                 },
                 new modPolicy.Policy(){
-                    Id = "7",
-                    Code = "COD_001",
+                    Code = 7,
                     Name = "Politica_1",
                     Description = "Descripcion ejemplo",
                     Conciliation = 123,
@@ -120,8 +113,7 @@ namespace ParameterControl.Services.Policies
                     UserOwner = 1
                 },
                 new modPolicy.Policy(){
-                    Id = "8",
-                    Code = "",
+                    Code = 8,
                     Name = "Name",
                     Description = "Description",
                     Conciliation = 123,
@@ -162,7 +154,6 @@ namespace ParameterControl.Services.Policies
             {
                 PolicyViewModel policyModel = new PolicyViewModel();
 
-                policyModel.Id = policy.Id;
                 policyModel.Code = policy.Code;
                 policyModel.Name = policy.Name; 
                 policyModel.Description = policy.Description;
@@ -170,6 +161,7 @@ namespace ParameterControl.Services.Policies
                 policyModel.ControlType = policy.ControlType;
                 policyModel.OperationType = policy.OperationType;
                 policyModel.State = policy.State;
+                policyModel.CodeFormat = "PO_" + policy.Code;
                 policyModel.StateFormat = policy.State ? "Activo" : "Inactivo";
                 policyModel.CreationDate = policy.CreationDate;
                 policyModel.UpdateDate = policy.UpdateDate;
@@ -180,9 +172,48 @@ namespace ParameterControl.Services.Policies
             return policiesModel;
         }
 
-        public async Task<modPolicy.Policy> GetPolicyById(string id)
+        public async Task<PolicyViewModel> GetPolicyFormat(modPolicy.Policy policy)
         {
-            modPolicy.Policy policy = policies.Find(policy => policy.Id == id);
+            
+            PolicyViewModel policyModel = new PolicyViewModel();
+
+            policyModel.Code = policy.Code;
+            policyModel.Name = policy.Name;
+            policyModel.Description = policy.Description;
+            policyModel.Conciliation = policy.Conciliation;
+            policyModel.ControlType = policy.ControlType;
+            policyModel.OperationType = policy.OperationType;
+            policyModel.State = policy.State;
+            policyModel.CodeFormat = "PO_" + policy.Code;
+            policyModel.StateFormat = policy.State ? "Activo" : "Inactivo";
+            policyModel.CreationDate = policy.CreationDate;
+            policyModel.UpdateDate = policy.UpdateDate;
+
+            return policyModel;
+        }
+
+        public async Task<PolicyCreateViewModel> GetPolicyFormatCreate(modPolicy.Policy policy)
+        {
+
+            PolicyCreateViewModel policyModel = new PolicyCreateViewModel();
+
+            policyModel.Code = policy.Code;
+            policyModel.Name = policy.Name;
+            policyModel.Description = policy.Description;
+            policyModel.Conciliation = policy.Conciliation;
+            policyModel.ControlType = policy.ControlType;
+            policyModel.OperationType = policy.OperationType;
+            policyModel.State = policy.State;
+            policyModel.CodeFormat = "PO_" + policy.Code;
+            policyModel.CreationDate = policy.CreationDate;
+            policyModel.UpdateDate = policy.UpdateDate;
+
+            return policyModel;
+        }
+
+        public async Task<modPolicy.Policy> GetPolicyByCode(int code)
+        {
+            modPolicy.Policy policy = policies.Find(policy => policy.Code == code);
             return policy;
         }
 
@@ -192,7 +223,8 @@ namespace ParameterControl.Services.Policies
             {
                 var policy = new ent.PolicyModel
                 {
-                    Code = request.Code,
+                    //Code = request.Code,
+                    Code = "",
                     Name = request.Name,
                     Description = request.Description,
                     CreationDate = DateTime.Now,

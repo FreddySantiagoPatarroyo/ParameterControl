@@ -10,7 +10,7 @@ namespace ParameterControl.Services.Rows
             {
                  new Row()
                 {
-                    Value = "Code",
+                    Value = "CodeFormat",
                     Name = "Codigo"
                 },
                 new Row()
@@ -311,11 +311,6 @@ namespace ParameterControl.Services.Rows
                 {
                     Value = "EndDate",
                     Name = "Fecha Fin"
-                },
-                new Row()
-                {
-                    Value = "StartDate",
-                    Name = "Fecha Inicio"
                 },
                 new Row()
                 {

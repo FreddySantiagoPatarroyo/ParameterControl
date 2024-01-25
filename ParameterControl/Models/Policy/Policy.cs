@@ -6,10 +6,7 @@ namespace ParameterControl.Models.Policy
 {
     public class Policy: GeneralData
     {
-        public string Id { get; set; } = string.Empty;
-
-        [Required(ErrorMessage = "El codigo es requerido")]
-        public string Code { get; set; } = string.Empty;
+        public int Code { get; set; }
 
         [Required(ErrorMessage = "El nombre es requerido")]
         public string Name { get; set; } = string.Empty;

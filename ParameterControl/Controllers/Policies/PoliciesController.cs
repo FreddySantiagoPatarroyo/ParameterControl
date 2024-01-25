@@ -131,11 +131,13 @@ namespace ParameterControl.Controllers.Policies
         }
 
         [HttpGet]
-        public async Task<ActionResult> Edit(string id)
+        public async Task<ActionResult> Edit(int code)
         {
-            modPolicy.Policy policy = await policiesServices.GetPolicyById(id);
+            modPolicy.Policy policy = await policiesServices.GetPolicyByCode(code);
 
-            return View("Actions/EditPolicy", policy);
+            PolicyCreateViewModel model = await policiesServices.GetPolicyFormatCreate(policy);
+
+            return View("Actions/EditPolicy", model);
         }
 
         [HttpPost]
@@ -164,27 +166,29 @@ namespace ParameterControl.Controllers.Policies
         }
 
         [HttpGet]
-        public async Task<ActionResult> View(string id)
+        public async Task<ActionResult> View(int code)
         {
-            modPolicy.Policy policy = await policiesServices.GetPolicyById(id);
+            modPolicy.Policy policy = await policiesServices.GetPolicyByCode(code);
 
-            return View("Actions/ViewPolicy", policy);
+            PolicyViewModel model = await policiesServices.GetPolicyFormat(policy);
+
+            return View("Actions/ViewPolicy", model);
         }
 
         [HttpGet]
-        public async Task<ActionResult> Active(string id)
+        public async Task<ActionResult> Active(int code)
         {
-            modPolicy.Policy policy = await policiesServices.GetPolicyById(id);
+            modPolicy.Policy policy = await policiesServices.GetPolicyByCode(code);
 
             return View("Actions/ActivePolicy", policy);
         }
 
         [HttpPost]
-        public async Task<ActionResult> ActivePolicy([FromBody] string id)
+        public async Task<ActionResult> ActivePolicy([FromBody] int code)
         {
             try
             {
-                modPolicy.Policy request = await policiesServices.GetPolicyById(id);
+                modPolicy.Policy request = await policiesServices.GetPolicyByCode(code);
                 request.UserOwner = authenticatedUser.GetUserOwnerId();
                 request.UpdateDate = DateTime.Now;
                 request.State = true;
@@ -199,19 +203,19 @@ namespace ParameterControl.Controllers.Policies
         }
 
         [HttpGet]
-        public async Task<ActionResult> Desactive(string id)
+        public async Task<ActionResult> Desactive(int code)
         {
-            modPolicy.Policy policy = await policiesServices.GetPolicyById(id);
+            modPolicy.Policy policy = await policiesServices.GetPolicyByCode(code);
 
             return View("Actions/DesactivePolicy", policy);
         }
 
         [HttpPost]
-        public async Task<ActionResult> DesactivePolicy([FromBody] string id)
+        public async Task<ActionResult> DesactivePolicy([FromBody] int code)
         {
             try
             {
-                modPolicy.Policy request = await policiesServices.GetPolicyById(id);
+                modPolicy.Policy request = await policiesServices.GetPolicyByCode(code);
                 request.UserOwner = authenticatedUser.GetUserOwnerId();
                 request.UpdateDate = DateTime.Now;
                 request.State = true;

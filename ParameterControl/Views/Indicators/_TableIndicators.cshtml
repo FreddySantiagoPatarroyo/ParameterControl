@@ -6,7 +6,7 @@
 @{
     PropertyInfo GetRowInfo(string RowValue)
     {
-        var property = typeof(Indicator).GetProperty(RowValue);
+        var property = typeof(IndicatorViewModel).GetProperty(RowValue);
 
         return property;
     }

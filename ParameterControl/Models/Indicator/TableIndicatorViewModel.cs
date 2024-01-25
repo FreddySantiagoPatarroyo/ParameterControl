@@ -4,7 +4,7 @@ namespace ParameterControl.Models.Indicator
 {
     public class TableIndicatorViewModel
     {
-        public List<Indicator> Data { get; set; } = new List<Indicator>();
+        public List<IndicatorViewModel> Data { get; set; } = new List<IndicatorViewModel>();
         public List<Row> Rows { get; set; } = new List<Row>();
         public bool IsCreate { get; set; } = false;
         public bool IsEdit { get; set; } = false;

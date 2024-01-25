@@ -284,7 +284,7 @@ namespace ParameterControl.Controllers.Conciliations
         public async Task<List<SelectListItem>> GetPolicies()
         {
             List<modPolicy.Policy> policies = await policiesServices.GetPolicies();
-            return policies.Select(policy => new SelectListItem(policy.Name, policy.Id.ToString())).ToList();
+            return policies.Select(policy => new SelectListItem(policy.Name, policy.Code.ToString())).ToList();
         }
     }
 }

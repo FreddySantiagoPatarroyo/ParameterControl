@@ -6,6 +6,8 @@ using ParameterControl.Services.Rows;
 using modIndicator = ParameterControl.Models.Indicator;
 using ParameterControl.Services.Results;
 using Newtonsoft.Json;
+using ParameterControl.Services.Authenticated;
+using ParameterControl.Models.User;
 
 
 namespace ParameterControl.Controllers.Indicators
@@ -16,23 +18,27 @@ namespace ParameterControl.Controllers.Indicators
         private readonly ILogger<HomeController> _logger;
         private readonly IIndicatorsService indicatorsService;
         private readonly Rows rows;
+        private readonly AuthenticatedUser authenticatedUser;
 
         public IndicatorsController(
             ILogger<HomeController> logger,
             IIndicatorsService indicatorsService,
-            Rows rows
+            Rows rows,
+            AuthenticatedUser authenticatedUser
         )
         {
             this._logger = logger;
             this.indicatorsService = indicatorsService;
             this.rows = rows;
+            this.authenticatedUser = authenticatedUser;
         }
 
         [HttpGet]
         public async Task<ActionResult> Indicators()
         {
+            List<Indicator> indicators = await indicatorsService.GetIndicators();
 
-            TableIndicators.Data = await indicatorsService.GetIndicators();
+            TableIndicators.Data = await indicatorsService.GetindicatorsFormat(indicators);
 
             TableIndicators.Rows = rows.RowsIndicators();
 
@@ -64,7 +70,7 @@ namespace ParameterControl.Controllers.Indicators
                 ValueFilter = filterValue
             };
 
-            List<Indicator> indicatorsFilter = await indicatorsService.GetFilterIndicators(filter);
+            List<IndicatorViewModel> indicatorsFilter = await indicatorsService.GetFilterIndicators(filter);
 
             TableIndicators.Data = indicatorsFilter;
 
@@ -81,12 +87,12 @@ namespace ParameterControl.Controllers.Indicators
         }
 
         [HttpGet]
-        public async Task<ActionResult> Create(string id)
+        public async Task<ActionResult> Create()
         {
 
-            Indicator indicator = await indicatorsService.GetIndicatorsById(id);
+            IndicatorCreationViewModel model = new IndicatorCreationViewModel();
 
-            return View("Actions/CreateIndicators", indicator);
+            return View("Actions/CreateIndicators", model);
         }
 
         [HttpPost]
@@ -101,6 +107,9 @@ namespace ParameterControl.Controllers.Indicators
             {
                 try
                 {
+                    request.UserOwner = authenticatedUser.GetUserOwnerId();
+                    request.CreationDate = DateTime.Now;
+                    request.UpdateDate = DateTime.Now;
                     _logger.LogInformation($"Inicia método IndicatorsController.Create {JsonConvert.SerializeObject(request)}");
                     return Ok(new { message = "Se creo el indicador de manera exitosa", state = "Success" });
                 }
@@ -117,7 +126,19 @@ namespace ParameterControl.Controllers.Indicators
         {
             Indicator indicator = await indicatorsService.GetIndicatorsById(id);
 
-            return View("Actions/EditIndicators", indicator);
+            IndicatorCreationViewModel model = new IndicatorCreationViewModel()
+            {
+                Id = indicator.Id,
+                Name = indicator.Name,
+                Description = indicator.Description,
+                Formula = indicator.Formula,
+                Scenery = indicator.Scenery,
+                Parameter = indicator.Parameter,
+                State = indicator.State,
+                CreationDate = indicator.CreationDate
+            };
+
+            return View("Actions/EditIndicators", model);
         }
 
         [HttpPost]
@@ -132,6 +153,8 @@ namespace ParameterControl.Controllers.Indicators
             {
                 try
                 {
+                    request.UserOwner = authenticatedUser.GetUserOwnerId();
+                    request.UpdateDate = DateTime.Now;
                     _logger.LogInformation($"Inicia método IndicatorsController.Edit {JsonConvert.SerializeObject(request)}");
                     return Ok(new { message = "Se actualizo el indicador de manera exitosa", state = "Success" });
                 }
@@ -160,10 +183,14 @@ namespace ParameterControl.Controllers.Indicators
         }
 
         [HttpPost]
-        public async Task<ActionResult> ActiveIndicator([FromBody] string request)
+        public async Task<ActionResult> ActiveIndicator([FromBody] string id)
         {
             try
             {
+                modIndicator.Indicator request = await indicatorsService.GetIndicatorsById(id);
+                request.UserOwner = authenticatedUser.GetUserOwnerId();
+                request.UpdateDate = DateTime.Now;
+                request.State = true;
                 _logger.LogInformation($"Inicia método IndicatorsController.Active {JsonConvert.SerializeObject(request)}");
                 return Ok(new { message = "Se activo el indicador de manera exitosa", state = "Success" });
             }
@@ -183,10 +210,14 @@ namespace ParameterControl.Controllers.Indicators
         }
 
         [HttpPost]
-        public async Task<ActionResult> DesactiveIndicator([FromBody] string request)
+        public async Task<ActionResult> DesactiveIndicator([FromBody] string id)
         {
             try
             {
+                modIndicator.Indicator request = await indicatorsService.GetIndicatorsById(id);
+                request.UserOwner = authenticatedUser.GetUserOwnerId();
+                request.UpdateDate = DateTime.Now;
+                request.State = false;
                 _logger.LogInformation($"Inicia método IndicatorsController.Desactive {JsonConvert.SerializeObject(request)}");
                 return Ok(new { message = "Se desactivo el indicador de manera exitosa", state = "Success" });
             }

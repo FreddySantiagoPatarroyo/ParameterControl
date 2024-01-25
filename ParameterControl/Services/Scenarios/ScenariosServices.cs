@@ -213,6 +213,7 @@ namespace ParameterControl.Services.Scenarios
 
             return impact;
         }
+
         public async Task<List<modConciliation.Conciliation>> GetConciliation()
         {
             List<modConciliation.Conciliation> conciliation = await conciliationsServices.GetConciliations();
