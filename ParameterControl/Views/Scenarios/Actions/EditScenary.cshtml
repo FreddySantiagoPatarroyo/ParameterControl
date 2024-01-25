@@ -21,14 +21,14 @@
                 <h1>Editar Escenario</h1>
             </div>
 
-            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="Code" />
             <input type="hidden" asp-for="CreationDate" />
 
-            <div class="form_group">
+           <div class="form_group">
                 <div class="field">
-                    <label asp-for="Code" class="label_form">Código*</label>
+                    <label asp-for="CodeFormat" class="label_form">Código*</label>
                     <div class="input">
-                        <input asp-for="Code" placeholder="Codigo" />
+                        <input asp-for="CodeFormat" placeholder="Codigo" />
                     </div>
                     <span id="CodeError" class="text_error"></span>
                 </div>
@@ -214,7 +214,6 @@
                 document.getElementById('loading').style.display = 'flex';
 
                 data = {
-                    Id: $('#Id').val(),
                     Code: $('#Code').val(),
                     Name: $('#Name').val(),
                     Impact: $('#Inpact').val(),

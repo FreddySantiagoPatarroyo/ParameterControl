@@ -27,9 +27,9 @@
 
             <div class="form_group">
                 <div class="field">
-                    <label asp-for="Code" class="label_form">Código*</label>
+                    <label asp-for="CodeFormat" class="label_form">Código*</label>
                     <div class="input">
-                        <input asp-for="Code" placeholder="Digite el codigo"/>
+                        <input asp-for="CodeFormat" placeholder="Digite el codigo" />
                     </div>
                     <span id="CodeError" class="text_error"></span>
                 </div>
@@ -241,10 +241,8 @@
             if (isValidCode && isValidName && isValidPackage && isValidEmail && isValidPolicies && isValidRequired) {
                 document.getElementById('btn_container').style.display = 'none';
                 document.getElementById('loading').style.display = 'flex';
-                
-                @{
-                    DateTime CreationDate = Model.CreationDate;
-                }
+
+                console.log($("#CreationDate").val());
 
                 data = {
                     Code: $('#Code').val(),
