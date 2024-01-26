@@ -21,10 +21,10 @@
                 <h1>Crear Usuario</h1>
             </div>
 
-            <input type="hidden" asp-for="Id"/>
+            <input type="hidden" asp-for="Code"/>
             <input type="hidden" asp-for="CreationDate"/>
 
-            <div class="form_group">
+          @*   <div class="form_group">
                 <div class="field">
                     <label asp-for="Code" class="label_form">Código usuario*</label>
                     <div class="input">
@@ -32,7 +32,7 @@
                     </div>
                     <span id="CodeError" class="text_error"></span>
                 </div>
-            </div>
+            </div> *@
             <div class="form_group">
                 <div class="field">
                     <label asp-for="User_" class="label_form">Usuario*</label>
@@ -102,7 +102,7 @@
     <script>
         const urlUser = '@Url.Action("CreateUser")';
         let data;
-        let isValidCode = false;
+        // let isValidCode = false;
         let isValidUser_ = false;
         let isValidEmail = false;
         let isValidName = false;
@@ -110,20 +110,19 @@
         // let isValidUpdateDate = false;
 
         const sendData = async () => {
-            isValidCode = validateInputEmpty("Code", "El codigo de usuario es requerido", "CodeError");
+            // isValidCode = validateInputEmpty("Code", "El codigo de usuario es requerido", "CodeError");
             isValidUser_ = validateInputEmpty("User_", "El usuario es requerido", "User_Error");
             isValidEmail = validateInputEmpty("Email", "El email es requerido", "EmailError");
             isValidName = validateInputEmpty("Name", "El nombre de usuario es requerido", "NameError");
             // isValidCreationDate = validateInputEmpty("CreationDate", "La fecha de creación es requerida", "CreationDateError");
             // isValidUpdateDate = validateInputEmpty("UpdateDate", "La fecha de actualización es requerida", "UpdateDateError");
 
-            if (isValidCode && isValidUser_ && isValidEmail && isValidName) {
+            if (isValidUser_ && isValidEmail && isValidName) {
                 document.getElementById('btn_container').style.display = 'none';
                 document.getElementById('loading').style.display = 'flex';
 
                 data = {
-                    Id: $('#Id').val(),
-                    Code: $('#Code').val(),
+                    // Code: $('#Code').val(),
                     User_: $('#User_').val(),
                     Email: $('#Email').val(),
                     Name: $('#Name').val(),

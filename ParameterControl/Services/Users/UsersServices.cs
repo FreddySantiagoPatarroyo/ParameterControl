@@ -2,6 +2,8 @@
 using ParameterControl.Models.Filter;
 using ParameterControl.Models.User;
 using modUser = ParameterControl.Models.User;
+using ParameterControl.Models.Policy;
+using ParameterControl.Policy.Entities;
 
 namespace ParameterControl.Services.Users
 {
@@ -13,8 +15,7 @@ namespace ParameterControl.Services.Users
             users = new List<User>()
             {
                 new User(){
-                   Id = "1",
-                   Code = "COD_001",
+                   Code = 1,
                    User_ = "EjemploUsuario",
                    Email = "ejemplo@gmail.com",
                    Name = "name1",
@@ -24,8 +25,7 @@ namespace ParameterControl.Services.Users
                     UserOwner = 1
                 },
                  new User(){
-                   Id = "2",
-                   Code = "COD_002",
+                   Code = 2,
                    User_ = "EjemploUsuario",
                    Email = "ejemplo@gmail.com",
                    Name = "name2",
@@ -35,8 +35,7 @@ namespace ParameterControl.Services.Users
                     UserOwner = 1
                 },
                   new User(){
-                   Id = "3",
-                   Code = "COD_003",
+                   Code = 3,
                    User_ = "EjemploUsuario",
                    Email = "ejemplo@gmail.com",
                    Name = "name3",
@@ -46,8 +45,7 @@ namespace ParameterControl.Services.Users
                     UserOwner = 1
                 },
                    new User(){
-                   Id = "4",
-                   Code = "COD_004",
+                   Code = 4,
                    User_ = "EjemploUsuario1",
                    Email = "ejemplo@gmail.com",
                    Name = "name4",
@@ -57,8 +55,7 @@ namespace ParameterControl.Services.Users
                     UserOwner = 1
                 },
                     new User(){
-                   Id = "5",
-                   Code = "COD_005",
+                   Code = 5,
                    User_ = "EjemploUsuario1",
                    Email = "ejemplo@gmail.com",
                    Name = "name5",
@@ -84,12 +81,12 @@ namespace ParameterControl.Services.Users
             {
                 UserViewModel userModel = new UserViewModel();
 
-                userModel.Id = user.Id;
                 userModel.Code = user.Code;
                 userModel.User_ = user.User_;
                 userModel.Email = user.Email;
                 userModel.Name = user.Name;
                 userModel.State = user.State;
+                userModel.CodeFormat = "COD_" + user.Code;
                 userModel.StateFormat = user.State ? "Activo" : "Inactivo";
                 userModel.CreationDate = user.CreationDate;
                 userModel.UpdateDate = user.UpdateDate;
@@ -100,9 +97,42 @@ namespace ParameterControl.Services.Users
             return UsersModel;
         }
 
-        public async Task<User> GetUsersById(string id)
+        public async Task<UserViewModel> GetUserFormat(modUser.User user)
         {
-            User user = users.Find(user => user.Id == id);
+                UserViewModel userModel = new UserViewModel();
+
+                userModel.Code = user.Code;
+                userModel.User_ = user.User_;
+                userModel.Email = user.Email;
+                userModel.Name = user.Name;
+                userModel.State = user.State;
+                userModel.CodeFormat = "COD_" + user.Code;
+                userModel.StateFormat = user.State ? "Activo" : "Inactivo";
+                userModel.CreationDate = user.CreationDate;
+                userModel.UpdateDate = user.UpdateDate;        
+
+            return userModel;
+        }
+
+        public async Task<UserCreateViewModel> GetUserFormatCreate(modUser.User user)
+        {
+            UserCreateViewModel userModel = new UserCreateViewModel();
+
+            userModel.Code = user.Code;
+            userModel.User_ = user.User_;
+            userModel.Email = user.Email;
+            userModel.Name = user.Name;
+            userModel.State = user.State;
+            userModel.CodeFormat = "COD_" + user.Code;
+            userModel.CreationDate = user.CreationDate;
+            userModel.UpdateDate = user.UpdateDate;
+
+            return userModel;
+        }
+
+        public async Task<User> GetUsersByCode(int code)
+        {
+            User user = users.Find(user => user.Code == code);
             return user;
         }
 
