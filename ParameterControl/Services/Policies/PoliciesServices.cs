@@ -252,17 +252,18 @@ namespace ParameterControl.Services.Policies
 
         public async Task<List<PolicyViewModel>> GetFilterPolicies(FilterViewModel filterModel)
         {
-            List<modPolicy.Policy> policiesFilter = new List<modPolicy.Policy>();
+            List<modPolicy.Policy> allPolicies = await GetPolicies();
+            List<PolicyViewModel> policiesFilter = await GetPolicesFormat(allPolicies);
 
-            if((filterModel.ColumValue == null || filterModel.ColumValue == "" || filterModel.ValueFilter == null || filterModel.ValueFilter == ""))
+            if(filterModel.ColumValue == null || filterModel.ColumValue == "" || filterModel.ValueFilter == null || filterModel.ValueFilter == "")
             {
-                policiesFilter = await GetPolicies();
+                return policiesFilter;
             }
             else
             {
                 switch (filterModel.ColumValue)
                 {
-                    case "Code":
+                    case "CodeFormat":
                         policiesFilter = await applyFilter(filterModel, policiesFilter);
                         break;
                     case "Name":
@@ -283,23 +284,27 @@ namespace ParameterControl.Services.Policies
                     case "StateFormat":
                         policiesFilter = await applyFilter(filterModel, policiesFilter);
                         break;
+                    case "CreationDate":
+                        policiesFilter = await applyFilter(filterModel, policiesFilter);
+                        break;
+                    case "UpdateDate":
+                        policiesFilter = await applyFilter(filterModel, policiesFilter);
+                        break;
                     default:
                         break;
                 }
             }
 
-            return await GetPolicesFormat(policiesFilter);
+            return policiesFilter;
         }
 
-        private async Task<List<modPolicy.Policy>> applyFilter(FilterViewModel filterModel, List<modPolicy.Policy> listPolicies)
+        private async Task<List<PolicyViewModel>> applyFilter(FilterViewModel filterModel, List<PolicyViewModel> allPolicies)
         {
-            var property = typeof(modPolicy.Policy).GetProperty(filterModel.ColumValue);
+            var property = typeof(PolicyViewModel).GetProperty(filterModel.ColumValue);
 
-            List<modPolicy.Policy> policiesFilter = new List<modPolicy.Policy>();
+            List<PolicyViewModel> policiesFilter = new List<PolicyViewModel>();
 
-            List<modPolicy.Policy> Policies = await GetPolicies();
-
-            foreach (modPolicy.Policy policy in Policies)
+            foreach (PolicyViewModel policy in allPolicies)
             {
                 if (property.GetValue(policy).ToString().ToUpper().Contains(filterModel.ValueFilter.ToUpper()))
                 {
