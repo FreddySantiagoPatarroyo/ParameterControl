@@ -136,23 +136,24 @@ namespace ParameterControl.Controllers.Scenarios
         }
 
         [HttpGet]
-        public async Task<ActionResult> Edit(string id)
+        public async Task<ActionResult> Edit(int code)
         {
-            modScenery.Scenery scenery = await scenariosServices.GetSceneryById(id);
+            modScenery.Scenery scenery = await scenariosServices.GetSceneryByCode(code);
 
             List<SelectListItem> ImpactOptionsList = await scenariosServices.GetImpact();
             List<SelectListItem> ConciliationOptionsList = await GetConciliation();
 
-            SceneryCreateViewModel model = new SceneryCreateViewModel()
-            {
-                Id = scenery.Id,
-                Code = scenery.Code,
-                Name = scenery.Name,
-                Impact = scenery.Impact,
-                Conciliation = scenery.Conciliation,
-                State = scenery.State,
-                CreationDate = scenery.CreationDate
-            };
+            SceneryCreateViewModel model = await scenariosServices.GetSceneryFormatCreate(scenery);
+
+            //SceneryCreateViewModel model = new SceneryCreateViewModel()
+            //{
+            //    Code = scenery.Code,
+            //    Name = scenery.Name,
+            //    Impact = scenery.Impact,
+            //    Conciliation = scenery.Conciliation,
+            //    State = scenery.State,
+            //    CreationDate = scenery.CreationDate
+            //};
 
             model.ImpactOptions = ImpactOptionsList;
             model.ConciliationOptions = ConciliationOptionsList;
@@ -186,27 +187,27 @@ namespace ParameterControl.Controllers.Scenarios
         }
 
         [HttpGet]
-        public async Task<ActionResult> View(string id)
+        public async Task<ActionResult> View(int code)
         {
-            Scenery scenery = await scenariosServices.GetSceneryById(id);
+            Scenery scenery = await scenariosServices.GetSceneryByCode(code);
 
             return View("Actions/ViewScenery", scenery);
         }
 
         [HttpGet]
-        public async Task<ActionResult> Active(string id)
+        public async Task<ActionResult> Active(int code)
         {
-            modScenery.Scenery scenery = await scenariosServices.GetSceneryById(id);
+            modScenery.Scenery scenery = await scenariosServices.GetSceneryByCode(code);
 
             return View("Actions/ActiveScenery", scenery);
         }
 
         [HttpPost]
-        public async Task<ActionResult> ActiveScenery([FromBody] string id)
+        public async Task<ActionResult> ActiveScenery([FromBody] int code)
         {
             try
             {
-                Scenery request = await scenariosServices.GetSceneryById(id);
+                Scenery request = await scenariosServices.GetSceneryByCode(code);
                 request.UserOwner = authenticatedUser.GetUserOwnerId();
                 request.UpdateDate = DateTime.Now;
                 request.State = true;
@@ -221,19 +222,19 @@ namespace ParameterControl.Controllers.Scenarios
         }
 
         [HttpGet]
-        public async Task<ActionResult> Desactive(string id)
+        public async Task<ActionResult> Desactive(int code)
         {
-            modScenery.Scenery scenery = await scenariosServices.GetSceneryById(id);
+            modScenery.Scenery scenery = await scenariosServices.GetSceneryByCode(code);
 
             return View("Actions/DesactiveScenery", scenery);
         }
 
         [HttpPost]
-        public async Task<ActionResult> DesactiveScenery([FromBody] string id)
+        public async Task<ActionResult> DesactiveScenery([FromBody] int code)
         {
             try
             {
-                Scenery request = await scenariosServices.GetSceneryById(id);
+                Scenery request = await scenariosServices.GetSceneryByCode(code);
                 request.UserOwner = authenticatedUser.GetUserOwnerId();
                 request.UpdateDate = DateTime.Now;
                 request.State = false;

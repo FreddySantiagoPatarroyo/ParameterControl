@@ -154,7 +154,7 @@
         const FormatDate = (date) => {
 
             const validateAm = date.toString().includes("a. m.");
-            const validatePm = date.includes("p. m.");
+            const validatePm = date.toString().includes("p. m.");
 
             if (validateAm) {
                 date = date.replace("a. m.", "AM")

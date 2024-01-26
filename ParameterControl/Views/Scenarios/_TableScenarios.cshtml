@@ -99,13 +99,13 @@
                                             </div>
                                         }
                                         <div class="row_table flex_box actions">
-                                            <a class="button_icon button_primary" title="Ver" asp-controller="Scenarios" asp-action="View" asp-route-id="@Scenary.Id">
+                                            <a class="button_icon button_primary" title="Ver" asp-controller="Scenarios" asp-action="View" asp-route-code="@Scenary.Code">
                                                 <i class="icon icon_041"></i>
                                             </a>
-                                            <a class="button_icon button_primary" title="Editar" asp-controller="Scenarios" asp-action="Edit" asp-route-id="@Scenary.Id">
+                                            <a class="button_icon button_primary" title="Editar" asp-controller="Scenarios" asp-action="Edit" asp-route-code="@Scenary.Code">
                                                 <i class="icon icon_106"></i>
                                             </a>
-                                            <a class="button_icon button_primary" title="Inactivar" asp-controller="Scenarios" asp-action="Desactive" asp-route-id="@Scenary.Id">
+                                            <a class="button_icon button_primary" title="Inactivar" asp-controller="Scenarios" asp-action="Desactive" asp-route-code="@Scenary.Code">
                                                 <i class="icon icon_196"></i>
                                             </a>
                                         </div>
@@ -127,7 +127,7 @@
                                             <button class="button_icon button_primary disabled" title="Editar" disabled>
                                                 <i class="icon icon_106"></i>
                                             </button>
-                                            <a class="button_icon button_primary" title="Activar" asp-controller="Scenarios" asp-action="Active" asp-route-id="@Scenary.Id">
+                                            <a class="button_icon button_primary" title="Activar" asp-controller="Scenarios" asp-action="Active" asp-route-code="@Scenary.Code">
                                                 <i class="icon icon_199"></i>
                                             </a>
                                         </div>

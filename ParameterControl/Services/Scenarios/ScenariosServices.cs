@@ -24,8 +24,7 @@ namespace ParameterControl.Services.Scenarios
             scenarios = new List<Scenery>()
             {
                 new Scenery(){
-                    Id = "1",
-                    Code = "ESC_AIC_001",
+                    Code = 1,
                     Name = "ESC_AIC_001",
                     Impact = "CLIENTE",
                     Conciliation = "Conciliacion1",
@@ -35,8 +34,7 @@ namespace ParameterControl.Services.Scenarios
                     UserOwner = 1
                 },
                 new Scenery(){
-                    Id = "2",
-                   Code = "ESC_AIC_001",
+                    Code = 2,
                     Name = "ESC_AIC_001",
                     Impact = "CLIENTE",
                     Conciliation = "Conciliacion1",
@@ -46,8 +44,7 @@ namespace ParameterControl.Services.Scenarios
                     UserOwner = 1
                 },
                 new Scenery(){
-                    Id = "3",
-                   Code = "ESC_AIC_001",
+                    Code = 3,
                     Name = "ESC_AIC_001",
                     Impact = "CLIENTE",
                     Conciliation = "Conciliacion1",
@@ -57,8 +54,7 @@ namespace ParameterControl.Services.Scenarios
                     UserOwner = 1
                 },
                 new Scenery(){
-                    Id = "4",
-                   Code = "ESC_AIC_001",
+                    Code = 4,
                     Name = "ESC_AIC_001",
                     Impact = "CLIENTE",
                     Conciliation = "Conciliacion1",
@@ -68,8 +64,7 @@ namespace ParameterControl.Services.Scenarios
                     UserOwner = 1
                 },
                 new Scenery(){
-                    Id = "5",
-                    Code = "ESC_AIC_002",
+                    Code = 5,
                     Name = "ESC_AIC_001",
                     Impact = "CLIENTE",
                     Conciliation = "Conciliacion1",
@@ -79,8 +74,7 @@ namespace ParameterControl.Services.Scenarios
                     UserOwner = 1
                 },
                 new Scenery(){
-                    Id = "6",
-                   Code = "ESC_AIC_001",
+                    Code = 6,
                     Name = "ESC_AIC_001",
                     Impact = "CLIENTE",
                     Conciliation = "Conciliacion1",
@@ -90,8 +84,7 @@ namespace ParameterControl.Services.Scenarios
                     UserOwner = 1
                 },
                 new Scenery(){
-                    Id = "7",
-                    Code = "ESC_AIC_001",
+                    Code = 7,
                     Name = "ESC_AIC_001",
                     Impact = "CLIENTE",
                     Conciliation = "Conciliacion1",
@@ -101,8 +94,7 @@ namespace ParameterControl.Services.Scenarios
                     UserOwner = 1
                 },
                 new Scenery(){
-                    Id = "8",
-                    Code = "ESC_AIC_001",
+                    Code = 8,
                     Name = "ESC_AIC_001",
                     Impact = "CLIENTE",
                     Conciliation = "Conciliacion1",
@@ -124,29 +116,67 @@ namespace ParameterControl.Services.Scenarios
         {
             List<SceneryViewModel> scenariosModel = new List<SceneryViewModel>();
 
-            foreach (modScenarios.Scenery scenary in scenarios)
+            foreach (modScenarios.Scenery scenery in scenarios)
             {
-                SceneryViewModel scenaryModel = new SceneryViewModel();
+                SceneryViewModel sceneryModel = new SceneryViewModel();
 
-                scenaryModel.Id = scenary.Id;
-                scenaryModel.Code = scenary.Code;
-                scenaryModel.Name = scenary.Name;
-                scenaryModel.Impact = scenary.Impact;
-                scenaryModel.Conciliation = scenary.Conciliation;
-                scenaryModel.State = scenary.State;
-                scenaryModel.StateFormat = scenary.State ? "Activo" : "Inactivo";
-                scenaryModel.CreationDate = scenary.CreationDate;
-                scenaryModel.UpdateDate = scenary.UpdateDate;
+                sceneryModel.Code = scenery.Code;
+                sceneryModel.Name = scenery.Name;
+                sceneryModel.Impact = scenery.Impact;
+                sceneryModel.Conciliation = scenery.Conciliation;
+                sceneryModel.State = scenery.State;
+                sceneryModel.CodeFormat = "ESC_" + scenery.Code;
+                sceneryModel.StateFormat = scenery.State ? "Activo" : "Inactivo";
+                sceneryModel.CreationDate = scenery.CreationDate;
+                sceneryModel.UpdateDate = scenery.UpdateDate;
 
-                scenariosModel.Add(scenaryModel);
+                scenariosModel.Add(sceneryModel);
             }
 
             return scenariosModel;
         }
 
-        public async Task<Scenery> GetSceneryById(string id)
+        public async Task<SceneryViewModel> GetSceneryFormat(modScenarios.Scenery scenery)
         {
-            Scenery scenery = scenarios.Find(scenery => scenery.Id == id);
+           
+                SceneryViewModel sceneryModel = new SceneryViewModel();
+
+                sceneryModel.Code = scenery.Code;
+                sceneryModel.Name = scenery.Name;
+                sceneryModel.Impact = scenery.Impact;
+                sceneryModel.Conciliation = scenery.Conciliation;
+                sceneryModel.State = scenery.State;
+                sceneryModel.CodeFormat = "ESC_" + scenery.Code;
+                sceneryModel.StateFormat = scenery.State ? "Activo" : "Inactivo";
+                sceneryModel.CreationDate = scenery.CreationDate;
+                sceneryModel.UpdateDate = scenery.UpdateDate;
+
+            
+                return sceneryModel;
+        }
+
+        public async Task<SceneryCreateViewModel> GetSceneryFormatCreate(modScenarios.Scenery scenery)
+        {
+
+            SceneryCreateViewModel sceneryModel = new SceneryCreateViewModel();
+
+            sceneryModel.Code = scenery.Code;
+            sceneryModel.Name = scenery.Name;
+            sceneryModel.Impact = scenery.Impact;
+            sceneryModel.Conciliation = scenery.Conciliation;
+            sceneryModel.State = scenery.State;
+            sceneryModel.CodeFormat = "ESC_" + scenery.Code;
+            sceneryModel.CreationDate = scenery.CreationDate;
+            sceneryModel.UpdateDate = scenery.UpdateDate;
+
+
+            return sceneryModel;
+        }
+
+
+        public async Task<Scenery> GetSceneryByCode(int code)
+        {
+            Scenery scenery = scenarios.Find(scenery => scenery.Code == code);
             return scenery;
         }
 

@@ -5,8 +5,6 @@ using ParameterControl.Services.Users;
 using ParameterControl.Services.Rows;
 using modUser = ParameterControl.Models.User;
 using Newtonsoft.Json;
-using ParameterControl.Services.Policies;
-using ParameterControl.Models.Policy;
 using ParameterControl.Services.Authenticated;
 using ParameterControl.Models.Conciliation;
 
@@ -124,20 +122,21 @@ namespace ParameterControl.Controllers.Users
         }
 
         [HttpGet]
-        public async Task<ActionResult> Edit(string id)
+        public async Task<ActionResult> Edit(int code)
         {
-            modUser.User user = await usersServices.GetUsersById(id);
+            modUser.User user = await usersServices.GetUsersByCode(code);
 
-            UserCreateViewModel model = new UserCreateViewModel()
-            {
-                Id = user.Id,
-                Code = user.Code,
-                Name = user.Name,
-                User_ = user.User_,
-                Email = user.Email,
-                State = user.State,
-                CreationDate = user.CreationDate
-            };
+            UserCreateViewModel model = await usersServices.GetUserFormatCreate(user);
+
+            //UserCreateViewModel model = new UserCreateViewModel()
+            //{
+            //    Code = user.Code,
+            //    Name = user.Name,
+            //    User_ = user.User_,
+            //    Email = user.Email,
+            //    State = user.State,
+            //    CreationDate = user.CreationDate
+            //};
 
             return View("Actions/EditUser", model);
         }
@@ -168,27 +167,27 @@ namespace ParameterControl.Controllers.Users
         }
 
         [HttpGet]
-        public async Task<ActionResult> View(string id)
+        public async Task<ActionResult> View(int code)
         {
-            User user = await usersServices.GetUsersById(id);
+            User user = await usersServices.GetUsersByCode(code);
 
             return View("Actions/ViewUser", user);
         }
 
         [HttpGet]
-        public async Task<ActionResult> Active(string id)
+        public async Task<ActionResult> Active(int code)
         {
-            modUser.User user = await usersServices.GetUsersById(id);
+            modUser.User user = await usersServices.GetUsersByCode(code);
 
             return View("Actions/ActiveUser", user);
         }
 
         [HttpPost]
-        public async Task<ActionResult> ActiveUser([FromBody] string id)
+        public async Task<ActionResult> ActiveUser([FromBody] int code)
         {
             try
             {
-                modUser.User request = await usersServices.GetUsersById(id);
+                modUser.User request = await usersServices.GetUsersByCode(code);
                 request.UserOwner = authenticatedUser.GetUserOwnerId();
                 request.UpdateDate = DateTime.Now;
                 request.State = true;
@@ -203,19 +202,19 @@ namespace ParameterControl.Controllers.Users
         }
 
         [HttpGet]
-        public async Task<ActionResult> Desactive(string id)
+        public async Task<ActionResult> Desactive(int code)
         {
-            User user = await usersServices.GetUsersById(id);
+            User user = await usersServices.GetUsersByCode(code);
 
             return View("Actions/DesactiveUser", user);
         }
 
         [HttpPost]
-        public async Task<ActionResult> DesactiveUser([FromBody] string id)
+        public async Task<ActionResult> DesactiveUser([FromBody] int code)
         {
             try
             {
-                modUser.User request = await usersServices.GetUsersById(id);
+                modUser.User request = await usersServices.GetUsersByCode(code);
                 request.UserOwner = authenticatedUser.GetUserOwnerId();
                 request.UpdateDate = DateTime.Now;
                 request.State = false;

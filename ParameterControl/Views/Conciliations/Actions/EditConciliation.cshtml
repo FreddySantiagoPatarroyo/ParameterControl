@@ -27,9 +27,9 @@
 
             <div class="form_group">
                 <div class="field">
-                    <label asp-for="Code" class="label_form">Código*</label>
+                    <label asp-for="CodeFormat" class="label_form">Código*</label>
                     <div class="input">
-                        <input asp-for="Code" placeholder="Digite el codigo"/>
+                        <input asp-for="CodeFormat" placeholder="Digite el codigo" readonly />
                     </div>
                     <span id="CodeError" class="text_error"></span>
                 </div>
@@ -242,7 +242,7 @@
                 document.getElementById('btn_container').style.display = 'none';
                 document.getElementById('loading').style.display = 'flex';
 
-                const CreationDateFormat = FormatDate($('#CreationDate').val());
+                const CreationDateFormat = FormatDate($('#CreationDate').val()); 
 
                 data = {
                     Code: $('#Code').val(),
@@ -295,7 +295,7 @@
         const FormatDate = (date) => {
 
             const validateAm = date.toString().includes("a. m.");
-            const validatePm = date.includes("p. m.");
+            const validatePm = date.toString().includes("p. m.");
 
             if (validateAm) {
                 date = date.replace("a. m.", "AM")
