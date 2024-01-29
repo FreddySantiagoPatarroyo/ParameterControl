@@ -34,10 +34,10 @@ namespace ParameterControl.Policy.DataAccess
                     using (OracleCommand command = new OracleCommand("INSERT_POLICY",connection))
                     {
                         command.CommandType = CommandType.StoredProcedure;
-                        command.Parameters.Add(new OracleParameter("PARAM_CODE", entity.Code));
                         command.Parameters.Add(new OracleParameter("PARAM_NAME", entity.Name));
                         command.Parameters.Add(new OracleParameter("PARAM_DESCRIPTION", entity.Description));
                         command.Parameters.Add(new OracleParameter("PARAM_MODIFIELDBY", entity.ModifieldBy));
+                        command.Parameters.Add(new OracleParameter("PARAM_OBJETIVO", entity.Objetive));
                         OracleDataReader reader = command.ExecuteReader();
                         response = 1;
                     }

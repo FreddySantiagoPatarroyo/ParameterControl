@@ -27,5 +27,8 @@ namespace ParameterControl.Models.Policy
         public string OperationType { get; set; } = string.Empty;
 
         public bool State {  get; set; } = false;
+
+        [Required(ErrorMessage = "El objetivo es requerido")]
+        public string Objetive { get; set; } = string.Empty;
     }
 }

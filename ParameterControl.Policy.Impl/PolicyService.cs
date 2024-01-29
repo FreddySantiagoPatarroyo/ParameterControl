@@ -3,7 +3,6 @@ using ParameterControl.Policy.DataAccess;
 using ParameterControl.Policy.Entities;
 using ParameterControl.Policy.Interfaces;
 using System.Data;
-using System.Xml.Linq;
 
 namespace ParameterControl.Policy.Impl
 {
@@ -56,13 +55,17 @@ namespace ParameterControl.Policy.Impl
             }
         }
 
-        public async Task<int> SelectAllPolicy()
+        public async Task<List<PolicyModel>> SelectAllPolicy()
         {
             try
             {
-                return await Task.Run(() =>
+                List<PolicyModel> mapper = new List<PolicyModel>();
+                return await Task.Run(async () =>
                 {
-                    return _getAllPolicy.SelectAllPolicy();
+                    var response = await _getAllPolicy.SelectAllPolicy();
+                    mapper = await MapperPolicy(response);
+
+                    return mapper;
                 });
             }
             catch (Exception ex)
@@ -71,13 +74,19 @@ namespace ParameterControl.Policy.Impl
             }
         }
 
-        public async Task<int> SelectByIdPolicy(PolicyModel entity)
+        public async Task<PolicyModel> SelectByIdPolicy(PolicyModel entity)
         {
             try
             {
-                return await Task.Run(() =>
+                PolicyModel mapper = new PolicyModel();
+                return await Task.Run(async () =>
                 {
-                    return _getByIdPolicy.SelectByIdPolicy(entity);
+                    var response = await _getByIdPolicy.SelectByIdPolicy(entity);
+                    foreach (DataRow row in response.Rows)
+                    {
+                        mapper = await MapperToPolicy(row);
+                    }
+                    return mapper;
                 });
             }
             catch (Exception ex)
@@ -108,7 +117,7 @@ namespace ParameterControl.Policy.Impl
                 return await Task.Run(async () =>
                 {
                     var response = await _getPaginatorPolicy.SelectPaginatorPolicy(page, row);
-                    var mapper = await MapperToPolicy(response);
+                    var mapper = await MapperPolicy(response);
                     return mapper;
                 });
             }
@@ -118,7 +127,7 @@ namespace ParameterControl.Policy.Impl
             }
         }
 
-        private async Task<List<PolicyModel>> MapperToPolicy(DataTable dt)
+        private async Task<List<PolicyModel>> MapperPolicy(DataTable dt)
         {
             return await Task.Run(() =>
             {
@@ -126,18 +135,8 @@ namespace ParameterControl.Policy.Impl
                 {
                     List<PolicyModel> policies = new List<PolicyModel>();
                     foreach (DataRow row in dt.Rows)
-                    {
-                        PolicyModel model = new PolicyModel
-                        {
-                            IdPolicy = Convert.ToInt32(row["CODE"]),
-                            Code = row["CODE"].ToString(),
-                            Name = row["CODE"].ToString(),
-                            Description = row["CODE"].ToString(),
-                            CreationDate = Convert.ToDateTime(row["CODE"]),
-                            ModifieldDate = Convert.ToDateTime(row["CODE"]),
-                            ModifieldBy = row["CODE"].ToString()
-                        };
-                        policies.Add(model);
+                    {                        
+                        policies.Add(MapperToPolicy(row).Result);
                     }
                     return policies;
                 }
@@ -145,6 +144,25 @@ namespace ParameterControl.Policy.Impl
                 {
                     return new List<PolicyModel>();
                 }
+            });
+        }
+
+        private async Task<PolicyModel> MapperToPolicy(DataRow dr)
+        {
+            return await Task.Run(() =>
+            {
+                PolicyModel model = new PolicyModel
+                {
+                    Id = dr["CODE"].ToString(),
+                    Code = dr["CODE_POLITICA"].ToString(),
+                    Name = dr["NOMBRE_POLITICA"].ToString(),
+                    Description = dr["DESCRIPCION"].ToString(),
+                    Objetive = dr["OBJETIVO"].ToString(),
+                    CreationDate = Convert.ToDateTime(dr["FECHA_CREACION"]),
+                    ModifieldDate = Convert.ToDateTime(dr["FECHA_ACTUALIZACION"]),
+                    ModifieldBy = dr["MODIFICADO_POR"].ToString()
+                };
+                return model;
             });
         }
     }

@@ -12,7 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ParameterControl.Conciliation.Entities\ParameterControl.Conciliation.Entities.csproj" />
+    <ProjectReference Include="..\ParameterControl.Auth.Entities\ParameterControl.Auth.Entities.csproj" />
   </ItemGroup>
 
 </Project>

@@ -35,6 +35,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ParameterControl.Policy.Int
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ParameterControl.Test", "ParameterControl.Test\ParameterControl.Test.csproj", "{2DDB2A2E-0DBF-422F-9C5F-284F6A5069D9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ParameterControl.Auth.DataAccess", "ParameterControl.Auth.DataAccess\ParameterControl.Auth.DataAccess.csproj", "{A5B7BCFB-6E39-4AFC-B5E0-E105311E4CAE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -93,6 +95,10 @@ Global
 		{2DDB2A2E-0DBF-422F-9C5F-284F6A5069D9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2DDB2A2E-0DBF-422F-9C5F-284F6A5069D9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2DDB2A2E-0DBF-422F-9C5F-284F6A5069D9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A5B7BCFB-6E39-4AFC-B5E0-E105311E4CAE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A5B7BCFB-6E39-4AFC-B5E0-E105311E4CAE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A5B7BCFB-6E39-4AFC-B5E0-E105311E4CAE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A5B7BCFB-6E39-4AFC-B5E0-E105311E4CAE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -109,6 +115,7 @@ Global
 		{45585B5B-E796-460D-A87F-38FB56C195D3} = {71A8A1B4-4DA2-4202-AEA1-7EA9B639EE8E}
 		{E8173CC1-D933-457E-8E4E-63BA0445AB70} = {71A8A1B4-4DA2-4202-AEA1-7EA9B639EE8E}
 		{2FAEAF31-5FF2-4B9E-BBEE-D27606798ACC} = {71A8A1B4-4DA2-4202-AEA1-7EA9B639EE8E}
+		{A5B7BCFB-6E39-4AFC-B5E0-E105311E4CAE} = {91079B39-5F50-456A-805D-3800C3F2B7EF}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {20AAF5E6-F20B-4969-933D-7039AE34C6FF}

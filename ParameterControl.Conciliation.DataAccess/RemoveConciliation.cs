@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Oracle.ManagedDataAccess.Client;
-using ParameterControl.Policy.Entities;
+using ParameterControl.Conciliation.Entities;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -10,18 +10,18 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ParameterControl.Policy.DataAccess
+namespace ParameterControl.Conciliation.DataAccess
 {
-    public class ModifyPolicy
+    public class RemoveConciliation
     {
         private readonly IConfiguration _configuration;
 
-        public ModifyPolicy(IConfiguration configuration)
+        public RemoveConciliation(IConfiguration configuration)
         {
             _configuration = configuration;
         }
 
-        public int UpdatePolicy(PolicyModel entity)
+        public int DeleteConciliation(ConciliationModel entity)
         {
             int response = 0;
 
@@ -31,14 +31,10 @@ namespace ParameterControl.Policy.DataAccess
                 {
                     connection.Open();
 
-                    using (OracleCommand command = new OracleCommand("UPDATE_POLICY",connection))
+                    using (OracleCommand command = new OracleCommand("DELETE_CONCILIATION",connection))
                     {
                         command.CommandType = CommandType.StoredProcedure;
                         command.Parameters.Add(new OracleParameter("PARAM_CODE", entity.Code));
-                        command.Parameters.Add(new OracleParameter("PARAM_NAME", entity.Name));
-                        command.Parameters.Add(new OracleParameter("PARAM_DESCRIPTION", entity.Description));
-                        command.Parameters.Add(new OracleParameter("PARAM_MODIFIELDBY", entity.ModifieldBy));
-                        command.Parameters.Add(new OracleParameter("PARAM_OBJETIVO", entity.Objetive));
                         OracleDataReader reader = command.ExecuteReader();
                         response = 1;
                     }

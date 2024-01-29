@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Oracle.ManagedDataAccess.Client;
-using ParameterControl.Policy.Entities;
+using ParameterControl.Auth.Entities;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -10,19 +10,19 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ParameterControl.Policy.DataAccess
+namespace ParameterControl.Auth.DataAccess
 {
-    public class GetAllPolicy
+    public class GetByIdUser
     {
         private readonly IConfiguration _configuration;
         DataTable _dataTable = new DataTable();
 
-        public GetAllPolicy(IConfiguration configuration)
+        public GetByIdUser(IConfiguration configuration)
         {
             _configuration = configuration;
         }
 
-        public async Task<DataTable> SelectAllPolicy()
+        public async Task<DataTable> SelectByIdUser(UserModel entity)
         {
             try
             {
@@ -32,9 +32,10 @@ namespace ParameterControl.Policy.DataAccess
                     {
                         connection.Open();
 
-                        using (OracleCommand command = new OracleCommand("ALL_POLICY", connection))
+                        using (OracleCommand command = new OracleCommand("SELECT_BY_ID_USER", connection))
                         {
                             command.CommandType = CommandType.StoredProcedure;
+                            command.Parameters.Add(new OracleParameter("PARAM_CODE", entity.Id));
                             OracleDataReader reader = command.ExecuteReader();
                             _dataTable.Load(reader);
                             return _dataTable;

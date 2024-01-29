@@ -136,6 +136,7 @@ namespace ParameterControl.Controllers.Policies
             if (!ModelState.IsValid)
             {
                 _logger.LogError($"Error en el modelo : {JsonConvert.SerializeObject(request)}");
+                var responseIn = await policiesServices.InsertPolicy(request);
                 return BadRequest(new { message = "Error en la informacion enviada", state = "Error" });
             }
             else
@@ -222,7 +223,6 @@ namespace ParameterControl.Controllers.Policies
         [HttpPost]
         public async Task<ActionResult> FilterPolicies(FilterViewModel filter)
         {
-
             Console.WriteLine(filter.ColumValue);
 
             Console.WriteLine(filter.ValueFilter);

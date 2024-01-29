@@ -15,7 +15,7 @@ using modPolicy = ParameterControl.Models.Policy;
 
 namespace ParameterControl.Services.Policies
 {
-    public class PoliciesServices: IPoliciesServices
+    public class PoliciesServices : IPoliciesServices
     {
         private List<modPolicy.Policy> policies = new List<modPolicy.Policy>();
         private readonly PolicyService _policyService;
@@ -119,7 +119,7 @@ namespace ParameterControl.Services.Policies
         {
             try
             {
-                var response = await _policyService.SelectPaginatorPolicy(pagination.Page, pagination.RecordPage);
+                var response = await _policyService.SelectPaginatorPolicy(pagination.Page, pagination.RecordsPage);
                 var result = _mapper.Map<List<modPolicy.Policy>>(response);
                 return result;
             }
@@ -132,7 +132,7 @@ namespace ParameterControl.Services.Policies
         public async Task<List<PolicyViewModel>> GetPolicesFormatTable(List<modPolicy.Policy> policies)
         {
             List<modPolicy.Policy> listPolicies = await GetPolicies();
-            List<PolicyViewModel> policiesModel  = new List<PolicyViewModel>();
+            List<PolicyViewModel> policiesModel = new List<PolicyViewModel>();
 
             foreach (modPolicy.Policy policy in listPolicies)
             {
@@ -140,7 +140,7 @@ namespace ParameterControl.Services.Policies
 
                 policyModel.Id = policy.Id;
                 policyModel.Code = policy.Code;
-                policyModel.Name = policy.Name; 
+                policyModel.Name = policy.Name;
                 policyModel.Description = policy.Description;
                 policyModel.Conciliation = policy.Conciliation;
                 policyModel.ControlType = policy.ControlType;
@@ -164,11 +164,11 @@ namespace ParameterControl.Services.Policies
         {
             try
             {
-                var policy = new ent.PolicyModel
+                var policy = new PolicyModel
                 {
-                    Code = request.Code,
                     Name = request.Name,
                     Description = request.Description,
+                    Objetive = request.Objetive,
                     CreationDate = DateTime.Now,
                     ModifieldDate = DateTime.Now,
                     ModifieldBy = "CreateToUserDev"
@@ -186,7 +186,7 @@ namespace ParameterControl.Services.Policies
 
         public async Task<List<string>> GetOperationsType()
         {
-           List<string> operationsType = new List<string>()
+            List<string> operationsType = new List<string>()
            {
                "Movil",
                "Fija"
@@ -200,7 +200,7 @@ namespace ParameterControl.Services.Policies
         {
             List<PolicyViewModel> policiesFilter = new List<PolicyViewModel>();
 
-            if((filterModel.ColumValue == null || filterModel.ColumValue == "" || filterModel.ValueFilter == null || filterModel.ValueFilter == ""))
+            if ((filterModel.ColumValue == null || filterModel.ColumValue == "" || filterModel.ValueFilter == null || filterModel.ValueFilter == ""))
             {
                 policiesFilter = await GetPolicesFormatTable(policies);
             }

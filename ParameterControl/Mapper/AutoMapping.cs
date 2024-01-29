@@ -8,7 +8,7 @@ namespace ParameterControl.Mapper
     {
         public AutoMapping()
         {
-            CreateMap<List<mod.Policy.Policy>, List<PolicyModel>>()
+            CreateMap<mod.Policy.Policy, PolicyModel>()
                 .ReverseMap();
         }
     }
