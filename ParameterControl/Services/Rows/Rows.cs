@@ -45,12 +45,12 @@ namespace ParameterControl.Services.Rows
                 },
                 new Row()
                 {
-                    Value = "CreationDateFormatFormat",
+                    Value = "CreationDateFormat",
                     Name = "Fecha Creacion"
                 },
                  new Row()
                 {
-                    Value = "UpdateDateFormatFormat",
+                    Value = "UpdateDateFormat",
                     Name = "Fecha Actualizacion"
                 }
             };
