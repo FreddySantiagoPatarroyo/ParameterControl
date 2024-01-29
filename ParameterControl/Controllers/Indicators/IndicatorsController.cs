@@ -4,10 +4,9 @@ using ParameterControl.Models.Filter;
 using ParameterControl.Services.Indicators;
 using ParameterControl.Services.Rows;
 using modIndicator = ParameterControl.Models.Indicator;
-using ParameterControl.Services.Results;
 using Newtonsoft.Json;
 using ParameterControl.Services.Authenticated;
-using ParameterControl.Models.User;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 
 namespace ParameterControl.Controllers.Indicators
@@ -54,11 +53,8 @@ namespace ParameterControl.Controllers.Indicators
 
 
         [HttpGet]
-        public async Task<ActionResult> IndicatorsFilter(string filterColunm = "", string filterValue = "")
+        public async Task<ActionResult> IndicatorsFilter(string filterColunm = "", string filterValue = "", string typeRow = "")
         {
-            _logger.LogInformation(filterColunm);
-            _logger.LogInformation(filterValue);
-
             if (filterColunm == null || filterColunm == "" || filterValue == null || filterValue == "")
             {
                 return RedirectToAction("Indicators");
@@ -67,7 +63,8 @@ namespace ParameterControl.Controllers.Indicators
             FilterViewModel filter = new FilterViewModel()
             {
                 ColumValue = filterColunm,
-                ValueFilter = filterValue
+                ValueFilter = filterValue,
+                TypeRow = typeRow
             };
 
             List<IndicatorViewModel> indicatorsFilter = await indicatorsService.GetFilterIndicators(filter);
@@ -244,16 +241,56 @@ namespace ParameterControl.Controllers.Indicators
         public async Task<ActionResult> FilterIndicators(FilterViewModel filter)
         {
 
-            Console.WriteLine(filter.ColumValue);
-
-            Console.WriteLine(filter.ValueFilter);
+            if (filter.TypeRow == "Select")
+            {
+                filter.ValueFilter = filter.ValueFilterOptions;
+            }
+            else if (filter.TypeRow == "Date")
+            {
+                filter.ValueFilter = filter.ValueFilterDate.ToString("dd/MM/yyyy");
+            }
 
             return RedirectToAction("IndicatorsFilter", new
             {
                 filterColunm = filter.ColumValue,
-                filterValue = filter.ValueFilter
+                filterValue = filter.ValueFilter,
+                typeRow = filter.TypeRow
+
             });
         }
 
+        [HttpPost]
+        public async Task<IActionResult> GetSecondaryFilter([FromBody] string ColumValue)
+        {
+            if (string.IsNullOrEmpty(ColumValue))
+            {
+                return BadRequest("No a seleccionado ninguna opcion");
+            }
+
+            FilterViewModel filter = new FilterViewModel()
+            {
+                ColumValue = ColumValue
+            };
+
+            switch (ColumValue)
+            {
+                case "StateFormat":
+                    filter.Options = new List<SelectListItem>().ToList();
+                    filter.Options.Add(new SelectListItem("Activo", "Activo"));
+                    filter.Options.Add(new SelectListItem("Inactivo", "Inactivo"));
+                    filter.TypeRow = "Select";
+                    break;
+                case "CreationDateFormat":
+                    filter.TypeRow = "Date";
+                    break;
+                case "UpdateDateFormat":
+                    filter.TypeRow = "Date";
+                    break;
+                default:
+                    filter.TypeRow = "General";
+                    break;
+            }
+            return Ok(filter);
+        }
     }
 }

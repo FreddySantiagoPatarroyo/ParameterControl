@@ -1,14 +1,7 @@
-﻿using MessagePack;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Newtonsoft.Json.Linq;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
 using ParameterControl.Models.Conciliation;
 using ParameterControl.Models.Filter;
-using ParameterControl.Models.Policy;
-using ParameterControl.Policy.Interfaces;
 using ParameterControl.Services.Policies;
-using System.Collections.Generic;
-using System.Data.Common;
-using System.Reflection;
 using modConciliation = ParameterControl.Models.Conciliation;
 using modPolicy = ParameterControl.Models.Policy;
 
@@ -177,6 +170,8 @@ namespace ParameterControl.Services.Conciliations
                 conciliationModel.StateFormat = conciliation.State ? "Activo" : "Inactivo";
                 conciliationModel.CreationDate = conciliation.CreationDate;
                 conciliationModel.UpdateDate = conciliation.UpdateDate;
+                conciliationModel.CreationDateFormat = conciliation.CreationDate.ToString("dd/MM/yyyy");
+                conciliationModel.UpdateDateFormat = conciliation.UpdateDate.ToString("dd/MM/yyyy");
 
                 conciliationsModel.Add(conciliationModel);
             }
@@ -205,9 +200,10 @@ namespace ParameterControl.Services.Conciliations
                 conciliationModel.StateFormat = conciliation.State ? "Activo" : "Inactivo";
                 conciliationModel.CreationDate = conciliation.CreationDate;
                 conciliationModel.UpdateDate = conciliation.UpdateDate;
+                conciliationModel.CreationDateFormat = conciliation.CreationDate.ToString("dd/MM/yyyy");
+                conciliationModel.UpdateDateFormat = conciliation.UpdateDate.ToString("dd/MM/yyyy");
 
-            
-                return conciliationModel;
+            return conciliationModel;
         }
 
 
@@ -256,53 +252,50 @@ namespace ParameterControl.Services.Conciliations
 
         public async Task<List<ConciliationViewModel>> GetFilterConciliations(FilterViewModel filterModel)
         {
-            List<modConciliation.Conciliation> ConciliationsFilter = new List<modConciliation.Conciliation>();
+            List<modConciliation.Conciliation> allConciliations = await GetConciliations();
+            List<ConciliationViewModel> conciliationsFilter = await GetConciliationsFormat(allConciliations);
 
-            if ((filterModel.ColumValue == null || filterModel.ColumValue == "" || filterModel.ValueFilter == null || filterModel.ValueFilter == ""))
+            if (filterModel.ColumValue == null || filterModel.ColumValue == "" || filterModel.ValueFilter == null || filterModel.ValueFilter == "")
             {
-                ConciliationsFilter = await GetConciliations();
+                return conciliationsFilter;
             }
             else
             {
-                switch (filterModel.ColumValue)
-                {
-                    case "Code":
-                        ConciliationsFilter = applyFilter(filterModel);
-                        break;
-                    case "Name":
-                        ConciliationsFilter = applyFilter(filterModel);
-                        break;
-                    case "Description":
-                        ConciliationsFilter = applyFilter(filterModel);
-                        break;
-                    case "Conciliation_":
-                        ConciliationsFilter = applyFilter(filterModel);
-                        break;
-                    case "Required":
-                        ConciliationsFilter = applyFilter(filterModel);
-                        break;
-                    default:
-                        break;
-                }
+                conciliationsFilter = await applyFilter(filterModel, conciliationsFilter);
             }
 
-            return await GetConciliationsFormat(ConciliationsFilter);
+            return conciliationsFilter;
         }
 
-        private List<modConciliation.Conciliation> applyFilter(FilterViewModel filterModel)
+        private async Task<List<ConciliationViewModel>> applyFilter(FilterViewModel filterModel, List<ConciliationViewModel> allConciliations)
         {
-            var property = typeof(Conciliation).GetProperty(filterModel.ColumValue);
+            Console.WriteLine(filterModel.TypeRow.ToString());
 
-            List<Conciliation> ConciliationsFilter = new List<Conciliation>();
+            var property = typeof(ConciliationViewModel).GetProperty(filterModel.ColumValue);
 
-            foreach (Conciliation Conciliation in conciliations)
+            List<ConciliationViewModel> conciliationsFilter = new List<ConciliationViewModel>();
+            if (filterModel.TypeRow == "Select")
             {
-                if (property.GetValue(Conciliation).ToString().ToUpper().Contains(filterModel.ValueFilter.ToUpper()))
+                foreach (ConciliationViewModel conciliation in allConciliations)
                 {
-                    ConciliationsFilter.Add(Conciliation);
+                    if (property.GetValue(conciliation).ToString().ToUpper() == filterModel.ValueFilter.ToUpper())
+                    {
+                        conciliationsFilter.Add(conciliation);
+                    }
                 }
             }
-            return ConciliationsFilter;
+            else
+            {
+                foreach (ConciliationViewModel conciliation in allConciliations)
+                {
+                    if (property.GetValue(conciliation).ToString().ToUpper().Contains(filterModel.ValueFilter.ToUpper()))
+                    {
+                        conciliationsFilter.Add(conciliation);
+                    }
+                }
+            }
+
+            return conciliationsFilter;
         }
     }
 }

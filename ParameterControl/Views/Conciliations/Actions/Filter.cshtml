@@ -17,6 +17,9 @@
                 <h1>Filtar Tabla Conciliaciones</h1>
             </div>
             <form asp-controller="Conciliations" asp-action="FilterConciliations">
+
+                <input type="hidden" asp-for="TypeRow" />
+
                 <div class="content_filter flex_box">
                     <div class="filter_primary">
                         <div id="field_primary" class="field">
@@ -44,10 +47,34 @@
                     </div>
 
                     <div class="filter_secondary">
-                        <div id="field_secundary" class="field">
+                        <div id="field_general" class="field">
                             <div id="input" class="input">
                                 <input id="input_filter" name="ValueFilter" asp-for="ValueFilter" placeholder="Valor filtro" autocomplete="off" />
                             </div>
+                            <span asp-validation-for="ValueFilter" class="text_error"></span>
+                        </div>
+                    </div>
+
+                    <div class="filter_secondary">
+                        <div id="field_date" class="field">
+                            <div id="input" class="input">
+                                <input id="input_filter_date" class="color_icon_calendar" name="ValueFilterDate" asp-for="ValueFilterDate" placeholder="Valor filtro" autocomplete="off" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="filter_secondary">
+                        <div id="field_options" class="field">
+                            <div id="input_select_options" class="input">
+                                <input class="input_select" id="input_select_filter_options" name="input_select_filter_options" placeholder="Seleccione una opción" onclick="showSecondaryOptions()" readonly />
+                                <input class="oculte" id="input_select_filter_options_value" name="ValueFilterOptions" asp-for="ValueFilterOptions" />
+                                <i class="icon icon_select icon_153"></i>
+                            </div>
+                            <div id="secondary_options" class="options">
+                                <ul id="secondary_options_list" class="options_list"></ul>
+                            </div>
+                            <span asp-validation-for="ValueFilterOptions" class="text_error"></span>
+                            <div id="select_helper_secondary" class="select_helper" onclick="showSecondaryOptions()"></div>
                         </div>
                     </div>
                 </div>

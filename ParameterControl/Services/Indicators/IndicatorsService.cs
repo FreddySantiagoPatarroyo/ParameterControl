@@ -1,7 +1,5 @@
 ﻿using ParameterControl.Models.Indicator;
 using ParameterControl.Models.Filter;
-using ParameterControl.Models.Indicator;
-using System.Reflection;
 
 using modIndicator = ParameterControl.Models.Indicator;
 
@@ -113,6 +111,8 @@ namespace ParameterControl.Services.Indicators
                 indicatorModel.StateFormat = indicator.State ? "Activo" : "Inactivo";
                 indicatorModel.CreationDate = indicator.CreationDate;
                 indicatorModel.UpdateDate = indicator.UpdateDate;
+                indicatorModel.CreationDateFormat = indicator.CreationDate.ToString("dd/MM/yyyy");
+                indicatorModel.UpdateDateFormat = indicator.UpdateDate.ToString("dd/MM/yyyy");
 
                 IndicatorsModel.Add(indicatorModel);
             }
@@ -128,50 +128,46 @@ namespace ParameterControl.Services.Indicators
 
         public async Task<List<IndicatorViewModel>> GetFilterIndicators(FilterViewModel filterModel)
         {
-            List<Indicator> IndicatorsFilter = new List<Indicator>();
+            List<modIndicator.Indicator> allIndicators = await GetIndicators();
+            List<IndicatorViewModel> IndicatorsFilter = await GetindicatorsFormat(allIndicators);
 
-            if ((filterModel.ColumValue == null || filterModel.ColumValue == "" || filterModel.ValueFilter == null || filterModel.ValueFilter == ""))
+            if (filterModel.ColumValue == null || filterModel.ColumValue == "" || filterModel.ValueFilter == null || filterModel.ValueFilter == "")
             {
-                IndicatorsFilter = await GetIndicators();
+                return IndicatorsFilter;
             }
             else
             {
-                switch (filterModel.ColumValue)
-                {
-                    case "Code":
-                        IndicatorsFilter = applyFilter(filterModel);
-                        break;
-                    case "Name":
-                        IndicatorsFilter = applyFilter(filterModel);
-                        break;
-                    case "Description":
-                        IndicatorsFilter = applyFilter(filterModel);
-                        break;
-                    case "Conciliation_":
-                        IndicatorsFilter = applyFilter(filterModel);
-                        break;
-                    case "Required":
-                        IndicatorsFilter = applyFilter(filterModel);
-                        break;
-                    default:
-                        break;
-                }
+                IndicatorsFilter = await applyFilter(filterModel, IndicatorsFilter);
             }
 
-            return await GetindicatorsFormat(IndicatorsFilter);
+            return IndicatorsFilter;
         }
 
-        private List<Indicator> applyFilter(FilterViewModel filterModel)
+        private async Task<List<IndicatorViewModel>> applyFilter(FilterViewModel filterModel, List<IndicatorViewModel> allIndicators)
         {
-            var property = typeof(Indicator).GetProperty(filterModel.ColumValue);
+            Console.WriteLine(filterModel.TypeRow.ToString());
 
-            List<Indicator> IndicatorsFilter = new List<Indicator>();
+            var property = typeof(IndicatorViewModel).GetProperty(filterModel.ColumValue);
 
-            foreach (Indicator Indicator in indicators)
+            List<IndicatorViewModel> IndicatorsFilter = new List<IndicatorViewModel>();
+            if (filterModel.TypeRow == "Select")
             {
-                if (property.GetValue(Indicator).ToString().ToUpper().Contains(filterModel.ValueFilter.ToUpper()))
+                foreach (IndicatorViewModel indicator in allIndicators)
                 {
-                    IndicatorsFilter.Add(Indicator);
+                    if (property.GetValue(indicator).ToString().ToUpper() == filterModel.ValueFilter.ToUpper())
+                    {
+                        IndicatorsFilter.Add(indicator);
+                    }
+                }
+            }
+            else
+            {
+                foreach (IndicatorViewModel indicator in allIndicators)
+                {
+                    if (property.GetValue(indicator).ToString().ToUpper().Contains(filterModel.ValueFilter.ToUpper()))
+                    {
+                        IndicatorsFilter.Add(indicator);
+                    }
                 }
             }
 

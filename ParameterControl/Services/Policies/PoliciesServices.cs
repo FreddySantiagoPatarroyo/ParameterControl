@@ -1,16 +1,9 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Newtonsoft.Json.Linq;
 using ParameterControl.Models.Filter;
 using ParameterControl.Models.Pagination;
 using ParameterControl.Models.Policy;
-using ParameterControl.Models.Rows;
-using ParameterControl.Policy.Entities;
 using ParameterControl.Policy.Impl;
-using ParameterControl.Policy.Interfaces;
-using System.Collections.Generic;
-using System.Data.Common;
-using System.Reflection;
 using ent = ParameterControl.Policy.Entities;
 using modPolicy = ParameterControl.Models.Policy;
 
@@ -46,7 +39,7 @@ namespace ParameterControl.Services.Policies
                     Description = "Description",
                     Conciliation = 123,
                     ControlType = "Voz",
-                    OperationType = "OperationType",
+                    OperationType = "Model",
                     State = false,
                     CreationDate = DateTime.Parse("2024-01-10"),
                     UpdateDate = DateTime.Parse("2023-11-09"),
@@ -58,9 +51,9 @@ namespace ParameterControl.Services.Policies
                     Description = "Descripcion ejemplo",
                     Conciliation = 123,
                     ControlType = "Emial",
-                    OperationType = "OperationType_1asdasdasdasdasdadasdasdasdad",
+                    OperationType = "Fija",
                     State = true,
-                    CreationDate = DateTime.Parse("2024-01-10"),
+                    CreationDate = DateTime.Parse("2024-02-10"),
                     UpdateDate = DateTime.Parse("2023-11-09"),
                     UserOwner = 1
                 },
@@ -70,7 +63,7 @@ namespace ParameterControl.Services.Policies
                     Description = "Description",
                     Conciliation = 123,
                     ControlType = "Voz",
-                    OperationType = "OperationType",
+                    OperationType = "Model",
                     State = false,
                     CreationDate = DateTime.Parse("2024-01-10"),
                     UpdateDate = DateTime.Parse("2023-11-09"),
@@ -82,7 +75,7 @@ namespace ParameterControl.Services.Policies
                     Description = "Descripcion ejemplo",
                     Conciliation = 123,
                     ControlType = "Emial",
-                    OperationType = "OperationType_1asdasdasdasdasdadasdasdasdad",
+                    OperationType = "Fija",
                     State = true,
                     CreationDate = DateTime.Parse("2024-01-10"),
                     UpdateDate = DateTime.Parse("2023-11-09"),
@@ -94,7 +87,7 @@ namespace ParameterControl.Services.Policies
                     Description = "Description",
                     Conciliation = 123,
                     ControlType = "Voz",
-                    OperationType = "OperationType",
+                    OperationType = "Model",
                     State = false,
                     CreationDate = DateTime.Parse("2024-01-10"),
                     UpdateDate = DateTime.Parse("2023-11-09"),
@@ -106,7 +99,7 @@ namespace ParameterControl.Services.Policies
                     Description = "Descripcion ejemplo",
                     Conciliation = 123,
                     ControlType = "Emial",
-                    OperationType = "OperationType_1asdasdasdasdasdadasdasdasdad",
+                    OperationType = "Fija",
                     State = true,
                     CreationDate = DateTime.Parse("2024-01-10"),
                     UpdateDate = DateTime.Parse("2023-11-09"),
@@ -118,7 +111,7 @@ namespace ParameterControl.Services.Policies
                     Description = "Description",
                     Conciliation = 123,
                     ControlType = "Voz",
-                    OperationType = "OperationType",
+                    OperationType = "Model",
                     State = false,
                     CreationDate = DateTime.Parse("2024-01-10"),
                     UpdateDate = DateTime.Parse("2023-11-09"),
@@ -165,6 +158,8 @@ namespace ParameterControl.Services.Policies
                 policyModel.StateFormat = policy.State ? "Activo" : "Inactivo";
                 policyModel.CreationDate = policy.CreationDate;
                 policyModel.UpdateDate = policy.UpdateDate;
+                policyModel.CreationDateFormat = policy.CreationDate.ToString("dd/MM/yyyy");
+                policyModel.UpdateDateFormat = policy.UpdateDate.ToString("dd/MM/yyyy");
 
                 policiesModel.Add(policyModel);
             }
@@ -188,6 +183,8 @@ namespace ParameterControl.Services.Policies
             policyModel.StateFormat = policy.State ? "Activo" : "Inactivo";
             policyModel.CreationDate = policy.CreationDate;
             policyModel.UpdateDate = policy.UpdateDate;
+            policyModel.CreationDateFormat = policy.CreationDate.ToString("dd/MM/yyyy");
+            policyModel.UpdateDateFormat = policy.UpdateDate.ToString("dd/MM/yyyy");
 
             return policyModel;
         }
@@ -261,38 +258,7 @@ namespace ParameterControl.Services.Policies
             }
             else
             {
-                switch (filterModel.ColumValue)
-                {
-                    case "CodeFormat":
-                        policiesFilter = await applyFilter(filterModel, policiesFilter);
-                        break;
-                    case "Name":
-                        policiesFilter = await applyFilter(filterModel, policiesFilter);
-                        break;
-                    case "Description":
-                        policiesFilter = await applyFilter(filterModel, policiesFilter);
-                        break;
-                    case "Conciliation":
-                        policiesFilter = await applyFilter(filterModel, policiesFilter);
-                        break;
-                    case "ControlType":
-                        policiesFilter = await applyFilter(filterModel, policiesFilter);
-                        break;
-                    case "OperationType":
-                        policiesFilter = await applyFilter(filterModel, policiesFilter);
-                        break;
-                    case "StateFormat":
-                        policiesFilter = await applyFilter(filterModel, policiesFilter);
-                        break;
-                    case "CreationDate":
-                        policiesFilter = await applyFilter(filterModel, policiesFilter);
-                        break;
-                    case "UpdateDate":
-                        policiesFilter = await applyFilter(filterModel, policiesFilter);
-                        break;
-                    default:
-                        break;
-                }
+                policiesFilter = await applyFilter(filterModel, policiesFilter);
             }
 
             return policiesFilter;
@@ -300,17 +266,31 @@ namespace ParameterControl.Services.Policies
 
         private async Task<List<PolicyViewModel>> applyFilter(FilterViewModel filterModel, List<PolicyViewModel> allPolicies)
         {
+            Console.WriteLine(filterModel.TypeRow.ToString());
+
             var property = typeof(PolicyViewModel).GetProperty(filterModel.ColumValue);
 
             List<PolicyViewModel> policiesFilter = new List<PolicyViewModel>();
-
-            foreach (PolicyViewModel policy in allPolicies)
-            {
-                if (property.GetValue(policy).ToString().ToUpper().Contains(filterModel.ValueFilter.ToUpper()))
+            if (filterModel.TypeRow == "Select") {
+                foreach (PolicyViewModel policy in allPolicies)
                 {
-                    policiesFilter.Add(policy);
+                    if (property.GetValue(policy).ToString().ToUpper() == filterModel.ValueFilter.ToUpper())
+                    {
+                        policiesFilter.Add(policy);
+                    }
                 }
             }
+            else
+            {
+                foreach (PolicyViewModel policy in allPolicies)
+                {
+                    if (property.GetValue(policy).ToString().ToUpper().Contains(filterModel.ValueFilter.ToUpper()))
+                    {
+                        policiesFilter.Add(policy);
+                    }
+                }
+            }
+           
             return policiesFilter;
         }
     }

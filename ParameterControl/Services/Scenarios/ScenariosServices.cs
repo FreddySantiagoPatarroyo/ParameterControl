@@ -8,6 +8,7 @@ using System.Data.Common;
 using System.Reflection;
 using modScenarios = ParameterControl.Models.Scenery;
 using modConciliation = ParameterControl.Models.Conciliation;
+using ParameterControl.Policy.Entities;
 
 
 namespace ParameterControl.Services.Scenarios
@@ -76,7 +77,7 @@ namespace ParameterControl.Services.Scenarios
                 new Scenery(){
                     Code = 6,
                     Name = "ESC_AIC_001",
-                    Impact = "CLIENTE",
+                    Impact = "COMPAÑIA",
                     Conciliation = "Conciliacion1",
                     State = false,
                     CreationDate = DateTime.Parse("2024-01-10"),
@@ -129,6 +130,8 @@ namespace ParameterControl.Services.Scenarios
                 sceneryModel.StateFormat = scenery.State ? "Activo" : "Inactivo";
                 sceneryModel.CreationDate = scenery.CreationDate;
                 sceneryModel.UpdateDate = scenery.UpdateDate;
+                sceneryModel.CreationDateFormat = scenery.CreationDate.ToString("dd/MM/yyyy");
+                sceneryModel.UpdateDateFormat = scenery.UpdateDate.ToString("dd/MM/yyyy");
 
                 scenariosModel.Add(sceneryModel);
             }
@@ -139,20 +142,22 @@ namespace ParameterControl.Services.Scenarios
         public async Task<SceneryViewModel> GetSceneryFormat(modScenarios.Scenery scenery)
         {
            
-                SceneryViewModel sceneryModel = new SceneryViewModel();
+            SceneryViewModel sceneryModel = new SceneryViewModel();
 
-                sceneryModel.Code = scenery.Code;
-                sceneryModel.Name = scenery.Name;
-                sceneryModel.Impact = scenery.Impact;
-                sceneryModel.Conciliation = scenery.Conciliation;
-                sceneryModel.State = scenery.State;
-                sceneryModel.CodeFormat = "ESC_" + scenery.Code;
-                sceneryModel.StateFormat = scenery.State ? "Activo" : "Inactivo";
-                sceneryModel.CreationDate = scenery.CreationDate;
-                sceneryModel.UpdateDate = scenery.UpdateDate;
+            sceneryModel.Code = scenery.Code;
+            sceneryModel.Name = scenery.Name;
+            sceneryModel.Impact = scenery.Impact;
+            sceneryModel.Conciliation = scenery.Conciliation;
+            sceneryModel.State = scenery.State;
+            sceneryModel.CodeFormat = "ESC_" + scenery.Code;
+            sceneryModel.StateFormat = scenery.State ? "Activo" : "Inactivo";
+            sceneryModel.CreationDate = scenery.CreationDate;
+            sceneryModel.UpdateDate = scenery.UpdateDate;
+            sceneryModel.CreationDateFormat = scenery.CreationDate.ToString("dd/MM/yyyy");
+            sceneryModel.UpdateDateFormat = scenery.UpdateDate.ToString("dd/MM/yyyy");
 
-            
-                return sceneryModel;
+
+            return sceneryModel;
         }
 
         public async Task<SceneryCreateViewModel> GetSceneryFormatCreate(modScenarios.Scenery scenery)
@@ -182,52 +187,46 @@ namespace ParameterControl.Services.Scenarios
 
         public async Task<List<SceneryViewModel>> GetFilterScenarios(FilterViewModel filterModel)
         {
-            List<Scenery> scenariosFilter = new List<Scenery>();
+            List<modScenarios.Scenery> allScenarios = await GetScenarios();
+            List<SceneryViewModel> scenariosFilter = await GetScenariosFormat(allScenarios);
 
-            if ((filterModel.ColumValue == null || filterModel.ColumValue == "" || filterModel.ValueFilter == null || filterModel.ValueFilter == ""))
+            if (filterModel.ColumValue == null || filterModel.ColumValue == "" || filterModel.ValueFilter == null || filterModel.ValueFilter == "")
             {
-                scenariosFilter = scenarios;
+                return scenariosFilter;
             }
             else
             {
-                switch (filterModel.ColumValue)
-                {
-                    case "Code":
-                        scenariosFilter = applyFilter(filterModel);
-                        break;
-                    case "Name":
-                        scenariosFilter = applyFilter(filterModel);
-                        break;
-                    case "Impact":
-                        scenariosFilter = applyFilter(filterModel);
-                        break;
-                    case "Conciliation":
-                        scenariosFilter = applyFilter(filterModel);
-                        break;
-                    case "Query":
-                        scenariosFilter = applyFilter(filterModel);
-                        break;
-                    case "Parameter":
-                        scenariosFilter = applyFilter(filterModel);
-                        break;
-                    default:
-                        break;
-                }
+                scenariosFilter = await applyFilter(filterModel, scenariosFilter);
             }
-            return await GetScenariosFormat(scenariosFilter);
+
+            return scenariosFilter;
         }
 
-        private List<Scenery> applyFilter(FilterViewModel filterModel)
+        private async Task<List<SceneryViewModel>> applyFilter(FilterViewModel filterModel, List<SceneryViewModel> allScenarios)
         {
-            var property = typeof(Scenery).GetProperty(filterModel.ColumValue);
+            Console.WriteLine(filterModel.TypeRow.ToString());
 
-            List<Scenery> scenariosFilter = new List<Scenery>();
+            var property = typeof(SceneryViewModel).GetProperty(filterModel.ColumValue);
 
-            foreach (Scenery scenery in scenarios)
+            List<SceneryViewModel> scenariosFilter = new List<SceneryViewModel>();
+            if (filterModel.TypeRow == "Select")
             {
-                if (property.GetValue(scenery).ToString().ToUpper().Contains(filterModel.ValueFilter.ToUpper()))
+                foreach (SceneryViewModel scenery in allScenarios)
                 {
-                    scenariosFilter.Add(scenery);
+                    if (property.GetValue(scenery).ToString().ToUpper() == filterModel.ValueFilter.ToUpper())
+                    {
+                        scenariosFilter.Add(scenery);
+                    }
+                }
+            }
+            else
+            {
+                foreach (SceneryViewModel scenery in allScenarios)
+                {
+                    if (property.GetValue(scenery).ToString().ToUpper().Contains(filterModel.ValueFilter.ToUpper()))
+                    {
+                        scenariosFilter.Add(scenery);
+                    }
                 }
             }
 

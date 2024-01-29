@@ -233,6 +233,10 @@
     display: none;
 }
 
+.color-icon::-webkit-calendar-picker-indicator {
+    filter: invert(1); /* Invierte los colores, convierte el ícono a blanco */
+}
+
 @media (min-width:910px) {
     .button_primary:hover {
         background-color: var(--button_primary_hover);

@@ -1,7 +1,5 @@
 ﻿using ParameterControl.Models.Result;
 using ParameterControl.Models.Filter;
-using ParameterControl.Models.User;
-using System.Reflection;
 
 using modResult = ParameterControl.Models.Result;
 
@@ -109,6 +107,10 @@ namespace ParameterControl.Services.Results
                 resultModel.StateFormat = result.State ? "Activo" : "Inactivo";
                 resultModel.CreationDate = result.CreationDate;
                 resultModel.UpdateDate = result.UpdateDate;
+                resultModel.CreationDateFormat = result.CreationDate.ToString("dd/MM/yyyy");
+                resultModel.UpdateDateFormat = result.UpdateDate.ToString("dd/MM/yyyy");
+                resultModel.StartDateFormat = result.StartDate.ToString("dd/MM/yyyy");
+                resultModel.EndDateFormat = result.EndDate.ToString("dd/MM/yyyy");
 
                 ResultsModel.Add(resultModel);
             }
@@ -124,58 +126,50 @@ namespace ParameterControl.Services.Results
        
         public async Task<List<ResultViewModel>> GetFilterResults(FilterViewModel filterModel)
         {
-            List<Result> ResultsFilter = new List<Result>();
+            List<modResult.Result> allResults = await GetResults();
+            List<ResultViewModel> resultsFilter = await GetResultsFormat(allResults);
 
-            if ((filterModel.ColumValue == null || filterModel.ColumValue == "" || filterModel.ValueFilter == null || filterModel.ValueFilter == ""))
+            if (filterModel.ColumValue == null || filterModel.ColumValue == "" || filterModel.ValueFilter == null || filterModel.ValueFilter == "")
             {
-                ResultsFilter = results;
+                return resultsFilter;
             }
             else
             {
-                switch (filterModel.ColumValue)
-                {
-                    case "Conciliation":
-                        ResultsFilter = applyFilter(filterModel);
-                        break;
-                    case "Name":
-                        ResultsFilter = applyFilter(filterModel);
-                        break;
-                    case "Description":
-                        ResultsFilter = applyFilter(filterModel);
-                        break;
-                    case "Conciliation_":
-                        ResultsFilter = applyFilter(filterModel);
-                        break;
-                    case "Required":
-                        ResultsFilter = applyFilter(filterModel);
-                        break;
-                    default:
-                        break;
-                }
+                resultsFilter = await applyFilter(filterModel, resultsFilter);
             }
 
-            return await GetResultsFormat(ResultsFilter);
+            return resultsFilter;
         }
 
-        private List<Result> applyFilter(FilterViewModel filterModel)
+        private async Task<List<ResultViewModel>> applyFilter(FilterViewModel filterModel, List<ResultViewModel> allResults)
         {
-            var property = typeof(Result).GetProperty(filterModel.ColumValue);
+            Console.WriteLine(filterModel.TypeRow.ToString());
 
-            List<Result> ResultsFilter = new List<Result>();
+            var property = typeof(ResultViewModel).GetProperty(filterModel.ColumValue);
 
-            foreach (Result Result in results)
+            List<ResultViewModel> resultsFilter = new List<ResultViewModel>();
+            if (filterModel.TypeRow == "Select")
             {
-                if (property.GetValue(Result).ToString().ToUpper().Contains(filterModel.ValueFilter.ToUpper()))
+                foreach (ResultViewModel result in allResults)
                 {
-                    ResultsFilter.Add(Result);
+                    if (property.GetValue(result).ToString().ToUpper() == filterModel.ValueFilter.ToUpper())
+                    {
+                        resultsFilter.Add(result);
+                    }
                 }
             }
-
-            return ResultsFilter;
+            else
+            {
+                foreach (ResultViewModel result in allResults)
+                {
+                    if (property.GetValue(result).ToString().ToUpper().Contains(filterModel.ValueFilter.ToUpper()))
+                    {
+                        resultsFilter.Add(result);
+                    }
+                }
+            }
+            return resultsFilter;
         }
-
-       
     }
-
 }
 

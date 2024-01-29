@@ -56,11 +56,8 @@ namespace ParameterControl.Controllers.Parameters
         }
 
         [HttpGet]
-        public async Task<ActionResult> ParametersFilter(string filterColunm = "", string filterValue = "")
+        public async Task<ActionResult> ParametersFilter(string filterColunm = "", string filterValue = "", string typeRow = "")
         {
-            _logger.LogInformation(filterColunm);
-            _logger.LogInformation(filterValue);
-
             if (filterColunm == null || filterColunm == "" || filterValue == null || filterValue == "")
             {
                 return RedirectToAction("Parameters");
@@ -69,7 +66,8 @@ namespace ParameterControl.Controllers.Parameters
             FilterViewModel filter = new FilterViewModel()
             {
                 ColumValue = filterColunm,
-                ValueFilter = filterValue
+                ValueFilter = filterValue,
+                TypeRow = typeRow
             };
 
             List<ParameterViewModel> parametersFilter = await parametersService.GetFilterParameters(filter);
@@ -254,15 +252,59 @@ namespace ParameterControl.Controllers.Parameters
         public async Task<ActionResult> FilterParameters(FilterViewModel filter)
         {
 
-            Console.WriteLine(filter.ColumValue);
-
-            Console.WriteLine(filter.ValueFilter);
+            if (filter.TypeRow == "Select")
+            {
+                filter.ValueFilter = filter.ValueFilterOptions;
+            }
+            else if (filter.TypeRow == "Date")
+            {
+                filter.ValueFilter = filter.ValueFilterDate.ToString("dd/MM/yyyy");
+            }
 
             return RedirectToAction("ParametersFilter", new
             {
                 filterColunm = filter.ColumValue,
-                filterValue = filter.ValueFilter
+                filterValue = filter.ValueFilter,
+                typeRow = filter.TypeRow
             });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> GetSecondaryFilter([FromBody] string ColumValue)
+        {
+            if (string.IsNullOrEmpty(ColumValue))
+            {
+                return BadRequest("No a seleccionado ninguna opcion");
+            }
+
+            FilterViewModel filter = new FilterViewModel()
+            {
+                ColumValue = ColumValue
+            };
+
+            switch (ColumValue)
+            {
+                case "StateFormat":
+                    filter.Options = new List<SelectListItem>().ToList();
+                    filter.Options.Add(new SelectListItem("Activo", "Activo"));
+                    filter.Options.Add(new SelectListItem("Inactivo", "Inactivo"));
+                    filter.TypeRow = "Select";
+                    break;
+                case "ParameterType":
+                    filter.Options = await parametersService.GetParameterType();
+                    filter.TypeRow = "Select";
+                    break;
+                case "CreationDateFormat":
+                    filter.TypeRow = "Date";
+                    break;
+                case "UpdateDateFormat":
+                    filter.TypeRow = "Date";
+                    break;
+                default:
+                    filter.TypeRow = "General";
+                    break;
+            }
+            return Ok(filter);
         }
 
         public async Task<List<SelectListItem>> GetParameters()

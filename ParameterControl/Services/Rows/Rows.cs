@@ -45,12 +45,12 @@ namespace ParameterControl.Services.Rows
                 },
                 new Row()
                 {
-                    Value = "CreationDate",
+                    Value = "CreationDateFormatFormat",
                     Name = "Fecha Creacion"
                 },
                  new Row()
                 {
-                    Value = "UpdateDate",
+                    Value = "UpdateDateFormatFormat",
                     Name = "Fecha Actualizacion"
                 }
             };
@@ -94,12 +94,12 @@ namespace ParameterControl.Services.Rows
                 },
                 new Row()
                 {
-                    Value = "CreationDate",
+                    Value = "CreationDateFormat",
                     Name = "Fecha Creacion"
                 },
                  new Row()
                 {
-                    Value = "UpdateDate",
+                    Value = "UpdateDateFormat",
                     Name = "Fecha Actualizacion"
                 }
             };
@@ -138,12 +138,12 @@ namespace ParameterControl.Services.Rows
                 },
                 new Row()
                 {
-                    Value = "CreationDate",
+                    Value = "CreationDateFormat",
                     Name = "Fecha Creacion"
                 },
                  new Row()
                 {
-                    Value = "UpdateDate",
+                    Value = "UpdateDateFormat",
                     Name = "Fecha Actualizacion"
                 }
             };
@@ -182,12 +182,12 @@ namespace ParameterControl.Services.Rows
                 },
                 new Row()
                 {
-                    Value = "CreationDate",
+                    Value = "CreationDateFormat",
                     Name = "Fecha Creacion"
                 },
                  new Row()
                 {
-                    Value = "UpdateDate",
+                    Value = "UpdateDateFormat",
                     Name = "Fecha Actualizacion"
                 }
             };
@@ -226,12 +226,12 @@ namespace ParameterControl.Services.Rows
                 },
                 new Row()
                 {
-                    Value = "CreationDate",
+                    Value = "CreationDateFormat",
                     Name = "Fecha Creacion"
                 },
                  new Row()
                 {
-                    Value = "UpdateDate",
+                    Value = "UpdateDateFormat",
                     Name = "Fecha Actualizacion"
                 }
             };
@@ -270,12 +270,12 @@ namespace ParameterControl.Services.Rows
                 },
                 new Row()
                 {
-                    Value = "CreationDate",
+                    Value = "CreationDateFormat",
                     Name = "Fecha Creacion"
                 },
                  new Row()
                 {
-                    Value = "UpdateDate",
+                    Value = "UpdateDateFormat",
                     Name = "Fecha Actualizacion"
                 }
             };
@@ -300,16 +300,16 @@ namespace ParameterControl.Services.Rows
                 new Row()
                 {
                     Value = "Status",
-                    Name = "Estado"
+                    Name = "Estado val"
                 },
                 new Row()
                 {
-                    Value = "StartDate",
+                    Value = "StartDateFormat",
                     Name = "Fecha Inicio"
                 },
                 new Row()
                 {
-                    Value = "EndDate",
+                    Value = "EndDateFormat",
                     Name = "Fecha Fin"
                 },
                 new Row()
@@ -339,12 +339,12 @@ namespace ParameterControl.Services.Rows
                 },
                 new Row()
                 {
-                    Value = "CreationDate",
+                    Value = "CreationDateFormat",
                     Name = "Fecha Creacion"
                 },
                  new Row()
                 {
-                    Value = "UpdateDate",
+                    Value = "UpdateDateFormat",
                     Name = "Fecha Actualizacion"
                 }
             };

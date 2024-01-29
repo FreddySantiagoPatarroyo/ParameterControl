@@ -59,11 +59,9 @@ namespace ParameterControl.Controllers.Conciliations
         }
 
         [HttpGet]
-        public async Task<ActionResult> ConciliationsFilter(string filterColunm = "", string filterValue = "")
+        public async Task<ActionResult> ConciliationsFilter(string filterColunm = "", string filterValue = "", string typeRow = "")
         {
-            _logger.LogInformation(filterColunm);
-            _logger.LogInformation(filterValue);
-
+  
             if (filterColunm == null || filterColunm == "" || filterValue == null || filterValue == "")
             {
                 return RedirectToAction("Conciliations");
@@ -72,11 +70,11 @@ namespace ParameterControl.Controllers.Conciliations
             FilterViewModel filter = new FilterViewModel()
             {
                 ColumValue = filterColunm,
-                ValueFilter = filterValue
+                ValueFilter = filterValue,
+                TypeRow = typeRow
             };
 
             List<ConciliationViewModel> conciliationsFilter = await conciliationsServices.GetFilterConciliations(filter);
-
             TableConciliations.Data = conciliationsFilter;
 
             TableConciliations.Rows = rows.RowsConciliations();
@@ -273,15 +271,59 @@ namespace ParameterControl.Controllers.Conciliations
         public async Task<ActionResult> FilterConciliations(FilterViewModel filter)
         {
 
-            Console.WriteLine(filter.ColumValue);
-
-            Console.WriteLine(filter.ValueFilter);
+            if (filter.TypeRow == "Select")
+            {
+                filter.ValueFilter = filter.ValueFilterOptions;
+            }
+            else if (filter.TypeRow == "Date")
+            {
+                filter.ValueFilter = filter.ValueFilterDate.ToString("dd/MM/yyyy");
+            }
 
             return RedirectToAction("ConciliationsFilter", new
             {
                 filterColunm = filter.ColumValue,
-                filterValue = filter.ValueFilter
+                filterValue = filter.ValueFilter,
+                typeRow = filter.TypeRow
             });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> GetSecondaryFilter([FromBody] string ColumValue)
+        {
+            if (string.IsNullOrEmpty(ColumValue))
+            {
+                return BadRequest("No a seleccionado ninguna opcion");
+            }
+
+            FilterViewModel filter = new FilterViewModel()
+            {
+                ColumValue = ColumValue
+            };
+
+            switch (ColumValue)
+            {
+                case "StateFormat":
+                    filter.Options = new List<SelectListItem>().ToList();
+                    filter.Options.Add(new SelectListItem("Activo", "Activo"));
+                    filter.Options.Add(new SelectListItem("Inactivo", "Inactivo"));
+                    filter.TypeRow = "Select";
+                    break;
+                case "RequiredFormat":
+                    filter.Options = await conciliationsServices.GetRequired();
+                    filter.TypeRow = "Select";
+                    break;
+                case "CreationDateFormat":
+                    filter.TypeRow = "Date";
+                    break;
+                case "UpdateDateFormat":
+                    filter.TypeRow = "Date";
+                    break;
+                default:
+                    filter.TypeRow = "General";
+                    break;
+            }
+            return Ok(filter);
         }
 
         public async Task<List<SelectListItem>> GetPolicies()

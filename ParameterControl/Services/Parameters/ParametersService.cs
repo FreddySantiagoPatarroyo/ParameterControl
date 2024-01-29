@@ -134,6 +134,8 @@ namespace ParameterControl.Services.Parameters
                 parameterModel.StateFormat = parameter.State ? "Activo" : "Inactivo";
                 parameterModel.CreationDate = parameter.CreationDate;
                 parameterModel.UpdateDate = parameter.UpdateDate;
+                parameterModel.CreationDateFormat = parameter.CreationDate.ToString("dd/MM/yyyy");
+                parameterModel.UpdateDateFormat = parameter.UpdateDate.ToString("dd/MM/yyyy");
 
                 parametersModel.Add(parameterModel);
             }
@@ -156,6 +158,8 @@ namespace ParameterControl.Services.Parameters
             parameterModel.StateFormat = parameter.State ? "Activo" : "Inactivo";
             parameterModel.CreationDate = parameter.CreationDate;
             parameterModel.UpdateDate = parameter.UpdateDate;
+            parameterModel.CreationDateFormat = parameter.CreationDate.ToString("dd/MM/yyyy");
+            parameterModel.UpdateDateFormat = parameter.UpdateDate.ToString("dd/MM/yyyy");
 
             return parameterModel;
         }
@@ -186,47 +190,46 @@ namespace ParameterControl.Services.Parameters
 
         public async Task<List<ParameterViewModel>> GetFilterParameters(FilterViewModel filterModel)
         {
-            List<Parameter> parametersFilter = new List<Parameter>();
+            List<modParameter.Parameter> allParameters = await GetParameters();
+            List<ParameterViewModel> parametersFilter = await GetParametersFormat(allParameters);
 
-            if ((filterModel.ColumValue == null || filterModel.ColumValue == "" || filterModel.ValueFilter == null || filterModel.ValueFilter == ""))
+            if (filterModel.ColumValue == null || filterModel.ColumValue == "" || filterModel.ValueFilter == null || filterModel.ValueFilter == "")
             {
-                parametersFilter = parameters;
+                return parametersFilter;
             }
             else
             {
-                switch (filterModel.ColumValue)
-                {
-                    case "ParameterType":
-                        parametersFilter = applyFilter(filterModel);
-                        break;
-                    case "Value":
-                        parametersFilter = applyFilter(filterModel);
-                        break;
-                    case "Description":
-                        parametersFilter = applyFilter(filterModel);
-                        break;
-                    case "Code":
-                        parametersFilter = applyFilter(filterModel);
-                        break;
-                    default:
-                        break;
-                }
+                parametersFilter = await applyFilter(filterModel, parametersFilter);
             }
 
-            return await GetParametersFormat(parametersFilter);
+            return parametersFilter;
         }
 
-        private List<Parameter> applyFilter(FilterViewModel filterModel)
+        private async Task<List<ParameterViewModel>> applyFilter(FilterViewModel filterModel, List<ParameterViewModel> allParameters)
         {
-            var property = typeof(Parameter).GetProperty(filterModel.ColumValue);
+            Console.WriteLine(filterModel.TypeRow.ToString());
 
-            List<Parameter> parametersFilter = new List<Parameter>();
+            var property = typeof(ParameterViewModel).GetProperty(filterModel.ColumValue);
 
-            foreach (Parameter parameter in parameters)
+            List<ParameterViewModel> parametersFilter = new List<ParameterViewModel>();
+            if (filterModel.TypeRow == "Select")
             {
-                if (property.GetValue(parameter).ToString().ToUpper().Contains(filterModel.ValueFilter.ToUpper()))
+                foreach (ParameterViewModel parameter in allParameters)
                 {
-                    parametersFilter.Add(parameter);
+                    if (property.GetValue(parameter).ToString().ToUpper() == filterModel.ValueFilter.ToUpper())
+                    {
+                        parametersFilter.Add(parameter);
+                    }
+                }
+            }
+            else
+            {
+                foreach (ParameterViewModel parameter in allParameters)
+                {
+                    if (property.GetValue(parameter).ToString().ToUpper().Contains(filterModel.ValueFilter.ToUpper()))
+                    {
+                        parametersFilter.Add(parameter);
+                    }
                 }
             }
 

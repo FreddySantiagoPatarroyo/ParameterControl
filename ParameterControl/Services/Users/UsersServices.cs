@@ -90,6 +90,8 @@ namespace ParameterControl.Services.Users
                 userModel.StateFormat = user.State ? "Activo" : "Inactivo";
                 userModel.CreationDate = user.CreationDate;
                 userModel.UpdateDate = user.UpdateDate;
+                userModel.CreationDateFormat = user.CreationDate.ToString("dd/MM/yyyy");
+                userModel.UpdateDateFormat = user.UpdateDate.ToString("dd/MM/yyyy");
 
                 UsersModel.Add(userModel);
             }
@@ -99,17 +101,19 @@ namespace ParameterControl.Services.Users
 
         public async Task<UserViewModel> GetUserFormat(modUser.User user)
         {
-                UserViewModel userModel = new UserViewModel();
+            UserViewModel userModel = new UserViewModel();
 
-                userModel.Code = user.Code;
-                userModel.User_ = user.User_;
-                userModel.Email = user.Email;
-                userModel.Name = user.Name;
-                userModel.State = user.State;
-                userModel.CodeFormat = "COD_" + user.Code;
-                userModel.StateFormat = user.State ? "Activo" : "Inactivo";
-                userModel.CreationDate = user.CreationDate;
-                userModel.UpdateDate = user.UpdateDate;        
+            userModel.Code = user.Code;
+            userModel.User_ = user.User_;
+            userModel.Email = user.Email;
+            userModel.Name = user.Name;
+            userModel.State = user.State;
+            userModel.CodeFormat = "COD_" + user.Code;
+            userModel.StateFormat = user.State ? "Activo" : "Inactivo";
+            userModel.CreationDate = user.CreationDate;
+            userModel.UpdateDate = user.UpdateDate;
+            userModel.CreationDateFormat = user.CreationDate.ToString("dd/MM/yyyy");
+            userModel.UpdateDateFormat = user.UpdateDate.ToString("dd/MM/yyyy");
 
             return userModel;
         }
@@ -138,59 +142,50 @@ namespace ParameterControl.Services.Users
 
         public async Task<List<UserViewModel>> GetFilterUsers(FilterViewModel filterModel)
         {
-            List<User> UsersFilter = new List<User>();
+            List<modUser.User> allUsers = await GetUsers();
+            List<UserViewModel> usersFilter = await GetUsersFormat(allUsers);
 
-            if ((filterModel.ColumValue == null || filterModel.ColumValue == "" || filterModel.ValueFilter == null || filterModel.ValueFilter == ""))
+            if (filterModel.ColumValue == null || filterModel.ColumValue == "" || filterModel.ValueFilter == null || filterModel.ValueFilter == "")
             {
-                UsersFilter = await GetUsers();
+                return usersFilter;
             }
             else
             {
-                switch (filterModel.ColumValue)
-                {
-                    case "Code":
-                        UsersFilter = applyFilter(filterModel);
-                        break;
-                    case "User_":
-                        UsersFilter = applyFilter(filterModel);
-                        break;
-                    case "Email":
-                        UsersFilter = applyFilter(filterModel);
-                        break;
-                    case "Name":
-                        UsersFilter = applyFilter(filterModel);
-                        break;
-                    case "CreationDate":
-                        UsersFilter = applyFilter(filterModel);
-                        break;
-                    case "UpdateDate":
-                        UsersFilter = applyFilter(filterModel);
-                        break;
-                    default:
-                        break;
-                }
+                usersFilter = await applyFilter(filterModel, usersFilter);
             }
 
-            return await GetUsersFormat(UsersFilter);
+            return usersFilter;
         }
 
-        private List<User> applyFilter(FilterViewModel filterModel)
+        private async Task<List<UserViewModel>> applyFilter(FilterViewModel filterModel, List<UserViewModel> allUsers)
         {
-            var property = typeof(User).GetProperty(filterModel.ColumValue);
+            Console.WriteLine(filterModel.TypeRow.ToString());
 
-            List<User> UsersFilter = new List<User>();
+            var property = typeof(UserViewModel).GetProperty(filterModel.ColumValue);
 
-            foreach (User User in users)
+            List<UserViewModel> usersFilter = new List<UserViewModel>();
+            if (filterModel.TypeRow == "Select")
             {
-                if (property.GetValue(User).ToString().ToUpper().Contains(filterModel.ValueFilter.ToUpper()))
+                foreach (UserViewModel user in allUsers)
                 {
-                    UsersFilter.Add(User);
+                    if (property.GetValue(user).ToString().ToUpper() == filterModel.ValueFilter.ToUpper())
+                    {
+                        usersFilter.Add(user);
+                    }
                 }
             }
-
-            return UsersFilter;
+            else
+            {
+                foreach (UserViewModel user in allUsers)
+                {
+                    if (property.GetValue(user).ToString().ToUpper().Contains(filterModel.ValueFilter.ToUpper()))
+                    {
+                        usersFilter.Add(user);
+                    }
+                }
+            }
+            return usersFilter;
         }
-
     }
 }
 

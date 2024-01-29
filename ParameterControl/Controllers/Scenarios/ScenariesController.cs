@@ -58,10 +58,8 @@ namespace ParameterControl.Controllers.Scenarios
         }
 
         [HttpGet]
-        public async Task<ActionResult> ScenariosFilter(string filterColunm = "", string filterValue = "")
+        public async Task<ActionResult> ScenariosFilter(string filterColunm = "", string filterValue = "", string typeRow = "")
         {
-            _logger.LogInformation(filterColunm);
-            _logger.LogInformation(filterValue);
 
             if (filterColunm == null || filterColunm == "" || filterValue == null || filterValue == "")
             {
@@ -71,7 +69,8 @@ namespace ParameterControl.Controllers.Scenarios
             FilterViewModel filter = new FilterViewModel()
             {
                 ColumValue = filterColunm,
-                ValueFilter = filterValue
+                ValueFilter = filterValue,
+                TypeRow = typeRow
             };
 
             List<SceneryViewModel> scenariosFilter = await scenariosServices.GetFilterScenarios(filter);
@@ -264,15 +263,59 @@ namespace ParameterControl.Controllers.Scenarios
         public async Task<ActionResult> FilterScenarios(FilterViewModel filter)
         {
 
-            Console.WriteLine(filter.ColumValue);
-
-            Console.WriteLine(filter.ValueFilter);
+            if (filter.TypeRow == "Select")
+            {
+                filter.ValueFilter = filter.ValueFilterOptions;
+            }
+            else if (filter.TypeRow == "Date")
+            {
+                filter.ValueFilter = filter.ValueFilterDate.ToString("dd/MM/yyyy");
+            }
 
             return RedirectToAction("ScenariosFilter", new
             {
                 filterColunm = filter.ColumValue,
-                filterValue = filter.ValueFilter
+                filterValue = filter.ValueFilter,
+                typeRow = filter.TypeRow
             });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> GetSecondaryFilter([FromBody] string ColumValue)
+        {
+            if (string.IsNullOrEmpty(ColumValue))
+            {
+                return BadRequest("No a seleccionado ninguna opcion");
+            }
+
+            FilterViewModel filter = new FilterViewModel()
+            {
+                ColumValue = ColumValue
+            };
+
+            switch (ColumValue)
+            {
+                case "StateFormat":
+                    filter.Options = new List<SelectListItem>().ToList();
+                    filter.Options.Add(new SelectListItem("Activo", "Activo"));
+                    filter.Options.Add(new SelectListItem("Inactivo", "Inactivo"));
+                    filter.TypeRow = "Select";
+                    break;
+                case "Impact":
+                    filter.Options = await scenariosServices.GetImpact();
+                    filter.TypeRow = "Select";
+                    break;
+                case "CreationDateFormat":
+                    filter.TypeRow = "Date";
+                    break;
+                case "UpdateDateFormat":
+                    filter.TypeRow = "Date";
+                    break;
+                default:
+                    filter.TypeRow = "General";
+                    break;
+            }
+            return Ok(filter);
         }
 
         public async Task<List<SelectListItem>> GetConciliation()
