@@ -4,13 +4,11 @@ using System.Reflection;
 
 namespace ParameterControl.Models.Conciliation
 {
-    public class Conciliation
+    public class Conciliation:GeneralData
     {
-        public string Id { get; set; } = string.Empty;
 
-        [Required(ErrorMessage = "El codigo es requerido")]
-        public string Code { get; set; } = string.Empty;
-        
+        public int Code { get; set; }
+
         [Required(ErrorMessage = "El nombre es requerido")]
         public string Name { get; set; } = string.Empty;
        
@@ -29,8 +27,6 @@ namespace ParameterControl.Models.Conciliation
         public string Policies { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "Este campo es requerido")]
-        public string Required { get; set; } = string.Empty;
-        
-        public bool State { get; set; } = false;
+        public bool Required { get; set; } = false;
     }
 }

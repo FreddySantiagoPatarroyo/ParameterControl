@@ -21,6 +21,7 @@
             </div>
 
             <input type="hidden" asp-for="Id"/>
+            <input type="hidden" asp-for="CreationDate" />
 
             <div class="form_group">
                 <div class="field">
@@ -121,7 +122,8 @@
                     Formula: $('#Formula').val(),
                     Scenery: $('#Scenery').val(),
                     Parameter: $('#Parameter').val(),
-                    State: true
+                    State: true,
+                    CreationDate: new Date($('#CreationDate').val())
                 }
 
                 console.log(data)

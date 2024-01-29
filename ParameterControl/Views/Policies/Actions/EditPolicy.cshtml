@@ -1,5 +1,6 @@
-﻿@using ParameterControl.Models.Policy;
-@model Policy;
+﻿
+@using ParameterControl.Models.Policy;
+@model PolicyCreateViewModel;
 
 @{
     ViewData["Title"] = "Editar Politicas";
@@ -21,16 +22,17 @@
                 <h1>Editar Politica</h1>
             </div>
 
-            <input type="hidden" asp-for="Id"/>
+            <input type="hidden" asp-for="Code"/>
             <input type="hidden" asp-for="Conciliation" />
             <input type="hidden" asp-for="ControlType" />
             <input type="hidden" asp-for="OperationType" />
+            <input type="hidden" asp-for="CreationDate" />
 
             <div class="form_group">
                 <div class="field">
-                    <label asp-for="Code" class="label_form">Código*</label>
+                    <label asp-for="CodeFormat" class="label_form">Código*</label>
                     <div class="input">
-                        <input asp-for="Code" placeholder="COD_001" readonly />
+                        <input asp-for="CodeFormat" placeholder="Codigo" readonly />
                     </div>
                     <span id="CodeError" class="text_error"></span>
                 </div>
@@ -39,7 +41,7 @@
                 <div class="field">
                     <label asp-for="Name" class="label_form">Nombre*</label>
                     <div class="input">
-                        <input asp-for="Name" placeholder="Descripcion" readonly />
+                        <input asp-for="Name" placeholder="Nombre" readonly />
                     </div>
                     <span id="NameError" class="text_error"></span>
                 </div>
@@ -99,15 +101,17 @@
                 document.getElementById('btn_container').style.display = 'none';
                 document.getElementById('loading').style.display = 'flex';
 
+                const CreationDateFormat = FormatDate($('#CreationDate').val());
+
                 data = {
-                    Id: $('#Id').val(),
                     Code: $('#Code').val(),
                     Name: $('#Name').val(),
                     Description: $('#Description').val(),
                     Conciliation: $('#Conciliation').val(),
                     ControlType: $('#ControlType').val(),
                     OperationType: $('#OperationType').val(),
-                    State: true
+                    State: true,
+                    CreationDate: new Date(CreationDateFormat)
                 }
 
                 console.log(data)
@@ -145,6 +149,22 @@
                 $(`#${idError}`).text("");
                 return true;
             }
+        }
+
+        const FormatDate = (date) => {
+
+            const validateAm = date.toString().includes("a. m.");
+            const validatePm = date.toString().includes("p. m.");
+
+            if (validateAm) {
+                date = date.replace("a. m.", "AM")
+            }
+
+            if (validatePm) {
+                date = date.replace("p. m.", "PM")
+            }
+
+            return date;
         }
     </script>
 }

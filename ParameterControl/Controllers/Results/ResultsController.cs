@@ -5,6 +5,9 @@ using ParameterControl.Services.Results;
 using ParameterControl.Services.Rows;
 using modResult = ParameterControl.Models.Result;
 using Newtonsoft.Json;
+using ParameterControl.Services.Authenticated;
+using ParameterControl.Services.Users;
+using System.Reflection;
 
 
 namespace ParameterControl.Controllers.Results
@@ -15,23 +18,27 @@ namespace ParameterControl.Controllers.Results
         private readonly ILogger<HomeController> _logger;
         private readonly IResultsServices resultsServices;
         private readonly Rows rows;
+        private readonly AuthenticatedUser authenticatedUser;
 
         public ResultsController(
             ILogger<HomeController> logger,
             IResultsServices resultsServices,
-            Rows rows
+            Rows rows,
+            AuthenticatedUser authenticatedUser
         )
         {
             this._logger = logger;
             this.resultsServices = resultsServices;
             this.rows = rows;
+            this.authenticatedUser = authenticatedUser;
         }
 
         [HttpGet]
         public async Task<ActionResult> Results()
         {
+            List<modResult.Result> results = await resultsServices.GetResults();
 
-            TableResults.Data = await resultsServices.GetResults();
+            TableResults.Data = await resultsServices.GetResultsFormat(results);
 
             TableResults.Rows = rows.RowsResults();
 
@@ -63,7 +70,7 @@ namespace ParameterControl.Controllers.Results
                 ValueFilter = filterValue
             };
 
-            List<Result> resultsFilter = await resultsServices.GetFilterResults(filter);
+            List<ResultViewModel> resultsFilter = await resultsServices.GetFilterResults(filter);
 
             TableResults.Data = resultsFilter;
 
@@ -113,10 +120,14 @@ namespace ParameterControl.Controllers.Results
         }
 
         [HttpPost]
-        public async Task<ActionResult> ActiveResult([FromBody] string request)
+        public async Task<ActionResult> ActiveResult([FromBody] string id)
         {
             try
             {
+                modResult.Result request = await resultsServices.GetResultsById(id);
+                request.UserOwner = authenticatedUser.GetUserOwnerId();
+                request.UpdateDate = DateTime.Now;
+                request.State = true;
                 _logger.LogInformation($"Inicia método ResultController.Active {JsonConvert.SerializeObject(request)}");
                 return Ok(new { message = "Se activo el resultado de manera exitosa", state = "Success" });
             }
@@ -136,10 +147,14 @@ namespace ParameterControl.Controllers.Results
         }
 
         [HttpPost]
-        public async Task<ActionResult> DesactiveResult([FromBody] string request)
+        public async Task<ActionResult> DesactiveResult([FromBody] string id)
         {
             try
             {
+                modResult.Result request = await resultsServices.GetResultsById(id);
+                request.UserOwner = authenticatedUser.GetUserOwnerId();
+                request.UpdateDate = DateTime.Now;
+                request.State = false;
                 _logger.LogInformation($"Inicia método ResultController.Active {JsonConvert.SerializeObject(request)}");
                 return Ok(new { message = "Se desactivo el resultado de manera exitosa", state = "Success" });
             }

@@ -1,8 +1,11 @@
-﻿namespace ParameterControl.Models.Scenery
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+
+namespace ParameterControl.Models.Scenery
 {
     public class SceneryCreateViewModel:Scenery
     {
-        public List<string> ImpactOptions = new List<string>();
-        public List<string> ConciliationOptions = new List<string>();
+        public string CodeFormat { get; set; } = string.Empty;
+        public List<SelectListItem> ImpactOptions = new List<SelectListItem>();
+        public List<SelectListItem> ConciliationOptions = new List<SelectListItem>();
     }
 }

@@ -21,15 +21,15 @@
                 <h1>Crear Politica</h1>
             </div>
 
-            <div class="form_group">
+            @* <div class="form_group">
                 <div class="field">
-                    <label asp-for="Code" class="label_form">Código*</label>
+                    <label asp-for="Code" class="label_form">Codigo*</label>
                     <div class="input">
                         <input asp-for="Code" placeholder="Codigo" autocomplete="off" />
                     </div>
                     <span id="CodeError" class="text_error"></span>
                 </div>
-            </div>
+            </div> *@
             <div class="form_group">
                 <div class="field">
                     <label asp-for="Name" class="label_form">Nombre*</label>
@@ -79,10 +79,10 @@
                             <li onclick="selectOption('@null', '@null')" class="option">
                                 <p class="option_text">Seleccione una opción</p>
                             </li>
-                            @foreach (var Colunm in Model.OperationTypeOptions)
+                            @foreach (var Option in Model.OperationTypeOptions)
                             {
-                                <li onclick="selectOption('@Colunm', '@Colunm')" class="option">
-                                    <p class="option_text">@Colunm</p>
+                                <li onclick="selectOption('@Option.Text', '@Option.Value')" class="option">
+                                    <p class="option_text">@Option.Text</p>
                                 </li>
                             }
                         </ul>
@@ -152,7 +152,7 @@
     <script>
         const urlPolicy = '@Url.Action("Create")';
         let data;
-        let isValidCode = false;
+        //let isValidCode = false;
         let isValidName = false;
         let isValidDescription = false;
         let isValidConciliation = false;
@@ -160,19 +160,19 @@
         let isValidOperationType = false;
 
         const sendData = async () => {
-            isValidCode = validateInputEmpty("Code", "El codigo es requerido", "CodeError");
+            //isValidCode = validateInputEmpty("Code", "El codigo es requerido", "CodeError");
             isValidName = validateInputEmpty("Name", "El nombre es requerido", "NameError");
             isValidDescription = validateInputEmpty("Description", "La descripcion es requerido", "DescriptionError");
             isValidConciliation = validateInputEmpty("Conciliation", "La conciliacion es requerido", "ConciliationError");
             isValidControlType = validateInputEmpty("ControlType", "El tipo de control es requerido", "ControlTypeError");
             isValidOperationType = validateInputEmpty("OperationType", "El tipo de operacion es requerido", "OperationTypeError");
 
-            if (isValidCode && isValidName && isValidDescription && isValidConciliation && isValidControlType && isValidOperationType) {
+            if (isValidName && isValidDescription && isValidConciliation && isValidControlType && isValidOperationType) {
                 document.getElementById('btn_container').style.display = 'none';
                 document.getElementById('loading').style.display = 'flex';
 
                 data = {
-                    Code: $('#Code').val(),
+                    //Code: $('Code').val(),
                     Name: $('#Name').val(),
                     Description: $('#Description').val(),
                     Conciliation: parseInt($('#Conciliation').val()),

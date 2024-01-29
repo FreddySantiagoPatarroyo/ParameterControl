@@ -1,4 +1,5 @@
-﻿using ParameterControl.Models.Filter;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using ParameterControl.Models.Filter;
 using ParameterControl.Models.Pagination;
 using ParameterControl.Models.Policy;
 using modPolicy = ParameterControl.Models.Policy;
@@ -8,11 +9,13 @@ namespace ParameterControl.Services.Policies
     public interface IPoliciesServices
     {
         Task<List<PolicyViewModel>> GetFilterPolicies(FilterViewModel filterModel);
-        Task<List<string>> GetOperationsType();
-        Task<List<PolicyViewModel>> GetPolicesFormatTable(List<modPolicy.Policy> policies);
+        Task<List<SelectListItem>> GetOperationsType();
+        Task<List<PolicyViewModel>> GetPolicesFormat(List<modPolicy.Policy> policies);
         Task<List<modPolicy.Policy>> GetPolicies();
         Task<List<modPolicy.Policy>> GetPoliciesPagination(PaginationViewModel pagination);
-        Task<modPolicy.Policy> GetPolicyById(string id);
+        Task<modPolicy.Policy> GetPolicyByCode(int code);
+        Task<PolicyViewModel> GetPolicyFormat(modPolicy.Policy policy);
+        Task<PolicyCreateViewModel> GetPolicyFormatCreate(modPolicy.Policy policy);
         Task<string> InsertPolicy(modPolicy.Policy request);
     }
 }

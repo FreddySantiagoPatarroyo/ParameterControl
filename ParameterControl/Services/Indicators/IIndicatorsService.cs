@@ -7,6 +7,7 @@ namespace ParameterControl.Services.Indicators
     {
         Task<List<Indicator>> GetIndicators();
         Task<Indicator> GetIndicatorsById(string id);
-        Task<List<Indicator>> GetFilterIndicators(FilterViewModel filterModel);
+        Task<List<IndicatorViewModel>> GetFilterIndicators(FilterViewModel filterModel);
+        Task<List<IndicatorViewModel>> GetindicatorsFormat(List<Indicator> indicators);
     }
 }

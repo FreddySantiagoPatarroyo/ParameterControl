@@ -1,9 +1,13 @@
-﻿using ParameterControl.Models.Filter;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using ParameterControl.Models.Conciliation;
+using ParameterControl.Models.Filter;
 using ParameterControl.Models.Policy;
 using ParameterControl.Models.Scenery;
 using ParameterControl.Services.Conciliations;
 using System.Data.Common;
 using System.Reflection;
+using modScenarios = ParameterControl.Models.Scenery;
+using modConciliation = ParameterControl.Models.Conciliation;
 
 
 namespace ParameterControl.Services.Scenarios
@@ -11,91 +15,96 @@ namespace ParameterControl.Services.Scenarios
     public class ScenariosServices : IScenariosServices
     {
         private List<Scenery> scenarios = new List<Scenery>();
-        public ScenariosServices()
+        private readonly IConciliationsServices conciliationsServices;
+
+        public ScenariosServices(
+            IConciliationsServices conciliationsServices
+        )
         {
             scenarios = new List<Scenery>()
             {
                 new Scenery(){
-                    Id = "1",
-                    Code = "ESC_AIC_001",
+                    Code = 1,
                     Name = "ESC_AIC_001",
                     Impact = "CLIENTE",
                     Conciliation = "Conciliacion1",
-                    Query = "Ver Query",
-                    Parameter = "Ver Parametro",
-                    State = true
+                    State = true,
+                    CreationDate = DateTime.Parse("2024-01-10"),
+                    UpdateDate = DateTime.Parse("2023-11-09"),
+                    UserOwner = 1
                 },
                 new Scenery(){
-                    Id = "2",
-                   Code = "ESC_AIC_001",
+                    Code = 2,
                     Name = "ESC_AIC_001",
                     Impact = "CLIENTE",
                     Conciliation = "Conciliacion1",
-                    Query = "Ver Query",
-                    Parameter = "Ver Parametro",
-                    State = false
+                    State = false,
+                    CreationDate = DateTime.Parse("2024-01-10"),
+                    UpdateDate = DateTime.Parse("2023-11-09"),
+                    UserOwner = 1
                 },
                 new Scenery(){
-                    Id = "3",
-                   Code = "ESC_AIC_001",
+                    Code = 3,
                     Name = "ESC_AIC_001",
                     Impact = "CLIENTE",
                     Conciliation = "Conciliacion1",
-                    Query = "Ver Query",
-                    Parameter = "Ver Parametro",
-                    State = true
+                    State = true,
+                    CreationDate = DateTime.Parse("2024-01-10"),
+                    UpdateDate = DateTime.Parse("2023-11-09"),
+                    UserOwner = 1
                 },
                 new Scenery(){
-                    Id = "4",
-                   Code = "ESC_AIC_001",
+                    Code = 4,
                     Name = "ESC_AIC_001",
                     Impact = "CLIENTE",
                     Conciliation = "Conciliacion1",
-                    Query = "Ver Query",
-                    Parameter = "Ver Parametro",
-                    State = false
+                    State = false,
+                    CreationDate = DateTime.Parse("2024-01-10"),
+                    UpdateDate = DateTime.Parse("2023-11-09"),
+                    UserOwner = 1
                 },
                 new Scenery(){
-                    Id = "5",
-                    Code = "ESC_AIC_001",
+                    Code = 5,
                     Name = "ESC_AIC_001",
                     Impact = "CLIENTE",
                     Conciliation = "Conciliacion1",
-                    Query = "Ver Query",
-                    Parameter = "Ver Parametro",
-                    State = true
+                    State = true,
+                    CreationDate = DateTime.Parse("2024-01-10"),
+                    UpdateDate = DateTime.Parse("2023-11-09"),
+                    UserOwner = 1
                 },
                 new Scenery(){
-                    Id = "6",
-                   Code = "ESC_AIC_001",
+                    Code = 6,
                     Name = "ESC_AIC_001",
                     Impact = "CLIENTE",
                     Conciliation = "Conciliacion1",
-                    Query = "Ver Query",
-                    Parameter = "Ver Parametro",
-                    State = false
+                    State = false,
+                    CreationDate = DateTime.Parse("2024-01-10"),
+                    UpdateDate = DateTime.Parse("2023-11-09"),
+                    UserOwner = 1
                 },
                 new Scenery(){
-                    Id = "7",
-                    Code = "ESC_AIC_001",
+                    Code = 7,
                     Name = "ESC_AIC_001",
                     Impact = "CLIENTE",
                     Conciliation = "Conciliacion1",
-                    Query = "Ver Query",
-                    Parameter = "Ver Parametro",
-                    State = true
+                    State = true,
+                    CreationDate = DateTime.Parse("2024-01-10"),
+                    UpdateDate = DateTime.Parse("2023-11-09"),
+                    UserOwner = 1
                 },
                 new Scenery(){
-                    Id = "8",
-                    Code = "ESC_AIC_001",
+                    Code = 8,
                     Name = "ESC_AIC_001",
                     Impact = "CLIENTE",
                     Conciliation = "Conciliacion1",
-                    Query = "Ver Query",
-                    Parameter = "Ver Parametro",
-                    State = false
+                    State = false,
+                    CreationDate = DateTime.Parse("2024-01-10"),
+                    UpdateDate = DateTime.Parse("2023-11-09"),
+                    UserOwner = 1
                 }
             };
+            this.conciliationsServices = conciliationsServices;
         }
 
         public async Task<List<Scenery>> GetScenarios()
@@ -103,13 +112,75 @@ namespace ParameterControl.Services.Scenarios
             return scenarios;
         }
 
-        public async Task<Scenery> GetSceneryById(string id)
+        public async Task<List<SceneryViewModel>> GetScenariosFormat(List<modScenarios.Scenery> scenarios)
         {
-            Scenery scenery = scenarios.Find(scenery => scenery.Id == id);
+            List<SceneryViewModel> scenariosModel = new List<SceneryViewModel>();
+
+            foreach (modScenarios.Scenery scenery in scenarios)
+            {
+                SceneryViewModel sceneryModel = new SceneryViewModel();
+
+                sceneryModel.Code = scenery.Code;
+                sceneryModel.Name = scenery.Name;
+                sceneryModel.Impact = scenery.Impact;
+                sceneryModel.Conciliation = scenery.Conciliation;
+                sceneryModel.State = scenery.State;
+                sceneryModel.CodeFormat = "ESC_" + scenery.Code;
+                sceneryModel.StateFormat = scenery.State ? "Activo" : "Inactivo";
+                sceneryModel.CreationDate = scenery.CreationDate;
+                sceneryModel.UpdateDate = scenery.UpdateDate;
+
+                scenariosModel.Add(sceneryModel);
+            }
+
+            return scenariosModel;
+        }
+
+        public async Task<SceneryViewModel> GetSceneryFormat(modScenarios.Scenery scenery)
+        {
+           
+                SceneryViewModel sceneryModel = new SceneryViewModel();
+
+                sceneryModel.Code = scenery.Code;
+                sceneryModel.Name = scenery.Name;
+                sceneryModel.Impact = scenery.Impact;
+                sceneryModel.Conciliation = scenery.Conciliation;
+                sceneryModel.State = scenery.State;
+                sceneryModel.CodeFormat = "ESC_" + scenery.Code;
+                sceneryModel.StateFormat = scenery.State ? "Activo" : "Inactivo";
+                sceneryModel.CreationDate = scenery.CreationDate;
+                sceneryModel.UpdateDate = scenery.UpdateDate;
+
+            
+                return sceneryModel;
+        }
+
+        public async Task<SceneryCreateViewModel> GetSceneryFormatCreate(modScenarios.Scenery scenery)
+        {
+
+            SceneryCreateViewModel sceneryModel = new SceneryCreateViewModel();
+
+            sceneryModel.Code = scenery.Code;
+            sceneryModel.Name = scenery.Name;
+            sceneryModel.Impact = scenery.Impact;
+            sceneryModel.Conciliation = scenery.Conciliation;
+            sceneryModel.State = scenery.State;
+            sceneryModel.CodeFormat = "ESC_" + scenery.Code;
+            sceneryModel.CreationDate = scenery.CreationDate;
+            sceneryModel.UpdateDate = scenery.UpdateDate;
+
+
+            return sceneryModel;
+        }
+
+
+        public async Task<Scenery> GetSceneryByCode(int code)
+        {
+            Scenery scenery = scenarios.Find(scenery => scenery.Code == code);
             return scenery;
         }
 
-        public async Task<List<Scenery>> GetFilterScenarios(FilterViewModel filterModel)
+        public async Task<List<SceneryViewModel>> GetFilterScenarios(FilterViewModel filterModel)
         {
             List<Scenery> scenariosFilter = new List<Scenery>();
 
@@ -143,8 +214,7 @@ namespace ParameterControl.Services.Scenarios
                         break;
                 }
             }
-
-            return scenariosFilter;
+            return await GetScenariosFormat(scenariosFilter);
         }
 
         private List<Scenery> applyFilter(FilterViewModel filterModel)
@@ -164,27 +234,20 @@ namespace ParameterControl.Services.Scenarios
             return scenariosFilter;
         }
 
-        public async Task<List<string>> GetImpact()
+        public async Task<List<SelectListItem>> GetImpact()
         {
-            List<string> impact = new List<string>()
-           {
-               "CLIENTE",
-                "COMPAÑIA ",
-                "CONFIGURACIÓN "
-           };
+            List<SelectListItem> impact = new List<SelectListItem>().ToList();
+            impact.Add(new SelectListItem("CLIENTE", "CLIENTE"));
+            impact.Add(new SelectListItem("COMPAÑIA", "COMPAÑIA"));
+            impact.Add(new SelectListItem("CONFIGURACIÓN", "CONFIGURACIÓN"));
+
             return impact;
         }
-        public async Task<List<string>> GetConciliation()
+
+        public async Task<List<modConciliation.Conciliation>> GetConciliation()
         {
-            List<string> conciliation = new List<string>()
-            {
-                "Conciliacion1",
-                "Conciliacion2",
-                "Conciliacion3"
-            };
+            List<modConciliation.Conciliation> conciliation = await conciliationsServices.GetConciliations();
             return conciliation;
         }
-
-
     }
 }

@@ -3,7 +3,7 @@
 
 namespace ParameterControl.Models.Indicator
 {
-    public class Indicator
+    public class Indicator:GeneralData
     {
         public string Id { get; set; } = string.Empty;
 
@@ -21,7 +21,6 @@ namespace ParameterControl.Models.Indicator
 
         [Required(ErrorMessage = "El Parametro es requerido")]
         public string Parameter { get; set; } = string.Empty;
-        public bool State { get; set; } = false;
 
     }
 }

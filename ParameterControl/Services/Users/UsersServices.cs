@@ -1,5 +1,9 @@
 ﻿using ParameterControl.Models.User;
 using ParameterControl.Models.Filter;
+using ParameterControl.Models.User;
+using modUser = ParameterControl.Models.User;
+using ParameterControl.Models.Policy;
+using ParameterControl.Policy.Entities;
 
 namespace ParameterControl.Services.Users
 {
@@ -11,54 +15,54 @@ namespace ParameterControl.Services.Users
             users = new List<User>()
             {
                 new User(){
-                   Id = "1",
-                   CodeUser = "COD_001",
+                   Code = 1,
                    User_ = "EjemploUsuario",
                    Email = "ejemplo@gmail.com",
-                   NameUser = "name1",
+                   Name = "name1",
                    CreationDate = DateTime.Parse("2024-01-10"),
                    UpdateDate = DateTime.Parse("2023-11-09"),
-                   State = true
+                   State = true,
+                    UserOwner = 1
                 },
                  new User(){
-                   Id = "2",
-                   CodeUser = "COD_002",
+                   Code = 2,
                    User_ = "EjemploUsuario",
                    Email = "ejemplo@gmail.com",
-                   NameUser = "name2",
+                   Name = "name2",
                    CreationDate = DateTime.Parse("2024-01-10"),
                    UpdateDate = DateTime.Parse("2023-11-09"),
-                   State = true
+                   State = true,
+                    UserOwner = 1
                 },
                   new User(){
-                   Id = "3",
-                   CodeUser = "COD_003",
+                   Code = 3,
                    User_ = "EjemploUsuario",
                    Email = "ejemplo@gmail.com",
-                   NameUser = "name3",
+                   Name = "name3",
                    CreationDate = DateTime.Parse("2024-01-10"),
                    UpdateDate = DateTime.Parse("2023-11-09"),
-                   State = false
+                   State = false,
+                    UserOwner = 1
                 },
                    new User(){
-                   Id = "4",
-                   CodeUser = "COD_004",
+                   Code = 4,
                    User_ = "EjemploUsuario1",
                    Email = "ejemplo@gmail.com",
-                   NameUser = "name4",
+                   Name = "name4",
                    CreationDate = DateTime.Parse("2024-01-10"),
                    UpdateDate = DateTime.Parse("2023-11-09"),
-                   State = false
+                   State = false,
+                    UserOwner = 1
                 },
                     new User(){
-                   Id = "5",
-                   CodeUser = "COD_005",
+                   Code = 5,
                    User_ = "EjemploUsuario1",
                    Email = "ejemplo@gmail.com",
-                   NameUser = "name5",
+                   Name = "name5",
                    CreationDate = DateTime.Parse("2024-01-10"),
                    UpdateDate = DateTime.Parse("2023-11-09"),
-                   State = true
+                   State = true,
+                   UserOwner = 1
                 },
 
             };
@@ -69,25 +73,82 @@ namespace ParameterControl.Services.Users
             return users;
         }
 
-        public async Task<User> GetUsersById(string id)
+        public async Task<List<UserViewModel>> GetUsersFormat(List<modUser.User> users)
         {
-            User user = users.Find(user => user.Id == id);
+            List<UserViewModel> UsersModel = new List<UserViewModel>();
+
+            foreach (modUser.User user in users)
+            {
+                UserViewModel userModel = new UserViewModel();
+
+                userModel.Code = user.Code;
+                userModel.User_ = user.User_;
+                userModel.Email = user.Email;
+                userModel.Name = user.Name;
+                userModel.State = user.State;
+                userModel.CodeFormat = "COD_" + user.Code;
+                userModel.StateFormat = user.State ? "Activo" : "Inactivo";
+                userModel.CreationDate = user.CreationDate;
+                userModel.UpdateDate = user.UpdateDate;
+
+                UsersModel.Add(userModel);
+            }
+
+            return UsersModel;
+        }
+
+        public async Task<UserViewModel> GetUserFormat(modUser.User user)
+        {
+                UserViewModel userModel = new UserViewModel();
+
+                userModel.Code = user.Code;
+                userModel.User_ = user.User_;
+                userModel.Email = user.Email;
+                userModel.Name = user.Name;
+                userModel.State = user.State;
+                userModel.CodeFormat = "COD_" + user.Code;
+                userModel.StateFormat = user.State ? "Activo" : "Inactivo";
+                userModel.CreationDate = user.CreationDate;
+                userModel.UpdateDate = user.UpdateDate;        
+
+            return userModel;
+        }
+
+        public async Task<UserCreateViewModel> GetUserFormatCreate(modUser.User user)
+        {
+            UserCreateViewModel userModel = new UserCreateViewModel();
+
+            userModel.Code = user.Code;
+            userModel.User_ = user.User_;
+            userModel.Email = user.Email;
+            userModel.Name = user.Name;
+            userModel.State = user.State;
+            userModel.CodeFormat = "COD_" + user.Code;
+            userModel.CreationDate = user.CreationDate;
+            userModel.UpdateDate = user.UpdateDate;
+
+            return userModel;
+        }
+
+        public async Task<User> GetUsersByCode(int code)
+        {
+            User user = users.Find(user => user.Code == code);
             return user;
         }
 
-        public async Task<List<User>> GetFilterUsers(FilterViewModel filterModel)
+        public async Task<List<UserViewModel>> GetFilterUsers(FilterViewModel filterModel)
         {
             List<User> UsersFilter = new List<User>();
 
             if ((filterModel.ColumValue == null || filterModel.ColumValue == "" || filterModel.ValueFilter == null || filterModel.ValueFilter == ""))
             {
-                UsersFilter = users;
+                UsersFilter = await GetUsers();
             }
             else
             {
                 switch (filterModel.ColumValue)
                 {
-                    case "CodeUser":
+                    case "Code":
                         UsersFilter = applyFilter(filterModel);
                         break;
                     case "User_":
@@ -96,7 +157,7 @@ namespace ParameterControl.Services.Users
                     case "Email":
                         UsersFilter = applyFilter(filterModel);
                         break;
-                    case "NameUser":
+                    case "Name":
                         UsersFilter = applyFilter(filterModel);
                         break;
                     case "CreationDate":
@@ -110,7 +171,7 @@ namespace ParameterControl.Services.Users
                 }
             }
 
-            return UsersFilter;
+            return await GetUsersFormat(UsersFilter);
         }
 
         private List<User> applyFilter(FilterViewModel filterModel)

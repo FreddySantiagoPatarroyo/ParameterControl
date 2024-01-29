@@ -20,7 +20,7 @@
                 <h2>¿Está seguro de desactivar la conciliacion @Model.Name?</h2>
             </div>
 
-            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="Code" />
 
             <div id="btn_container" class="btn_container">
                 <a class="button button_secondary" asp-controller="Conciliations" asp-action="Conciliations"><p class="text font_bold">Cancelar</p></a>
@@ -50,7 +50,7 @@
             document.getElementById('btn_container').style.display = 'none';
             document.getElementById('loading').style.display = 'flex';
 
-            data = $('#Id').val();
+            data = $('#Code').val();
 
             console.log(data)
 

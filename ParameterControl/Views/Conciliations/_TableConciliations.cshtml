@@ -6,7 +6,7 @@
 @{
     PropertyInfo GetRowInfo(string RowValue)
     {
-        var property = typeof(Conciliation).GetProperty(RowValue);
+        var property = typeof(ConciliationViewModel).GetProperty(RowValue);
 
         return property;
     }
@@ -99,13 +99,13 @@
                                             </div>
                                         }
                                         <div class="row_table flex_box actions">
-                                            <a class="button_icon button_primary" title="Ver" asp-controller="Conciliations" asp-action="View" asp-route-id="@Conciliation.Id">
+                                            <a class="button_icon button_primary" title="Ver" asp-controller="Conciliations" asp-action="View" asp-route-code="@Conciliation.Code">
                                                 <i class="icon icon_041"></i>
                                             </a>
-                                            <a class="button_icon button_primary" title="Editar" asp-controller="Conciliations" asp-action="Edit" asp-route-id="@Conciliation.Id">
+                                            <a class="button_icon button_primary" title="Editar" asp-controller="Conciliations" asp-action="Edit" asp-route-code="@Conciliation.Code">
                                                 <i class="icon icon_106"></i>
                                             </a>
-                                            <a class="button_icon button_primary" title="Inactivar" asp-controller="Conciliations" asp-action="Desactive" asp-route-id="@Conciliation.Id">
+                                            <a class="button_icon button_primary" title="Inactivar" asp-controller="Conciliations" asp-action="Desactive" asp-route-code="@Conciliation.Code">
                                                 <i class="icon icon_196"></i>
                                             </a>
                                         </div>
@@ -127,7 +127,7 @@
                                             <button class="button_icon button_primary disabled" title="Editar" disabled>
                                                 <i class="icon icon_106"></i>
                                             </button>
-                                            <a class="button_icon button_primary" title="Activar" asp-controller="Conciliations" asp-action="Active" asp-route-id="@Conciliation.Id">
+                                            <a class="button_icon button_primary" title="Activar" asp-controller="Conciliations" asp-action="Active" asp-route-code="@Conciliation.Code">
                                                 <i class="icon icon_199"></i>
                                             </a>
                                         </div>

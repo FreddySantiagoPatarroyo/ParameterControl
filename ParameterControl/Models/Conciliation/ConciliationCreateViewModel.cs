@@ -1,8 +1,12 @@
-﻿namespace ParameterControl.Models.Conciliation
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+
+namespace ParameterControl.Models.Conciliation
 {
     public class ConciliationCreateViewModel:Conciliation
     {
-        public List<string> PoliciesOption = new List<string>();
-        public List<string> RequiredOption = new List<string>();
+        public string CodeFormat { get; set; } = string.Empty;
+        public List<SelectListItem> PoliciesOption = new List<SelectListItem>();
+        public List<SelectListItem> RequiredOption = new List<SelectListItem>();
+        public string RequiredFormat { get; set; } = string.Empty;
     }
 }

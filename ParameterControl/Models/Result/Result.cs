@@ -3,7 +3,7 @@
 
 namespace ParameterControl.Models.Result
 {
-    public class Result
+    public class Result:GeneralData
     {
         public string Id { get; set; } = string.Empty;
         public string Conciliation { get; set; } = string.Empty;
@@ -15,8 +15,5 @@ namespace ParameterControl.Models.Result
         public string IncoValue { get; set; } = string.Empty;
         public string PQValue { get; set; } = string.Empty;
         public string ReinValue { get; set; } = string.Empty;
-        public bool State { get; set; } = false;
-
-
     }
 }

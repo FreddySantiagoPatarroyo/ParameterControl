@@ -7,6 +7,7 @@ namespace ParameterControl.Services.Results
     {
         Task<List<Result>> GetResults();
         Task<Result> GetResultsById(string id);
-        Task<List<Result>> GetFilterResults(FilterViewModel filterModel);
+        Task<List<ResultViewModel>> GetFilterResults(FilterViewModel filterModel);
+        Task<List<ResultViewModel>> GetResultsFormat(List<Result> results);
     }
 }
