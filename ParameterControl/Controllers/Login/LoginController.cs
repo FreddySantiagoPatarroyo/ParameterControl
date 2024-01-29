@@ -13,7 +13,7 @@ namespace ParameterControl.Controllers.Login
         [HttpPost]
         public IActionResult Login(LoginViewModel request)
         {
-            if(!ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 return View(request);
             }

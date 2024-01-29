@@ -2,7 +2,7 @@
 
 namespace ParameterControl.Models.User
 {
-    public class User:GeneralData
+    public class User : GeneralData
     {
         public int Code { get; set; }
         [Required(ErrorMessage = "El campo usuario usuario es requerido")]

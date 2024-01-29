@@ -1,14 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
-using ParameterControl.Models.Conciliation;
 using ParameterControl.Models.Filter;
-using ParameterControl.Models.Policy;
 using ParameterControl.Models.Scenery;
 using ParameterControl.Services.Conciliations;
-using System.Data.Common;
-using System.Reflection;
-using modScenarios = ParameterControl.Models.Scenery;
 using modConciliation = ParameterControl.Models.Conciliation;
-using ParameterControl.Policy.Entities;
+
+using modScenarios = ParameterControl.Models.Scenery;
+
 
 
 namespace ParameterControl.Services.Scenarios
@@ -141,7 +138,7 @@ namespace ParameterControl.Services.Scenarios
 
         public async Task<SceneryViewModel> GetSceneryFormat(modScenarios.Scenery scenery)
         {
-           
+
             SceneryViewModel sceneryModel = new SceneryViewModel();
 
             sceneryModel.Code = scenery.Code;
@@ -155,7 +152,6 @@ namespace ParameterControl.Services.Scenarios
             sceneryModel.UpdateDate = scenery.UpdateDate;
             sceneryModel.CreationDateFormat = scenery.CreationDate.ToString("dd/MM/yyyy");
             sceneryModel.UpdateDateFormat = scenery.UpdateDate.ToString("dd/MM/yyyy");
-
 
             return sceneryModel;
         }

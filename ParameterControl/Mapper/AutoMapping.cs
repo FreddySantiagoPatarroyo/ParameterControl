@@ -1,6 +1,4 @@
 ﻿using AutoMapper;
-using mod = ParameterControl.Models;
-using ParameterControl.Policy.Entities;
 
 namespace ParameterControl.Mapper
 {

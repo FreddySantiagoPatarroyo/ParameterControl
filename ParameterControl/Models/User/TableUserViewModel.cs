@@ -2,7 +2,7 @@
 
 namespace ParameterControl.Models.User
 {
-    public class TableUserViewModel: User
+    public class TableUserViewModel : User
     {
         public List<UserViewModel> Data { get; set; } = new List<UserViewModel>();
         public List<Row> Rows { get; set; } = new List<Row>();

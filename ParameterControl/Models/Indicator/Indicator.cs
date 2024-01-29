@@ -3,7 +3,7 @@
 
 namespace ParameterControl.Models.Indicator
 {
-    public class Indicator:GeneralData
+    public class Indicator : GeneralData
     {
         public string Id { get; set; } = string.Empty;
 

@@ -3,13 +3,14 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using ParameterControl.Models.Filter;
 using ParameterControl.Models.Pagination;
 using ParameterControl.Models.Policy;
+using ParameterControl.Policy.Entities;
 using ParameterControl.Policy.Impl;
-using ent = ParameterControl.Policy.Entities;
+
 using modPolicy = ParameterControl.Models.Policy;
 
 namespace ParameterControl.Services.Policies
 {
-    public class PoliciesServices: IPoliciesServices
+    public class PoliciesServices : IPoliciesServices
     {
         private List<modPolicy.Policy> policies = new List<modPolicy.Policy>();
         private readonly PolicyService _policyService;
@@ -141,14 +142,14 @@ namespace ParameterControl.Services.Policies
 
         public async Task<List<PolicyViewModel>> GetPolicesFormat(List<modPolicy.Policy> policies)
         {
-            List<PolicyViewModel> policiesModel  = new List<PolicyViewModel>();
+            List<PolicyViewModel> policiesModel = new List<PolicyViewModel>();
 
             foreach (modPolicy.Policy policy in policies)
             {
                 PolicyViewModel policyModel = new PolicyViewModel();
 
                 policyModel.Code = policy.Code;
-                policyModel.Name = policy.Name; 
+                policyModel.Name = policy.Name;
                 policyModel.Description = policy.Description;
                 policyModel.Conciliation = policy.Conciliation;
                 policyModel.ControlType = policy.ControlType;
@@ -169,7 +170,7 @@ namespace ParameterControl.Services.Policies
 
         public async Task<PolicyViewModel> GetPolicyFormat(modPolicy.Policy policy)
         {
-            
+
             PolicyViewModel policyModel = new PolicyViewModel();
 
             policyModel.Code = policy.Code;
@@ -218,12 +219,11 @@ namespace ParameterControl.Services.Policies
         {
             try
             {
-                var policy = new ent.PolicyModel
+                var policy = new PolicyModel
                 {
-                    //Code = request.Code,
-                    Code = "",
                     Name = request.Name,
                     Description = request.Description,
+                    Objetive = request.Objetive,
                     CreationDate = DateTime.Now,
                     ModifieldDate = DateTime.Now,
                     ModifieldBy = "CreateToUserDev"

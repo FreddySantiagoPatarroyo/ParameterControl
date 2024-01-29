@@ -1,11 +1,11 @@
-﻿using ParameterControl.Models.Result;
+using ParameterControl.Models.Result;
 using ParameterControl.Models.Filter;
 
 using modResult = ParameterControl.Models.Result;
 
 namespace ParameterControl.Services.Results
 {
-    public class ResultsServices: IResultsServices
+    public class ResultsServices : IResultsServices
     {
         private List<Result> results = new List<Result>();
         public ResultsServices()
@@ -13,7 +13,7 @@ namespace ParameterControl.Services.Results
             results = new List<Result>()
             {
                 new Result(){
-                    Id = "1",  
+                    Id = "1",
                     Conciliation = "CO_CONCILIACIÓN",
                     Scenery = "CO_ESCENARIO",
                     Status = "OK",
@@ -123,7 +123,7 @@ namespace ParameterControl.Services.Results
             Result result = results.Find(results => results.Id == id);
             return result;
         }
-       
+
         public async Task<List<ResultViewModel>> GetFilterResults(FilterViewModel filterModel)
         {
             List<modResult.Result> allResults = await GetResults();

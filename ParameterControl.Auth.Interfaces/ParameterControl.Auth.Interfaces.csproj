@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\ParameterControl.Auth.Entities\ParameterControl.Auth.Entities.csproj" />
+  </ItemGroup>
+
 </Project>

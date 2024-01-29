@@ -1,6 +1,6 @@
 ﻿namespace ParameterControl.Models.Indicator
 {
-    public class IndicatorCreationViewModel:Indicator
+    public class IndicatorCreationViewModel : Indicator
     {
     }
 }

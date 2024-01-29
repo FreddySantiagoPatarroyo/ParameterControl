@@ -1,12 +1,10 @@
-﻿using ParameterControl.Models.Rows;
-using System.ComponentModel.DataAnnotations;
-using System.Reflection;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace ParameterControl.Models.Scenery
 {
-    public class Scenery:GeneralData
+    public class Scenery : GeneralData
     {
-        
+
         public int Code { get; set; }
 
         [Required(ErrorMessage = "El nombre es requerido")]

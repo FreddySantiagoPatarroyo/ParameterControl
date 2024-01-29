@@ -6,15 +6,15 @@
         private int RecordPageSize { get; set; } = 10;
         private readonly int MaxRecordPage = 50;
         public int RecordsPage
-        { 
-            get 
-            { 
+        {
+            get
+            {
                 return RecordPageSize;
-            } 
-            set 
+            }
+            set
             {
                 RecordPageSize = (value > MaxRecordPage) ? MaxRecordPage : value;
-            } 
+            }
         }
 
         public int IgnoreRecords => RecordPageSize * (Page - 1);

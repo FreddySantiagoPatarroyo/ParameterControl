@@ -7,8 +7,8 @@ namespace ParameterControl.Policy.Interfaces
         Task<int> InsertPolicy(PolicyModel entity);
         Task<int> UpdatePolicy(PolicyModel entity);
         Task<int> DeletePolicy(PolicyModel entity);
-        Task<int> SelectAllPolicy();
-        Task<int> SelectByIdPolicy(PolicyModel entity);
+        Task<List<PolicyModel>> SelectAllPolicy();
+        Task<PolicyModel> SelectByIdPolicy(PolicyModel entity);
         Task<List<PolicyModel>> SelectPaginatorPolicy(int page, int row);
     }
 }

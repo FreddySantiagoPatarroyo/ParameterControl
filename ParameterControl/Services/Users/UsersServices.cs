@@ -1,13 +1,10 @@
-﻿using ParameterControl.Models.User;
-using ParameterControl.Models.Filter;
+﻿using ParameterControl.Models.Filter;
 using ParameterControl.Models.User;
 using modUser = ParameterControl.Models.User;
-using ParameterControl.Models.Policy;
-using ParameterControl.Policy.Entities;
 
 namespace ParameterControl.Services.Users
 {
-    public class UsersServices: IUsersServices
+    public class UsersServices : IUsersServices
     {
         private List<User> users = new List<User>();
         public UsersServices()

@@ -1,10 +1,8 @@
-﻿using ParameterControl.Models.Rows;
-using System.ComponentModel.DataAnnotations;
-using System.Reflection;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace ParameterControl.Models.Policy
 {
-    public class Policy: GeneralData
+    public class Policy : GeneralData
     {
         public int Code { get; set; }
 
@@ -22,5 +20,8 @@ namespace ParameterControl.Models.Policy
 
         [Required(ErrorMessage = "El tipo de operacion es requerido")]
         public string OperationType { get; set; } = string.Empty;
+
+        [Required(ErrorMessage = "El objetivo es requerido")]
+        public string Objetive { get; set; } = string.Empty;
     }
 }

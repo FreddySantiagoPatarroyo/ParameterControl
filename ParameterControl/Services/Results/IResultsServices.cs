@@ -1,5 +1,5 @@
-﻿using ParameterControl.Models.Result;
-using ParameterControl.Models.Filter;
+﻿using ParameterControl.Models.Filter;
+using ParameterControl.Models.Result;
 
 namespace ParameterControl.Services.Results
 {

@@ -182,26 +182,25 @@ namespace ParameterControl.Services.Conciliations
 
         public async Task<ConciliationViewModel> GetConciliationFormat(modConciliation.Conciliation conciliation)
         {
-           
-                ConciliationViewModel conciliationModel = new ConciliationViewModel();
+            ConciliationViewModel conciliationModel = new ConciliationViewModel();
 
-                conciliationModel.Code = conciliation.Code;
-                conciliationModel.Name = conciliation.Name;
-                conciliationModel.Description = conciliation.Description;
-                conciliationModel.Conciliation_ = conciliation.Conciliation_;
-                conciliationModel.Package = conciliation.Package;
-                conciliationModel.Email = conciliation.Email;
-                conciliationModel.Destination = conciliation.Destination;
-                conciliationModel.Policies = conciliation.Policies;
-                conciliationModel.Required = conciliation.Required;
-                conciliationModel.RequiredFormat = conciliation.Required ? "Si" : "No";
-                conciliationModel.State = conciliation.State;
-                conciliationModel.CodeFormat = "CO_" + conciliation.Code;
-                conciliationModel.StateFormat = conciliation.State ? "Activo" : "Inactivo";
-                conciliationModel.CreationDate = conciliation.CreationDate;
-                conciliationModel.UpdateDate = conciliation.UpdateDate;
-                conciliationModel.CreationDateFormat = conciliation.CreationDate.ToString("dd/MM/yyyy");
-                conciliationModel.UpdateDateFormat = conciliation.UpdateDate.ToString("dd/MM/yyyy");
+            conciliationModel.Code = conciliation.Code;
+            conciliationModel.Name = conciliation.Name;
+            conciliationModel.Description = conciliation.Description;
+            conciliationModel.Conciliation_ = conciliation.Conciliation_;
+            conciliationModel.Package = conciliation.Package;
+            conciliationModel.Email = conciliation.Email;
+            conciliationModel.Destination = conciliation.Destination;
+            conciliationModel.Policies = conciliation.Policies;
+            conciliationModel.Required = conciliation.Required;
+            conciliationModel.RequiredFormat = conciliation.Required ? "Si" : "No";
+            conciliationModel.State = conciliation.State;
+            conciliationModel.CodeFormat = "CO_" + conciliation.Code;
+            conciliationModel.StateFormat = conciliation.State ? "Activo" : "Inactivo";
+            conciliationModel.CreationDate = conciliation.CreationDate;
+            conciliationModel.UpdateDate = conciliation.UpdateDate;
+            conciliationModel.CreationDateFormat = conciliation.CreationDate.ToString("dd/MM/yyyy");
+            conciliationModel.UpdateDateFormat = conciliation.UpdateDate.ToString("dd/MM/yyyy");
 
             return conciliationModel;
         }

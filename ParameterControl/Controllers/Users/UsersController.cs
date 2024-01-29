@@ -1,19 +1,17 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using ParameterControl.Models.User;
-using ParameterControl.Models.Filter;
-using ParameterControl.Services.Users;
-using ParameterControl.Services.Rows;
-using modUser = ParameterControl.Models.User;
 using Newtonsoft.Json;
+using ParameterControl.Models.Filter;
+using ParameterControl.Models.User;
 using ParameterControl.Services.Authenticated;
-using ParameterControl.Models.Conciliation;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using ParameterControl.Services.Policies;
+using ParameterControl.Services.Rows;
+using ParameterControl.Services.Users;
+using modUser = ParameterControl.Models.User;
 
 
 namespace ParameterControl.Controllers.Users
 {
-    public class UsersController: Controller
+    public class UsersController : Controller
     {
         public TableUserViewModel TableUsers = new TableUserViewModel();
         private readonly ILogger<HomeController> _logger;
@@ -112,7 +110,7 @@ namespace ParameterControl.Controllers.Users
                     request.CreationDate = DateTime.Now;
                     request.UpdateDate = DateTime.Now;
                     _logger.LogInformation($"Inicia método UsersController.Create {JsonConvert.SerializeObject(request)}");
-                    
+
                     return Ok(new { message = "Se creo el usuario de manera exitosa", state = "Success" });
                 }
                 catch (Exception ex)
