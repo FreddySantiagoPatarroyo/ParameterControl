@@ -1,14 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Oracle.ManagedDataAccess.Client;
 using ParameterControl.Conciliation.Entities;
-using System;
-using System.Collections.Generic;
-using System.Configuration;
 using System.Data;
-using System.DirectoryServices;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ParameterControl.Conciliation.DataAccess
 {
@@ -31,7 +24,7 @@ namespace ParameterControl.Conciliation.DataAccess
                 {
                     connection.Open();
 
-                    using (OracleCommand command = new OracleCommand("DELETE_CONCILIATION",connection))
+                    using (OracleCommand command = new OracleCommand("DELETE_CONCILIATION", connection))
                     {
                         command.CommandType = CommandType.StoredProcedure;
                         command.Parameters.Add(new OracleParameter("PARAM_CODE", entity.Code));

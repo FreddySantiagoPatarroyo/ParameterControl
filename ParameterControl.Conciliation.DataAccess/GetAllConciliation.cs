@@ -1,13 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Oracle.ManagedDataAccess.Client;
-using System;
-using System.Collections.Generic;
-using System.Configuration;
 using System.Data;
-using System.DirectoryServices;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ParameterControl.Conciliation.DataAccess
 {
@@ -25,7 +18,7 @@ namespace ParameterControl.Conciliation.DataAccess
         {
             try
             {
-                return await Task.Run(() => 
+                return await Task.Run(() =>
                 {
                     using (OracleConnection connection = new OracleConnection(_configuration.GetConnectionString("conn-db")))
                     {

@@ -1,10 +1,8 @@
-﻿using ParameterControl.Models.Rows;
-using System.ComponentModel.DataAnnotations;
-using System.Reflection;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace ParameterControl.Models.Policy
 {
-    public class Policy: GeneralData
+    public class Policy : GeneralData
     {
         public int Code { get; set; }
 

@@ -1,7 +1,7 @@
-﻿using ParameterControl.Models.Filter;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using ParameterControl.Models.Filter;
 using ParameterControl.Models.Parameter;
 using modParameter = ParameterControl.Models.Parameter;
-using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace ParameterControl.Services.Parameters
 {
@@ -241,14 +241,14 @@ namespace ParameterControl.Services.Parameters
             parameterType.Add(new SelectListItem("PARÁMETROS SEGURIDAD", "PARÁMETROS SEGURIDAD"));
             parameterType.Add(new SelectListItem("PARÁMETROS SISTEMA", "PARÁMETROS SISTEMA"));
             parameterType.Add(new SelectListItem("PARÁMETROS CONCILIACIÓN", "PARÁMETROS CONCILIACIÓN"));
-            
+
             return parameterType;
         }
         public async Task<List<Parameter>> GetListParameter()
         {
             //Crear funcion para buscar parametros segun el tipo de parametro
             List<Parameter> listParameter = await GetParameters();
-          
+
             return listParameter;
         }
     }

@@ -1,18 +1,16 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using ParameterControl.Models.Indicator;
+using Newtonsoft.Json;
 using ParameterControl.Models.Filter;
+using ParameterControl.Models.Indicator;
+using ParameterControl.Services.Authenticated;
 using ParameterControl.Services.Indicators;
 using ParameterControl.Services.Rows;
 using modIndicator = ParameterControl.Models.Indicator;
-using ParameterControl.Services.Results;
-using Newtonsoft.Json;
-using ParameterControl.Services.Authenticated;
-using ParameterControl.Models.User;
 
 
 namespace ParameterControl.Controllers.Indicators
 {
-    public class IndicatorsController: Controller
+    public class IndicatorsController : Controller
     {
         public TableIndicatorViewModel TableIndicators = new TableIndicatorViewModel();
         private readonly ILogger<HomeController> _logger;

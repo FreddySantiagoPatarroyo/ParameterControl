@@ -135,7 +135,7 @@ namespace ParameterControl.Auth.Impl
                 {
                     List<UserModel> policies = new List<UserModel>();
                     foreach (DataRow row in dt.Rows)
-                    {                        
+                    {
                         policies.Add(MapperToUser(row).Result);
                     }
                     return policies;

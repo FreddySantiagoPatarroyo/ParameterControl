@@ -135,7 +135,7 @@ namespace ParameterControl.Policy.Impl
                 {
                     List<PolicyModel> policies = new List<PolicyModel>();
                     foreach (DataRow row in dt.Rows)
-                    {                        
+                    {
                         policies.Add(MapperToPolicy(row).Result);
                     }
                     return policies;

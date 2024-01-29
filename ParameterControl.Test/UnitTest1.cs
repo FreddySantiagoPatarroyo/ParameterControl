@@ -2,7 +2,6 @@ using AutoMapper;
 using Microsoft.Extensions.Configuration;
 using ParameterControl.Policy.DataAccess;
 using ParameterControl.Policy.Entities;
-using ParameterControl.Policy.Impl;
 using ParameterControl.Services.Policies;
 
 namespace ParameterControl.Test
@@ -19,12 +18,12 @@ namespace ParameterControl.Test
         {
             var builder = new ConfigurationBuilder()
                 .SetBasePath(System.IO.Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.test.json", optional:false, reloadOnChange:true)
-                .AddJsonFile($"appsettings.test.json", optional:true, reloadOnChange:true)
+                .AddJsonFile("appsettings.test.json", optional: false, reloadOnChange: true)
+                .AddJsonFile($"appsettings.test.json", optional: true, reloadOnChange: true)
                 .Build();
 
             _configuration = builder;
-            _policiesServices = new PoliciesServices(_configuration,_mapper);
+            _policiesServices = new PoliciesServices(_configuration, _mapper);
         }
 
         [Test]
@@ -40,8 +39,8 @@ namespace ParameterControl.Test
                     Conciliation = 1
                 };
                 var response = await _policiesServices.InsertPolicy(policy);
-                
-                Assert.Equals(response,1);
+
+                Assert.Equals(response, 1);
             }
             catch (Exception ex)
             {

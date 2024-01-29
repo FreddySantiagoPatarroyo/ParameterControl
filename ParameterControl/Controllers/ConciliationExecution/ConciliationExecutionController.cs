@@ -1,7 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using ParameterControl.Models.ReconciliationExecution;
-using System.Reflection;
-using static System.Collections.Specialized.BitVector32;
 
 
 namespace ParameterControl.Controllers.ConciliationExecution
@@ -10,7 +7,7 @@ namespace ParameterControl.Controllers.ConciliationExecution
     {
         public IActionResult ConciliationExecution()
         {
-            return View("ConciliationExecution"); 
+            return View("ConciliationExecution");
         }
         public async Task<ActionResult> RunProcess(string id)
         {
@@ -26,7 +23,7 @@ namespace ParameterControl.Controllers.ConciliationExecution
 
             return View("Actions/SuccesfulTransaction");
         }
-       
+
     }
 }
 

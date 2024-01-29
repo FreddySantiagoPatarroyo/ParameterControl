@@ -1,17 +1,10 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Newtonsoft.Json.Linq;
 using ParameterControl.Models.Filter;
 using ParameterControl.Models.Pagination;
 using ParameterControl.Models.Policy;
-using ParameterControl.Models.Rows;
 using ParameterControl.Policy.Entities;
 using ParameterControl.Policy.Impl;
-using ParameterControl.Policy.Interfaces;
-using System.Collections.Generic;
-using System.Data.Common;
-using System.Reflection;
-using ent = ParameterControl.Policy.Entities;
 using modPolicy = ParameterControl.Models.Policy;
 
 namespace ParameterControl.Services.Policies
@@ -174,7 +167,7 @@ namespace ParameterControl.Services.Policies
 
         public async Task<PolicyViewModel> GetPolicyFormat(modPolicy.Policy policy)
         {
-            
+
             PolicyViewModel policyModel = new PolicyViewModel();
 
             policyModel.Code = policy.Code;

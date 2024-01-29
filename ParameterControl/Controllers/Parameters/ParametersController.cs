@@ -5,9 +5,7 @@ using ParameterControl.Models.Filter;
 using ParameterControl.Models.Parameter;
 using ParameterControl.Services.Authenticated;
 using ParameterControl.Services.Parameters;
-using ParameterControl.Services.Policies;
 using ParameterControl.Services.Rows;
-using System.Linq;
 using modParameter = ParameterControl.Models.Parameter;
 
 
@@ -17,7 +15,7 @@ namespace ParameterControl.Controllers.Parameters
     {
         public TableParametersViewModel TableParameters = new TableParametersViewModel();
         private readonly ILogger<HomeController> _logger;
-        private readonly IParametersService parametersService; 
+        private readonly IParametersService parametersService;
         private readonly Rows rows;
         private readonly AuthenticatedUser authenticatedUser;
 

@@ -1,14 +1,7 @@
-﻿using MessagePack;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Newtonsoft.Json.Linq;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
 using ParameterControl.Models.Conciliation;
 using ParameterControl.Models.Filter;
-using ParameterControl.Models.Policy;
-using ParameterControl.Policy.Interfaces;
 using ParameterControl.Services.Policies;
-using System.Collections.Generic;
-using System.Data.Common;
-using System.Reflection;
 using modConciliation = ParameterControl.Models.Conciliation;
 using modPolicy = ParameterControl.Models.Policy;
 
@@ -187,27 +180,27 @@ namespace ParameterControl.Services.Conciliations
 
         public async Task<ConciliationViewModel> GetConciliationFormat(modConciliation.Conciliation conciliation)
         {
-           
-                ConciliationViewModel conciliationModel = new ConciliationViewModel();
 
-                conciliationModel.Code = conciliation.Code;
-                conciliationModel.Name = conciliation.Name;
-                conciliationModel.Description = conciliation.Description;
-                conciliationModel.Conciliation_ = conciliation.Conciliation_;
-                conciliationModel.Package = conciliation.Package;
-                conciliationModel.Email = conciliation.Email;
-                conciliationModel.Destination = conciliation.Destination;
-                conciliationModel.Policies = conciliation.Policies;
-                conciliationModel.Required = conciliation.Required;
-                conciliationModel.RequiredFormat = conciliation.Required ? "Si" : "No";
-                conciliationModel.State = conciliation.State;
-                conciliationModel.CodeFormat = "CO_" + conciliation.Code;
-                conciliationModel.StateFormat = conciliation.State ? "Activo" : "Inactivo";
-                conciliationModel.CreationDate = conciliation.CreationDate;
-                conciliationModel.UpdateDate = conciliation.UpdateDate;
+            ConciliationViewModel conciliationModel = new ConciliationViewModel();
 
-            
-                return conciliationModel;
+            conciliationModel.Code = conciliation.Code;
+            conciliationModel.Name = conciliation.Name;
+            conciliationModel.Description = conciliation.Description;
+            conciliationModel.Conciliation_ = conciliation.Conciliation_;
+            conciliationModel.Package = conciliation.Package;
+            conciliationModel.Email = conciliation.Email;
+            conciliationModel.Destination = conciliation.Destination;
+            conciliationModel.Policies = conciliation.Policies;
+            conciliationModel.Required = conciliation.Required;
+            conciliationModel.RequiredFormat = conciliation.Required ? "Si" : "No";
+            conciliationModel.State = conciliation.State;
+            conciliationModel.CodeFormat = "CO_" + conciliation.Code;
+            conciliationModel.StateFormat = conciliation.State ? "Activo" : "Inactivo";
+            conciliationModel.CreationDate = conciliation.CreationDate;
+            conciliationModel.UpdateDate = conciliation.UpdateDate;
+
+
+            return conciliationModel;
         }
 
 

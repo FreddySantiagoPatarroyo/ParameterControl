@@ -2,7 +2,7 @@
 
 namespace ParameterControl.Models.Parameter
 {
-    public class ParameterCreateViewModel:Parameter
+    public class ParameterCreateViewModel : Parameter
     {
         public string ParameterFormat { get; set; } = string.Empty;
         public List<SelectListItem> ParameterTypeOption = new List<SelectListItem>();

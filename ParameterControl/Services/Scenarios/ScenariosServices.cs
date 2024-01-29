@@ -1,13 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
-using ParameterControl.Models.Conciliation;
 using ParameterControl.Models.Filter;
-using ParameterControl.Models.Policy;
 using ParameterControl.Models.Scenery;
 using ParameterControl.Services.Conciliations;
-using System.Data.Common;
-using System.Reflection;
-using modScenarios = ParameterControl.Models.Scenery;
 using modConciliation = ParameterControl.Models.Conciliation;
+using modScenarios = ParameterControl.Models.Scenery;
 
 
 namespace ParameterControl.Services.Scenarios
@@ -138,21 +134,21 @@ namespace ParameterControl.Services.Scenarios
 
         public async Task<SceneryViewModel> GetSceneryFormat(modScenarios.Scenery scenery)
         {
-           
-                SceneryViewModel sceneryModel = new SceneryViewModel();
 
-                sceneryModel.Code = scenery.Code;
-                sceneryModel.Name = scenery.Name;
-                sceneryModel.Impact = scenery.Impact;
-                sceneryModel.Conciliation = scenery.Conciliation;
-                sceneryModel.State = scenery.State;
-                sceneryModel.CodeFormat = "ESC_" + scenery.Code;
-                sceneryModel.StateFormat = scenery.State ? "Activo" : "Inactivo";
-                sceneryModel.CreationDate = scenery.CreationDate;
-                sceneryModel.UpdateDate = scenery.UpdateDate;
+            SceneryViewModel sceneryModel = new SceneryViewModel();
 
-            
-                return sceneryModel;
+            sceneryModel.Code = scenery.Code;
+            sceneryModel.Name = scenery.Name;
+            sceneryModel.Impact = scenery.Impact;
+            sceneryModel.Conciliation = scenery.Conciliation;
+            sceneryModel.State = scenery.State;
+            sceneryModel.CodeFormat = "ESC_" + scenery.Code;
+            sceneryModel.StateFormat = scenery.State ? "Activo" : "Inactivo";
+            sceneryModel.CreationDate = scenery.CreationDate;
+            sceneryModel.UpdateDate = scenery.UpdateDate;
+
+
+            return sceneryModel;
         }
 
         public async Task<SceneryCreateViewModel> GetSceneryFormatCreate(modScenarios.Scenery scenery)

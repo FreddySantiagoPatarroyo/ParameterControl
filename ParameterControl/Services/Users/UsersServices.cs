@@ -1,13 +1,10 @@
-﻿using ParameterControl.Models.User;
-using ParameterControl.Models.Filter;
+﻿using ParameterControl.Models.Filter;
 using ParameterControl.Models.User;
 using modUser = ParameterControl.Models.User;
-using ParameterControl.Models.Policy;
-using ParameterControl.Policy.Entities;
 
 namespace ParameterControl.Services.Users
 {
-    public class UsersServices: IUsersServices
+    public class UsersServices : IUsersServices
     {
         private List<User> users = new List<User>();
         public UsersServices()
@@ -99,17 +96,17 @@ namespace ParameterControl.Services.Users
 
         public async Task<UserViewModel> GetUserFormat(modUser.User user)
         {
-                UserViewModel userModel = new UserViewModel();
+            UserViewModel userModel = new UserViewModel();
 
-                userModel.Code = user.Code;
-                userModel.User_ = user.User_;
-                userModel.Email = user.Email;
-                userModel.Name = user.Name;
-                userModel.State = user.State;
-                userModel.CodeFormat = "COD_" + user.Code;
-                userModel.StateFormat = user.State ? "Activo" : "Inactivo";
-                userModel.CreationDate = user.CreationDate;
-                userModel.UpdateDate = user.UpdateDate;        
+            userModel.Code = user.Code;
+            userModel.User_ = user.User_;
+            userModel.Email = user.Email;
+            userModel.Name = user.Name;
+            userModel.State = user.State;
+            userModel.CodeFormat = "COD_" + user.Code;
+            userModel.StateFormat = user.State ? "Activo" : "Inactivo";
+            userModel.CreationDate = user.CreationDate;
+            userModel.UpdateDate = user.UpdateDate;
 
             return userModel;
         }

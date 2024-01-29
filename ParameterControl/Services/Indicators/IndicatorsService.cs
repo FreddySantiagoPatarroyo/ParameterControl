@@ -1,8 +1,5 @@
-﻿using ParameterControl.Models.Indicator;
-using ParameterControl.Models.Filter;
+﻿using ParameterControl.Models.Filter;
 using ParameterControl.Models.Indicator;
-using System.Reflection;
-
 using modIndicator = ParameterControl.Models.Indicator;
 
 namespace ParameterControl.Services.Indicators
@@ -17,8 +14,8 @@ namespace ParameterControl.Services.Indicators
                 new Indicator(){
                     Id = "1",
                     Name = "Indicador_001",
-                    Description = "ejemplo",  
-                    Formula = "FormulaEjemplo",  
+                    Description = "ejemplo",
+                    Formula = "FormulaEjemplo",
                     Scenery = "EscenarioEjemplo",
                     Parameter = "ParametroEjemplo",
                     State = false,

@@ -1,15 +1,14 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using ParameterControl.Models.Filter;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Newtonsoft.Json;
 using ParameterControl.Models.Conciliation;
+using ParameterControl.Models.Filter;
+using ParameterControl.Services.Authenticated;
 using ParameterControl.Services.Conciliations;
+using ParameterControl.Services.Policies;
 using ParameterControl.Services.Rows;
 using modConciliation = ParameterControl.Models.Conciliation;
 using modPolicy = ParameterControl.Models.Policy;
-using Newtonsoft.Json;
-using ParameterControl.Services.Policies;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-using ParameterControl.Services.Authenticated;
 
 namespace ParameterControl.Controllers.Conciliations
 {
@@ -97,7 +96,7 @@ namespace ParameterControl.Controllers.Conciliations
         {
 
             List<SelectListItem> PoliciesOptionsList = await GetPolicies();
-            List <SelectListItem> RequiredOptionList = await conciliationsServices.GetRequired();
+            List<SelectListItem> RequiredOptionList = await conciliationsServices.GetRequired();
 
             ConciliationCreateViewModel model = new ConciliationCreateViewModel()
             {

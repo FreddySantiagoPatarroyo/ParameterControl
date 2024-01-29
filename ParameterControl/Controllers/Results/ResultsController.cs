@@ -1,18 +1,16 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using ParameterControl.Models.Result;
+using Newtonsoft.Json;
 using ParameterControl.Models.Filter;
+using ParameterControl.Models.Result;
+using ParameterControl.Services.Authenticated;
 using ParameterControl.Services.Results;
 using ParameterControl.Services.Rows;
 using modResult = ParameterControl.Models.Result;
-using Newtonsoft.Json;
-using ParameterControl.Services.Authenticated;
-using ParameterControl.Services.Users;
-using System.Reflection;
 
 
 namespace ParameterControl.Controllers.Results
 {
-    public class ResultsController: Controller
+    public class ResultsController : Controller
     {
         public TableResultViewModel TableResults = new TableResultViewModel();
         private readonly ILogger<HomeController> _logger;

@@ -1,10 +1,8 @@
-﻿using ParameterControl.Models.Rows;
-using System.ComponentModel.DataAnnotations;
-using System.Reflection;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace ParameterControl.Models.Parameter
 {
-    public class Parameter:GeneralData
+    public class Parameter : GeneralData
     {
         public int Code { get; set; }
 
@@ -21,6 +19,6 @@ namespace ParameterControl.Models.Parameter
         public string ParameterType { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "El listado es requerido")]
-        public string List {  get; set; } = string.Empty;
+        public string List { get; set; } = string.Empty;
     }
 }

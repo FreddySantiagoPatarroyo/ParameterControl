@@ -1,14 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Oracle.ManagedDataAccess.Client;
 using ParameterControl.Auth.Entities;
-using System;
-using System.Collections.Generic;
-using System.Configuration;
 using System.Data;
-using System.DirectoryServices;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ParameterControl.Auth.DataAccess
 {
@@ -31,7 +24,7 @@ namespace ParameterControl.Auth.DataAccess
                 {
                     connection.Open();
 
-                    using (OracleCommand command = new OracleCommand("INSERT_USER",connection))
+                    using (OracleCommand command = new OracleCommand("INSERT_USER", connection))
                     {
                         command.CommandType = CommandType.StoredProcedure;
                         command.Parameters.Add(new OracleParameter("PARAM_NAME", entity.User));
