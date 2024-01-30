@@ -43,6 +43,7 @@ namespace ParameterControl.Controllers.CrossConnections
             TableCrossConnections.IsCreate = false;
             TableCrossConnections.IsActivate = false;
             TableCrossConnections.IsEdit = false;
+            TableCrossConnections.IsView = true;
             TableCrossConnections.IsInactivate = false;
 
             ViewBag.ApplyFilter = false;
@@ -71,10 +72,11 @@ namespace ParameterControl.Controllers.CrossConnections
             TableCrossConnections.Rows = rows.RowsCrossConnection();
 
             TableCrossConnections.Filter = true;
-            TableCrossConnections.IsCreate = true;
-            TableCrossConnections.IsActivate = true;
-            TableCrossConnections.IsEdit = true;
-            TableCrossConnections.IsInactivate = true;
+            TableCrossConnections.IsCreate = false;
+            TableCrossConnections.IsActivate = false;
+            TableCrossConnections.IsEdit = false;
+            TableCrossConnections.IsView = true;
+            TableCrossConnections.IsInactivate = false;
 
             ViewBag.ApplyFilter = true;
 
@@ -96,7 +98,7 @@ namespace ParameterControl.Controllers.CrossConnections
         {
             FilterViewModel model = new FilterViewModel()
             {
-                Rows = rows.RowsPolicies()
+                Rows = rows.RowsCrossConnection()
 
             };
 
