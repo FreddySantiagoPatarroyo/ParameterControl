@@ -2,7 +2,7 @@
 {
     public class PaginationViewModel
     {
-        public int Page { get; set; }
+        public int Page { get; set; } = 1;
         private int RecordPageSize { get; set; } = 10;
         private readonly int MaxRecordPage = 50;
         public int RecordsPage

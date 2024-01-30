@@ -130,9 +130,12 @@ namespace ParameterControl.Services.Policies
         {
             try
             {
+                Console.WriteLine(pagination.Page);
+                Console.WriteLine(pagination.RecordsPage);
                 var response = await _policyService.SelectPaginatorPolicy(pagination.Page, pagination.RecordsPage);
                 var result = _mapper.Map<List<modPolicy.Policy>>(response);
-                return result;
+                Console.WriteLine(result.Count);
+                return result; 
             }
             catch (Exception ex)
             {

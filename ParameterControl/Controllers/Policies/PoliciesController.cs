@@ -34,7 +34,7 @@ namespace ParameterControl.Controllers.Policies
         }
 
         [HttpGet]
-        public async Task<ActionResult> Policies()
+        public async Task<ActionResult> Policies(PaginationViewModel paginationViewModel)
         {
             List<modPolicy.Policy> policies = await policiesServices.GetPolicies();
 
