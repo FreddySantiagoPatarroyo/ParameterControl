@@ -31,7 +31,7 @@ namespace ParameterControl.Services.Conciliations
                     State = true,
                     CreationDate = DateTime.Parse("2024-01-10"),
                     UpdateDate = DateTime.Parse("2023-11-09"),
-                    UserOwner = 1
+                    UserOwner = "User1"
                 },
                 new Conciliation(){
                     Code = 2,
@@ -46,7 +46,7 @@ namespace ParameterControl.Services.Conciliations
                     State = true,
                     CreationDate = DateTime.Parse("2024-01-10"),
                     UpdateDate = DateTime.Parse("2023-11-09"),
-                    UserOwner = 1
+                    UserOwner = "User1"
                 },
                 new Conciliation(){
                     Code = 3,
@@ -61,7 +61,7 @@ namespace ParameterControl.Services.Conciliations
                     State = true,
                     CreationDate = DateTime.Parse("2024-01-10"),
                     UpdateDate = DateTime.Parse("2023-11-09"),
-                    UserOwner = 1
+                    UserOwner = "User1"
                 },
                 new Conciliation(){
                     Code = 4,
@@ -76,7 +76,7 @@ namespace ParameterControl.Services.Conciliations
                     State = false,
                     CreationDate = DateTime.Parse("2024-01-10"),
                     UpdateDate = DateTime.Parse("2023-11-09"),
-                    UserOwner = 1
+                    UserOwner = "User1"
                 },
                 new Conciliation(){
                     Code = 5,
@@ -91,7 +91,7 @@ namespace ParameterControl.Services.Conciliations
                     State = true,
                     CreationDate = DateTime.Parse("2024-01-10"),
                     UpdateDate = DateTime.Parse("2023-11-09"),
-                    UserOwner = 1
+                    UserOwner = "User1"
                 },
                 new Conciliation(){
                     Code = 6,
@@ -106,7 +106,7 @@ namespace ParameterControl.Services.Conciliations
                     State = false,
                     CreationDate = DateTime.Parse("2024-01-10"),
                     UpdateDate = DateTime.Parse("2023-11-09"),
-                    UserOwner = 1
+                    UserOwner = "User1"
                 },
                 new Conciliation(){
                     Code = 7,
@@ -121,7 +121,7 @@ namespace ParameterControl.Services.Conciliations
                     State = true,
                     CreationDate = DateTime.Parse("2024-01-10"),
                     UpdateDate = DateTime.Parse("2023-11-09"),
-                    UserOwner = 1
+                    UserOwner = "User1"
                 },
                 new Conciliation(){
                     Code = 8,
@@ -136,7 +136,7 @@ namespace ParameterControl.Services.Conciliations
                     State = false,
                     CreationDate = DateTime.Parse("2024-01-10"),
                     UpdateDate = DateTime.Parse("2023-11-09"),
-                    UserOwner = 1
+                    UserOwner = "User1"
                 }
             };
             this.policiesServices = policiesServices;

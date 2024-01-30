@@ -29,7 +29,7 @@ namespace ParameterControl.Services.Scenarios
                     State = true,
                     CreationDate = DateTime.Parse("2024-01-10"),
                     UpdateDate = DateTime.Parse("2023-11-09"),
-                    UserOwner = 1
+                    UserOwner = "User1"
                 },
                 new Scenery(){
                     Code = 2,
@@ -39,7 +39,7 @@ namespace ParameterControl.Services.Scenarios
                     State = false,
                     CreationDate = DateTime.Parse("2024-01-10"),
                     UpdateDate = DateTime.Parse("2023-11-09"),
-                    UserOwner = 1
+                    UserOwner = "User1"
                 },
                 new Scenery(){
                     Code = 3,
@@ -49,7 +49,7 @@ namespace ParameterControl.Services.Scenarios
                     State = true,
                     CreationDate = DateTime.Parse("2024-01-10"),
                     UpdateDate = DateTime.Parse("2023-11-09"),
-                    UserOwner = 1
+                    UserOwner = "User1"
                 },
                 new Scenery(){
                     Code = 4,
@@ -59,7 +59,7 @@ namespace ParameterControl.Services.Scenarios
                     State = false,
                     CreationDate = DateTime.Parse("2024-01-10"),
                     UpdateDate = DateTime.Parse("2023-11-09"),
-                    UserOwner = 1
+                    UserOwner = "User1"
                 },
                 new Scenery(){
                     Code = 5,
@@ -69,7 +69,7 @@ namespace ParameterControl.Services.Scenarios
                     State = true,
                     CreationDate = DateTime.Parse("2024-01-10"),
                     UpdateDate = DateTime.Parse("2023-11-09"),
-                    UserOwner = 1
+                    UserOwner = "User1"
                 },
                 new Scenery(){
                     Code = 6,
@@ -79,7 +79,7 @@ namespace ParameterControl.Services.Scenarios
                     State = false,
                     CreationDate = DateTime.Parse("2024-01-10"),
                     UpdateDate = DateTime.Parse("2023-11-09"),
-                    UserOwner = 1
+                    UserOwner = "User1"
                 },
                 new Scenery(){
                     Code = 7,
@@ -89,7 +89,7 @@ namespace ParameterControl.Services.Scenarios
                     State = true,
                     CreationDate = DateTime.Parse("2024-01-10"),
                     UpdateDate = DateTime.Parse("2023-11-09"),
-                    UserOwner = 1
+                    UserOwner = "User1"
                 },
                 new Scenery(){
                     Code = 8,
@@ -99,7 +99,7 @@ namespace ParameterControl.Services.Scenarios
                     State = false,
                     CreationDate = DateTime.Parse("2024-01-10"),
                     UpdateDate = DateTime.Parse("2023-11-09"),
-                    UserOwner = 1
+                    UserOwner = "User1"
                 }
             };
             this.conciliationsServices = conciliationsServices;

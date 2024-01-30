@@ -19,7 +19,7 @@ namespace ParameterControl.Services.Users
                    CreationDate = DateTime.Parse("2024-01-10"),
                    UpdateDate = DateTime.Parse("2023-11-09"),
                    State = true,
-                    UserOwner = 1
+                    UserOwner = "User1"
                 },
                  new User(){
                    Code = 2,
@@ -29,7 +29,7 @@ namespace ParameterControl.Services.Users
                    CreationDate = DateTime.Parse("2024-01-10"),
                    UpdateDate = DateTime.Parse("2023-11-09"),
                    State = true,
-                    UserOwner = 1
+                    UserOwner = "User1"
                 },
                   new User(){
                    Code = 3,
@@ -39,7 +39,7 @@ namespace ParameterControl.Services.Users
                    CreationDate = DateTime.Parse("2024-01-10"),
                    UpdateDate = DateTime.Parse("2023-11-09"),
                    State = false,
-                    UserOwner = 1
+                    UserOwner = "User1"
                 },
                    new User(){
                    Code = 4,
@@ -49,7 +49,7 @@ namespace ParameterControl.Services.Users
                    CreationDate = DateTime.Parse("2024-01-10"),
                    UpdateDate = DateTime.Parse("2023-11-09"),
                    State = false,
-                    UserOwner = 1
+                    UserOwner = "User1"
                 },
                     new User(){
                    Code = 5,
@@ -59,7 +59,7 @@ namespace ParameterControl.Services.Users
                    CreationDate = DateTime.Parse("2024-01-10"),
                    UpdateDate = DateTime.Parse("2023-11-09"),
                    State = true,
-                   UserOwner = 1
+                   UserOwner = "User1"
                 },
 
             };

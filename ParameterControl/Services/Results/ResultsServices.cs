@@ -26,7 +26,7 @@ namespace ParameterControl.Services.Results
                     State = true,
                     CreationDate = DateTime.Parse("2024-01-10"),
                     UpdateDate = DateTime.Parse("2023-11-09"),
-                    UserOwner = 1
+                    UserOwner = "User1"
                 },
                  new Result(){
                     Id = "2",
@@ -42,7 +42,7 @@ namespace ParameterControl.Services.Results
                     State = false,
                     CreationDate = DateTime.Parse("2024-01-10"),
                     UpdateDate = DateTime.Parse("2023-11-09"),
-                    UserOwner = 1
+                    UserOwner = "User1"
                 },
                   new Result(){
                     Id = "3",
@@ -58,7 +58,7 @@ namespace ParameterControl.Services.Results
                     State = true,
                     CreationDate = DateTime.Parse("2024-01-10"),
                     UpdateDate = DateTime.Parse("2023-11-09"),
-                    UserOwner = 1
+                    UserOwner = "User1"
                 },
                    new Result(){
                     Id = "4",
@@ -74,7 +74,7 @@ namespace ParameterControl.Services.Results
                     State = false,
                     CreationDate = DateTime.Parse("2024-01-10"),
                     UpdateDate = DateTime.Parse("2023-11-09"),
-                    UserOwner = 1
+                    UserOwner = "User1"
                 },
 
             };

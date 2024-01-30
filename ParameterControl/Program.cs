@@ -1,5 +1,6 @@
 using ParameterControl.Services.Authenticated;
 using ParameterControl.Services.Conciliations;
+using ParameterControl.Services.CrossConnections;
 using ParameterControl.Services.Indicators;
 using ParameterControl.Services.Parameters;
 using ParameterControl.Services.Policies;
@@ -19,6 +20,7 @@ builder.Services.AddTransient<IScenariosServices, ScenariosServices>();
 builder.Services.AddTransient<IUsersServices, UsersServices>();
 builder.Services.AddTransient<IIndicatorsService, IndicatorsService>();
 builder.Services.AddTransient<IResultsServices, ResultsServices>();
+builder.Services.AddTransient<ICrossConnectionsService, CrossConnectionsService>();
 builder.Services.AddTransient<AuthenticatedUser>();
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());

@@ -32,7 +32,7 @@ namespace ParameterControl.Services.Policies
                     State = true,
                     CreationDate = DateTime.Parse("2024-01-10"),
                     UpdateDate = DateTime.Parse("2023-11-09"),
-                    UserOwner = 1
+                    UserOwner = "User1"
                 },
                 new modPolicy.Policy(){
                     Code = 2,
@@ -44,7 +44,7 @@ namespace ParameterControl.Services.Policies
                     State = false,
                     CreationDate = DateTime.Parse("2024-01-10"),
                     UpdateDate = DateTime.Parse("2023-11-09"),
-                    UserOwner = 1
+                    UserOwner = "User1"
                 },
                 new modPolicy.Policy(){
                     Code = 3,
@@ -56,7 +56,7 @@ namespace ParameterControl.Services.Policies
                     State = true,
                     CreationDate = DateTime.Parse("2024-02-10"),
                     UpdateDate = DateTime.Parse("2023-11-09"),
-                    UserOwner = 1
+                    UserOwner = "User1"
                 },
                 new modPolicy.Policy(){
                     Code = 4,
@@ -68,7 +68,7 @@ namespace ParameterControl.Services.Policies
                     State = false,
                     CreationDate = DateTime.Parse("2024-01-10"),
                     UpdateDate = DateTime.Parse("2023-11-09"),
-                    UserOwner = 1
+                    UserOwner = "User1"
                 },
                 new modPolicy.Policy(){
                     Code = 5,
@@ -80,7 +80,7 @@ namespace ParameterControl.Services.Policies
                     State = true,
                     CreationDate = DateTime.Parse("2024-01-10"),
                     UpdateDate = DateTime.Parse("2023-11-09"),
-                    UserOwner = 1
+                    UserOwner = "User1"
                 },
                 new modPolicy.Policy(){
                     Code = 6,
@@ -92,7 +92,7 @@ namespace ParameterControl.Services.Policies
                     State = false,
                     CreationDate = DateTime.Parse("2024-01-10"),
                     UpdateDate = DateTime.Parse("2023-11-09"),
-                    UserOwner = 1
+                    UserOwner = "User1"
                 },
                 new modPolicy.Policy(){
                     Code = 7,
@@ -104,7 +104,7 @@ namespace ParameterControl.Services.Policies
                     State = true,
                     CreationDate = DateTime.Parse("2024-01-10"),
                     UpdateDate = DateTime.Parse("2023-11-09"),
-                    UserOwner = 1
+                    UserOwner = "User1"
                 },
                 new modPolicy.Policy(){
                     Code = 8,
@@ -116,7 +116,7 @@ namespace ParameterControl.Services.Policies
                     State = false,
                     CreationDate = DateTime.Parse("2024-01-10"),
                     UpdateDate = DateTime.Parse("2023-11-09"),
-                    UserOwner = 1
+                    UserOwner = "User1"
                 }
             };
         }

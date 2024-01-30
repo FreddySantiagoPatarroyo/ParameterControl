@@ -2,9 +2,9 @@
 {
     public class AuthenticatedUser
     {
-        public int GetUserOwnerId()
+        public string GetUserOwnerId()
         {
-            return 1;
+            return "User1";
         }
     }
 }
