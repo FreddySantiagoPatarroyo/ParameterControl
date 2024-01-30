@@ -5,7 +5,8 @@ using ParameterControl.Models.Pagination;
 using ParameterControl.Models.Policy;
 using ParameterControl.Policy.Entities;
 using ParameterControl.Policy.Impl;
-
+using System.Data;
+using System.Runtime.CompilerServices;
 using modPolicy = ParameterControl.Models.Policy;
 
 namespace ParameterControl.Services.Policies
@@ -123,7 +124,9 @@ namespace ParameterControl.Services.Policies
 
         public async Task<List<modPolicy.Policy>> GetPolicies()
         {
-            return policies;
+            var collectionPolicies = await _policyService.SelectAllPolicy();
+            var response = await MapperPolicy(collectionPolicies);
+            return response;
         }
 
         public async Task<List<modPolicy.Policy>> GetPoliciesPagination(PaginationViewModel pagination)
@@ -295,6 +298,40 @@ namespace ParameterControl.Services.Policies
             }
            
             return policiesFilter;
+        }
+
+        private async Task<List<modPolicy.Policy>> MapperPolicy(List<PolicyModel> policyModel)
+        {
+            return await Task.Run(() =>
+            {
+                List<modPolicy.Policy> policies = new List<modPolicy.Policy>();
+                if (policyModel.Count > 0)
+                {                    
+                    foreach (var policy in policyModel)
+                    {
+                        policies.Add(MapperToPolicy(policy).Result);
+                    }
+                }
+                return policies;
+            });
+        }
+
+        private async Task<modPolicy.Policy> MapperToPolicy(PolicyModel policy)
+        {
+            return await Task.Run(() =>
+            {
+                modPolicy.Policy model = new modPolicy.Policy
+                {
+                    Code = Convert.ToInt32(policy.Code),
+                    Name = policy.Name,
+                    Description = policy.Description,
+                    Objetive = policy.Objetive,
+                    CreationDate = policy.CreationDate,
+                    UpdateDate = policy.ModifieldDate,
+                    UserOwner = policy.ModifieldBy
+                };
+                return model;
+            });
         }
     }
 }

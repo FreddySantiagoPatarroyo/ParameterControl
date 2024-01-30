@@ -153,14 +153,13 @@ namespace ParameterControl.Policy.Impl
             {
                 PolicyModel model = new PolicyModel
                 {
-                    Id = dr["CODE"].ToString(),
-                    Code = dr["CODE_POLITICA"].ToString(),
-                    Name = dr["NOMBRE_POLITICA"].ToString(),
-                    Description = dr["DESCRIPCION"].ToString(),
-                    Objetive = dr["OBJETIVO"].ToString(),
-                    CreationDate = Convert.ToDateTime(dr["FECHA_CREACION"]),
-                    ModifieldDate = Convert.ToDateTime(dr["FECHA_ACTUALIZACION"]),
-                    ModifieldBy = dr["MODIFICADO_POR"].ToString()
+                    Code = dr["COD_POLITICA"].ToString(),
+                    Name = dr["NOMBRE_POLITICA"] is DBNull ? string.Empty : dr["NOMBRE_POLITICA"].ToString(),
+                    Description = dr["DESCRIPCION"] is DBNull ? string.Empty : dr["DESCRIPCION"].ToString(),
+                    Objetive = dr["OBJETIVO"] is DBNull ? string.Empty : dr["OBJETIVO"].ToString(),
+                    CreationDate = dr["FECHA_CREACION"] is DBNull ? DateTime.Now : Convert.ToDateTime(dr["FECHA_CREACION"]),
+                    ModifieldDate = dr["FECHA_ACTUALIZACION"] is DBNull ? DateTime.Now : Convert.ToDateTime(dr["FECHA_ACTUALIZACION"]),
+                    ModifieldBy = dr["MODIFICADO_POR"] is DBNull ? string.Empty : dr["MODIFICADO_POR"].ToString()
                 };
                 return model;
             });
