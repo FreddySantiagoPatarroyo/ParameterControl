@@ -21,7 +21,6 @@ namespace ParameterControl.Models.Policy
         [Required(ErrorMessage = "El tipo de operacion es requerido")]
         public string OperationType { get; set; } = string.Empty;
 
-        [Required(ErrorMessage = "El objetivo es requerido")]
         public string Objetive { get; set; } = string.Empty;
     }
 }

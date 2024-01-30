@@ -124,7 +124,6 @@ namespace ParameterControl.Controllers.Policies
                     return BadRequest(new { message = "Error al crear la politica", state = "Error" });
                 }
             }
-
         }
 
         [HttpGet]
