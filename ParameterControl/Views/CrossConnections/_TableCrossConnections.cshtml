@@ -26,37 +26,6 @@
         <div class="list">
             <div class="element_table">
                 <div class="content_filter flex_box">
-                    @* <div class="filter_primary">
-                    <div id="field_primary" class="field">
-                    <label class="name font_normal" for="select_filter">Filtrar Por :</label>
-                    <div id="input" class="input">
-                    <input class="input_select" id="input_select_filter" name="input_select_filter" value="" type="text" placeholder="Seleccione una opción" onclick="showOptions()" readonly />
-                    <i class="icon icon_select icon_153"></i>
-                    </div>
-                    <div id="options" class="options">
-                    <ul class="options_list">
-                    <li onclick="selectOption('@null', '@null')" class="option">
-                    <p class="option_text">Seleccione una opción</p>
-                    </li>
-                    @foreach (var Colunm in Model.Rows)
-                    {
-                    <li onclick="selectOption('@Colunm.Name', '@Colunm.Value')" class="option">
-                    <p class="option_text">@Colunm.Name</p>
-                    </li>
-                    }
-                    </ul>
-                    </div>
-                    <div id="select_helper" class="select_helper" onclick="showOptions()"></div>
-                    </div>
-                    </div>
-
-                    <div class="filter_secondary">
-                    <div id="field_secundary" class="field">
-                    <div id="input" class="input">
-                    <input class="input_select" id="input_filter" name="input_filter" type="text" placeholder="Filtro" onkeyup="selectValue()" />
-                    </div>
-                    </div>
-                    </div> *@
                     <a class="button button_primary" title="Filtrar" asp-controller="CrossConnections" asp-action="Filter">
                         <p class="text font_bold">Filtrar Tabla</p>
                     </a>
@@ -100,18 +69,20 @@
                                             </div>
                                         }
                                         <div class="row_table flex_box actions">
-                                            
-                                            <a class="button_icon button_primary" title="Ver" asp-controller="Policies" asp-action="View" asp-route-code="@CrossConnections.Code">
-                                                <i class="icon icon_041"></i>
-                                            </a>
+                                            @if (Model.IsView)
+                                            {
+                                                <a class="button_icon button_primary" title="Ver" asp-controller="CrossConnections" asp-action="View" asp-route-code="@CrossConnections.Code">
+                                                    <i class="icon icon_041"></i>
+                                                </a>
+                                            }
                                             @if(Model.IsEdit){
-                                                <a class="button_icon button_primary" title="Editar" asp-controller="Policies" asp-action="Edit" asp-route-code="@CrossConnections.Code">
+                                                <a class="button_icon button_primary" title="Editar" asp-controller="CrossConnections" asp-action="Edit" asp-route-code="@CrossConnections.Code">
                                                     <i class="icon icon_106"></i>
                                                 </a>
                                             }
                                             @if (Model.IsInactivate)
                                             {
-                                                <a class="button_icon button_primary" title="Inactivar" asp-controller="Policies" asp-action="Desactive" asp-route-code="@CrossConnections.Code">
+                                                <a class="button_icon button_primary" title="Inactivar" asp-controller="CrossConnections" asp-action="Desactive" asp-route-code="@CrossConnections.Code">
                                                     <i class="icon icon_196"></i>
                                                 </a>
                                             }
@@ -128,16 +99,19 @@
                                             </div>
                                         }
                                         <div class="row_table flex_box actions">
-                                            <button class="button_icon button_primary disabled" title="Ver" disabled>
-                                                <i class="icon icon_041"></i>
-                                            </button>
+                                            @if (Model.IsView)
+                                            {
+                                                <button class="button_icon button_primary disabled" title="Ver" disabled>
+                                                    <i class="icon icon_041"></i>
+                                                </button>
+                                            }
                                             @if(Model.IsEdit){
                                                 <button class="button_icon button_primary disabled" title="Editar" disabled>
                                                     <i class="icon icon_106"></i>
                                                 </button>
                                             }
                                             @if(Model.IsActivate){
-                                                <a class="button_icon button_primary" title="Activar" asp-controller="Policies" asp-action="Active" asp-route-code="@CrossConnections.Code">
+                                                <a class="button_icon button_primary" title="Activar" asp-controller="CrossConnections" asp-action="Active" asp-route-code="@CrossConnections.Code">
                                                     <i class="icon icon_199"></i>
                                                 </a>
                                             }

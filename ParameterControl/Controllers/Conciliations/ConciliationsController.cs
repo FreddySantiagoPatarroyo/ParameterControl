@@ -197,7 +197,9 @@ namespace ParameterControl.Controllers.Conciliations
         {
             Conciliation conciliation = await conciliationsServices.GetConciliationsByCode(code);
 
-            return View("Actions/ViewConciliation", conciliation);
+            ConciliationViewModel model = await conciliationsServices.GetConciliationFormat(conciliation);
+
+            return View("Actions/ViewConciliation", model);
         }
 
         [HttpGet]

@@ -2,6 +2,7 @@
 @model ConciliationViewModel;
 
 @{
+    ViewData["Title"] = "Ver Conciliaciones";
 }
 
 <partial name="_Menu" />
@@ -27,6 +28,14 @@
             <div class="form_group">
                 <p class="title_form">Descripción:</p>
                 <p>@Model.Description</p>
+            </div>
+            <div class="form_group">
+                <p class="title_form">Conciliacion:</p>
+                <p>@Model.Conciliation_</p>
+            </div>
+            <div class="form_group">
+                <p class="title_form">Requerido:</p>
+                <p>@Model.RequiredFormat</p>
             </div>
 
             <div class="btn_container">
