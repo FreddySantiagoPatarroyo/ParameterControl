@@ -1,40 +1,35 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Oracle.ManagedDataAccess.Client;
-using ParameterControl.Policy.Entities;
 using System.Data;
 
 namespace ParameterControl.Policy.DataAccess
 {
-    public class SetPolicy
+    public class CountPolicy
     {
         private readonly IConfiguration _configuration;
+        DataTable _dataTable = new DataTable();
 
-        public SetPolicy(IConfiguration configuration)
+        public CountPolicy(IConfiguration configuration)
         {
             _configuration = configuration;
         }
 
-        public async Task<int> InsertPolicy(PolicyModel entity)
+        public async Task<int> SelectCountPolicy()
         {
-            int response = 0;
-
             try
             {
-                return await Task.Run(() => 
+                return await Task.Run(() =>
                 {
                     using (OracleConnection connection = new OracleConnection(_configuration.GetConnectionString("conn-db")))
                     {
                         connection.Open();
 
-                        using (OracleCommand command = new OracleCommand("INSERT_POLICY", connection))
+                        using (OracleCommand command = new OracleCommand("COUNT_POLICY", connection))
                         {
                             command.CommandType = CommandType.StoredProcedure;
-                            command.Parameters.Add(new OracleParameter("PARAM_NAME", entity.Name));
-                            command.Parameters.Add(new OracleParameter("PARAM_DESCRIPTION", entity.Description));
-                            command.Parameters.Add(new OracleParameter("PARAM_MODIFIELDBY", entity.ModifieldBy));
-                            command.Parameters.Add(new OracleParameter("PARAM_OBJETIVO", entity.Objetive));
                             OracleDataReader reader = command.ExecuteReader();
-                            return response = 1;
+                            _dataTable.Load(reader);
+                            return Convert.ToInt32(_dataTable.Rows[0]["TOTAL"].ToString());
                         }
                     }
                 });

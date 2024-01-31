@@ -14,31 +14,32 @@ namespace ParameterControl.Policy.DataAccess
             _configuration = configuration;
         }
 
-        public int DeletePolicy(PolicyModel entity)
+        public async Task<int> DeletePolicy(PolicyModel entity)
         {
             int response = 0;
 
             try
             {
-                using (OracleConnection connection = new OracleConnection(_configuration.GetConnectionString("conn-db")))
+                return await Task.Run(() => 
                 {
-                    connection.Open();
-
-                    using (OracleCommand command = new OracleCommand("DELETE_POLICY", connection))
+                    using (OracleConnection connection = new OracleConnection(_configuration.GetConnectionString("conn-db")))
                     {
-                        command.CommandType = CommandType.StoredProcedure;
-                        command.Parameters.Add(new OracleParameter("PARAM_CODE", entity.Code));
-                        OracleDataReader reader = command.ExecuteReader();
-                        response = 1;
+                        connection.Open();
+
+                        using (OracleCommand command = new OracleCommand("DELETE_POLICY", connection))
+                        {
+                            command.CommandType = CommandType.StoredProcedure;
+                            command.Parameters.Add(new OracleParameter("PARAM_CODE", entity.Code));
+                            OracleDataReader reader = command.ExecuteReader();
+                            return response = 1;
+                        }
                     }
-                }
+                });
             }
             catch (Exception ex)
             {
                 throw;
             }
-
-            return response;
         }
     }
 }

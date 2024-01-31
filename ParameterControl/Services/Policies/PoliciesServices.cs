@@ -1,13 +1,8 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Newtonsoft.Json;
-using ParameterControl.Models.Filter;
+﻿using ParameterControl.Models.Filter;
 using ParameterControl.Models.Pagination;
 using ParameterControl.Models.Policy;
 using ParameterControl.Policy.Entities;
 using ParameterControl.Policy.Impl;
-using System.Data;
-using System.Runtime.CompilerServices;
 using modPolicy = ParameterControl.Models.Policy;
 
 namespace ParameterControl.Services.Policies
@@ -16,11 +11,9 @@ namespace ParameterControl.Services.Policies
     {
         private List<modPolicy.Policy> policies = new List<modPolicy.Policy>();
         private readonly PolicyService _policyService;
-        private readonly IMapper _mapper;
 
-        public PoliciesServices(IConfiguration configuration, IMapper mapper)
+        public PoliciesServices(IConfiguration configuration)
         {
-            _mapper = mapper;
             _policyService = new PolicyService(configuration);
             policies = new List<modPolicy.Policy>()
             {
@@ -121,20 +114,16 @@ namespace ParameterControl.Services.Policies
 
         public async Task<int> CountPolicies()
         {
-            var collectionPolicies = await _policyService.SelectAllPolicy();
-            var response = await MapperPolicy(collectionPolicies);
-            return response.Count();
+            return await _policyService.SelectCountPolicy();             
         }
 
         public async Task<List<modPolicy.Policy>> GetPoliciesPagination(PaginationViewModel pagination)
         {
             try
             {
-                Console.WriteLine(pagination.Page);
-                Console.WriteLine(pagination.RecordsPage);
                 var response = await _policyService.SelectPaginatorPolicy(pagination.Page, pagination.RecordsPage);
                 var result = await MapperPolicy(response);
-                Console.WriteLine(result.Count);
+
                 return result; 
             }
             catch (Exception ex)
