@@ -6,14 +6,14 @@
 }
 
 <div id="pagination_mobile" class="custom_pagination pagination_mobile flex_box">
-    <a class="button button_primary">
+    <a href="@string.Format(pageLink, Model.Page - 1, Model.RecordsPage)" class="button button_primary @(Model.Page == 1 || Model.TotalRecords == 0 ? "button_disable" : null)">
         <i class="icon text icon_160"></i>
         <p class="text font_bold">Anterior</p>
     </a>
     <p class="pages font_light">
         pagina @Model.Page de @Model.TotalPages
     </p>
-    <a class="button button_primary">
+    <a href="@string.Format(pageLink, Model.Page + 1, Model.RecordsPage)" class="button button_primary @(Model.Page == Model.TotalPages || Model.TotalRecords == 0 ? "button_disable" : null)">
         <p class="text font_bold">Siguiente</p>
         <i class="icon text icon_158"></i>
     </a>
