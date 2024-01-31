@@ -8,13 +8,13 @@ using ParameterControl.Models.Policy;
 using ParameterControl.Policy.Entities;
 using ParameterControl.Services.Policies;
 using modConciliation = ParameterControl.Models.Conciliation;
-using modPolicy = ParameterControl.Models;
+using modPolicy = ParameterControl.Models.Policy;
 
 namespace ParameterControl.Services.Conciliations
 {
     public class ConciliationsServices : IConciliationsServices
     {
-        private List<modPolicy.Conciliation.Conciliation> conciliations = new List<modPolicy.Conciliation.Conciliation>();
+        private List<modConciliation.Conciliation> conciliations = new List<modConciliation.Conciliation>();
         private readonly IPoliciesServices policiesServices;
         private readonly IConciliationService conciliationServices;
 
@@ -24,9 +24,9 @@ namespace ParameterControl.Services.Conciliations
         )
         {
             conciliationServices = new ConciliationService(configuration);
-            conciliations = new List<modPolicy.Conciliation.Conciliation>()
+            conciliations = new List<modConciliation.Conciliation>()
             {
-                new modPolicy.Conciliation.Conciliation(){
+                new modConciliation.Conciliation(){
                     Code = 1,
                     Name = "Conciliacion_1",
                     Description = "Descriptionasdasdasdasdasdasdasdasdasdasd",
@@ -43,7 +43,7 @@ namespace ParameterControl.Services.Conciliations
                     UpdateDate = DateTime.Parse("2023-11-09"),
                     UserOwner = "User1"
                 },
-                new modPolicy.Conciliation.Conciliation(){
+                new modConciliation.Conciliation(){
                     Code = 2,
                     Name = "Conciliacion_1",
                     Description = "Description",
@@ -60,7 +60,7 @@ namespace ParameterControl.Services.Conciliations
                     UpdateDate = DateTime.Parse("2023-11-09"),
                     UserOwner = "User1"
                 },
-                new modPolicy.Conciliation.Conciliation(){
+                new modConciliation.Conciliation(){
                     Code = 3,
                     Name = "Conciliacion_1",
                     Description = "Description",
@@ -77,7 +77,7 @@ namespace ParameterControl.Services.Conciliations
                     UpdateDate = DateTime.Parse("2023-11-09"),
                     UserOwner = "User1"
                 },
-                new modPolicy.Conciliation.Conciliation(){
+                new modConciliation.Conciliation(){
                     Code = 4,
                     Name = "Conciliacion_1",
                     Description = "Description",
@@ -94,7 +94,7 @@ namespace ParameterControl.Services.Conciliations
                     UpdateDate = DateTime.Parse("2023-11-09"),
                     UserOwner = "User1"
                 },
-                new modPolicy.Conciliation.Conciliation(){
+                new modConciliation.Conciliation(){
                     Code = 5,
                     Name = "Conciliacion_1",
                     Description = "Description",
@@ -111,7 +111,7 @@ namespace ParameterControl.Services.Conciliations
                     UpdateDate = DateTime.Parse("2023-11-09"),
                     UserOwner = "User1"
                 },
-                new modPolicy.Conciliation.Conciliation(){
+                new modConciliation.Conciliation(){
                     Code = 6,
                     Name = "Conciliacion_1",
                     Description = "Description",
@@ -128,7 +128,7 @@ namespace ParameterControl.Services.Conciliations
                     UpdateDate = DateTime.Parse("2023-11-09"),
                     UserOwner = "User1"
                 },
-                new modPolicy.Conciliation.Conciliation(){
+                new modConciliation.Conciliation(){
                     Code = 7,
                     Name = "Conciliacion_1",
                     Description = "Description",
@@ -145,7 +145,7 @@ namespace ParameterControl.Services.Conciliations
                     UpdateDate = DateTime.Parse("2023-11-09"),
                     UserOwner = "User1"
                 },
-                new modPolicy.Conciliation.Conciliation(){
+                new modConciliation.Conciliation(){
                     Code = 8,
                     Name = "Conciliacion_1",
                     Description = "Description",
@@ -273,9 +273,9 @@ namespace ParameterControl.Services.Conciliations
             return operationsType;
         }
 
-		public async Task<List<modPolicy.Policy.Policy>> GetPolicies()
+		public async Task<List<modPolicy.Policy>> GetPolicies()
         {
-            List<modPolicy.Policy.Policy> policies = await policiesServices.GetPolicies();
+            List<modPolicy.Policy> policies = await policiesServices.GetPolicies();
             return policies;
         }
 
@@ -291,6 +291,7 @@ namespace ParameterControl.Services.Conciliations
         {
             List<modConciliation.Conciliation> allConciliations = await GetConciliations();
             List<ConciliationViewModel> conciliationsFilter = await GetConciliationsFormat(allConciliations);
+
 
             if (filterModel.ColumValue == null || filterModel.ColumValue == "" || filterModel.ValueFilter == null || filterModel.ValueFilter == "")
             {
@@ -346,11 +347,11 @@ namespace ParameterControl.Services.Conciliations
             return response.Equals(1) ? "Conciliacion creada correctamente" : "Error creando la conciliacion";
         }
 
-        private async Task<List<modPolicy.Conciliation.Conciliation>> MapperConciliation(List<ConciliationModel> conciliationModel)
+        private async Task<List<modConciliation.Conciliation>> MapperConciliation(List<ConciliationModel> conciliationModel)
         {
             return await Task.Run(() =>
             {
-                List<modPolicy.Conciliation.Conciliation> conciliations = new List<modPolicy.Conciliation.Conciliation>();
+                List<modConciliation.Conciliation> conciliations = new List<modConciliation.Conciliation>();
                 if (conciliationModel.Count > 0)
                 {
                     foreach (var conciliation in conciliationModel)
@@ -362,11 +363,11 @@ namespace ParameterControl.Services.Conciliations
             });
         }
 
-        private async Task<modPolicy.Conciliation.Conciliation> MapperToConciliation(ConciliationModel conciliation)
+        private async Task<modConciliation.Conciliation> MapperToConciliation(ConciliationModel conciliation)
         {
             return await Task.Run(() =>
             {
-                modPolicy.Conciliation.Conciliation model = new modPolicy.Conciliation.Conciliation
+                modConciliation.Conciliation model = new modConciliation.Conciliation
                 {
                     Code = Convert.ToInt32(conciliation.Id),
                     Name = conciliation.ConciliationName,
@@ -376,15 +377,15 @@ namespace ParameterControl.Services.Conciliations
             });
         }
 
-        public async Task<string> UpdateConciliation(modPolicy.Conciliation.Conciliation conciliation)
+        public async Task<string> UpdateConciliation(modConciliation.Conciliation conciliation)
         {
             var mapping = await MapperUpdateConciliation(conciliation);
-            var response = await policiesServices.UpdatePolicy(new modPolicy.Policy.Policy { });
+            var response = await policiesServices.UpdatePolicy(new modPolicy.Policy { });
 
             return response.Equals(1) ? "Conciliacion actualizada correctamente" : "Error actualizando la conciliacion";
         }
 
-        private async Task<PolicyModel> MapperUpdateConciliation(modPolicy.Conciliation.Conciliation conciliation)
+        private async Task<PolicyModel> MapperUpdateConciliation(modConciliation.Conciliation conciliation)
         {
             return await Task.Run(() =>
             {
