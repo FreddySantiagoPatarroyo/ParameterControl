@@ -84,13 +84,11 @@
         let isValidCode = false;
         let isValidName = false;
         let isValidDescription = false;
-        // let isValidConciliation = false;
 
         const sendData = async () => {
             isValidCode = validateInputEmpty("Code", "El codigo es requerido", "CodeError");
             isValidName = validateInputEmpty("Name", "El nombre es requerido", "NameError");
             isValidDescription = validateInputEmpty("Description", "La descripcion es requerido", "DescriptionError");
-            // isValidConciliation = validateInputEmpty("Conciliation", "La conciliacion es requerido", "ConciliationError");
 
             if (isValidCode && isValidName && isValidDescription) {
                 document.getElementById('btn_container').style.display = 'none';
