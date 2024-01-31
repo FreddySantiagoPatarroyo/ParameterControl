@@ -114,7 +114,9 @@ namespace ParameterControl.Services.Policies
 
         public async Task<int> CountPolicies()
         {
-            return await _policyService.SelectCountPolicy();             
+            var collectionPolicies = await _policyService.SelectAllPolicy();
+            var response = await MapperPolicy(collectionPolicies);
+            return response.Count();
         }
 
         public async Task<List<modPolicy.Policy>> GetPoliciesPagination(PaginationViewModel pagination)
