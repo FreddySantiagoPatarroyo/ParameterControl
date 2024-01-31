@@ -6,48 +6,55 @@
 }
 
 <div id="pagination_mobile" class="custom_pagination pagination_mobile flex_box">
-    <button class="button button_primary">
+    <a class="button button_primary">
         <i class="icon text icon_160"></i>
         <p class="text font_bold">Anterior</p>
-    </button>
+    </a>
     <p class="pages font_light">
-        pagina 1 de 2
+        pagina @Model.Page de @Model.TotalPages
     </p>
-    <button class="button button_primary">
+    <a class="button button_primary">
         <p class="text font_bold">Siguiente</p>
         <i class="icon text icon_158"></i>
-    </button>
+    </a>
 </div>
+
 <div id="pagination_desktop" class="custom_pagination pagination_desktop flex_box">
     <div class="navigator flex_box">
-        <button class="button button_primary">
+        <a href="@string.Format(pageLink, 1, Model.RecordsPage)" class="button button_primary @(Model.Page == 1 || Model.TotalRecords == 0 ? "button_disable" : null)">
             <p class="text font_bold">Primera</p>
-        </button>
-        <button class="button_icon button_primary">
+        </a>
+        <a href="@string.Format(pageLink, Model.Page - 1, Model.RecordsPage)" class="button_icon button_primary @(Model.Page == 1 || Model.TotalRecords == 0 ? "button_disable" : null)">
             <i class="icon text icon_152"></i>
-        </button>
+        </a>
         <div class="pages flex_box">
-            <button class="button_icon button_primary">
+            @for (int pagina = 1; pagina <= Model.TotalPages; pagina++)
+            {
+                <a class="button_icon button_primary @(pagina == Model.Page ? "buttom_selected" : null)" href="@string.Format(pageLink, pagina, Model.RecordsPage)">
+                    <p class="text font_bold">@pagina</p>
+                </a>
+            }
+            @* <a class="button_icon button_primary">
                 <p class="text font_bold">1</p>
-            </button>
-            <button class="button_icon button_primary">
+            </a>
+            <a class="button_icon button_primary">
                 <p class="text font_bold">2</p>
-            </button>
-            <button class="button_icon button_primary">
+            </a>
+            <a class="button_icon button_primary">
                 <p class="text font_bold">3</p>
-            </button>
-            <button class="button_icon button_primary">
+            </a>
+            <a class="button_icon button_primary">
                 <p class="text font_bold">4</p>
-            </button>
-            <button class="button_icon button_primary">
+            </a>
+            <a class="button_icon button_primary">
                 <p class="text font_bold">5</p>
-            </button>
+            </a> *@
         </div>
-        <button class="button_icon button_primary">
+        <a href="@string.Format(pageLink, Model.Page + 1, Model.RecordsPage)" class="button_icon button_primary @(Model.Page == Model.TotalPages || Model.TotalRecords == 0 ? "button_disable" : null)">
             <i class="icon text icon_151"></i>
-        </button>
-        <button class="button button_primary">
+        </a>
+        <a href="@string.Format(pageLink, Model.TotalPages, Model.RecordsPage)" class="button button_primary @(Model.Page == Model.TotalPages || Model.TotalRecords == 0 ? "button_disable" : null)">
             <p class="text font_bold">Ultima</p>
-        </button>
+        </a>
     </div>
 </div>

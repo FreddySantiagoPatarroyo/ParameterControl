@@ -95,9 +95,11 @@ namespace ParameterControl.Controllers.Conciliations
 
             List<SelectListItem> PoliciesOptionsList = await GetPolicies();
             List<SelectListItem> RequiredOptionList = await conciliationsServices.GetRequired();
+            List<SelectListItem> OperationTypeOptionsList = await conciliationsServices.GetOperationsType();
 
             ConciliationCreateViewModel model = new ConciliationCreateViewModel()
             {
+                OperationTypeOptions = OperationTypeOptionsList,
                 PoliciesOption = PoliciesOptionsList,
                 RequiredOption = RequiredOptionList
             };
@@ -140,27 +142,13 @@ namespace ParameterControl.Controllers.Conciliations
 
             List<SelectListItem> PoliciesOptionsList = await GetPolicies();
             List<SelectListItem> RequiredOptionsList = await conciliationsServices.GetRequired();
+            List<SelectListItem> OperationTypeOptionsList = await conciliationsServices.GetOperationsType();
 
             ConciliationCreateViewModel model = await conciliationsServices.GetConciliationFormatCreate(conciliation);
 
             Console.WriteLine(model.CreationDate);
-            //ConciliationCreateViewModel model = new ConciliationCreateViewModel()
-            //{
-            //    Code = conciliation.Code,
-            //    Name = conciliation.Name,
-            //    Description = conciliation.Description,
-            //    Conciliation_ = conciliation.Conciliation_,
-            //    Package = conciliation.Package,
-            //    Email = conciliation.Email,
-            //    Destination = conciliation.Destination,
-            //    Policies = conciliation.Policies,
-            //    Required = conciliation.Required,
-            //    RequiredFormat = conciliation.Required ? "Si" : "No",
-            //    State = conciliation.State,
-            //    CodeFormat = "CO_" + conciliation.Code,
-            //    CreationDate = conciliation.CreationDate,
-            //    UpdateDate = conciliation.UpdateDate
-            //};
+            
+            model.OperationTypeOptions = OperationTypeOptionsList;
             model.PoliciesOption = PoliciesOptionsList;
             model.RequiredOption = RequiredOptionsList;
 

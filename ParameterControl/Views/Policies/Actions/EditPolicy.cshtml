@@ -24,8 +24,6 @@
 
             <input type="hidden" asp-for="Code"/>
             <input type="hidden" asp-for="Conciliation" />
-            <input type="hidden" asp-for="ControlType" />
-            <input type="hidden" asp-for="OperationType" />
             <input type="hidden" asp-for="CreationDate" />
 
             <div class="form_group">
@@ -86,16 +84,12 @@
         let isValidName = false;
         let isValidDescription = false;
         // let isValidConciliation = false;
-        // let isValidControlType = false;
-        // let isValidOperationType = false;
 
         const sendData = async () => {
             isValidCode = validateInputEmpty("Code", "El codigo es requerido", "CodeError");
             isValidName = validateInputEmpty("Name", "El nombre es requerido", "NameError");
             isValidDescription = validateInputEmpty("Description", "La descripcion es requerido", "DescriptionError");
             // isValidConciliation = validateInputEmpty("Conciliation", "La conciliacion es requerido", "ConciliationError");
-            // isValidControlType = validateInputEmpty("ControlType", "El tipo de control es requerido", "ControlTypeError");
-            // isValidOperationType = validateInputEmpty("OperationType", "El tipo de operacion es requerido", "OperationTypeError");
 
             if (isValidCode && isValidName && isValidDescription) {
                 document.getElementById('btn_container').style.display = 'none';
@@ -108,8 +102,6 @@
                     Name: $('#Name').val(),
                     Description: $('#Description').val(),
                     Conciliation: $('#Conciliation').val(),
-                    ControlType: $('#ControlType').val(),
-                    OperationType: $('#OperationType').val(),
                     State: true,
                     CreationDate: new Date(CreationDateFormat)
                 }
@@ -152,7 +144,6 @@
         }
 
         const FormatDate = (date) => {
-
             const validateAm = date.toString().includes("a. m.");
             const validatePm = date.toString().includes("p. m.");
 
@@ -163,7 +154,6 @@
             if (validatePm) {
                 date = date.replace("p. m.", "PM")
             }
-
             return date;
         }
     </script>

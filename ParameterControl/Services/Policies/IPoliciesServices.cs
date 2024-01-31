@@ -9,8 +9,8 @@ namespace ParameterControl.Services.Policies
     public interface IPoliciesServices
     {
         Task<int> CountPolicies();
+        List<PolicyViewModel> GetFilterPagination(List<PolicyViewModel> inicialPolicies, PaginationViewModel paginationViewModel, int totalData);
         Task<List<PolicyViewModel>> GetFilterPolicies(FilterViewModel filterModel);
-        Task<List<SelectListItem>> GetOperationsType();
         Task<List<PolicyViewModel>> GetPolicesFormat(List<modPolicy.Policy> policies);
         Task<List<modPolicy.Policy>> GetPolicies();
         Task<List<modPolicy.Policy>> GetPoliciesFake();

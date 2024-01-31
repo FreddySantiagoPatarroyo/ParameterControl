@@ -74,10 +74,20 @@
 
             <div class="form_group">
                 <div class="field">
-                    <label asp-for="Policies" class="label_form">Politicas*</label>
+                    <label asp-for="ControlType" class="label_form">Tipo control*</label>
+                    <div class="input">
+                        <input asp-for="ControlType" placeholder="Tipo de control" autocomplete="off" />
+                    </div>
+                    <span id="ControlTypeError" class="text_error"></span>
+                </div>
+            </div>
+
+            <div class="form_group">
+                <div class="field">
+                    <label asp-for="OperationType" class="label_form">Tipo de operacion*</label>
                     <div id="input_select" class="input">
-                        <input class="input_select" id="input_select_filter" asp-for="Policies" placeholder="Seleccione una opción" onclick="showOptions()" readonly />
-                        <input class="oculte" asp-for="Policies" />
+                        <input class="input_select" id="input_select_filter" name="input_select_filter" asp-for="OperationType" placeholder="Seleccione una opción" onclick="showOptions()" readonly />
+                        <input asp-for="OperationType" class="oculte" />
                         <i class="icon icon_select icon_153"></i>
                     </div>
                     <div id="options" class="options">
@@ -85,7 +95,7 @@
                             <li onclick="selectOption('@null', '@null')" class="option">
                                 <p class="option_text">Seleccione una opción</p>
                             </li>
-                            @foreach (var Option in Model.PoliciesOption)
+                            @foreach (var Option in Model.OperationTypeOptions)
                             {
                                 <li onclick="selectOption('@Option.Text', '@Option.Value')" class="option">
                                     <p class="option_text">@Option.Text</p>
@@ -94,6 +104,33 @@
                         </ul>
                     </div>
                     <div id="select_helper" class="select_helper" onclick="showOptions()"></div>
+                </div>
+
+                <span id="OperationTypeError" class="text_error"></span>
+            </div>
+
+            <div class="form_group">
+                <div class="field">
+                    <label asp-for="Policies" class="label_form">Politicas*</label>
+                    <div id="input_select_policies" class="input">
+                        <input class="input_select" id="input_select_filter_policies" asp-for="Policies" placeholder="Seleccione una opción" onclick="showOptionsPolicies()" readonly />
+                        <input class="oculte" asp-for="Policies" />
+                        <i class="icon icon_select icon_153"></i>
+                    </div>
+                    <div id="options_policies" class="options">
+                        <ul class="options_list">
+                            <li onclick="selectOptionPolicies('@null', '@null')" class="option">
+                                <p class="option_text">Seleccione una opción</p>
+                            </li>
+                            @foreach (var Option in Model.PoliciesOption)
+                            {
+                                <li onclick="selectOptionPolicies('@Option.Text', '@Option.Value')" class="option">
+                                    <p class="option_text">@Option.Text</p>
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                    <div id="select_helper_policies" class="select_helper" onclick="showOptionsPolicies()"></div>
                 </div>
 
                 <span id="PoliciesError" class="text_error"></span>
@@ -148,6 +185,7 @@
 @section Scripts {
     <partial name="_ValidationScriptsPartial.cshtml" />
     <script>
+        /* ----------- Select de tipo de operacion ----------- */
         let viewOptions = false;
 
         const showOptions = () => {
@@ -172,16 +210,51 @@
             if (name == null || value == null || name == '' || value == '') {
                 console.log("vacio");
                 document.getElementById("input_select_filter").value = '';
-                document.getElementById("Policies").value = '';
+                document.getElementById("OperationType").value = '';
             } else {
                 console.log(value);
                 document.getElementById("input_select_filter").value = name;
-                document.getElementById("Policies").value = value;
+                document.getElementById("OperationType").value = value;
             }
-
             showOptions();
         }
 
+        /* ----------- Select de politicas ----------- */
+        let viewOptionsPolicies = false;
+
+        const showOptionsPolicies = () => {
+
+            let widthOptionPolicies = document.getElementById("input_select_policies").clientWidth;
+            let optionsPolicies = document.getElementById("options_policies");
+            optionsPolicies.style.width = widthOptionPolicies + "px";
+
+            viewOptionsPolicies = !viewOptionsPolicies;
+
+            if (viewOptionsPolicies) {
+                document.getElementById('options_policies').style.display = 'block';
+                document.getElementById('select_helper_policies').style.display = 'block';
+            } else {
+                document.getElementById('options_policies').style.display = 'none';
+                document.getElementById('select_helper_policies').style.display = 'none';
+            }
+        }
+
+        const selectOptionPolicies = (name, value) => {
+
+            if (name == null || value == null || name == '' || value == '') {
+                console.log("vacio");
+                document.getElementById("input_select_filter_policies").value = '';
+                document.getElementById("Policies").value = '';
+            } else {
+                console.log(value);
+                document.getElementById("input_select_filter_policies").value = name;
+                document.getElementById("Policies").value = value;
+            }
+
+            showOptionsPolicies();
+        }
+
+        /* ----------- Select de requerido ----------- */
         let viewOptionsRequired = false;
 
         const showOptionsRequired = () => {
@@ -227,6 +300,8 @@
         let isValidEmail = false;
         let isValidPolicies = false;
         let isValidRequired = false;
+        let isValidControlType = false;
+        let isValidOperationType = false;
 
         const sendData = async () => {
             isValidCode = validateInputEmpty("Code", "El código es requerido", "CodeError");
@@ -235,8 +310,10 @@
             isValidEmail = validateInputEmpty("Email", "El email del usuario asignado es requerido", "EmailError");
             isValidPolicies = validateInputEmpty("Policies", "La política es requerida", "PoliciesError");
             isValidRequired = validateInputEmpty("input_select_filter_required", "Este campo es requerido", "RequiredError");
+            isValidControlType = validateInputEmpty("ControlType", "El tipo de control es requerido", "ControlTypeError");
+            isValidOperationType = validateInputEmpty("OperationType", "El tipo de operacion es requerido", "OperationTypeError");
 
-            if (isValidCode && isValidName && isValidPackage && isValidEmail && isValidPolicies && isValidRequired) {
+            if (isValidCode && isValidName && isValidPackage && isValidEmail && isValidPolicies && isValidRequired && isValidControlType && isValidOperationType) {
                 document.getElementById('btn_container').style.display = 'none';
                 document.getElementById('loading').style.display = 'flex';
 
@@ -250,6 +327,8 @@
                     Policies: $('#Policies').val(),
                     Required: $('#Required').val() === "True" ? true : false,
                     State: true,
+                    ControlType: $('#ControlType').val(),
+                    OperationType: $('#OperationType').val(),
                     CreationDate: new Date(CreationDateFormat)
                 }
 

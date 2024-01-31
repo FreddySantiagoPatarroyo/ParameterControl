@@ -2,7 +2,7 @@
 @using System.Reflection;
 @using ParameterControl.Models.Pagination
 @using ParameterControl.Models.Policy
-@model TablePoliciesViewModel
+@model PaginationResult<TablePoliciesViewModel>
 
 @{
     PropertyInfo GetRowInfo(string RowValue)
@@ -12,11 +12,12 @@
         return property;
     }
 }
+
 <div class="content_policies">
     <div class="card_policies card_element flex_box" id="card_policies">
         <div class="flex_box titulation">
             <p class="title_table font_bold">Politicas</p>
-            @if (Model.IsCreate)
+            @if (Model.Elements.IsCreate)
             {
                 <a class="button button_primary" asp-controller="Policies" asp-action="Create">
                     <p class="text font_bold">Crear</p>
@@ -71,7 +72,7 @@
                 <div id="table" class="content_table">
                     <div class="tables flex_box">
                         <div class="columns">
-                            @foreach (var Colunm in Model.Rows)
+                            @foreach (var Colunm in Model.Elements.Rows)
                             {
                                 <div class="@Colunm.Name column flex_box order">
                                     <p class="text font_bold">@Colunm.Name</p>
@@ -81,18 +82,18 @@
                                 <p class="text font_bold">Acciones</p>
                             </div>
                         </div>
-                        @if (Model.Data.Count() == 0)
+                        @if (Model.Elements.Data.Count() == 0)
                         {
                             <p>No existe informacion</p>
                         }
                         else
                         {
-                            @foreach (var Policy in Model.Data)
+                            @foreach (var Policy in Model.Elements.Data)
                             {
                                 @if (Policy.State)
                                 {
                                     <div class="rows">
-                                        @foreach (var Row in Model.Rows)
+                                        @foreach (var Row in Model.Elements.Rows)
                                         {
                                             <div class="row_table flex_box">
                                                 <p id="text_row" class="text flex_box">@GetRowInfo(Row.Value)?.GetValue(Policy)?.ToString()</p>
@@ -114,7 +115,7 @@
                                 else
                                 {
                                     <div class="rows disabled">
-                                        @foreach (var Row in Model.Rows)
+                                        @foreach (var Row in Model.Elements.Rows)
                                         {
                                             <div class="row_table flex_box">
                                                 <p id="text_row" class="text flex_box">@GetRowInfo(Row.Value)?.GetValue(Policy)?.ToString()</p>
@@ -138,7 +139,7 @@
                     </div>
                 </div>
                 <div class="pagination flex_box">
-                    <partial name="_Pagination" model="new PaginationResult<Policy>()"/>
+                    <partial name="_Pagination"/>
                 </div>
             </div>
         </div>

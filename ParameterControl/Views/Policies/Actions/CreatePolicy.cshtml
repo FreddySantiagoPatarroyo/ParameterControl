@@ -57,41 +57,6 @@
                     <span id="ConciliationError" class="text_error"></span>
                 </div>
             </div>
-            <div class="form_group">
-                <div class="field">
-                    <label asp-for="ControlType" class="label_form">Tipo control*</label>
-                    <div class="input">
-                        <input asp-for="ControlType" placeholder="Tipo de control" autocomplete="off" />
-                    </div>
-                    <span id="ControlTypeError" class="text_error"></span>
-                </div>
-            </div>
-            <div class="form_group">
-                <div class="field">
-                    <label asp-for="OperationType" class="label_form">Tipo de operacion*</label>
-                    <div id="input_select" class="input">
-                        <input class="input_select" id="input_select_filter" name="input_select_filter" asp-for="OperationType" placeholder="Seleccione una opción" onclick="showOptions()" readonly />
-                        <input asp-for="OperationType" class="oculte" />
-                        <i class="icon icon_select icon_153"></i>
-                    </div>
-                    <div id="options" class="options">
-                        <ul class="options_list">
-                            <li onclick="selectOption('@null', '@null')" class="option">
-                                <p class="option_text">Seleccione una opción</p>
-                            </li>
-                            @foreach (var Option in Model.OperationTypeOptions)
-                            {
-                                <li onclick="selectOption('@Option.Text', '@Option.Value')" class="option">
-                                    <p class="option_text">@Option.Text</p>
-                                </li>
-                            }
-                        </ul>
-                    </div>
-                    <div id="select_helper" class="select_helper" onclick="showOptions()"></div>
-                </div>
-                
-                <span id="OperationTypeError" class="text_error"></span>
-            </div>
 
             <p class="note_text"><span>Nota: </span>Los campos con (*) son obligatorios</p>
 
@@ -156,18 +121,14 @@
         let isValidName = false;
         let isValidDescription = false;
         let isValidConciliation = false;
-        let isValidControlType = false;
-        let isValidOperationType = false;
 
         const sendData = async () => {
             //isValidCode = validateInputEmpty("Code", "El codigo es requerido", "CodeError");
             isValidName = validateInputEmpty("Name", "El nombre es requerido", "NameError");
             isValidDescription = validateInputEmpty("Description", "La descripcion es requerido", "DescriptionError");
             isValidConciliation = validateInputEmpty("Conciliation", "La conciliacion es requerido", "ConciliationError");
-            isValidControlType = validateInputEmpty("ControlType", "El tipo de control es requerido", "ControlTypeError");
-            isValidOperationType = validateInputEmpty("OperationType", "El tipo de operacion es requerido", "OperationTypeError");
 
-            if (isValidName && isValidDescription && isValidConciliation && isValidControlType && isValidOperationType) {
+            if (isValidName && isValidDescription && isValidConciliation) {
                 document.getElementById('btn_container').style.display = 'none';
                 document.getElementById('loading').style.display = 'flex';
 
@@ -176,8 +137,6 @@
                     Name: $('#Name').val(),
                     Description: $('#Description').val(),
                     Conciliation: parseInt($('#Conciliation').val()),
-                    ControlType: $('#ControlType').val(),
-                    OperationType: $('#OperationType').val(),
                     State: true
                 }
 

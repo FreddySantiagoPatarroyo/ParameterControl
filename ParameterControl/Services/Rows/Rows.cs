@@ -30,16 +30,6 @@ namespace ParameterControl.Services.Rows
                 },
                 new Row()
                 {
-                    Value = "ControlType",
-                    Name = "Tipo de control"
-                },
-                new Row()
-                {
-                    Value = "OperationType",
-                    Name = "Tipo de operacion"
-                },
-                new Row()
-                {
                     Value = "StateFormat",
                     Name = "Estado Activación"
                 },

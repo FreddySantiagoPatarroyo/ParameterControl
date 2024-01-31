@@ -264,7 +264,16 @@ namespace ParameterControl.Services.Conciliations
             modConciliation.Conciliation conciliation = conciliations.Find(conciliation => conciliation.Code == code);
             return conciliation;
         }
-        public async Task<List<modPolicy.Policy.Policy>> GetPolicies()
+
+        public async Task<List<SelectListItem>> GetOperationsType()
+        {
+            List<SelectListItem> operationsType = new List<SelectListItem>().ToList();
+            operationsType.Add(new SelectListItem("Model", "1"));
+            operationsType.Add(new SelectListItem("Fija", "2"));
+            return operationsType;
+        }
+
+		public async Task<List<modPolicy.Policy.Policy>> GetPolicies()
         {
             List<modPolicy.Policy.Policy> policies = await policiesServices.GetPolicies();
             return policies;
