@@ -7,6 +7,7 @@ using ParameterControl.Models.Policy;
 using ParameterControl.Services.Authenticated;
 using ParameterControl.Services.Policies;
 using ParameterControl.Services.Rows;
+using System.Collections.Generic;
 using modPolicy = ParameterControl.Models.Policy;
 
 
@@ -36,7 +37,7 @@ namespace ParameterControl.Controllers.Policies
         [HttpGet]
         public async Task<ActionResult> Policies(PaginationViewModel paginationViewModel)
         {
-            List<modPolicy.Policy> policies = await policiesServices.GetPolicies();
+            List<modPolicy.Policy> policies = await policiesServices.GetPoliciesPagination(paginationViewModel);
             int TotalPolicies = await policiesServices.CountPolicies();
 
             TablePolicies.Data = await policiesServices.GetPolicesFormat(policies);
@@ -55,12 +56,12 @@ namespace ParameterControl.Controllers.Policies
                 Page = paginationViewModel.Page,
                 RecordsPage = paginationViewModel.RecordsPage,
                 TotalRecords = TotalPolicies,
-                BaseUrl = Url.Action()
+                BaseUrl = Url.Action() + "?"
             };
 
             ViewBag.ApplyFilter = false;
 
-            return View("Policies", TablePolicies);
+            return View("Policies", resultViemModel);
         }
 
         public async Task<ActionResult> PoliciesFilter(PaginationViewModel paginationViewModel, string filterColunm = "", string filterValue = "", string typeRow = "")
@@ -79,7 +80,9 @@ namespace ParameterControl.Controllers.Policies
             };
 
             List<PolicyViewModel> policiesFilter = await policiesServices.GetFilterPolicies(filter);
-            TablePolicies.Data = policiesFilter;
+            int TotalPolicies = policiesFilter.Count();
+
+            TablePolicies.Data = policiesServices.GetFilterPagination(policiesFilter, paginationViewModel, TotalPolicies);
 
             TablePolicies.Rows = rows.RowsPolicies();
 
@@ -89,21 +92,25 @@ namespace ParameterControl.Controllers.Policies
             TablePolicies.IsEdit = true;
             TablePolicies.IsInactivate = true;
 
+
+            var resultViemModel = new PaginationResult<TablePoliciesViewModel>()
+            {
+                Elements = TablePolicies,
+                Page = paginationViewModel.Page,
+                RecordsPage = paginationViewModel.RecordsPage,
+                TotalRecords = TotalPolicies,
+                BaseUrl = Url.Action() + "?filterColunm=" + filterColunm + "&filterValue=" + filterValue + "&typeRow=" + typeRow + "&"
+            };
+
             ViewBag.ApplyFilter = true;
 
-            return View("PoliciesFilter", TablePolicies);
+            return View("PoliciesFilter", resultViemModel);
         }
 
         [HttpGet]
         public async Task<ActionResult> Create()
         {
-
-            List<SelectListItem> OperationTypeOptionsList = await policiesServices.GetOperationsType();
-
-            PolicyCreateViewModel model = new PolicyCreateViewModel()
-            {
-                OperationTypeOptions = OperationTypeOptionsList
-            };
+            PolicyCreateViewModel model = new PolicyCreateViewModel();
 
             return View("Actions/CreatePolicy", model);
         }
@@ -286,10 +293,6 @@ namespace ParameterControl.Controllers.Policies
                     filter.Options = new List<SelectListItem>().ToList();
                     filter.Options.Add(new SelectListItem("Activo", "Activo"));
                     filter.Options.Add(new SelectListItem("Inactivo", "Inactivo"));
-                    filter.TypeRow = "Select";
-                    break;
-                case "OperationType":
-                    filter.Options = await policiesServices.GetOperationsType();
                     filter.TypeRow = "Select";
                     break;
                 case "CreationDateFormat":

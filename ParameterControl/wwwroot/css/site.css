@@ -189,7 +189,7 @@ body {
         --button_primary: var(--red_500);
         --button_secondary: var(--gray_300);
         --button_secondary_hover: var(--gray_100);
-        --tx_button_tertiary: var(--gray_400);
+        --tx_button_tertiary: var(--gray_800);
         --button_tertiary_hover: var(--gray_100);
         /*End*/
         /*Texts*/

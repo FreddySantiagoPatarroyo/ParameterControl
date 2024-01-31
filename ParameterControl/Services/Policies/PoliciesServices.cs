@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Newtonsoft.Json;
 using ParameterControl.Models.Filter;
 using ParameterControl.Models.Pagination;
 using ParameterControl.Models.Policy;
@@ -28,8 +29,6 @@ namespace ParameterControl.Services.Policies
                     Name = "Politica_1",
                     Description = "Descripcion ejemplo asdasdasdasdasdasdasdasdasdadasdasdasdasdads",
                     Conciliation = 123,
-                    ControlType = "Voz",
-                    OperationType = "OperationType_1asdasdasdasdasdadasdasdasdad",
                     State = true,
                     CreationDate = DateTime.Parse("2024-01-10"),
                     UpdateDate = DateTime.Parse("2023-11-09"),
@@ -40,8 +39,6 @@ namespace ParameterControl.Services.Policies
                     Name = "Name",
                     Description = "Description",
                     Conciliation = 123,
-                    ControlType = "Voz",
-                    OperationType = "Model",
                     State = false,
                     CreationDate = DateTime.Parse("2024-01-10"),
                     UpdateDate = DateTime.Parse("2023-11-09"),
@@ -52,8 +49,6 @@ namespace ParameterControl.Services.Policies
                     Name = "Politica_1",
                     Description = "Descripcion ejemplo",
                     Conciliation = 123,
-                    ControlType = "Emial",
-                    OperationType = "Fija",
                     State = true,
                     CreationDate = DateTime.Parse("2024-02-10"),
                     UpdateDate = DateTime.Parse("2023-11-09"),
@@ -64,8 +59,6 @@ namespace ParameterControl.Services.Policies
                     Name = "Name",
                     Description = "Description",
                     Conciliation = 123,
-                    ControlType = "Voz",
-                    OperationType = "Model",
                     State = false,
                     CreationDate = DateTime.Parse("2024-01-10"),
                     UpdateDate = DateTime.Parse("2023-11-09"),
@@ -76,8 +69,6 @@ namespace ParameterControl.Services.Policies
                     Name = "Politica_1",
                     Description = "Descripcion ejemplo",
                     Conciliation = 123,
-                    ControlType = "Emial",
-                    OperationType = "Fija",
                     State = true,
                     CreationDate = DateTime.Parse("2024-01-10"),
                     UpdateDate = DateTime.Parse("2023-11-09"),
@@ -88,8 +79,6 @@ namespace ParameterControl.Services.Policies
                     Name = "Name",
                     Description = "Description",
                     Conciliation = 123,
-                    ControlType = "Voz",
-                    OperationType = "Model",
                     State = false,
                     CreationDate = DateTime.Parse("2024-01-10"),
                     UpdateDate = DateTime.Parse("2023-11-09"),
@@ -100,8 +89,6 @@ namespace ParameterControl.Services.Policies
                     Name = "Politica_1",
                     Description = "Descripcion ejemplo",
                     Conciliation = 123,
-                    ControlType = "Emial",
-                    OperationType = "Fija",
                     State = true,
                     CreationDate = DateTime.Parse("2024-01-10"),
                     UpdateDate = DateTime.Parse("2023-11-09"),
@@ -112,8 +99,6 @@ namespace ParameterControl.Services.Policies
                     Name = "Name",
                     Description = "Description",
                     Conciliation = 123,
-                    ControlType = "Voz",
-                    OperationType = "Model",
                     State = false,
                     CreationDate = DateTime.Parse("2024-01-10"),
                     UpdateDate = DateTime.Parse("2023-11-09"),
@@ -148,7 +133,7 @@ namespace ParameterControl.Services.Policies
                 Console.WriteLine(pagination.Page);
                 Console.WriteLine(pagination.RecordsPage);
                 var response = await _policyService.SelectPaginatorPolicy(pagination.Page, pagination.RecordsPage);
-                var result = _mapper.Map<List<modPolicy.Policy>>(response);
+                var result = await MapperPolicy(response);
                 Console.WriteLine(result.Count);
                 return result; 
             }
@@ -170,8 +155,6 @@ namespace ParameterControl.Services.Policies
                 policyModel.Name = policy.Name;
                 policyModel.Description = policy.Description;
                 policyModel.Conciliation = policy.Conciliation;
-                policyModel.ControlType = policy.ControlType;
-                policyModel.OperationType = policy.OperationType;
                 policyModel.State = policy.State;
                 policyModel.CodeFormat = "PO_" + policy.Code;
                 policyModel.StateFormat = policy.State ? "Activo" : "Inactivo";
@@ -195,8 +178,6 @@ namespace ParameterControl.Services.Policies
             policyModel.Name = policy.Name;
             policyModel.Description = policy.Description;
             policyModel.Conciliation = policy.Conciliation;
-            policyModel.ControlType = policy.ControlType;
-            policyModel.OperationType = policy.OperationType;
             policyModel.State = policy.State;
             policyModel.CodeFormat = "PO_" + policy.Code;
             policyModel.StateFormat = policy.State ? "Activo" : "Inactivo";
@@ -217,8 +198,6 @@ namespace ParameterControl.Services.Policies
             policyModel.Name = policy.Name;
             policyModel.Description = policy.Description;
             policyModel.Conciliation = policy.Conciliation;
-            policyModel.ControlType = policy.ControlType;
-            policyModel.OperationType = policy.OperationType;
             policyModel.State = policy.State;
             policyModel.CodeFormat = "PO_" + policy.Code;
             policyModel.CreationDate = policy.CreationDate;
@@ -255,14 +234,6 @@ namespace ParameterControl.Services.Policies
             {
                 throw;
             }
-        }
-
-        public async Task<List<SelectListItem>> GetOperationsType()
-        {
-            List<SelectListItem> operationsType = new List<SelectListItem>().ToList();
-            operationsType.Add(new SelectListItem("Model", "1"));
-            operationsType.Add(new SelectListItem("Fija", "2"));
-            return operationsType;
         }
 
         public async Task<List<PolicyViewModel>> GetFilterPolicies(FilterViewModel filterModel)
@@ -310,6 +281,26 @@ namespace ParameterControl.Services.Policies
             }
            
             return policiesFilter;
+        }
+
+        public List<PolicyViewModel> GetFilterPagination(List<PolicyViewModel> inicialPolicies, PaginationViewModel paginationViewModel, int totalData)
+        {
+            var limit = paginationViewModel.Page * paginationViewModel.RecordsPage;
+            var index = limit - paginationViewModel.RecordsPage;
+            var count = 0;
+
+            if (limit > totalData)
+            {
+                count = totalData - index;
+            }
+            else
+            {
+                count = paginationViewModel.RecordsPage;
+            }
+
+            List<PolicyViewModel> policiesFilterPagination = inicialPolicies.GetRange(index, count);
+
+            return policiesFilterPagination;
         }
 
         private async Task<List<modPolicy.Policy>> MapperPolicy(List<PolicyModel> policyModel)

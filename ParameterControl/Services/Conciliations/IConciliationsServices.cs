@@ -17,7 +17,6 @@ namespace ParameterControl.Services.Conciliations
         Task<List<ConciliationViewModel>> GetConciliationsFormat(List<modConciliation.Conciliation> conciliations);
         Task<ConciliationViewModel> GetConciliationFormat(modConciliation.Conciliation conciliation);
         Task<ConciliationCreateViewModel> GetConciliationFormatCreate(modConciliation.Conciliation conciliation);
-
-
+        Task<List<SelectListItem>> GetOperationsType();
     }
 }

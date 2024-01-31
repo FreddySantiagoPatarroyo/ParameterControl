@@ -15,12 +15,6 @@ namespace ParameterControl.Models.Policy
         [Range(0, int.MaxValue, ErrorMessage = "Esta conciliacion no es valida")]
         public int Conciliation { get; set; }
 
-        [Required(ErrorMessage = "El tipo de algo es requerido")]
-        public string ControlType { get; set; } = string.Empty;
-
-        [Required(ErrorMessage = "El tipo de operacion es requerido")]
-        public string OperationType { get; set; } = string.Empty;
-
         public string Objetive { get; set; } = string.Empty;
     }
 }
