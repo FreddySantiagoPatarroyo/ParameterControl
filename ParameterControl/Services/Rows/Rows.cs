@@ -25,11 +25,6 @@ namespace ParameterControl.Services.Rows
                 },
                 new Row()
                 {
-                    Value = "Conciliation",
-                    Name = "Conciliacion"
-                },
-                new Row()
-                {
                     Value = "StateFormat",
                     Name = "Estado Activación"
                 },

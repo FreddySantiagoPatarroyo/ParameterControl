@@ -24,7 +24,6 @@ namespace ParameterControl.Services.Policies
                     Code = 1,
                     Name = "Politica_1",
                     Description = "Descripcion ejemplo asdasdasdasdasdasdasdasdasdadasdasdasdasdads",
-                    Conciliation = 123,
                     State = true,
                     CreationDate = DateTime.Parse("2024-01-10"),
                     UpdateDate = DateTime.Parse("2023-11-09"),
@@ -34,7 +33,6 @@ namespace ParameterControl.Services.Policies
                     Code = 2,
                     Name = "Name",
                     Description = "Description",
-                    Conciliation = 123,
                     State = false,
                     CreationDate = DateTime.Parse("2024-01-10"),
                     UpdateDate = DateTime.Parse("2023-11-09"),
@@ -44,7 +42,6 @@ namespace ParameterControl.Services.Policies
                     Code = 3,
                     Name = "Politica_1",
                     Description = "Descripcion ejemplo",
-                    Conciliation = 123,
                     State = true,
                     CreationDate = DateTime.Parse("2024-02-10"),
                     UpdateDate = DateTime.Parse("2023-11-09"),
@@ -54,7 +51,6 @@ namespace ParameterControl.Services.Policies
                     Code = 4,
                     Name = "Name",
                     Description = "Description",
-                    Conciliation = 123,
                     State = false,
                     CreationDate = DateTime.Parse("2024-01-10"),
                     UpdateDate = DateTime.Parse("2023-11-09"),
@@ -64,7 +60,6 @@ namespace ParameterControl.Services.Policies
                     Code = 5,
                     Name = "Politica_1",
                     Description = "Descripcion ejemplo",
-                    Conciliation = 123,
                     State = true,
                     CreationDate = DateTime.Parse("2024-01-10"),
                     UpdateDate = DateTime.Parse("2023-11-09"),
@@ -74,7 +69,6 @@ namespace ParameterControl.Services.Policies
                     Code = 6,
                     Name = "Name",
                     Description = "Description",
-                    Conciliation = 123,
                     State = false,
                     CreationDate = DateTime.Parse("2024-01-10"),
                     UpdateDate = DateTime.Parse("2023-11-09"),
@@ -84,7 +78,6 @@ namespace ParameterControl.Services.Policies
                     Code = 7,
                     Name = "Politica_1",
                     Description = "Descripcion ejemplo",
-                    Conciliation = 123,
                     State = true,
                     CreationDate = DateTime.Parse("2024-01-10"),
                     UpdateDate = DateTime.Parse("2023-11-09"),
@@ -94,7 +87,6 @@ namespace ParameterControl.Services.Policies
                     Code = 8,
                     Name = "Name",
                     Description = "Description",
-                    Conciliation = 123,
                     State = false,
                     CreationDate = DateTime.Parse("2024-01-10"),
                     UpdateDate = DateTime.Parse("2023-11-09"),
@@ -148,7 +140,6 @@ namespace ParameterControl.Services.Policies
                 policyModel.Code = policy.Code;
                 policyModel.Name = policy.Name;
                 policyModel.Description = policy.Description;
-                policyModel.Conciliation = policy.Conciliation;
                 policyModel.State = policy.State;
                 policyModel.CodeFormat = "PO_" + policy.Code;
                 policyModel.StateFormat = policy.State ? "Activo" : "Inactivo";
@@ -171,7 +162,6 @@ namespace ParameterControl.Services.Policies
             policyModel.Code = policy.Code;
             policyModel.Name = policy.Name;
             policyModel.Description = policy.Description;
-            policyModel.Conciliation = policy.Conciliation;
             policyModel.State = policy.State;
             policyModel.CodeFormat = "PO_" + policy.Code;
             policyModel.StateFormat = policy.State ? "Activo" : "Inactivo";
@@ -191,7 +181,6 @@ namespace ParameterControl.Services.Policies
             policyModel.Code = policy.Code;
             policyModel.Name = policy.Name;
             policyModel.Description = policy.Description;
-            policyModel.Conciliation = policy.Conciliation;
             policyModel.State = policy.State;
             policyModel.CodeFormat = "PO_" + policy.Code;
             policyModel.CreationDate = policy.CreationDate;
