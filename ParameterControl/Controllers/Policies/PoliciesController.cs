@@ -37,6 +37,7 @@ namespace ParameterControl.Controllers.Policies
         public async Task<ActionResult> Policies(PaginationViewModel paginationViewModel)
         {
             List<modPolicy.Policy> policies = await policiesServices.GetPolicies();
+            int TotalPolicies = await policiesServices.CountPolicies();
 
             TablePolicies.Data = await policiesServices.GetPolicesFormat(policies);
 
@@ -48,12 +49,21 @@ namespace ParameterControl.Controllers.Policies
             TablePolicies.IsEdit = true;
             TablePolicies.IsInactivate = true;
 
+            var resultViemModel = new PaginationResult<TablePoliciesViewModel>()
+            {
+                Elements = TablePolicies,
+                Page = paginationViewModel.Page,
+                RecordsPage = paginationViewModel.RecordsPage,
+                TotalRecords = TotalPolicies,
+                BaseUrl = Url.Action()
+            };
+
             ViewBag.ApplyFilter = false;
 
             return View("Policies", TablePolicies);
         }
 
-        public async Task<ActionResult> PoliciesFilter(string filterColunm = "", string filterValue = "", string typeRow = "")
+        public async Task<ActionResult> PoliciesFilter(PaginationViewModel paginationViewModel, string filterColunm = "", string filterValue = "", string typeRow = "")
         {
 
             if (filterColunm == null || filterColunm == "" || filterValue == null || filterValue == "")

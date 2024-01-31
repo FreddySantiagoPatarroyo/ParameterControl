@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
 using ParameterControl.Models.Conciliation;
 using ParameterControl.Models.Filter;
+using ParameterControl.Models.Policy;
+using ParameterControl.Policy.Entities;
 using ParameterControl.Services.Policies;
 using modConciliation = ParameterControl.Models.Conciliation;
 using modPolicy = ParameterControl.Models.Policy;
@@ -21,13 +23,15 @@ namespace ParameterControl.Services.Conciliations
                 new Conciliation(){
                     Code = 1,
                     Name = "Conciliacion_1",
-                    Description = "Description",
+                    Description = "Descriptionasdasdasdasdasdasdasdasdasdasd",
                     Package = "paqueteEjemplo",
                     Email = "ejemplo@gmail.com",
                     Destination = "ejemploDestino",
                     Policies = "Politica1",
                     Required = true,
                     Conciliation_ = "Conciliation",
+                    ControlType = "Voz",
+                    OperationType = "Model",
                     State = true,
                     CreationDate = DateTime.Parse("2024-01-10"),
                     UpdateDate = DateTime.Parse("2023-11-09"),
@@ -43,6 +47,8 @@ namespace ParameterControl.Services.Conciliations
                     Policies = "Politica2",
                     Required = false,
                     Conciliation_ = "Conciliation",
+                    ControlType = "Voz",
+                    OperationType = "Model",
                     State = true,
                     CreationDate = DateTime.Parse("2024-01-10"),
                     UpdateDate = DateTime.Parse("2023-11-09"),
@@ -58,6 +64,8 @@ namespace ParameterControl.Services.Conciliations
                     Policies = "Politica1",
                     Required = true,
                     Conciliation_ = "Conciliation",
+                    ControlType = "Voz",
+                    OperationType = "Model",
                     State = true,
                     CreationDate = DateTime.Parse("2024-01-10"),
                     UpdateDate = DateTime.Parse("2023-11-09"),
@@ -73,6 +81,8 @@ namespace ParameterControl.Services.Conciliations
                     Policies = "Politica1",
                     Required = false,
                     Conciliation_ = "Conciliation",
+                    ControlType = "Voz",
+                    OperationType = "Model",
                     State = false,
                     CreationDate = DateTime.Parse("2024-01-10"),
                     UpdateDate = DateTime.Parse("2023-11-09"),
@@ -88,6 +98,8 @@ namespace ParameterControl.Services.Conciliations
                     Policies = "Politica1",
                     Required = true,
                     Conciliation_ = "Conciliation",
+                    ControlType = "Voz",
+                    OperationType = "Model",
                     State = true,
                     CreationDate = DateTime.Parse("2024-01-10"),
                     UpdateDate = DateTime.Parse("2023-11-09"),
@@ -103,6 +115,8 @@ namespace ParameterControl.Services.Conciliations
                     Policies = "Politica1",
                     Required = true,
                     Conciliation_ = "Conciliation",
+                    ControlType = "Voz",
+                    OperationType = "Model",
                     State = false,
                     CreationDate = DateTime.Parse("2024-01-10"),
                     UpdateDate = DateTime.Parse("2023-11-09"),
@@ -118,6 +132,8 @@ namespace ParameterControl.Services.Conciliations
                     Policies = "Politica1",
                     Required = false,
                     Conciliation_ = "Conciliation",
+                    ControlType = "Voz",
+                    OperationType = "Model",
                     State = true,
                     CreationDate = DateTime.Parse("2024-01-10"),
                     UpdateDate = DateTime.Parse("2023-11-09"),
@@ -133,6 +149,8 @@ namespace ParameterControl.Services.Conciliations
                     Policies = "Politica1",
                     Required = true,
                     Conciliation_ = "Conciliation",
+                    ControlType = "Voz",
+                    OperationType = "Model",
                     State = false,
                     CreationDate = DateTime.Parse("2024-01-10"),
                     UpdateDate = DateTime.Parse("2023-11-09"),
@@ -164,6 +182,8 @@ namespace ParameterControl.Services.Conciliations
                 conciliationModel.Destination = conciliation.Destination;
                 conciliationModel.Policies = conciliation.Policies;
                 conciliationModel.Required = conciliation.Required;
+                conciliationModel.ControlType = conciliation.ControlType;
+                conciliationModel.OperationType = conciliation.OperationType;
                 conciliationModel.RequiredFormat = conciliation.Required ? "Si" : "No";
                 conciliationModel.State = conciliation.State;
                 conciliationModel.CodeFormat = "CO_" + conciliation.Code;
@@ -193,6 +213,8 @@ namespace ParameterControl.Services.Conciliations
             conciliationModel.Destination = conciliation.Destination;
             conciliationModel.Policies = conciliation.Policies;
             conciliationModel.Required = conciliation.Required;
+            conciliationModel.ControlType = conciliation.ControlType;
+            conciliationModel.OperationType = conciliation.OperationType;
             conciliationModel.RequiredFormat = conciliation.Required ? "Si" : "No";
             conciliationModel.State = conciliation.State;
             conciliationModel.CodeFormat = "CO_" + conciliation.Code;
@@ -220,12 +242,13 @@ namespace ParameterControl.Services.Conciliations
             conciliationModel.Destination = conciliation.Destination;
             conciliationModel.Policies = conciliation.Policies;
             conciliationModel.Required = conciliation.Required;
+            conciliationModel.ControlType = conciliation.ControlType;
+            conciliationModel.OperationType = conciliation.OperationType;
             conciliationModel.RequiredFormat = conciliation.Required ? "Si" : "No";
             conciliationModel.State = conciliation.State;
             conciliationModel.CodeFormat = "CO_" + conciliation.Code;
             conciliationModel.CreationDate = conciliation.CreationDate;
             conciliationModel.UpdateDate = conciliation.UpdateDate;
-
 
             return conciliationModel;
         }

@@ -12,7 +12,6 @@ namespace ParameterControl.Models.Parameter
         [Required(ErrorMessage = "El valor es requerido")]
         public string Value { get; set; } = string.Empty;
 
-        [Required(ErrorMessage = "La description es requerido")]
         public string Description { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "El tipo de parametro es requerido")]

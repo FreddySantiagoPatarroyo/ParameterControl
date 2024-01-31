@@ -26,5 +26,11 @@ namespace ParameterControl.Models.Conciliation
 
         [Required(ErrorMessage = "Este campo es requerido")]
         public bool Required { get; set; } = false;
+
+        [Required(ErrorMessage = "El tipo de algo es requerido")]
+        public string ControlType { get; set; } = string.Empty;
+
+        [Required(ErrorMessage = "El tipo de operacion es requerido")]
+        public string OperationType { get; set; } = string.Empty;
     }
 }

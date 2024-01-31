@@ -41,7 +41,7 @@ namespace ParameterControl.Services.Rows
                 new Row()
                 {
                     Value = "StateFormat",
-                    Name = "Estado"
+                    Name = "Estado Activación"
                 },
                 new Row()
                 {
@@ -89,8 +89,18 @@ namespace ParameterControl.Services.Rows
                 },
                 new Row()
                 {
+                    Value = "ControlType",
+                    Name = "Tipo de control"
+                },
+                new Row()
+                {
+                    Value = "OperationType",
+                    Name = "Tipo de operacion"
+                },
+                new Row()
+                {
                     Value = "StateFormat",
-                    Name = "Estado"
+                    Name = "Estado Activación"
                 },
                 new Row()
                 {
@@ -134,7 +144,7 @@ namespace ParameterControl.Services.Rows
                  new Row()
                 {
                     Value = "StateFormat",
-                    Name = "Estado"
+                    Name = "Estado Activación"
                 },
                 new Row()
                 {
@@ -178,7 +188,7 @@ namespace ParameterControl.Services.Rows
                  new Row()
                 {
                     Value = "StateFormat",
-                    Name = "Estado"
+                    Name = "Estado Activación"
                 },
                 new Row()
                 {
@@ -222,7 +232,7 @@ namespace ParameterControl.Services.Rows
                   new Row()
                 {
                     Value = "StateFormat",
-                    Name = "Estado"
+                    Name = "Estado Activación"
                 },
                 new Row()
                 {
@@ -290,7 +300,7 @@ namespace ParameterControl.Services.Rows
                  new Row()
                 {
                     Value = "StateFormat",
-                    Name = "Estado"
+                    Name = "Estado Activación"
                 },
                 new Row()
                 {
@@ -324,7 +334,7 @@ namespace ParameterControl.Services.Rows
                 new Row()
                 {
                     Value = "Status",
-                    Name = "Estado val"
+                    Name = "Estado"
                 },
                 new Row()
                 {
@@ -339,27 +349,27 @@ namespace ParameterControl.Services.Rows
                 new Row()
                 {
                     Value = "BeneValue",
-                    Name = "Valor Bene"
+                    Name = "Valor Beneficio"
                 },
                 new Row()
                 {
                     Value = "IncoValue",
-                    Name = "Valor Inco"
+                    Name = "Valor Inconsistencia"
                 },
                 new Row()
                 {
                     Value = "PQValue",
-                    Name = "Valor PQ"
+                    Name = "Valor PQR"
                 },
                 new Row()
                 {
                     Value = "ReinValue",
-                    Name = "Valor Rein"
+                    Name = "Valor Reincidencia"
                 },
                  new Row()
                 {
                     Value = "StateFormat",
-                    Name = "Estado"
+                    Name = "Estado Activación"
                 },
                 new Row()
                 {

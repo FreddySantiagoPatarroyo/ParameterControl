@@ -95,7 +95,7 @@
 
             <div class="form_group">
                 <div class="field">
-                    <label asp-for="Description" class="label_form">Descripción*</label>
+                    <label asp-for="Description" class="label_form">Descripción</label>
                     <div class="textarea">
                         <textarea asp-for="Description" placeholder="Digite la descripción" autocomplete="off"></textarea>
                     </div>
@@ -202,18 +202,18 @@
         let data;
         let isValidPatameter = false;
         let isValidValue = false;
-        let isValidDescription = false;
+        //let isValidDescription = false;
         let isValidParameterType = false;
         let isValidList = false;
 
         const sendData = async () => {
             isValidPatameter = validateInputEmpty("ParameterFormat", "El parametro es requerido", "ParameterError");
             isValidValue = validateInputEmpty("Value", "El valor es requerido", "ValueError");
-            isValidDescription = validateInputEmpty("Description", "La descripcion es requerido", "DescriptionError");
+            //isValidDescription = validateInputEmpty("Description", "La descripcion es requerido", "DescriptionError");
             isValidParameterType = validateInputEmpty("ParameterType", "El tipo de parametro es requerido", "ParameterTypeError");
             isValidList = validateInputEmpty("List", "La lista es requerido", "ListError");
 
-            if (isValidPatameter && isValidValue && isValidDescription && isValidParameterType && isValidList) {
+            if (isValidPatameter && isValidValue && isValidParameterType && isValidList) {
                 document.getElementById('btn_container').style.display = 'none';
                 document.getElementById('loading').style.display = 'flex';
 

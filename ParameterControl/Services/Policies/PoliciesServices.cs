@@ -122,11 +122,23 @@ namespace ParameterControl.Services.Policies
             };
         }
 
+        public async Task<List<modPolicy.Policy>> GetPoliciesFake()
+        {
+            return policies;
+        }
+
         public async Task<List<modPolicy.Policy>> GetPolicies()
         {
             var collectionPolicies = await _policyService.SelectAllPolicy();
             var response = await MapperPolicy(collectionPolicies);
             return response;
+        }
+
+        public async Task<int> CountPolicies()
+        {
+            var collectionPolicies = await _policyService.SelectAllPolicy();
+            var response = await MapperPolicy(collectionPolicies);
+            return response.Count();
         }
 
         public async Task<List<modPolicy.Policy>> GetPoliciesPagination(PaginationViewModel pagination)

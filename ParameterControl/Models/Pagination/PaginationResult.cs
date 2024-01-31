@@ -11,6 +11,6 @@
 
     public class PaginationResult<T> : PaginationResult
     {
-        public List<T> Elements { get; set; }
+        public T Elements { get; set; }
     }
 }
