@@ -14,35 +14,36 @@ namespace ParameterControl.Policy.DataAccess
             _configuration = configuration;
         }
 
-        public int UpdatePolicy(PolicyModel entity)
+        public async Task<int> UpdatePolicy(PolicyModel entity)
         {
             int response = 0;
 
             try
             {
-                using (OracleConnection connection = new OracleConnection(_configuration.GetConnectionString("conn-db")))
+                return await Task.Run(() => 
                 {
-                    connection.Open();
-
-                    using (OracleCommand command = new OracleCommand("UPDATE_POLICY", connection))
+                    using (OracleConnection connection = new OracleConnection(_configuration.GetConnectionString("conn-db")))
                     {
-                        command.CommandType = CommandType.StoredProcedure;
-                        command.Parameters.Add(new OracleParameter("PARAM_CODE", entity.Code));
-                        command.Parameters.Add(new OracleParameter("PARAM_NAME", entity.Name));
-                        command.Parameters.Add(new OracleParameter("PARAM_DESCRIPTION", entity.Description));
-                        command.Parameters.Add(new OracleParameter("PARAM_MODIFIELDBY", entity.ModifieldBy));
-                        command.Parameters.Add(new OracleParameter("PARAM_OBJETIVO", entity.Objetive));
-                        OracleDataReader reader = command.ExecuteReader();
-                        response = 1;
+                        connection.Open();
+
+                        using (OracleCommand command = new OracleCommand("UPDATE_POLICY", connection))
+                        {
+                            command.CommandType = CommandType.StoredProcedure;
+                            command.Parameters.Add(new OracleParameter("PARAM_CODE", entity.Code));
+                            command.Parameters.Add(new OracleParameter("PARAM_NAME", entity.Name));
+                            command.Parameters.Add(new OracleParameter("PARAM_DESCRIPTION", entity.Description));
+                            command.Parameters.Add(new OracleParameter("PARAM_MODIFIELDBY", entity.ModifieldBy));
+                            command.Parameters.Add(new OracleParameter("PARAM_OBJETIVO", entity.Objetive));
+                            OracleDataReader reader = command.ExecuteReader();
+                            return response = 1;
+                        }
                     }
-                }
+                });
             }
             catch (Exception ex)
             {
                 throw;
             }
-
-            return response;
         }
     }
 }

@@ -10,5 +10,6 @@ namespace ParameterControl.Policy.Interfaces
         Task<List<PolicyModel>> SelectAllPolicy();
         Task<PolicyModel> SelectByIdPolicy(PolicyModel entity);
         Task<List<PolicyModel>> SelectPaginatorPolicy(int page, int row);
+        Task<int> SelectCountPolicy();
     }
 }

@@ -15,11 +15,9 @@ namespace ParameterControl.Services.Policies
     {
         private List<modPolicy.Policy> policies = new List<modPolicy.Policy>();
         private readonly PolicyService _policyService;
-        private readonly IMapper _mapper;
 
-        public PoliciesServices(IConfiguration configuration, IMapper mapper)
+        public PoliciesServices(IConfiguration configuration)
         {
-            _mapper = mapper;
             _policyService = new PolicyService(configuration);
             policies = new List<modPolicy.Policy>()
             {
@@ -136,20 +134,15 @@ namespace ParameterControl.Services.Policies
 
         public async Task<int> CountPolicies()
         {
-            var collectionPolicies = await _policyService.SelectAllPolicy();
-            var response = await MapperPolicy(collectionPolicies);
-            return response.Count();
+            return await _policyService.SelectCountPolicy();             
         }
 
         public async Task<List<modPolicy.Policy>> GetPoliciesPagination(PaginationViewModel pagination)
         {
             try
             {
-                Console.WriteLine(pagination.Page);
-                Console.WriteLine(pagination.RecordsPage);
                 var response = await _policyService.SelectPaginatorPolicy(pagination.Page, pagination.RecordsPage);
-                var result = _mapper.Map<List<modPolicy.Policy>>(response);
-                Console.WriteLine(result.Count);
+                var result = await MapperPolicy(response);
                 return result; 
             }
             catch (Exception ex)

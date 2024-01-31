@@ -33,7 +33,7 @@ namespace ParameterControl.Test
             {
                 var policy = new Models.Policy.Policy
                 {
-                    Name = "PO_AIC_430",
+                    Name = "PO_AIC_435",
                     Description = "Conciliacion Mandante Bonos Prepagos",
                     Objetive = "Mitigar pérdidas de ingresos por inconsistencias en el aprovisionamiento de las ofertas prepago sin costo en la plataforma YELLOWBRICK",
                     Conciliation = 1
@@ -84,6 +84,21 @@ namespace ParameterControl.Test
             catch (Exception ex)
             {
                 throw;
+            }
+        }
+
+        [Test]
+        public async Task Test4()
+        {
+            try
+            {
+                var setPolicy = new CountPolicy(_configuration);
+                var response = await setPolicy.SelectCountPolicy();
+                Assert.Positive(response);
+            }
+            catch (Exception ex)
+            {
+
             }
         }
     }

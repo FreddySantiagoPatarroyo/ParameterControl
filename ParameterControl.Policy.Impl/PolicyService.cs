@@ -14,6 +14,7 @@ namespace ParameterControl.Policy.Impl
         private readonly GetByIdPolicy _getByIdPolicy;
         private readonly GetAllPolicy _getAllPolicy;
         private readonly GetPaginatorPolicy _getPaginatorPolicy;
+        private readonly CountPolicy _countPolicy;
 
         public PolicyService(IConfiguration configuration)
         {
@@ -23,6 +24,7 @@ namespace ParameterControl.Policy.Impl
             _getByIdPolicy = new GetByIdPolicy(configuration);
             _getAllPolicy = new GetAllPolicy(configuration);
             _getPaginatorPolicy = new GetPaginatorPolicy(configuration);
+            _countPolicy = new CountPolicy(configuration);
         }
 
         public async Task<int> InsertPolicy(PolicyModel entity)
@@ -114,12 +116,9 @@ namespace ParameterControl.Policy.Impl
         {
             try
             {
-                return await Task.Run(async () =>
-                {
-                    var response = await _getPaginatorPolicy.SelectPaginatorPolicy(page, row);
-                    var mapper = await MapperPolicy(response);
-                    return mapper;
-                });
+                var response = await _getPaginatorPolicy.SelectPaginatorPolicy(page, row);
+                var mapper = await MapperPolicy(response);
+                return mapper;
             }
             catch (Exception ex)
             {
@@ -129,22 +128,20 @@ namespace ParameterControl.Policy.Impl
 
         private async Task<List<PolicyModel>> MapperPolicy(DataTable dt)
         {
-            return await Task.Run(() =>
+            if (dt.Rows.Count > 0)
             {
-                if (dt.Rows.Count > 0)
+                List<PolicyModel> policies = new List<PolicyModel>();
+                foreach (DataRow row in dt.Rows)
                 {
-                    List<PolicyModel> policies = new List<PolicyModel>();
-                    foreach (DataRow row in dt.Rows)
-                    {
-                        policies.Add(MapperToPolicy(row).Result);
-                    }
-                    return policies;
+                    var response = await MapperToPolicy(row);
+                    policies.Add(response);
                 }
-                else
-                {
-                    return new List<PolicyModel>();
-                }
-            });
+                return policies;
+            }
+            else
+            {
+                return new List<PolicyModel>();
+            }
         }
 
         private async Task<PolicyModel> MapperToPolicy(DataRow dr)
@@ -163,6 +160,18 @@ namespace ParameterControl.Policy.Impl
                 };
                 return model;
             });
+        }
+
+        public async Task<int> SelectCountPolicy()
+        {
+            try
+            {
+                return await _countPolicy.SelectCountPolicy();
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
         }
     }
 }
