@@ -14,6 +14,7 @@ namespace ParameterControl.Auth.Impl
         private readonly GetByIdUser _getByIdUser;
         private readonly GetAllUser _getAllUser;
         private readonly GetPaginatorUser _getPaginatorUser;
+        private readonly CountUser _getCountUser;
 
         public AuthService(IConfiguration configuration)
         {
@@ -23,6 +24,7 @@ namespace ParameterControl.Auth.Impl
             _getByIdUser = new GetByIdUser(configuration);
             _getAllUser = new GetAllUser(configuration);
             _getPaginatorUser = new GetPaginatorUser(configuration);
+            _getCountUser = new CountUser(configuration);
         }
 
         public async Task<int> InsertUser(UserModel entity)
@@ -154,18 +156,28 @@ namespace ParameterControl.Auth.Impl
                 UserModel model = new UserModel
                 {
                     Id = Convert.ToInt32(dr["COD_USUARIO"]),
-                    User = dr["USUARIO"].ToString(),
-                    Email = dr["EMAIL"].ToString(),
-                    UserName = dr["NOMBRE_USUARIO"].ToString(),
-                    RolId = Convert.ToInt32(dr["IDROL"]),
-                    GroupId = dr["LOGINGROUP"].ToString(),
-                    CreationDate = Convert.ToDateTime(dr["FECHA_CREACION"]),
-                    ModifiedDate = Convert.ToDateTime(dr["FECHA_ACTUALIZACION"]),
-                    ModifiedBy = dr["MODIFICADO_POR"].ToString(),
-                    FirstAccess = Convert.ToInt32(dr["PRIMER_ACCESO"])
+                    User = dr["USUARIO"] is DBNull ? string.Empty : dr["USUARIO"].ToString(),
+                    Email = dr["EMAIL"] is DBNull ? string.Empty : dr["EMAIL"].ToString(),
+                    UserName = dr["NOMBRE_USUARIO"] is DBNull ? string.Empty : dr["NOMBRE_USUARIO"].ToString(),
+                    CreationDate = dr["FECHA_CREACION"] is DBNull ? DateTime.Now : Convert.ToDateTime(dr["FECHA_CREACION"]),
+                    ModifiedDate = dr["FECHA_ACTUALIZACION"] is DBNull ? DateTime.Now : Convert.ToDateTime(dr["FECHA_ACTUALIZACION"]),
+                    ModifiedBy = dr["MODIFICADO_POR"] is DBNull ? string.Empty : dr["MODIFICADO_POR"].ToString()
+                    //FirstAccess = dr["PRIMER_ACCESO"] is DBNull ? 0 : Convert.ToInt32(dr["PRIMER_ACCESO"])
                 };
                 return model;
             });
+        }
+
+        public async Task<int> SelectCountUser()
+        {
+            try
+            {
+                return await _getCountUser.SelectCountUser();
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
         }
     }
 }

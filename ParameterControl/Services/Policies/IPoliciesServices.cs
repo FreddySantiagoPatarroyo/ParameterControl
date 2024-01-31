@@ -19,5 +19,6 @@ namespace ParameterControl.Services.Policies
         Task<PolicyViewModel> GetPolicyFormat(modPolicy.Policy policy);
         Task<PolicyCreateViewModel> GetPolicyFormatCreate(modPolicy.Policy policy);
         Task<string> InsertPolicy(modPolicy.Policy request);
+        Task<string> UpdatePolicy(modPolicy.Policy policy);
     }
 }

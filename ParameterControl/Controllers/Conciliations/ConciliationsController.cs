@@ -195,7 +195,7 @@ namespace ParameterControl.Controllers.Conciliations
         [HttpGet]
         public async Task<ActionResult> View(int code)
         {
-            Conciliation conciliation = await conciliationsServices.GetConciliationsByCode(code);
+            modConciliation.Conciliation conciliation = await conciliationsServices.GetConciliationsByCode(code);
 
             ConciliationViewModel model = await conciliationsServices.GetConciliationFormat(conciliation);
 
@@ -215,7 +215,7 @@ namespace ParameterControl.Controllers.Conciliations
         {
             try
             {
-                Conciliation request = await conciliationsServices.GetConciliationsByCode(code);
+                modConciliation.Conciliation request = await conciliationsServices.GetConciliationsByCode(code);
                 request.UserOwner = authenticatedUser.GetUserOwnerId();
                 request.UpdateDate = DateTime.Now;
                 request.State = true;
@@ -242,7 +242,7 @@ namespace ParameterControl.Controllers.Conciliations
         {
             try
             {
-                Conciliation request = await conciliationsServices.GetConciliationsByCode(code);
+                modConciliation.Conciliation request = await conciliationsServices.GetConciliationsByCode(code);
                 request.UserOwner = authenticatedUser.GetUserOwnerId();
                 request.UpdateDate = DateTime.Now;
                 request.State = false;

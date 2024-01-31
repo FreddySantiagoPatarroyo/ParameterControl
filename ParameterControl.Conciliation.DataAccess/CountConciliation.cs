@@ -1,21 +1,20 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Oracle.ManagedDataAccess.Client;
-using ParameterControl.Conciliation.Entities;
 using System.Data;
 
 namespace ParameterControl.Conciliation.DataAccess
 {
-    public class GetByIdConciliation
+    public class CountConciliation
     {
         private readonly IConfiguration _configuration;
         DataTable _dataTable = new DataTable();
 
-        public GetByIdConciliation(IConfiguration configuration)
+        public CountConciliation(IConfiguration configuration)
         {
             _configuration = configuration;
         }
 
-        public async Task<DataTable> SelectByIdConciliation(ConciliationModel entity)
+        public async Task<int> SelectCountConciliation()
         {
             try
             {
@@ -25,13 +24,12 @@ namespace ParameterControl.Conciliation.DataAccess
                     {
                         connection.Open();
 
-                        using (OracleCommand command = new OracleCommand("SELECT_BY_ID_CONCILIATION", connection))
+                        using (OracleCommand command = new OracleCommand("COUNT_CONCILIATION", connection))
                         {
                             command.CommandType = CommandType.StoredProcedure;
-                            command.Parameters.Add(new OracleParameter("PARAM_CODE", entity.Id));
                             OracleDataReader reader = command.ExecuteReader();
                             _dataTable.Load(reader);
-                            return _dataTable;
+                            return Convert.ToInt32(_dataTable.Rows[0]["TOTAL"].ToString());
                         }
                     }
                 });

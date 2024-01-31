@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\ParameterControl.Conciliation.Entities\ParameterControl.Conciliation.Entities.csproj" />
+  </ItemGroup>
+
 </Project>

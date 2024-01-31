@@ -23,7 +23,7 @@ namespace ParameterControl.Test
                 .Build();
 
             _configuration = builder;
-            _policiesServices = new PoliciesServices(_configuration, _mapper);
+            _policiesServices = new PoliciesServices(_configuration);
         }
 
         [Test]

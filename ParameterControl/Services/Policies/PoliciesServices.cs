@@ -5,6 +5,7 @@ using ParameterControl.Models.Pagination;
 using ParameterControl.Models.Policy;
 using ParameterControl.Policy.Entities;
 using ParameterControl.Policy.Impl;
+using ParameterControl.Policy.Interfaces;
 using System.Data;
 using System.Runtime.CompilerServices;
 using modPolicy = ParameterControl.Models.Policy;
@@ -14,7 +15,7 @@ namespace ParameterControl.Services.Policies
     public class PoliciesServices : IPoliciesServices
     {
         private List<modPolicy.Policy> policies = new List<modPolicy.Policy>();
-        private readonly PolicyService _policyService;
+        private readonly IPolicyService _policyService;
 
         public PoliciesServices(IConfiguration configuration)
         {
@@ -333,7 +334,32 @@ namespace ParameterControl.Services.Policies
                     Objetive = policy.Objetive,
                     CreationDate = policy.CreationDate,
                     UpdateDate = policy.ModifieldDate,
-                    UserOwner = policy.ModifieldBy
+                    UserOwner = policy.ModifieldBy,
+                    State = policy.State,
+                };
+                return model;
+            });
+        }
+
+        public async Task<string> UpdatePolicy(modPolicy.Policy policy)
+        {
+            var mapping = await MapperUpdatePolicy(policy);
+            var response = await _policyService.UpdatePolicy(mapping);
+
+            return response.Equals(1) ? "Politica actualizada correctamente" : "Error actualizando la politica";
+        }
+
+        private async Task<PolicyModel> MapperUpdatePolicy(modPolicy.Policy policy)
+        {
+            return await Task.Run(() =>
+            {
+                PolicyModel model = new PolicyModel
+                {
+                    Code = policy.Name,
+                    Name = policy.Name,
+                    Description = policy.Description,
+                    ModifieldBy = policy.UserOwner,
+                    State = policy.State
                 };
                 return model;
             });

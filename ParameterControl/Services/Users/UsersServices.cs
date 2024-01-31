@@ -1,4 +1,7 @@
-﻿using ParameterControl.Models.Filter;
+﻿using ParameterControl.Auth.Entities;
+using ParameterControl.Auth.Impl;
+using ParameterControl.Auth.Interfaces;
+using ParameterControl.Models.Filter;
 using ParameterControl.Models.User;
 using modUser = ParameterControl.Models.User;
 
@@ -7,8 +10,11 @@ namespace ParameterControl.Services.Users
     public class UsersServices : IUsersServices
     {
         private List<User> users = new List<User>();
-        public UsersServices()
+        private readonly IAuthService _authService;
+
+        public UsersServices(IConfiguration configuration)
         {
+            _authService = new AuthService(configuration);
             users = new List<User>()
             {
                 new User(){
@@ -67,7 +73,9 @@ namespace ParameterControl.Services.Users
 
         public async Task<List<User>> GetUsers()
         {
-            return users;
+            var collectionUsers = await _authService.SelectAllUser();
+            var response = await MapperUser(collectionUsers);
+            return response;
         }
 
         public async Task<List<UserViewModel>> GetUsersFormat(List<modUser.User> users)
@@ -182,6 +190,84 @@ namespace ParameterControl.Services.Users
                 }
             }
             return usersFilter;
+        }
+
+        public async Task<int> CountUsers()
+        {
+            return await _authService.SelectCountUser();
+        }
+
+        public async Task<string> InsertUser(User request)
+        {
+            try
+            {
+                var user = new Auth.Entities.UserModel
+                {
+                    UserName = request.Name,
+                    Email = request.Email,
+                    User = request.UserOwner
+                };
+
+                var response = await _authService.InsertUser(user);
+
+                return response.Equals(1) ? "Usuario creado correctamente" : "Error creando el usuario";
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
+        private async Task<List<User>> MapperUser(List<UserModel> userModel)
+        {
+            return await Task.Run(() =>
+            {
+                List<User> users = new List<User>();
+                if (userModel.Count > 0)
+                {
+                    foreach (var user in userModel)
+                    {
+                        users.Add(MapperToUser(user).Result);
+                    }
+                }
+                return users;
+            });
+        }
+
+        private async Task<modUser.User> MapperToUser(UserModel User)
+        {
+            return await Task.Run(() =>
+            {
+                modUser.User model = new modUser.User
+                {
+                    Code = Convert.ToInt32(User.Id),
+                    Name = User.UserName,
+                    CreationDate = User.CreationDate,
+                    UserOwner = User.ModifiedBy
+                };
+                return model;
+            });
+        }
+
+        public async Task<string> UpdateUser(modUser.User User)
+        {
+            var mapping = await MapperUpdateUser(User);
+            var response = await _authService.UpdateUser(mapping);
+
+            return response.Equals(1) ? "Usuario actualizado correctamente" : "Error actualizando el usuario";
+        }
+
+        private async Task<UserModel> MapperUpdateUser(modUser.User User)
+        {
+            return await Task.Run(() =>
+            {
+                UserModel model = new UserModel
+                {
+                    Id = User.Code,
+                    UserName = User.Name
+                };
+                return model;
+            });
         }
     }
 }

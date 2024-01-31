@@ -6,4 +6,9 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\ParameterControl.Conciliation.DataAccess\ParameterControl.Conciliation.DataAccess.csproj" />
+    <ProjectReference Include="..\ParameterControl.Conciliation.Interfaces\ParameterControl.Conciliation.Interfaces.csproj" />
+  </ItemGroup>
+
 </Project>
