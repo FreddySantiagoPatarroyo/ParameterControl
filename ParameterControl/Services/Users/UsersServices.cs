@@ -2,6 +2,8 @@
 using ParameterControl.Auth.Impl;
 using ParameterControl.Auth.Interfaces;
 using ParameterControl.Models.Filter;
+using ParameterControl.Models.Pagination;
+using ParameterControl.Models.Policy;
 using ParameterControl.Models.User;
 using modUser = ParameterControl.Models.User;
 
@@ -76,6 +78,30 @@ namespace ParameterControl.Services.Users
             var collectionUsers = await _authService.SelectAllUser();
             var response = await MapperUser(collectionUsers);
             return response;
+        }
+
+        public async Task<int> CountUsers()
+        {
+            var collectionUsers = await _authService.SelectAllUser();
+            var response = await MapperUser(collectionUsers);
+            return response.Count();
+
+            //return await _authService.SelectCountUser();
+        }
+
+        public async Task<List<modUser.User>> GetUsersPagination(PaginationViewModel pagination)
+        {
+            try
+            {
+                var response = await _authService.SelectPaginatorUser(pagination.Page, pagination.RecordsPage);
+                var result = await MapperUser(response);
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
         }
 
         public async Task<List<UserViewModel>> GetUsersFormat(List<modUser.User> users)
@@ -192,9 +218,24 @@ namespace ParameterControl.Services.Users
             return usersFilter;
         }
 
-        public async Task<int> CountUsers()
+        public List<UserViewModel>GetFilterPagination(List<UserViewModel> inicialUsers, PaginationViewModel paginationViewModel, int totalData)
         {
-            return await _authService.SelectCountUser();
+            var limit = paginationViewModel.Page * paginationViewModel.RecordsPage;
+            var index = limit - paginationViewModel.RecordsPage;
+            var count = 0;
+
+            if (limit > totalData)
+            {
+                count = totalData - index;
+            }
+            else
+            {
+                count = paginationViewModel.RecordsPage;
+            }
+
+            List<UserViewModel> usersFilterPagination = inicialUsers.GetRange(index, count);
+
+            return usersFilterPagination;
         }
 
         public async Task<string> InsertUser(User request)

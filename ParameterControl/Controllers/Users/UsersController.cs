@@ -7,6 +7,9 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using ParameterControl.Services.Rows;
 using ParameterControl.Services.Users;
 using modUser = ParameterControl.Models.User;
+using ParameterControl.Models.Pagination;
+using ParameterControl.Services.Policies;
+using ParameterControl.Models.Policy;
 
 
 namespace ParameterControl.Controllers.Users
@@ -33,10 +36,12 @@ namespace ParameterControl.Controllers.Users
         }
 
         [HttpGet]
-        public async Task<ActionResult> Users()
+        public async Task<ActionResult> Users(PaginationViewModel paginationViewModel)
         {
 
-            List<User> Users = await usersServices.GetUsers();
+            List<User> Users = await usersServices.GetUsersPagination(paginationViewModel);
+            int TotalUsers = await usersServices.CountUsers();
+
             TableUsers.Data = await usersServices.GetUsersFormat(Users);
 
             TableUsers.Rows = rows.RowsUsers();
@@ -46,17 +51,24 @@ namespace ParameterControl.Controllers.Users
             TableUsers.IsEdit = true;
             TableUsers.IsInactivate = true;
 
+            var resultViemModel = new PaginationResult<TableUserViewModel>()
+            {
+                Elements = TableUsers,
+                Page = paginationViewModel.Page,
+                RecordsPage = paginationViewModel.RecordsPage,
+                TotalRecords = TotalUsers,
+                BaseUrl = Url.Action() + "?"
+            };
+
             ViewBag.ApplyFilter = false;
 
-            return View("Users", TableUsers);
+            return View("Users", resultViemModel);
         }
 
 
         [HttpGet]
-        public async Task<ActionResult> UsersFilter(string filterColunm = "", string filterValue = "", string typeRow = "")
+        public async Task<ActionResult> UsersFilter(PaginationViewModel paginationViewModel, string filterColunm = "", string filterValue = "", string typeRow = "")
         {
-            _logger.LogInformation(filterColunm);
-            _logger.LogInformation(filterValue);
 
             if (filterColunm == null || filterColunm == "" || filterValue == null || filterValue == "")
             {
@@ -71,8 +83,9 @@ namespace ParameterControl.Controllers.Users
             };
 
             List<UserViewModel> usersFilter = await usersServices.GetFilterUsers(filter);
+            int TotalUsers = usersFilter.Count();
 
-            TableUsers.Data = usersFilter;
+            TableUsers.Data = usersServices.GetFilterPagination(usersFilter, paginationViewModel, TotalUsers);
 
             TableUsers.Rows = rows.RowsUsers();
 
@@ -81,9 +94,18 @@ namespace ParameterControl.Controllers.Users
             TableUsers.IsEdit = true;
             TableUsers.IsInactivate = true;
 
+            var resultViemModel = new PaginationResult<TableUserViewModel>()
+            {
+                Elements = TableUsers,
+                Page = paginationViewModel.Page,
+                RecordsPage = paginationViewModel.RecordsPage,
+                TotalRecords = TotalUsers,
+                BaseUrl = Url.Action() + "?filterColunm=" + filterColunm + "&filterValue=" + filterValue + "&typeRow=" + typeRow + "&"
+            };
+
             ViewBag.ApplyFilter = true;
 
-            return View("UsersFilter", TableUsers);
+            return View("UsersFilter", resultViemModel);
         }
 
         [HttpGet]
