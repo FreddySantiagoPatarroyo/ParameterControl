@@ -196,31 +196,6 @@ namespace ParameterControl.Services.Policies
             return policy;
         }
 
-        public async Task<string> InsertPolicy(modPolicy.Policy request)
-        {
-            try
-            {
-                var policy = new PolicyModel
-                {
-                    Name = request.Name,
-                    Description = request.Description,
-                    Objetive = request.Objetive,
-                    CreationDate = DateTime.Now,
-                    ModifieldDate = DateTime.Now,
-                    ModifieldBy = "CreateToUserDev",
-                    State = request.State,
-                };
-
-                var response = await _policyService.InsertPolicy(policy);
-
-                return response.Equals(1) ? "Politica creada correctamente" : "Error creando la politica";
-            }
-            catch (Exception ex)
-            {
-                throw;
-            }
-        }
-
         public async Task<List<PolicyViewModel>> GetFilterPolicies(FilterViewModel filterModel)
         {
             List<modPolicy.Policy> allPolicies = await GetPolicies();
@@ -335,7 +310,7 @@ namespace ParameterControl.Services.Policies
                     CreationDate = DateTime.Now,
                     ModifieldDate = DateTime.Now,
                     ModifieldBy = "CreateToUserDev",
-                    State = request.State
+                    State = request.State,
                 };
 
                 var response = await _policyService.InsertPolicy(policy);
@@ -378,11 +353,7 @@ namespace ParameterControl.Services.Policies
             {
                 PolicyModel model = new PolicyModel
                 {
-<<<<<<< .mine
                     Code = policy.Code,
-=======
-                    Code = policy.Code.ToString(),
->>>>>>> .theirs
                     Name = policy.Name,
                     Description = policy.Description,
                     Objetive = policy.Objetive,
@@ -401,7 +372,7 @@ namespace ParameterControl.Services.Policies
             {
                 PolicyModel model = new PolicyModel
                 {
-                    Code = policy.Code.ToString(),
+                    Code = policy.Code,
                     Name = policy.Name,
                     Description = policy.Description,
                     Objetive = policy.Objetive,
@@ -420,7 +391,7 @@ namespace ParameterControl.Services.Policies
             {
                 PolicyModel model = new PolicyModel
                 {
-                    Code = policy.Code.ToString(),
+                    Code = policy.Code,
                     Name = policy.Name,
                     Description = policy.Description,
                     Objetive = policy.Objetive,
