@@ -6,4 +6,9 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\ParameterControl.Parameter.DataAccess\ParameterControl.Parameter.DataAccess.csproj" />
+    <ProjectReference Include="..\ParameterControl.Parameter.Interfaces\ParameterControl.Parameter.Interfaces.csproj" />
+  </ItemGroup>
+
 </Project>

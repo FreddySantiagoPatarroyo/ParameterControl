@@ -2,7 +2,7 @@
 {
     public class ConciliationModel
     {
-        public string Id { get; set; } = string.Empty;
+        public int Code { get; set; }
         public string ConciliationName { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
         public string TargetTable { get; set; } = string.Empty;

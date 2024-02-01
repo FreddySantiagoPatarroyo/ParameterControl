@@ -202,7 +202,8 @@ namespace ParameterControl.Services.Policies
 
         public async Task<modPolicy.Policy> GetPolicyByCode(int code)
         {
-            modPolicy.Policy policy = policies.Find(policy => policy.Code == code);
+            var response = await _policyService.SelectByIdPolicy(new PolicyModel { Code = code });
+            var policy = await MapperToPolicy(response);
             return policy;
         }
 
@@ -217,7 +218,8 @@ namespace ParameterControl.Services.Policies
                     Objetive = request.Objetive,
                     CreationDate = DateTime.Now,
                     ModifieldDate = DateTime.Now,
-                    ModifieldBy = "CreateToUserDev"
+                    ModifieldBy = "CreateToUserDev",
+                    State = request.State,
                 };
 
                 var response = await _policyService.InsertPolicy(policy);
@@ -346,7 +348,7 @@ namespace ParameterControl.Services.Policies
             {
                 PolicyModel model = new PolicyModel
                 {
-                    Code = policy.Name,
+                    Code = policy.Code,
                     Name = policy.Name,
                     Description = policy.Description,
                     ModifieldBy = policy.UserOwner,

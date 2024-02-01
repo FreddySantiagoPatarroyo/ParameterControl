@@ -2,7 +2,7 @@
 {
     public class ParameterModel
     {
-        public string Id { get; set; } = string.Empty;
+        public int Code { get; set; }
         public string Parameter { get; set; } = string.Empty;
         public string Value { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;

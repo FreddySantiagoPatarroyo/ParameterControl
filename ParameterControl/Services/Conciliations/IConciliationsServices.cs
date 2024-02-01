@@ -13,9 +13,9 @@ namespace ParameterControl.Services.Conciliations
         Task<List<modConciliation.Conciliation.Conciliation>> GetConciliations();
         Task<modConciliation.Conciliation.Conciliation> GetConciliationsByCode(int code);
         Task<List<ConciliationViewModel>> GetFilterConciliations(FilterViewModel filterModel);
-        Task<List<ConciliationViewModel>> GetConciliationsFormat(List<modConciliation.Conciliation> conciliations);
-        Task<ConciliationViewModel> GetConciliationFormat(modConciliation.Conciliation conciliation);
-        Task<ConciliationCreateViewModel> GetConciliationFormatCreate(modConciliation.Conciliation conciliation);
+        Task<List<ConciliationViewModel>> GetConciliationsFormat(List<modConciliation.Conciliation.Conciliation> conciliations);
+        Task<ConciliationViewModel> GetConciliationFormat(modConciliation.Conciliation.Conciliation conciliation);
+        Task<ConciliationCreateViewModel> GetConciliationFormatCreate(modConciliation.Conciliation.Conciliation conciliation);
         Task<List<SelectListItem>> GetOperationsType();
         Task<string> InsertConciliation(modConciliation.Conciliation.Conciliation request);
         Task<string> UpdateConciliation(modConciliation.Conciliation.Conciliation Conciliation);

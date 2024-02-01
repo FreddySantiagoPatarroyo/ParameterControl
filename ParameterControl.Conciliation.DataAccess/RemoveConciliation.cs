@@ -27,7 +27,7 @@ namespace ParameterControl.Conciliation.DataAccess
                     using (OracleCommand command = new OracleCommand("DELETE_CONCILIATION", connection))
                     {
                         command.CommandType = CommandType.StoredProcedure;
-                        command.Parameters.Add(new OracleParameter("PARAM_CODE", entity.Id));
+                        command.Parameters.Add(new OracleParameter("PARAM_CODE", entity.Code));
                         OracleDataReader reader = command.ExecuteReader();
                         response = 1;
                     }

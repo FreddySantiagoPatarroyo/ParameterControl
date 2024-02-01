@@ -150,7 +150,7 @@ namespace ParameterControl.Conciliation.Impl
             {
                 ConciliationModel model = new ConciliationModel
                 {
-                    Id = dr["COD_POLITICA"].ToString(),
+                    Code = Convert.ToInt32(dr["COD_POLITICA"]),
                     ConciliationName = dr["NOMBRE_POLITICA"] is DBNull ? string.Empty : dr["NOMBRE_POLITICA"].ToString(),
                     Description = dr["DESCRIPCION"] is DBNull ? string.Empty : dr["DESCRIPCION"].ToString(),
                     Observation = dr["OBJETIVO"] is DBNull ? string.Empty : dr["OBJETIVO"].ToString(),

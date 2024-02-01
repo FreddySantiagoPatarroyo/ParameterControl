@@ -28,7 +28,7 @@ namespace ParameterControl.Conciliation.DataAccess
                         using (OracleCommand command = new OracleCommand("SELECT_BY_ID_CONCILIATION", connection))
                         {
                             command.CommandType = CommandType.StoredProcedure;
-                            command.Parameters.Add(new OracleParameter("PARAM_CODE", entity.Id));
+                            command.Parameters.Add(new OracleParameter("PARAM_CODE", entity.Code));
                             OracleDataReader reader = command.ExecuteReader();
                             _dataTable.Load(reader);
                             return _dataTable;

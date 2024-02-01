@@ -27,7 +27,7 @@ namespace ParameterControl.Auth.DataAccess
                     using (OracleCommand command = new OracleCommand("UPDATE_USER", connection))
                     {
                         command.CommandType = CommandType.StoredProcedure;
-                        command.Parameters.Add(new OracleParameter("PARAM_CODE", entity.Id));
+                        command.Parameters.Add(new OracleParameter("PARAM_CODE", entity.Code));
                         command.Parameters.Add(new OracleParameter("PARAM_NAME", entity.User));
                         command.Parameters.Add(new OracleParameter("PARAM_EMAIL", entity.Email));
                         command.Parameters.Add(new OracleParameter("PARAM_USER_NAME", entity.UserName));

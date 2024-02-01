@@ -3,6 +3,7 @@ using ParameterControl.Auth.Impl;
 using ParameterControl.Auth.Interfaces;
 using ParameterControl.Models.Filter;
 using ParameterControl.Models.User;
+using ParameterControl.Policy.Entities;
 using modUser = ParameterControl.Models.User;
 
 namespace ParameterControl.Services.Users
@@ -141,7 +142,8 @@ namespace ParameterControl.Services.Users
 
         public async Task<User> GetUsersByCode(int code)
         {
-            User user = users.Find(user => user.Code == code);
+            var response = await _authService.SelectByIdUser(new UserModel { Code = code });
+            var user = await MapperToUser(response);
             return user;
         }
 
@@ -240,7 +242,7 @@ namespace ParameterControl.Services.Users
             {
                 modUser.User model = new modUser.User
                 {
-                    Code = Convert.ToInt32(User.Id),
+                    Code = Convert.ToInt32(User.Code),
                     Name = User.UserName,
                     CreationDate = User.CreationDate,
                     UserOwner = User.ModifiedBy
@@ -263,7 +265,7 @@ namespace ParameterControl.Services.Users
             {
                 UserModel model = new UserModel
                 {
-                    Id = User.Code,
+                    Code = User.Code,
                     UserName = User.Name
                 };
                 return model;
