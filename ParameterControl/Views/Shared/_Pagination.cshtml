@@ -27,7 +27,7 @@
         <a href="@string.Format(pageLink, Model.Page - 1, Model.RecordsPage)" class="button_icon button_primary @(Model.Page == 1 || Model.TotalRecords == 0 ? "button_disable" : null)">
             <i class="icon text icon_152"></i>
         </a>
-        <div class="pages flex_box">
+        <div class="pages">
             @for (int pagina = 1; pagina <= Model.TotalPages; pagina++)
             {
                 <a class="button_icon button_primary @(pagina == Model.Page ? "buttom_selected" : null)" href="@string.Format(pageLink, pagina, Model.RecordsPage)">
