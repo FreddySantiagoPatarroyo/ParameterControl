@@ -240,18 +240,39 @@ namespace ParameterControl.Services.Rows
             {
                  new Row()
                 {
-                    Value = "Code",
-                    Name = "Codigo"
+                    Value = "Table",
+                    Name = "Tabla"
                 },
                 new Row()
                 {
-                    Value = "Name",
-                    Name = "Nombre"
+                    Value = "Periodicity",
+                    Name = "Periocidad"
                 },
                 new Row()
                 {
                     Value = "Status",
                     Name = "Estado"
+                }
+                ,
+                new Row()
+                {
+                    Value = "Error",
+                    Name = "Error"
+                },
+                new Row()
+                {
+                    Value = "LastLoadFormat",
+                    Name = "Ultima Carga"
+                },
+                new Row()
+                {
+                    Value = "LastExecutionFormat",
+                    Name = "Ultima Ejecucion"
+                },
+                new Row()
+                {
+                    Value = "StateFormat",
+                    Name = "Estado Activacion"
                 }
             };
 

@@ -43,7 +43,7 @@ namespace ParameterControl.Controllers.CrossConnections
             TableCrossConnections.IsCreate = false;
             TableCrossConnections.IsActivate = false;
             TableCrossConnections.IsEdit = false;
-            TableCrossConnections.IsView = true;
+            TableCrossConnections.IsView = false;
             TableCrossConnections.IsInactivate = false;
 
             ViewBag.ApplyFilter = false;
@@ -75,7 +75,7 @@ namespace ParameterControl.Controllers.CrossConnections
             TableCrossConnections.IsCreate = false;
             TableCrossConnections.IsActivate = false;
             TableCrossConnections.IsEdit = false;
-            TableCrossConnections.IsView = true;
+            TableCrossConnections.IsView = false;
             TableCrossConnections.IsInactivate = false;
 
             ViewBag.ApplyFilter = true;
@@ -83,15 +83,15 @@ namespace ParameterControl.Controllers.CrossConnections
             return View("CrossConnectionsFilter", TableCrossConnections);
         }
 
-        [HttpGet]
-        public async Task<ActionResult> View(int code)
-        {
-            modCrossConnection.CrossConnection crossConnection = await crossConnectionsService.GetCrossConnectionByCode(code);
+        //[HttpGet]
+        //public async Task<ActionResult> View(int code)
+        //{
+        //    modCrossConnection.CrossConnection crossConnection = await crossConnectionsService.GetCrossConnectionByCode(code);
 
-            CrossConnectionViewModel model = await crossConnectionsService.GetCrossConnectionFormat(crossConnection);
+        //    CrossConnectionViewModel model = await crossConnectionsService.GetCrossConnectionFormat(crossConnection);
 
-            return View("Actions/ViewCrossConnection", model);
-        }
+        //    return View("Actions/ViewCrossConnection", model);
+        //}
 
         [HttpGet]
         public ActionResult Filter()
