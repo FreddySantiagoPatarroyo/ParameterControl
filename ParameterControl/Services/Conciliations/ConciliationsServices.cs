@@ -261,7 +261,8 @@ namespace ParameterControl.Services.Conciliations
 
         public async Task<modConciliation.Conciliation> GetConciliationsByCode(int code)
         {
-            modConciliation.Conciliation conciliation = conciliations.Find(conciliation => conciliation.Code == code);
+            var response = await conciliationServices.SelectByIdConciliation(new ConciliationModel { Code = code });
+            var conciliation = await MapperToConciliation(response);
             return conciliation;
         }
 
@@ -369,7 +370,7 @@ namespace ParameterControl.Services.Conciliations
             {
                 modConciliation.Conciliation model = new modConciliation.Conciliation
                 {
-                    Code = Convert.ToInt32(conciliation.Id),
+                    Code = Convert.ToInt32(conciliation.Code),
                     Name = conciliation.ConciliationName,
                     Description = conciliation.Description                     
                 };
@@ -391,7 +392,7 @@ namespace ParameterControl.Services.Conciliations
             {
                 PolicyModel model = new PolicyModel
                 {
-                    Code = conciliation.Code.ToString(),
+                    Code = conciliation.Code,
                     Name = conciliation.Name,
                     Description = conciliation.Description,
                     ModifieldBy = conciliation.UserOwner,

@@ -1,21 +1,20 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Oracle.ManagedDataAccess.Client;
-using ParameterControl.Auth.Entities;
 using System.Data;
 
-namespace ParameterControl.Auth.DataAccess
+namespace ParameterControl.Parameter.DataAccess
 {
-    public class GetByIdUser
+    public class GetAllParameter
     {
         private readonly IConfiguration _configuration;
         DataTable _dataTable = new DataTable();
 
-        public GetByIdUser(IConfiguration configuration)
+        public GetAllParameter(IConfiguration configuration)
         {
             _configuration = configuration;
         }
 
-        public async Task<DataTable> SelectByIdUser(UserModel entity)
+        public async Task<DataTable> SelectAllParameter()
         {
             try
             {
@@ -25,10 +24,9 @@ namespace ParameterControl.Auth.DataAccess
                     {
                         connection.Open();
 
-                        using (OracleCommand command = new OracleCommand("SELECT_BY_ID_USER", connection))
+                        using (OracleCommand command = new OracleCommand("ALL_PARAMETER", connection))
                         {
                             command.CommandType = CommandType.StoredProcedure;
-                            command.Parameters.Add(new OracleParameter("PARAM_CODE", entity.Code));
                             OracleDataReader reader = command.ExecuteReader();
                             _dataTable.Load(reader);
                             return _dataTable;

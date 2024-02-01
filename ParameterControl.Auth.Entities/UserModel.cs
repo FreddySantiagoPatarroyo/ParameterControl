@@ -2,7 +2,7 @@
 {
     public class UserModel
     {
-        public int Id { get; set; }
+        public int Code { get; set; }
         public string User { get; set; } = string.Empty;
         public string Email { get; set; } = string.Empty;
         public string UserName { get; set; } = string.Empty;

@@ -27,7 +27,7 @@ namespace ParameterControl.Conciliation.DataAccess
                     using (OracleCommand command = new OracleCommand("INSERT_CONCILIATION", connection))
                     {
                         command.CommandType = CommandType.StoredProcedure;
-                        command.Parameters.Add(new OracleParameter("PARAM_NAME", entity.Id));
+                        command.Parameters.Add(new OracleParameter("PARAM_NAME", entity.Code));
                         command.Parameters.Add(new OracleParameter("PARAM_DESCRIPTION", entity.Description));
                         command.Parameters.Add(new OracleParameter("PARAM_MODIFIELDBY", entity.AssignedUser));
                         command.Parameters.Add(new OracleParameter("PARAM_OBJETIVO", entity.Observation));

@@ -155,14 +155,14 @@ namespace ParameterControl.Auth.Impl
             {
                 UserModel model = new UserModel
                 {
-                    Id = Convert.ToInt32(dr["COD_USUARIO"]),
+                    Code = Convert.ToInt32(dr["COD_USUARIO"]),
                     User = dr["USUARIO"] is DBNull ? string.Empty : dr["USUARIO"].ToString(),
                     Email = dr["EMAIL"] is DBNull ? string.Empty : dr["EMAIL"].ToString(),
                     UserName = dr["NOMBRE_USUARIO"] is DBNull ? string.Empty : dr["NOMBRE_USUARIO"].ToString(),
                     CreationDate = dr["FECHA_CREACION"] is DBNull ? DateTime.Now : Convert.ToDateTime(dr["FECHA_CREACION"]),
                     ModifiedDate = dr["FECHA_ACTUALIZACION"] is DBNull ? DateTime.Now : Convert.ToDateTime(dr["FECHA_ACTUALIZACION"]),
-                    ModifiedBy = dr["MODIFICADO_POR"] is DBNull ? string.Empty : dr["MODIFICADO_POR"].ToString()
-                    //FirstAccess = dr["PRIMER_ACCESO"] is DBNull ? 0 : Convert.ToInt32(dr["PRIMER_ACCESO"])
+                    ModifiedBy = dr["MODIFICADO_POR"] is DBNull ? string.Empty : dr["MODIFICADO_POR"].ToString(),
+                    FirstAccess = dr["PRIMER_ACCESO"] is DBNull ? 0 : Convert.ToInt32(dr["PRIMER_ACCESO"])
                 };
                 return model;
             });
