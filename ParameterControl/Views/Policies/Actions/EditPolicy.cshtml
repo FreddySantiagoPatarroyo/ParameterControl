@@ -23,7 +23,6 @@
             </div>
 
             <input type="hidden" asp-for="Code"/>
-            <input type="hidden" asp-for="Conciliation" />
             <input type="hidden" asp-for="CreationDate" />
 
             <div class="form_group">
@@ -35,6 +34,7 @@
                     <span id="CodeError" class="text_error"></span>
                 </div>
             </div>
+
             <div class="form_group">
                 <div class="field">
                     <label asp-for="Name" class="label_form">Nombre*</label>
@@ -44,6 +44,7 @@
                     <span id="NameError" class="text_error"></span>
                 </div>
             </div>
+
             <div class="form_group">
                 <div class="field">
                     <label asp-for="Description" class="label_form">Descripcion*</label>
@@ -83,13 +84,11 @@
         let isValidCode = false;
         let isValidName = false;
         let isValidDescription = false;
-        // let isValidConciliation = false;
 
         const sendData = async () => {
             isValidCode = validateInputEmpty("Code", "El codigo es requerido", "CodeError");
             isValidName = validateInputEmpty("Name", "El nombre es requerido", "NameError");
             isValidDescription = validateInputEmpty("Description", "La descripcion es requerido", "DescriptionError");
-            // isValidConciliation = validateInputEmpty("Conciliation", "La conciliacion es requerido", "ConciliationError");
 
             if (isValidCode && isValidName && isValidDescription) {
                 document.getElementById('btn_container').style.display = 'none';
@@ -101,7 +100,6 @@
                     Code: $('#Code').val(),
                     Name: $('#Name').val(),
                     Description: $('#Description').val(),
-                    Conciliation: $('#Conciliation').val(),
                     State: true,
                     CreationDate: new Date(CreationDateFormat)
                 }

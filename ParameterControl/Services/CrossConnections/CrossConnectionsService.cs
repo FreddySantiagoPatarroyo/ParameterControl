@@ -1,9 +1,8 @@
 ﻿using ParameterControl.Models.CrossConnection;
 using ParameterControl.Models.Filter;
+using ParameterControl.Models.Policy;
+using ParameterControl.Policy.Entities;
 using modCrossConnection = ParameterControl.Models.CrossConnection;
-
-
-
 
 namespace ParameterControl.Services.CrossConnections
 {
@@ -14,34 +13,58 @@ namespace ParameterControl.Services.CrossConnections
             crossConnections = new List<modCrossConnection.CrossConnection>()
             {
                 new modCrossConnection.CrossConnection(){
-                    Code = 1,
-                    Name = "Toma transversal 1",
-                    Status = "Pendiente"
+                    Table = "Tabla1",
+                    Periodicity = "Periocidad1",
+                    Status = "Pendiente",
+                    Error = "Error1",
+                    LastLoad = DateTime.Now,
+                    LastExecution = DateTime.Now,
+                    State = true
                 },
                 new modCrossConnection.CrossConnection(){
-                    Code = 2,
-                    Name = "Toma transversal 2",
-                    Status = "Ok"
+                    Table = "Tabla2",
+                    Periodicity = "Periocidad2",
+                    Status = "Ok",
+                    Error = "Error2",
+                    LastLoad = DateTime.Now,
+                    LastExecution = DateTime.Now,
+                    State = true
                 },
                 new modCrossConnection.CrossConnection(){
-                    Code = 3,
-                    Name = "Toma transversal 1",
-                    Status = "Error"
+                    Table = "Tabla3",
+                    Periodicity = "Periocidad2",
+                    Status = "Error",
+                    Error = "Error3",
+                    LastLoad = DateTime.Now,
+                    LastExecution = DateTime.Now,
+                    State = true
                 },
                 new modCrossConnection.CrossConnection(){
-                    Code = 4,
-                     Name = "Toma transversal 1",
-                    Status = "Pendiente"
+                    Table = "Tabla4",
+                    Periodicity = "Periocidad4",
+                    Status = "Pendiente",
+                    Error = "Error4",
+                    LastLoad = DateTime.Now,
+                    LastExecution = DateTime.Now,
+                    State = true
                 },
                 new modCrossConnection.CrossConnection(){
-                    Code = 5,
-                     Name = "Toma transversal 1",
-                    Status = "Pendiente"
+                    Table = "Tabla5",
+                    Periodicity = "Periocidad5",
+                    Status = "Pendiente",
+                    Error = "Error5",
+                    LastLoad = DateTime.Now,
+                    LastExecution = DateTime.Now,
+                    State = true
                 },
                 new modCrossConnection.CrossConnection(){
-                    Code = 6,
-                     Name = "Toma transversal 1",
-                    Status = "Pendiente"
+                    Table = "Tabla6",
+                    Periodicity = "Periocidad6",
+                    Status = "Pendiente",
+                    Error = "Error6",
+                    LastLoad = DateTime.Now,
+                    LastExecution = DateTime.Now,
+                    State = true
                 }
             };
         }
@@ -59,9 +82,16 @@ namespace ParameterControl.Services.CrossConnections
             {
                 CrossConnectionViewModel crossConnectionModel = new CrossConnectionViewModel();
 
-                crossConnectionModel.Code = crossConnection.Code;
-                crossConnectionModel.Name = crossConnection.Name;
+                crossConnectionModel.Table = crossConnection.Table;
+                crossConnectionModel.Periodicity = crossConnection.Periodicity;
                 crossConnectionModel.Status = crossConnection.Status;
+                crossConnectionModel.Error = crossConnection.Error;
+                crossConnectionModel.LastLoad = crossConnection.LastLoad;
+                crossConnectionModel.LastExecution = crossConnection.LastExecution;
+                crossConnectionModel.State = crossConnection.State;
+                crossConnectionModel.StateFormat = crossConnection.State ? "Activo" : "Inactivo";
+                crossConnectionModel.LastLoadFormat = crossConnection.LastLoad.ToString("dd/MM/yyyy");
+                crossConnectionModel.LastExecutionFormat = crossConnection.LastExecution.ToString("dd/MM/yyyy");
 
                 crossConnectionsModel.Add(crossConnectionModel);
             }
@@ -74,18 +104,25 @@ namespace ParameterControl.Services.CrossConnections
 
             CrossConnectionViewModel crossConnectionModel = new CrossConnectionViewModel();
 
-            crossConnectionModel.Code = crossConnection.Code;
-            crossConnectionModel.Name = crossConnection.Name;
+            crossConnectionModel.Table = crossConnection.Table;
+            crossConnectionModel.Periodicity = crossConnection.Periodicity;
             crossConnectionModel.Status = crossConnection.Status;
+            crossConnectionModel.Error = crossConnection.Error;
+            crossConnectionModel.LastLoad = crossConnection.LastLoad;
+            crossConnectionModel.LastExecution = crossConnection.LastExecution;
+            crossConnectionModel.State = crossConnection.State;
+            crossConnectionModel.StateFormat = crossConnection.State ? "Activo" : "Inactivo";
+            crossConnectionModel.LastLoadFormat = crossConnection.LastLoad.ToString("dd/MM/yyyy");
+            crossConnectionModel.LastExecutionFormat = crossConnection.LastExecution.ToString("dd/MM/yyyy");
 
             return crossConnectionModel;
         }
 
-        public async Task<modCrossConnection.CrossConnection> GetCrossConnectionByCode(int code)
-        {
-            modCrossConnection.CrossConnection crossConnection = crossConnections.Find(crossConnection => crossConnection.Code == code);
-            return crossConnection;
-        }
+        //public async Task<modCrossConnection.CrossConnection> GetCrossConnectionByCode(int code)
+        //{
+        //    modCrossConnection.CrossConnection crossConnection = crossConnections.Find(crossConnection => crossConnection.Code == code);
+        //    return crossConnection;
+        //}
 
         public async Task<List<CrossConnectionViewModel>> GetFilterCrossConnections(FilterViewModel filterModel)
         {

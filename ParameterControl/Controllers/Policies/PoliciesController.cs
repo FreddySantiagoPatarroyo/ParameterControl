@@ -127,9 +127,6 @@ namespace ParameterControl.Controllers.Policies
             {
                 try
                 {
-                    request.UserOwner = authenticatedUser.GetUserOwnerId();
-                    request.CreationDate = DateTime.Now;
-                    request.UpdateDate = DateTime.Now;
                     _logger.LogInformation($"Inicia método PoliciesController.Create {JsonConvert.SerializeObject(request)}");
                     var responseIn = await policiesServices.InsertPolicy(request);
                     _logger.LogInformation($"Finaliza método PoliciesController.Create {responseIn}");
@@ -159,16 +156,17 @@ namespace ParameterControl.Controllers.Policies
             if (!ModelState.IsValid)
             {
                 _logger.LogError($"Error en el modelo : {JsonConvert.SerializeObject(request)}");
-                var responseIn = await policiesServices.InsertPolicy(request);
+                
+               
                 return BadRequest(new { message = "Error en la informacion enviada", state = "Error" });
             }
             else
             {
                 try
                 {
-                    request.UserOwner = authenticatedUser.GetUserOwnerId();
-                    request.UpdateDate = DateTime.Now;
                     _logger.LogInformation($"Inicia método PoliciesController.Edit {JsonConvert.SerializeObject(request)}");
+                    var responseIn = await policiesServices.UpdatePolicy(request);
+                    _logger.LogInformation($"Finaliza método PoliciesController.Edit {responseIn}");
                     return Ok(new { message = "Se actualizo la politica de manera exitosa", state = "Success" });
                 }
                 catch (Exception ex)
@@ -203,10 +201,8 @@ namespace ParameterControl.Controllers.Policies
             try
             {
                 modPolicy.Policy request = await policiesServices.GetPolicyByCode(code);
-                request.UserOwner = authenticatedUser.GetUserOwnerId();
-                request.UpdateDate = DateTime.Now;
-                request.State = true;
                 _logger.LogInformation($"Inicia método PoliciesController.Active {JsonConvert.SerializeObject(request)}");
+                var responseIn = await policiesServices.ActivePolicy(request);
                 return Ok(new { message = "Se activo la politica de manera exitosa", state = "Success" });
             }
             catch (Exception ex)
@@ -230,10 +226,8 @@ namespace ParameterControl.Controllers.Policies
             try
             {
                 modPolicy.Policy request = await policiesServices.GetPolicyByCode(code);
-                request.UserOwner = authenticatedUser.GetUserOwnerId();
-                request.UpdateDate = DateTime.Now;
-                request.State = true;
                 _logger.LogInformation($"Inicia método PoliciesController.Desactive {JsonConvert.SerializeObject(request)}");
+                var responseIn = await policiesServices.DesactivePolicy(request);
                 return Ok(new { message = "Se desactivo la politica de manera exitosa", state = "Success" });
             }
             catch (Exception ex)

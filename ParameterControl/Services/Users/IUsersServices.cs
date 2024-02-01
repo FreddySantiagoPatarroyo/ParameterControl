@@ -1,4 +1,5 @@
 ﻿using ParameterControl.Models.Filter;
+using ParameterControl.Models.Pagination;
 using ParameterControl.Models.User;
 using modUser = ParameterControl.Models.User;
 
@@ -16,5 +17,7 @@ namespace ParameterControl.Services.Users
         Task<string> InsertUser(modUser.User user);
         Task<string> UpdateUser(modUser.User user);
         Task<int> CountUsers();
+        List<UserViewModel> GetFilterPagination(List<UserViewModel> inicialUsers, PaginationViewModel paginationViewModel, int totalData);
+        Task<List<User>> GetUsersPagination(PaginationViewModel pagination);
     }
 }

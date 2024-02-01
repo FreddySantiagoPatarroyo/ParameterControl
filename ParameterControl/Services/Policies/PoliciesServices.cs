@@ -24,7 +24,6 @@ namespace ParameterControl.Services.Policies
                     Code = 1,
                     Name = "Politica_1",
                     Description = "Descripcion ejemplo asdasdasdasdasdasdasdasdasdadasdasdasdasdads",
-                    Conciliation = 123,
                     State = true,
                     CreationDate = DateTime.Parse("2024-01-10"),
                     UpdateDate = DateTime.Parse("2023-11-09"),
@@ -34,7 +33,6 @@ namespace ParameterControl.Services.Policies
                     Code = 2,
                     Name = "Name",
                     Description = "Description",
-                    Conciliation = 123,
                     State = false,
                     CreationDate = DateTime.Parse("2024-01-10"),
                     UpdateDate = DateTime.Parse("2023-11-09"),
@@ -44,7 +42,6 @@ namespace ParameterControl.Services.Policies
                     Code = 3,
                     Name = "Politica_1",
                     Description = "Descripcion ejemplo",
-                    Conciliation = 123,
                     State = true,
                     CreationDate = DateTime.Parse("2024-02-10"),
                     UpdateDate = DateTime.Parse("2023-11-09"),
@@ -54,7 +51,6 @@ namespace ParameterControl.Services.Policies
                     Code = 4,
                     Name = "Name",
                     Description = "Description",
-                    Conciliation = 123,
                     State = false,
                     CreationDate = DateTime.Parse("2024-01-10"),
                     UpdateDate = DateTime.Parse("2023-11-09"),
@@ -64,7 +60,6 @@ namespace ParameterControl.Services.Policies
                     Code = 5,
                     Name = "Politica_1",
                     Description = "Descripcion ejemplo",
-                    Conciliation = 123,
                     State = true,
                     CreationDate = DateTime.Parse("2024-01-10"),
                     UpdateDate = DateTime.Parse("2023-11-09"),
@@ -74,7 +69,6 @@ namespace ParameterControl.Services.Policies
                     Code = 6,
                     Name = "Name",
                     Description = "Description",
-                    Conciliation = 123,
                     State = false,
                     CreationDate = DateTime.Parse("2024-01-10"),
                     UpdateDate = DateTime.Parse("2023-11-09"),
@@ -84,7 +78,6 @@ namespace ParameterControl.Services.Policies
                     Code = 7,
                     Name = "Politica_1",
                     Description = "Descripcion ejemplo",
-                    Conciliation = 123,
                     State = true,
                     CreationDate = DateTime.Parse("2024-01-10"),
                     UpdateDate = DateTime.Parse("2023-11-09"),
@@ -94,7 +87,6 @@ namespace ParameterControl.Services.Policies
                     Code = 8,
                     Name = "Name",
                     Description = "Description",
-                    Conciliation = 123,
                     State = false,
                     CreationDate = DateTime.Parse("2024-01-10"),
                     UpdateDate = DateTime.Parse("2023-11-09"),
@@ -148,7 +140,6 @@ namespace ParameterControl.Services.Policies
                 policyModel.Code = policy.Code;
                 policyModel.Name = policy.Name;
                 policyModel.Description = policy.Description;
-                policyModel.Conciliation = policy.Conciliation;
                 policyModel.State = policy.State;
                 policyModel.CodeFormat = "PO_" + policy.Code;
                 policyModel.StateFormat = policy.State ? "Activo" : "Inactivo";
@@ -171,7 +162,6 @@ namespace ParameterControl.Services.Policies
             policyModel.Code = policy.Code;
             policyModel.Name = policy.Name;
             policyModel.Description = policy.Description;
-            policyModel.Conciliation = policy.Conciliation;
             policyModel.State = policy.State;
             policyModel.CodeFormat = "PO_" + policy.Code;
             policyModel.StateFormat = policy.State ? "Activo" : "Inactivo";
@@ -191,7 +181,6 @@ namespace ParameterControl.Services.Policies
             policyModel.Code = policy.Code;
             policyModel.Name = policy.Name;
             policyModel.Description = policy.Description;
-            policyModel.Conciliation = policy.Conciliation;
             policyModel.State = policy.State;
             policyModel.CodeFormat = "PO_" + policy.Code;
             policyModel.CreationDate = policy.CreationDate;
@@ -334,9 +323,50 @@ namespace ParameterControl.Services.Policies
             });
         }
 
+        public async Task<string> InsertPolicy(modPolicy.Policy request)
+        {
+            try
+            {
+                var policy = new PolicyModel
+                {
+                    Name = request.Name,
+                    Description = request.Description,
+                    Objetive = request.Objetive,
+                    CreationDate = DateTime.Now,
+                    ModifieldDate = DateTime.Now,
+                    ModifieldBy = "CreateToUserDev",
+                    State = request.State
+                };
+
+                var response = await _policyService.InsertPolicy(policy);
+
+                return response.Equals(1) ? "Politica creada correctamente" : "Error creando la politica";
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
         public async Task<string> UpdatePolicy(modPolicy.Policy policy)
         {
             var mapping = await MapperUpdatePolicy(policy);
+            var response = await _policyService.UpdatePolicy(mapping);
+
+            return response.Equals(1) ? "Politica actualizada correctamente" : "Error actualizando la politica";
+        }
+
+        public async Task<string> ActivePolicy(modPolicy.Policy policy)
+        {
+            var mapping = await MapperActiveePolicy(policy);
+            var response = await _policyService.UpdatePolicy(mapping);
+
+            return response.Equals(1) ? "Politica actualizada correctamente" : "Error actualizando la politica";
+        }
+
+        public async Task<string> DesactivePolicy(modPolicy.Policy policy)
+        {
+            var mapping = await MapperDesactiveePolicy(policy);
             var response = await _policyService.UpdatePolicy(mapping);
 
             return response.Equals(1) ? "Politica actualizada correctamente" : "Error actualizando la politica";
@@ -348,11 +378,56 @@ namespace ParameterControl.Services.Policies
             {
                 PolicyModel model = new PolicyModel
                 {
+<<<<<<< .mine
                     Code = policy.Code,
+=======
+                    Code = policy.Code.ToString(),
+>>>>>>> .theirs
                     Name = policy.Name,
                     Description = policy.Description,
-                    ModifieldBy = policy.UserOwner,
+                    Objetive = policy.Objetive,
+                    CreationDate = policy.CreationDate,
+                    ModifieldDate = DateTime.Now,
+                    ModifieldBy = "CreateToUserDev",
                     State = policy.State
+                };
+                return model;
+            });
+        }
+
+        private async Task<PolicyModel> MapperActiveePolicy(modPolicy.Policy policy)
+        {
+            return await Task.Run(() =>
+            {
+                PolicyModel model = new PolicyModel
+                {
+                    Code = policy.Code.ToString(),
+                    Name = policy.Name,
+                    Description = policy.Description,
+                    Objetive = policy.Objetive,
+                    CreationDate = policy.CreationDate,
+                    ModifieldDate = DateTime.Now,
+                    ModifieldBy = "CreateToUserDev",
+                    State = true
+                };
+                return model;
+            });
+        }
+
+        private async Task<PolicyModel> MapperDesactiveePolicy(modPolicy.Policy policy)
+        {
+            return await Task.Run(() =>
+            {
+                PolicyModel model = new PolicyModel
+                {
+                    Code = policy.Code.ToString(),
+                    Name = policy.Name,
+                    Description = policy.Description,
+                    Objetive = policy.Objetive,
+                    CreationDate = policy.CreationDate,
+                    ModifieldDate = DateTime.Now,
+                    ModifieldBy = "CreateToUserDev",
+                    State = false
                 };
                 return model;
             });

@@ -30,6 +30,7 @@
                     <span id="CodeError" class="text_error"></span>
                 </div>
             </div> *@
+
             <div class="form_group">
                 <div class="field">
                     <label asp-for="Name" class="label_form">Nombre*</label>
@@ -39,6 +40,7 @@
                     <span id="NameError" class="text_error"></span>
                 </div>
             </div>
+
             <div class="form_group">
                 <div class="field">
                     <label asp-for="Description" class="label_form">Descripcion*</label>
@@ -48,16 +50,7 @@
                     <span id="DescriptionError" class="text_error"></span>
                 </div>
             </div>
-            <div class="form_group">
-                <div class="field">
-                    <label asp-for="Conciliation" class="label_form">Conciliacion*</label>
-                    <div class="input">
-                        <input asp-for="Conciliation" placeholder="Conciliacion" autocomplete="off" />
-                    </div>
-                    <span id="ConciliationError" class="text_error"></span>
-                </div>
-            </div>
-
+            
             <p class="note_text"><span>Nota: </span>Los campos con (*) son obligatorios</p>
 
             <div id="btn_container" class="btn_container">
@@ -117,26 +110,21 @@
     <script>
         const urlPolicy = '@Url.Action("Create")';
         let data;
-        //let isValidCode = false;
+
         let isValidName = false;
         let isValidDescription = false;
-        let isValidConciliation = false;
 
         const sendData = async () => {
-            //isValidCode = validateInputEmpty("Code", "El codigo es requerido", "CodeError");
             isValidName = validateInputEmpty("Name", "El nombre es requerido", "NameError");
             isValidDescription = validateInputEmpty("Description", "La descripcion es requerido", "DescriptionError");
-            isValidConciliation = validateInputEmpty("Conciliation", "La conciliacion es requerido", "ConciliationError");
 
-            if (isValidName && isValidDescription && isValidConciliation) {
+            if (isValidName && isValidDescription) {
                 document.getElementById('btn_container').style.display = 'none';
                 document.getElementById('loading').style.display = 'flex';
 
                 data = {
-                    //Code: $('Code').val(),
                     Name: $('#Name').val(),
                     Description: $('#Description').val(),
-                    Conciliation: parseInt($('#Conciliation').val()),
                     State: true
                 }
 

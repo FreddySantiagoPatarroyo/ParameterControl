@@ -25,19 +25,22 @@
         </div>
         <div class="list">
             <div class="element_table">
-                <div class="content_filter flex_box">
-                    <a class="button button_primary" title="Filtrar" asp-controller="CrossConnections" asp-action="Filter">
-                        <p class="text font_bold">Filtrar Tabla</p>
-                    </a>
-
-                    @if (ViewBag.ApplyFilter)
-                    {
-                        <a class="button button_secondary" title="Filtrar" asp-controller="CrossConnections" asp-action="CrossConnections">
-                            <p class="text font_bold">Eliminar filtros</p>
+                @if (Model.Filter)
+                {
+                    <div class="content_filter flex_box">
+                        <a class="button button_primary" title="Filtrar" asp-controller="CrossConnections" asp-action="Filter">
+                            <p class="text font_bold">Filtrar Tabla</p>
                         </a>
-                    }
-                </div>
 
+                        @if (ViewBag.ApplyFilter)
+                        {
+                            <a class="button button_secondary" title="Filtrar" asp-controller="CrossConnections" asp-action="CrossConnections">
+                                <p class="text font_bold">Eliminar filtros</p>
+                            </a>
+                        }
+                    </div>
+                }
+                
                 <div id="table" class="content_table">
                     <div class="tables flex_box">
                         <div class="columns">
@@ -47,9 +50,12 @@
                                     <p class="text font_bold">@Colunm.Name</p>
                                 </div>
                             }
-                            <div class="column actions flex_box">
-                                <p class="text font_bold">Acciones</p>
-                            </div>
+                            @if (Model.IsView || Model.IsEdit || Model.IsInactivate)
+                            {
+                                <div class="column actions flex_box">
+                                    <p class="text font_bold">Acciones</p>
+                                </div>
+                            }
                         </div>
                         @if (Model.Data.Count() == 0)
                         {
@@ -59,7 +65,7 @@
                         {
                             @foreach (var CrossConnections in Model.Data)
                             {
-                                @if (true)
+                                @if (CrossConnections.State)
                                 {
                                     <div class="rows">
                                         @foreach (var Row in Model.Rows)
@@ -68,25 +74,29 @@
                                                 <p id="text_row" class="text flex_box">@GetRowInfo(Row.Value)?.GetValue(CrossConnections)?.ToString()</p>
                                             </div>
                                         }
-                                        <div class="row_table flex_box actions">
-                                            @if (Model.IsView)
-                                            {
-                                                <a class="button_icon button_primary" title="Ver" asp-controller="CrossConnections" asp-action="View" asp-route-code="@CrossConnections.Code">
-                                                    <i class="icon icon_041"></i>
-                                                </a>
-                                            }
-                                            @if(Model.IsEdit){
-                                                <a class="button_icon button_primary" title="Editar" asp-controller="CrossConnections" asp-action="Edit" asp-route-code="@CrossConnections.Code">
-                                                    <i class="icon icon_106"></i>
-                                                </a>
-                                            }
-                                            @if (Model.IsInactivate)
-                                            {
-                                                <a class="button_icon button_primary" title="Inactivar" asp-controller="CrossConnections" asp-action="Desactive" asp-route-code="@CrossConnections.Code">
-                                                    <i class="icon icon_196"></i>
-                                                </a>
-                                            }
-                                        </div>
+                                        @if (Model.IsView || Model.IsEdit || Model.IsInactivate)
+                                        {
+                                            <div class="row_table flex_box actions">
+                                                @if (Model.IsView)
+                                                {
+                                                    <a class="button_icon button_primary" title="Ver" asp-controller="CrossConnections" asp-action="View">
+                                                        <i class="icon icon_041"></i>
+                                                    </a>
+                                                }
+                                                @if (Model.IsEdit)
+                                                {
+                                                    <a class="button_icon button_primary" title="Editar" asp-controller="CrossConnections" asp-action="Edit">
+                                                        <i class="icon icon_106"></i>
+                                                    </a>
+                                                }
+                                                @if (Model.IsInactivate)
+                                                {
+                                                    <a class="button_icon button_primary" title="Inactivar" asp-controller="CrossConnections" asp-action="Desactive">
+                                                        <i class="icon icon_196"></i>
+                                                    </a>
+                                                }
+                                            </div>
+                                        }
                                     </div>
                                 }
                                 else
@@ -111,7 +121,7 @@
                                                 </button>
                                             }
                                             @if(Model.IsActivate){
-                                                <a class="button_icon button_primary" title="Activar" asp-controller="CrossConnections" asp-action="Active" asp-route-code="@CrossConnections.Code">
+                                                <a class="button_icon button_primary" title="Activar" asp-controller="CrossConnections" asp-action="Active">
                                                     <i class="icon icon_199"></i>
                                                 </a>
                                             }
