@@ -195,31 +195,6 @@ namespace ParameterControl.Services.Policies
             return policy;
         }
 
-        public async Task<string> InsertPolicy(modPolicy.Policy request)
-        {
-            try
-            {
-                var policy = new PolicyModel
-                {
-                    Name = request.Name,
-                    Description = request.Description,
-                    Objetive = request.Objetive,
-                    CreationDate = DateTime.Now,
-                    ModifieldDate = DateTime.Now,
-                    ModifieldBy = "CreateToUserDev",
-                    State = request.State
-                };
-
-                var response = await _policyService.InsertPolicy(policy);
-
-                return response.Equals(1) ? "Politica creada correctamente" : "Error creando la politica";
-            }
-            catch (Exception ex)
-            {
-                throw;
-            }
-        }
-
         public async Task<List<PolicyViewModel>> GetFilterPolicies(FilterViewModel filterModel)
         {
             List<modPolicy.Policy> allPolicies = await GetPolicies();
@@ -322,9 +297,50 @@ namespace ParameterControl.Services.Policies
             });
         }
 
+        public async Task<string> InsertPolicy(modPolicy.Policy request)
+        {
+            try
+            {
+                var policy = new PolicyModel
+                {
+                    Name = request.Name,
+                    Description = request.Description,
+                    Objetive = request.Objetive,
+                    CreationDate = DateTime.Now,
+                    ModifieldDate = DateTime.Now,
+                    ModifieldBy = "CreateToUserDev",
+                    State = request.State
+                };
+
+                var response = await _policyService.InsertPolicy(policy);
+
+                return response.Equals(1) ? "Politica creada correctamente" : "Error creando la politica";
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
         public async Task<string> UpdatePolicy(modPolicy.Policy policy)
         {
             var mapping = await MapperUpdatePolicy(policy);
+            var response = await _policyService.UpdatePolicy(mapping);
+
+            return response.Equals(1) ? "Politica actualizada correctamente" : "Error actualizando la politica";
+        }
+
+        public async Task<string> ActivePolicy(modPolicy.Policy policy)
+        {
+            var mapping = await MapperActiveePolicy(policy);
+            var response = await _policyService.UpdatePolicy(mapping);
+
+            return response.Equals(1) ? "Politica actualizada correctamente" : "Error actualizando la politica";
+        }
+
+        public async Task<string> DesactivePolicy(modPolicy.Policy policy)
+        {
+            var mapping = await MapperDesactiveePolicy(policy);
             var response = await _policyService.UpdatePolicy(mapping);
 
             return response.Equals(1) ? "Politica actualizada correctamente" : "Error actualizando la politica";
@@ -336,11 +352,52 @@ namespace ParameterControl.Services.Policies
             {
                 PolicyModel model = new PolicyModel
                 {
-                    Code = policy.Name,
+                    Code = policy.Code.ToString(),
                     Name = policy.Name,
                     Description = policy.Description,
-                    ModifieldBy = policy.UserOwner,
+                    Objetive = policy.Objetive,
+                    CreationDate = policy.CreationDate,
+                    ModifieldDate = DateTime.Now,
+                    ModifieldBy = "CreateToUserDev",
                     State = policy.State
+                };
+                return model;
+            });
+        }
+
+        private async Task<PolicyModel> MapperActiveePolicy(modPolicy.Policy policy)
+        {
+            return await Task.Run(() =>
+            {
+                PolicyModel model = new PolicyModel
+                {
+                    Code = policy.Code.ToString(),
+                    Name = policy.Name,
+                    Description = policy.Description,
+                    Objetive = policy.Objetive,
+                    CreationDate = policy.CreationDate,
+                    ModifieldDate = DateTime.Now,
+                    ModifieldBy = "CreateToUserDev",
+                    State = true
+                };
+                return model;
+            });
+        }
+
+        private async Task<PolicyModel> MapperDesactiveePolicy(modPolicy.Policy policy)
+        {
+            return await Task.Run(() =>
+            {
+                PolicyModel model = new PolicyModel
+                {
+                    Code = policy.Code.ToString(),
+                    Name = policy.Name,
+                    Description = policy.Description,
+                    Objetive = policy.Objetive,
+                    CreationDate = policy.CreationDate,
+                    ModifieldDate = DateTime.Now,
+                    ModifieldBy = "CreateToUserDev",
+                    State = false
                 };
                 return model;
             });

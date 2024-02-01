@@ -283,8 +283,10 @@ namespace ParameterControl.Services.Users
                 {
                     Code = Convert.ToInt32(User.Id),
                     User_ = User.User,
+                    Email = User.Email,
                     Name = User.UserName,
                     CreationDate = User.CreationDate,
+                    UpdateDate = User.ModifiedDate,
                     UserOwner = User.ModifiedBy
                 };
                 return model;
