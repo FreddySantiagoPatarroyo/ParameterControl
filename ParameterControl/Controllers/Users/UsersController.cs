@@ -39,7 +39,7 @@ namespace ParameterControl.Controllers.Users
         public async Task<ActionResult> Users(PaginationViewModel paginationViewModel)
         {
 
-            List<User> Users = await usersServices.GetUsersPagination(paginationViewModel);
+            List<User> Users = await usersServices.GetUsersFake();
             int TotalUsers = await usersServices.CountUsers();
 
             TableUsers.Data = await usersServices.GetUsersFormat(Users);

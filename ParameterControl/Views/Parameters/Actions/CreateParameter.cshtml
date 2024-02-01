@@ -100,6 +100,16 @@
                 </div>
             </div>
 
+            <div class="form_group">
+                <div class="field">
+                    <label asp-for="Email" class="label_form">Correo Electrónico*</label>
+                    <div class="input">
+                        <input class="description" asp-for="Email" placeholder="Digite su correo" autocomplete="off" />
+                    </div>
+                    <span id="EmailError" class="text_error"></span>
+                </div>
+            </div>
+
             <p class="note_text"><span>Nota: </span>Los campos con (*) son obligatorios</p>
 
             <div id="btn_container" class="btn_container">
@@ -203,6 +213,7 @@
         let isValidParameter = false;
         let isValidValue = false;
         //let isValidDescription = false;
+        let isValidEmail = false;
 
         const sendData = async () => {
             isValidParameterType = validateInputEmpty("ParameterType", "El tipo de parametro es requerido", "ParameterTypeError");
@@ -210,8 +221,10 @@
             isValidParameter = validateInputEmpty("Parameter_", "El parametro es requerido", "ParameterError");
             isValidValue = validateInputEmpty("Value", "El valor es requerido", "ValueError");
             //isValidDescription = validateInputEmpty("Description", "La descripcion es requerido", "DescriptionError");
+            isValidEmail = validateEmail("Email", "El Email es requerido", "Digite un email válido", "EmailError");
 
-            if (isValidParameter && isValidValue && isValidParameterType && isValidList) {
+
+            if (isValidParameter && isValidValue && isValidParameterType && isValidList && isValidEmail) {
                 document.getElementById('btn_container').style.display = 'none';
                 document.getElementById('loading').style.display = 'flex';
 
@@ -221,6 +234,7 @@
                     Description: $('#Description').val(),
                     ParameterType: $('#ParameterType').val(),
                     List: $('#List').val(),
+                    Email: $('#Email').val(),
                     State: true
                 }
 
@@ -260,5 +274,23 @@
                 return true;
             }
         }
+
+        const validateEmail = (idInput, requiredMessage, formatMessage, idError) => {
+            const email = $(`#${idInput}`).val();
+            const emailFormat = /^[a-zA-Z0-9._-]+@@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+
+            if (!email) { 
+                $(`#${idError}`).text(requiredMessage);
+                return false;
+            } else if (!emailFormat.test(email)) {
+                $(`#${idError}`).text(formatMessage);
+                return false;
+            } else {
+                $(`#${idError}`).text("");
+                return true;
+            }
+        }
+
+
     </script>
 }

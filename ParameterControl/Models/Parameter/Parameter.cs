@@ -19,5 +19,8 @@ namespace ParameterControl.Models.Parameter
 
         [Required(ErrorMessage = "El listado es requerido")]
         public string List { get; set; } = string.Empty;
+
+        public string Email { get; set; } = string.Empty;
+
     }
 }

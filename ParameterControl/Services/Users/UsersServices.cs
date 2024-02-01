@@ -73,6 +73,11 @@ namespace ParameterControl.Services.Users
             };
         }
 
+        public async Task<List<User>> GetUsersFake()
+        {
+            return users;
+        }
+
         public async Task<List<User>> GetUsers()
         {
             var collectionUsers = await _authService.SelectAllUser();

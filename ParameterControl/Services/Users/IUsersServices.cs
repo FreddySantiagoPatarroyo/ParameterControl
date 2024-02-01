@@ -19,5 +19,6 @@ namespace ParameterControl.Services.Users
         Task<int> CountUsers();
         List<UserViewModel> GetFilterPagination(List<UserViewModel> inicialUsers, PaginationViewModel paginationViewModel, int totalData);
         Task<List<User>> GetUsersPagination(PaginationViewModel pagination);
+        Task<List<User>> GetUsersFake();
     }
 }
