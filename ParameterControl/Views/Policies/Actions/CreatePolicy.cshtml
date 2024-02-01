@@ -110,12 +110,11 @@
     <script>
         const urlPolicy = '@Url.Action("Create")';
         let data;
-        //let isValidCode = false;
+
         let isValidName = false;
         let isValidDescription = false;
 
         const sendData = async () => {
-            //isValidCode = validateInputEmpty("Code", "El codigo es requerido", "CodeError");
             isValidName = validateInputEmpty("Name", "El nombre es requerido", "NameError");
             isValidDescription = validateInputEmpty("Description", "La descripcion es requerido", "DescriptionError");
 
@@ -124,10 +123,8 @@
                 document.getElementById('loading').style.display = 'flex';
 
                 data = {
-                    //Code: $('Code').val(),
                     Name: $('#Name').val(),
                     Description: $('#Description').val(),
-                    Conciliation: parseInt($('#Conciliation').val()),
                     State: true
                 }
 

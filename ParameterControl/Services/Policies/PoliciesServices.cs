@@ -206,7 +206,8 @@ namespace ParameterControl.Services.Policies
                     Objetive = request.Objetive,
                     CreationDate = DateTime.Now,
                     ModifieldDate = DateTime.Now,
-                    ModifieldBy = "CreateToUserDev"
+                    ModifieldBy = "CreateToUserDev",
+                    State = request.State
                 };
 
                 var response = await _policyService.InsertPolicy(policy);

@@ -282,6 +282,7 @@ namespace ParameterControl.Services.Users
                 modUser.User model = new modUser.User
                 {
                     Code = Convert.ToInt32(User.Id),
+                    User_ = User.User,
                     Name = User.UserName,
                     CreationDate = User.CreationDate,
                     UserOwner = User.ModifiedBy
