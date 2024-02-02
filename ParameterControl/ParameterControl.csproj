@@ -29,9 +29,14 @@
     <ProjectReference Include="..\ParameterControl.Conciliation.Entities\ParameterControl.Conciliation.Entities.csproj" />
     <ProjectReference Include="..\ParameterControl.Conciliation.Impl\ParameterControl.Conciliation.Impl.csproj" />
     <ProjectReference Include="..\ParameterControl.Conciliation.Interfaces\ParameterControl.Conciliation.Interfaces.csproj" />
+    <ProjectReference Include="..\ParameterControl.Parameter.Entities\ParameterControl.Parameter.Entities.csproj" />
+    <ProjectReference Include="..\ParameterControl.Parameter.Impl\ParameterControl.Parameter.Impl.csproj" />
+    <ProjectReference Include="..\ParameterControl.Parameter.Interfaces\ParameterControl.Parameter.Interfaces.csproj" />
     <ProjectReference Include="..\ParameterControl.Policy.Entities\ParameterControl.Policy.Entities.csproj" />
     <ProjectReference Include="..\ParameterControl.Policy.Impl\ParameterControl.Policy.Impl.csproj" />
     <ProjectReference Include="..\ParameterControl.Policy.Interfaces\ParameterControl.Policy.Interfaces.csproj" />
+    <ProjectReference Include="..\ParameterControl.Stage.Impl\ParameterControl.Stage.Impl.csproj" />
+    <ProjectReference Include="..\ParameterControl.Stage.Interfaces\ParameterControl.Stage.Interfaces.csproj" />
   </ItemGroup>
 
 </Project>

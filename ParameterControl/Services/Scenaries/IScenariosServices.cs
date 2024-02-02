@@ -1,9 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
 using ParameterControl.Models.Filter;
 using ParameterControl.Models.Scenery;
-
 using modConciliation = ParameterControl.Models.Conciliation;
-using modScenery = ParameterControl.Models.Scenery;
 
 namespace ParameterControl.Services.Scenarios
 {
@@ -15,7 +13,10 @@ namespace ParameterControl.Services.Scenarios
         Task<Scenery> GetSceneryByCode(int code);
         Task<List<SceneryViewModel>> GetFilterScenarios(FilterViewModel filterModel);
         Task<List<SceneryViewModel>> GetScenariosFormat(List<Scenery> scenarios);
-        Task<SceneryViewModel> GetSceneryFormat(modScenery.Scenery scenery);
-        Task<SceneryCreateViewModel> GetSceneryFormatCreate(modScenery.Scenery scenery);
+        Task<SceneryViewModel> GetSceneryFormat(Scenery scenery);
+        Task<SceneryCreateViewModel> GetSceneryFormatCreate(Scenery scenery);
+        Task<string> InsertScenery(Scenery request);
+        Task<string> UpdateScenery(Scenery Conciliation);
+        Task<int> CountScenery();
     }
 }

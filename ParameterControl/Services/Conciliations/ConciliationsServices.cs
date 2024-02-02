@@ -376,7 +376,7 @@ namespace ParameterControl.Services.Conciliations
         public async Task<string> UpdateConciliation(modConciliation.Conciliation conciliation)
         {
             var mapping = await MapperUpdateConciliation(conciliation);
-            var response = await policiesServices.UpdatePolicy(new modPolicy.Policy { });
+            var response = await conciliationServices.UpdateConciliation(mapping);
 
             return response.Equals(1) ? "Conciliacion actualizada correctamente" : "Error actualizando la conciliacion";
         }
