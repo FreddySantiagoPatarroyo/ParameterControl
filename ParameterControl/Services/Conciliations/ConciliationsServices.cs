@@ -30,12 +30,10 @@ namespace ParameterControl.Services.Conciliations
                     Code = 1,
                     Name = "Conciliacion_1",
                     Description = "Descriptionasdasdasdasdasdasdasdasdasdasd",
-                    Package = "paqueteEjemplo",
                     Email = "ejemplo@gmail.com",
-                    Destination = "ejemploDestino",
-                    Policies = "Politica1",
+                    Destination = 123,
+                    Policy = "Politica1",
                     Required = true,
-                    Conciliation_ = "Conciliation",
                     ControlType = "Voz",
                     OperationType = "Model",
                     State = true,
@@ -47,12 +45,10 @@ namespace ParameterControl.Services.Conciliations
                     Code = 2,
                     Name = "Conciliacion_1",
                     Description = "Description",
-                    Package = "paqueteEjemplo",
                     Email = "ejemplo@gmail.com",
-                    Destination = "ejemploDestino",
-                    Policies = "Politica2",
+                    Destination = 145,
+                    Policy = "Politica2",
                     Required = false,
-                    Conciliation_ = "Conciliation",
                     ControlType = "Voz",
                     OperationType = "Model",
                     State = true,
@@ -64,12 +60,10 @@ namespace ParameterControl.Services.Conciliations
                     Code = 3,
                     Name = "Conciliacion_1",
                     Description = "Description",
-                    Package = "paqueteEjemplo",
                     Email = "ejemplo@gmail.com",
-                    Destination = "ejemploDestino",
-                    Policies = "Politica1",
+                    Destination = 213,
+                    Policy = "Politica1",
                     Required = true,
-                    Conciliation_ = "Conciliation",
                     ControlType = "Voz",
                     OperationType = "Model",
                     State = true,
@@ -81,12 +75,10 @@ namespace ParameterControl.Services.Conciliations
                     Code = 4,
                     Name = "Conciliacion_1",
                     Description = "Description",
-                    Package = "paqueteEjemplo",
                     Email = "ejemplo@gmail.com",
-                    Destination = "ejemploDestino",
-                    Policies = "Politica1",
+                    Destination = 123,
+                    Policy = "Politica1",
                     Required = false,
-                    Conciliation_ = "Conciliation",
                     ControlType = "Voz",
                     OperationType = "Model",
                     State = false,
@@ -98,66 +90,13 @@ namespace ParameterControl.Services.Conciliations
                     Code = 5,
                     Name = "Conciliacion_1",
                     Description = "Description",
-                    Package = "paqueteEjemplo",
                     Email = "ejemplo@gmail.com",
-                    Destination = "ejemploDestino",
-                    Policies = "Politica1",
+                    Destination = 123,
+                    Policy = "Politica1",
                     Required = true,
-                    Conciliation_ = "Conciliation",
                     ControlType = "Voz",
                     OperationType = "Model",
                     State = true,
-                    CreationDate = DateTime.Parse("2024-01-10"),
-                    UpdateDate = DateTime.Parse("2023-11-09"),
-                    UserOwner = "User1"
-                },
-                new modConciliation.Conciliation(){
-                    Code = 6,
-                    Name = "Conciliacion_1",
-                    Description = "Description",
-                    Package = "paqueteEjemplo",
-                    Email = "ejemplo@gmail.com",
-                    Destination = "ejemploDestino",
-                    Policies = "Politica1",
-                    Required = true,
-                    Conciliation_ = "Conciliation",
-                    ControlType = "Voz",
-                    OperationType = "Model",
-                    State = false,
-                    CreationDate = DateTime.Parse("2024-01-10"),
-                    UpdateDate = DateTime.Parse("2023-11-09"),
-                    UserOwner = "User1"
-                },
-                new modConciliation.Conciliation(){
-                    Code = 7,
-                    Name = "Conciliacion_1",
-                    Description = "Description",
-                    Package = "paqueteEjemplo",
-                    Email = "ejemplo@gmail.com",
-                    Destination = "ejemploDestino",
-                    Policies = "Politica1",
-                    Required = false,
-                    Conciliation_ = "Conciliation",
-                    ControlType = "Voz",
-                    OperationType = "Model",
-                    State = true,
-                    CreationDate = DateTime.Parse("2024-01-10"),
-                    UpdateDate = DateTime.Parse("2023-11-09"),
-                    UserOwner = "User1"
-                },
-                new modConciliation.Conciliation(){
-                    Code = 8,
-                    Name = "Conciliacion_1",
-                    Description = "Description",
-                    Package = "paqueteEjemplo",
-                    Email = "ejemplo@gmail.com",
-                    Destination = "ejemploDestino",
-                    Policies = "Politica1",
-                    Required = true,
-                    Conciliation_ = "Conciliation",
-                    ControlType = "Voz",
-                    OperationType = "Model",
-                    State = false,
                     CreationDate = DateTime.Parse("2024-01-10"),
                     UpdateDate = DateTime.Parse("2023-11-09"),
                     UserOwner = "User1"
@@ -184,11 +123,9 @@ namespace ParameterControl.Services.Conciliations
                 conciliationModel.Code = conciliation.Code;
                 conciliationModel.Name = conciliation.Name;
                 conciliationModel.Description = conciliation.Description;
-                conciliationModel.Conciliation_ = conciliation.Conciliation_;
-                conciliationModel.Package = conciliation.Package;
                 conciliationModel.Email = conciliation.Email;
                 conciliationModel.Destination = conciliation.Destination;
-                conciliationModel.Policies = conciliation.Policies;
+                conciliationModel.Policy = conciliation.Policy;
                 conciliationModel.Required = conciliation.Required;
                 conciliationModel.ControlType = conciliation.ControlType;
                 conciliationModel.OperationType = conciliation.OperationType;
@@ -214,11 +151,9 @@ namespace ParameterControl.Services.Conciliations
             conciliationModel.Code = conciliation.Code;
             conciliationModel.Name = conciliation.Name;
             conciliationModel.Description = conciliation.Description;
-            conciliationModel.Conciliation_ = conciliation.Conciliation_;
-            conciliationModel.Package = conciliation.Package;
             conciliationModel.Email = conciliation.Email;
             conciliationModel.Destination = conciliation.Destination;
-            conciliationModel.Policies = conciliation.Policies;
+            conciliationModel.Policy = conciliation.Policy;
             conciliationModel.Required = conciliation.Required;
             conciliationModel.ControlType = conciliation.ControlType;
             conciliationModel.OperationType = conciliation.OperationType;
@@ -242,11 +177,9 @@ namespace ParameterControl.Services.Conciliations
             conciliationModel.Code = conciliation.Code;
             conciliationModel.Name = conciliation.Name;
             conciliationModel.Description = conciliation.Description;
-            conciliationModel.Conciliation_ = conciliation.Conciliation_;
-            conciliationModel.Package = conciliation.Package;
             conciliationModel.Email = conciliation.Email;
             conciliationModel.Destination = conciliation.Destination;
-            conciliationModel.Policies = conciliation.Policies;
+            conciliationModel.Policy = conciliation.Policy;
             conciliationModel.Required = conciliation.Required;
             conciliationModel.ControlType = conciliation.ControlType;
             conciliationModel.OperationType = conciliation.OperationType;
@@ -386,14 +319,14 @@ namespace ParameterControl.Services.Conciliations
             return response.Equals(1) ? "Conciliacion actualizada correctamente" : "Error actualizando la conciliacion";
         }
 
-        private async Task<PolicyModel> MapperUpdateConciliation(modConciliation.Conciliation conciliation)
+        private async Task<ConciliationModel> MapperUpdateConciliation(modConciliation.Conciliation conciliation)
         {
             return await Task.Run(() =>
             {
-                PolicyModel model = new PolicyModel
+                ConciliationModel model = new ConciliationModel
                 {
                     Code = conciliation.Code,
-                    Name = conciliation.Name,
+                    ConciliationName = conciliation.Name,
                     Description = conciliation.Description,
                     ModifieldBy = conciliation.UserOwner,
                     State = conciliation.State

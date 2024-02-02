@@ -30,5 +30,10 @@
         public DateTime ModifieldDate { get; set; }
         public string TestDate { get; set; } = string.Empty;
         public string Req { get; set; } = string.Empty;
+        public string PolicyName { get; set; } = string.Empty;
+        public int Destination { get; set; }
+        public bool State { get; set; } = false;
+        public string ModifieldBy { get; set; } = string.Empty;
+
     }
 }

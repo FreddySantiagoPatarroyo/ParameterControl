@@ -45,16 +45,6 @@
 
             <div class="form_group">
                 <div class="field">
-                    <label asp-for="Package" class="label_form">Paquete*</label>
-                    <div class="input">
-                        <input asp-for="Package" placeholder="Digite el paquete">
-                    </div>
-                    <span id="PackageError" class="text_error"></span>
-                </div>
-            </div>
-
-            <div class="form_group">
-                <div class="field">
                     <label  asp-for="Email" class="label_form">Email Usuario Asignado*</label>
                     <div class="input">
                         <input asp-for="Email" placeholder="Digite el email">
@@ -111,10 +101,10 @@
 
             <div class="form_group">
                 <div class="field">
-                    <label asp-for="Policies" class="label_form">Politicas*</label>
+                    <label asp-for="Policy" class="label_form">Politicas*</label>
                     <div id="input_select_policies" class="input">
-                        <input class="input_select" id="input_select_filter_policies" asp-for="Policies" placeholder="Seleccione una opción" onclick="showOptionsPolicies()" readonly />
-                        <input class="oculte" asp-for="Policies" />
+                        <input class="input_select" id="input_select_filter_policies" asp-for="Policy" placeholder="Seleccione una opción" onclick="showOptionsPolicies()" readonly />
+                        <input class="oculte" asp-for="Policy" />
                         <i class="icon icon_select icon_153"></i>
                     </div>
                     <div id="options_policies" class="options">
@@ -294,9 +284,9 @@
     <script>
         const urlConciliation = '@Url.Action("Edit")';
         let data;
+
         let isValidCode = false;
         let isValidName = false;
-        let isValidPackage = false;
         let isValidEmail = false;
         let isValidPolicies = false;
         let isValidRequired = false;
@@ -306,14 +296,13 @@
         const sendData = async () => {
             isValidCode = validateInputEmpty("Code", "El código es requerido", "CodeError");
             isValidName = validateInputEmpty("Name", "El nombre es requerido", "NameError");
-            isValidPackage = validateInputEmpty("Package", "El paquete es requerido", "PackageError");
             isValidEmail = validateInputEmpty("Email", "El email del usuario asignado es requerido", "EmailError");
             isValidPolicies = validateInputEmpty("Policies", "La política es requerida", "PoliciesError");
             isValidRequired = validateInputEmpty("input_select_filter_required", "Este campo es requerido", "RequiredError");
             isValidControlType = validateInputEmpty("ControlType", "El tipo de control es requerido", "ControlTypeError");
             isValidOperationType = validateInputEmpty("OperationType", "El tipo de operacion es requerido", "OperationTypeError");
 
-            if (isValidCode && isValidName && isValidPackage && isValidEmail && isValidPolicies && isValidRequired && isValidControlType && isValidOperationType) {
+            if (isValidCode && isValidName && isValidEmail && isValidPolicies && isValidRequired && isValidControlType && isValidOperationType) {
                 document.getElementById('btn_container').style.display = 'none';
                 document.getElementById('loading').style.display = 'flex';
 
@@ -322,8 +311,8 @@
                 data = {
                     Code: $('#Code').val(),
                     Name: $('#Name').val(),
-                    Package: $('#Package').val(),
                     Email: $('#Email').val(),
+                    Destination: $('#Destination').val(),
                     Policies: $('#Policies').val(),
                     Required: $('#Required').val() === "True" ? true : false,
                     State: true,

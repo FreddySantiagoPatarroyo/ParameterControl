@@ -150,13 +150,19 @@ namespace ParameterControl.Conciliation.Impl
             {
                 ConciliationModel model = new ConciliationModel
                 {
-                    Code = Convert.ToInt32(dr["COD_POLITICA"]),
-                    ConciliationName = dr["NOMBRE_POLITICA"] is DBNull ? string.Empty : dr["NOMBRE_POLITICA"].ToString(),
+                    Code = Convert.ToInt32(dr["COD_CONCILIACION"]),
+                    ConciliationName = dr["NOMBRE_CONCILIACION"] is DBNull ? string.Empty : dr["NOMBRE_POLITICA"].ToString(),
                     Description = dr["DESCRIPCION"] is DBNull ? string.Empty : dr["DESCRIPCION"].ToString(),
-                    Observation = dr["OBJETIVO"] is DBNull ? string.Empty : dr["OBJETIVO"].ToString(),
+                    Email = dr["EMAILS"] is DBNull ? string.Empty : dr["EMAILS"].ToString(),
+                    Destination = dr["DESTINO"] is DBNull ? 0 : Convert.ToInt32(dr["DESTINO"]),
+                    PolicyName = dr["NOMBRE_POLITICA"] is DBNull ? string.Empty : dr["NOMBRE_POLITICA"].ToString(),
                     CreationDate = dr["FECHA_CREACION"] is DBNull ? DateTime.Now : Convert.ToDateTime(dr["FECHA_CREACION"]),
                     ModifieldDate = dr["FECHA_ACTUALIZACION"] is DBNull ? DateTime.Now : Convert.ToDateTime(dr["FECHA_ACTUALIZACION"]),
-                    Status = dr["ESTADO_ACTIVACION"] is DBNull ? string.Empty : dr["ESTADO_ACTIVACION"].ToString()
+                    RequiredApproval = dr["REQUIERE_APROBACION"] is DBNull ? string.Empty : dr["REQUIERE_APROBACION"].ToString(),
+                    OperationType = dr["TIPO_OPERACION"] is DBNull ? string.Empty : dr["TIPO_OPERACION"].ToString(),
+                    AssignmentType = dr["TIPO_ASIGNACION"] is DBNull ? string.Empty : dr["TIPO_ASIGNACION"].ToString(),
+                    ModifieldBy = dr["MODIFICADO_POR"] is DBNull ? string.Empty : dr["MODIFICADO_POR"].ToString(),
+                    State = dr["ESTADO_ACTIVACION"] is DBNull ? false : Convert.ToBoolean(dr["ESTADO_ACTIVACION"]),
                 };
                 return model;
             });

@@ -39,7 +39,7 @@ namespace ParameterControl.Controllers.Users
         public async Task<ActionResult> Users(PaginationViewModel paginationViewModel)
         {
 
-            List<User> Users = await usersServices.GetUsersFake();
+            List<User> Users = await usersServices.GetUsersPagination(paginationViewModel);
             int TotalUsers = await usersServices.CountUsers();
 
             TableUsers.Data = await usersServices.GetUsersFormat(Users);
@@ -150,16 +150,6 @@ namespace ParameterControl.Controllers.Users
             modUser.User user = await usersServices.GetUsersByCode(code);
 
             UserCreateViewModel model = await usersServices.GetUserFormatCreate(user);
-
-            //UserCreateViewModel model = new UserCreateViewModel()
-            //{
-            //    Code = user.Code,
-            //    Name = user.Name,
-            //    User_ = user.User_,
-            //    Email = user.Email,
-            //    State = user.State,
-            //    CreationDate = user.CreationDate
-            //};
 
             return View("Actions/EditUser", model);
         }
