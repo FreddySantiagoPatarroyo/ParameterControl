@@ -151,10 +151,11 @@ namespace ParameterControl.Conciliation.Impl
                 ConciliationModel model = new ConciliationModel
                 {
                     Code = Convert.ToInt32(dr["COD_CONCILIACION"]),
-                    ConciliationName = dr["NOMBRE_CONCILIACION"] is DBNull ? string.Empty : dr["NOMBRE_POLITICA"].ToString(),
+                    ConciliationName = dr["NOMBRE_CONCILIACION"] is DBNull ? string.Empty : dr["NOMBRE_CONCILIACION"].ToString(),
                     Description = dr["DESCRIPCION"] is DBNull ? string.Empty : dr["DESCRIPCION"].ToString(),
                     Email = dr["EMAILS"] is DBNull ? string.Empty : dr["EMAILS"].ToString(),
                     Destination = dr["DESTINO"] is DBNull ? 0 : Convert.ToInt32(dr["DESTINO"]),
+                    PolicyId = Convert.ToInt32(dr["COD_POLITICA"]),
                     PolicyName = dr["NOMBRE_POLITICA"] is DBNull ? string.Empty : dr["NOMBRE_POLITICA"].ToString(),
                     CreationDate = dr["FECHA_CREACION"] is DBNull ? DateTime.Now : Convert.ToDateTime(dr["FECHA_CREACION"]),
                     ModifieldDate = dr["FECHA_ACTUALIZACION"] is DBNull ? DateTime.Now : Convert.ToDateTime(dr["FECHA_ACTUALIZACION"]),
@@ -163,6 +164,7 @@ namespace ParameterControl.Conciliation.Impl
                     AssignmentType = dr["TIPO_ASIGNACION"] is DBNull ? string.Empty : dr["TIPO_ASIGNACION"].ToString(),
                     ModifieldBy = dr["MODIFICADO_POR"] is DBNull ? string.Empty : dr["MODIFICADO_POR"].ToString(),
                     State = dr["ESTADO_ACTIVACION"] is DBNull ? false : Convert.ToBoolean(dr["ESTADO_ACTIVACION"]),
+                    StatePolicy = dr["ESTADO_ACTIVACION_POLITICA"] is DBNull ? false : Convert.ToBoolean(dr["ESTADO_ACTIVACION_POLITICA"]),
                 };
                 return model;
             });

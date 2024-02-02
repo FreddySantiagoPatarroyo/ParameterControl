@@ -64,8 +64,8 @@ namespace ParameterControl.Services.Rows
                 },
                 new Row()
                 {
-                    Value = "Conciliation_",
-                    Name = "Conciliacion"
+                    Value = "Policy",
+                    Name = "Politica"
                 },
                 new Row()
                 {

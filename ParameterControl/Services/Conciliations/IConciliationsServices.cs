@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
 using ParameterControl.Models.Conciliation;
 using ParameterControl.Models.Filter;
+using ParameterControl.Models.Pagination;
 using modConciliation = ParameterControl.Models.Conciliation;
 using modPolicy = ParameterControl.Models.Policy;
 
@@ -20,5 +21,7 @@ namespace ParameterControl.Services.Conciliations
         Task<string> InsertConciliation(modConciliation.Conciliation request);
         Task<string> UpdateConciliation(modConciliation.Conciliation Conciliation);
         Task<int> CountConciliations();
+        Task<List<modConciliation.Conciliation>> GetConciliationsPagination(PaginationViewModel pagination);
+        List<ConciliationViewModel> GetFilterPagination(List<ConciliationViewModel> inicialConciliations, PaginationViewModel paginationViewModel, int totalData);
     }
 }
