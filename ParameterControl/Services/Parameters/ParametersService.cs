@@ -1,18 +1,26 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using ParameterControl.Parameter.Entities;
 using ParameterControl.Models.Filter;
 using ParameterControl.Models.Parameter;
+using ParameterControl.Services.Policies;
 using modParameter = ParameterControl.Models.Parameter;
+using ParameterControl.Conciliation.Interfaces;
+using ParameterControl.Parameter.Interfaces;
+using ParameterControl.Parameter.Impl;
+using ParameterControl.Conciliation.Entities;
 
 namespace ParameterControl.Services.Parameters
 {
     public class ParametersService : IParametersService
     {
-        private List<Parameter> parameters = new List<Parameter>();
-        public ParametersService()
+        private List<modParameter.Parameter> parameters = new List<modParameter.Parameter>();
+        private readonly IParameterService _parameterServices;
+        public ParametersService(IConfiguration configuration)
         {
-            parameters = new List<Parameter>()
+            _parameterServices = new ParameterService(configuration);
+            parameters = new List<modParameter.Parameter>()
             {
-                new Parameter(){
+                new modParameter.Parameter(){
                     Code = 1,
                     Parameter_ = "Parameter1",
                     ParameterType = "OTRO",
@@ -24,7 +32,7 @@ namespace ParameterControl.Services.Parameters
                     UpdateDate = DateTime.Parse("2023-11-09"),
                     UserOwner = "User1"
                 },
-                new Parameter(){
+                new modParameter.Parameter(){
                     Code = 2,
                     Parameter_ = "Parameter2",
                     ParameterType = "GENERAL",
@@ -36,7 +44,7 @@ namespace ParameterControl.Services.Parameters
                     UpdateDate = DateTime.Parse("2023-11-09"),
                     UserOwner = "User1"
                 },
-                new Parameter(){
+                new modParameter.Parameter(){
                     Code = 3,
                     Parameter_ = "Parameter3",
                     ParameterType = "GENERAL",
@@ -48,7 +56,7 @@ namespace ParameterControl.Services.Parameters
                     UpdateDate = DateTime.Parse("2023-11-09"),
                     UserOwner = "User1"
                 },
-                new Parameter(){
+                new modParameter.Parameter(){
                     Code = 4,
                     Parameter_ = "Parameter4",
                     ParameterType = "GENERAL",
@@ -60,7 +68,7 @@ namespace ParameterControl.Services.Parameters
                     UpdateDate = DateTime.Parse("2023-11-09"),
                     UserOwner = "User1"
                 },
-                new Parameter(){
+                new modParameter.Parameter(){
                     Code = 5,
                     Parameter_ = "Parameter5",
                     ParameterType = "GENERAL",
@@ -72,7 +80,7 @@ namespace ParameterControl.Services.Parameters
                     UpdateDate = DateTime.Parse("2023-11-09"),
                     UserOwner = "User1"
                 },
-                new Parameter(){
+                new modParameter.Parameter(){
                     Code = 6,
                     Parameter_ = "Parameter6",
                     ParameterType = "GENERAL",
@@ -84,7 +92,7 @@ namespace ParameterControl.Services.Parameters
                     UpdateDate = DateTime.Parse("2023-11-09"),
                     UserOwner = "User1"
                 },
-                new Parameter(){
+                new modParameter.Parameter(){
                     Code = 7,
                     Parameter_ = "Parameter7",
                     ParameterType = "GENERAL",
@@ -96,7 +104,7 @@ namespace ParameterControl.Services.Parameters
                     UpdateDate = DateTime.Parse("2023-11-09"),
                     UserOwner = "User1"
                 },
-                new Parameter(){
+                new modParameter.Parameter(){
                     Code = 8,
                     Parameter_ = "Parameter8",
                     ParameterType = "GENERAL",
@@ -111,9 +119,11 @@ namespace ParameterControl.Services.Parameters
             };
         }
 
-        public async Task<List<Parameter>> GetParameters()
+        public async Task<List<modParameter.Parameter>> GetParameters()
         {
-            return parameters;
+            var collectionParameters = await _parameterServices.SelectAllParameter();
+            var response = await MapperParameter(collectionParameters);
+            return response;
         }
 
         public async Task<List<ParameterViewModel>> GetParametersFormat(List<modParameter.Parameter> parameters)
@@ -182,9 +192,10 @@ namespace ParameterControl.Services.Parameters
             return parameterModel;
         }
 
-        public async Task<Parameter> GetParameterByCode(int code)
+        public async Task<modParameter.Parameter> GetParameterByCode(int code)
         {
-            Parameter parameter = parameters.Find(parameter => parameter.Code == code);
+            var response = await _parameterServices.SelectByIdParameter(new ParameterModel { Code = code });
+            var parameter = await MapperToParameter(response);
             return parameter;
         }
 
@@ -247,12 +258,81 @@ namespace ParameterControl.Services.Parameters
 
             return parameterType;
         }
-        public async Task<List<Parameter>> GetListParameter()
+        public async Task<List<modParameter.Parameter>> GetListParameter()
         {
             //Crear funcion para buscar parametros segun el tipo de parametro
-            List<Parameter> listParameter = await GetParameters();
+            List<modParameter.Parameter> listParameter = await GetParameters();
 
             return listParameter;
+        }
+
+        public async Task<string> InsertParameter(modParameter.Parameter request)
+        {
+            ParameterModel Parameter = new ParameterModel
+            {
+            };
+
+            var response = await _parameterServices.InsertParameter(Parameter);
+
+            return response.Equals(1) ? "Conciliacion creada correctamente" : "Error creando la conciliacion";
+        }
+
+        private async Task<List<modParameter.Parameter>> MapperParameter(List<ParameterModel> ParameterModel)
+        {
+            return await Task.Run(() =>
+            {
+                List<modParameter.Parameter> Parameters = new List<modParameter.Parameter>();
+                if (ParameterModel.Count > 0)
+                {
+                    foreach (var Parameter in ParameterModel)
+                    {
+                        Parameters.Add(MapperToParameter(Parameter).Result);
+                    }
+                }
+                return Parameters;
+            });
+        }
+
+        private async Task<modParameter.Parameter> MapperToParameter(ParameterModel Parameter)
+        {
+            return await Task.Run(() =>
+            {
+                modParameter.Parameter model = new modParameter.Parameter
+                {
+                    Code = Convert.ToInt32(Parameter.Code),
+                    Parameter_ = Parameter.Parameter,
+                    Description = Parameter.Description
+                };
+                return model;
+            });
+        }
+
+        public async Task<string> UpdateParameter(modParameter.Parameter Parameter)
+        {
+            var mapping = await MapperUpdateParameter(Parameter);
+            var response = await _parameterServices.UpdateParameter(mapping);
+
+            return response.Equals(1) ? "Conciliacion actualizada correctamente" : "Error actualizando la conciliacion";
+        }
+
+        private async Task<ParameterModel> MapperUpdateParameter(modParameter.Parameter Parameter)
+        {
+            return await Task.Run(() =>
+            {
+                ParameterModel model = new ParameterModel
+                {
+                    Code = Parameter.Code,
+                    Parameter = Parameter.Parameter_,
+                    Description = Parameter.Description,
+                    ModifieldBy = Parameter.UserOwner
+                };
+                return model;
+            });
+        }
+
+        public async Task<int> CountParameters()
+        {
+            return await _parameterServices.SelectCountParameter();
         }
     }
 }

@@ -1,7 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using ParameterControl.Conciliation.Entities;
 using ParameterControl.Models.Filter;
 using ParameterControl.Models.Scenery;
 using ParameterControl.Services.Conciliations;
+using ParameterControl.Stage.Entities;
+using ParameterControl.Stage.Impl;
+using ParameterControl.Stage.Interfaces;
 using modConciliation = ParameterControl.Models.Conciliation;
 
 using modScenarios = ParameterControl.Models.Scenery;
@@ -14,11 +18,14 @@ namespace ParameterControl.Services.Scenarios
     {
         private List<Scenery> scenarios = new List<Scenery>();
         private readonly IConciliationsServices conciliationsServices;
+        private readonly IStageService _stageService;
 
         public ScenariosServices(
-            IConciliationsServices conciliationsServices
+            IConciliationsServices conciliationsServices,
+            IConfiguration configuration
         )
         {
+            _stageService = new StageService(configuration);
             scenarios = new List<Scenery>()
             {
                 new Scenery(){
@@ -107,7 +114,9 @@ namespace ParameterControl.Services.Scenarios
 
         public async Task<List<Scenery>> GetScenarios()
         {
-            return scenarios;
+            var collectionScenarios = await _stageService.SelectAllStage();
+            var response = await MapperScenery(collectionScenarios);
+            return response;
         }
 
         public async Task<List<SceneryViewModel>> GetScenariosFormat(List<modScenarios.Scenery> scenarios)
@@ -177,7 +186,8 @@ namespace ParameterControl.Services.Scenarios
 
         public async Task<Scenery> GetSceneryByCode(int code)
         {
-            Scenery scenery = scenarios.Find(scenery => scenery.Code == code);
+            var response = await _stageService.SelectByIdStage(new StageModel { Code = code });
+            var scenery = await MapperToScenery(response);
             return scenery;
         }
 
@@ -243,6 +253,73 @@ namespace ParameterControl.Services.Scenarios
         {
             List<modConciliation.Conciliation> conciliation = await conciliationsServices.GetConciliations();
             return conciliation;
+        }
+
+        public async Task<string> InsertScenery(Scenery request)
+        {
+            StageModel stage = new StageModel
+            {
+            };
+
+            var response = await _stageService.InsertStage(stage);
+
+            return response.Equals(1) ? "Escenario creado correctamente" : "Error creando el escenario";
+        }
+
+        private async Task<List<Scenery>> MapperScenery(List<StageModel> stageModel)
+        {
+            return await Task.Run(() =>
+            {
+                List<Scenery> scenarios = new List<Scenery>();
+                if (stageModel.Count > 0)
+                {
+                    foreach (var scenery in stageModel)
+                    {
+                        scenarios.Add(MapperToScenery(scenery).Result);
+                    }
+                }
+                return scenarios;
+            });
+        }
+
+        private async Task<Scenery> MapperToScenery(StageModel stage)
+        {
+            return await Task.Run(() =>
+            {
+                Scenery model = new Scenery
+                {
+                    Code = stage.Code,
+                    Name = stage.Name
+                };
+                return model;
+            });
+        }
+
+        public async Task<string> UpdateScenery(Scenery scenery)
+        {
+            var mapping = await MapperUpdateScenery(scenery);
+            var response = await _stageService.UpdateStage(mapping);
+
+            return response.Equals(1) ? "Escenario actualizada correctamente" : "Error actualizando el escenario";
+        }
+
+        private async Task<StageModel> MapperUpdateScenery(Scenery scenery)
+        {
+            return await Task.Run(() =>
+            {
+                StageModel model = new StageModel
+                {
+                    Code = scenery.Code,
+                    ModifieldBy = scenery.UserOwner,
+                    State = scenery.State
+                };
+                return model;
+            });
+        }
+
+        public async Task<int> CountScenery()
+        {
+            return await _stageService.SelectCountStage();
         }
     }
 }

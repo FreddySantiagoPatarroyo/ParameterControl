@@ -151,7 +151,8 @@ namespace ParameterControl.Parameter.Impl
                 ParameterModel model = new ParameterModel
                 {
                     Code = Convert.ToInt32(dr["COD_PARAMETRO"]),
-                    Parameter = dr["NOMBRE_PARAMETRO"] is DBNull ? string.Empty : dr["NOMBRE_PARAMETRO"].ToString(),
+                    Parameter = dr["PARAMETRO"] is DBNull ? string.Empty : dr["PARAMETRO"].ToString(),
+                    Value = dr["VALOR"] is DBNull ? string.Empty : dr["VALOR"].ToString(),
                     Description = dr["DESCRIPCION"] is DBNull ? string.Empty : dr["DESCRIPCION"].ToString(),
                     CreationDate = dr["FECHA_CREACION"] is DBNull ? DateTime.Now : Convert.ToDateTime(dr["FECHA_CREACION"]),
                     ModifieldDate = dr["FECHA_ACTUALIZACION"] is DBNull ? DateTime.Now : Convert.ToDateTime(dr["FECHA_ACTUALIZACION"]),

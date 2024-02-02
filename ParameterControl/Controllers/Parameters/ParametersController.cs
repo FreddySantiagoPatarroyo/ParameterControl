@@ -101,7 +101,7 @@ namespace ParameterControl.Controllers.Parameters
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] Parameter request)
+        public async Task<IActionResult> Create([FromBody] modParameter.Parameter request)
         {
             if (!ModelState.IsValid)
             {
@@ -129,7 +129,7 @@ namespace ParameterControl.Controllers.Parameters
         [HttpGet]
         public async Task<ActionResult> Edit(int code)
         {
-            Parameter parameter = await parametersService.GetParameterByCode(code);
+            modParameter.Parameter parameter = await parametersService.GetParameterByCode(code);
 
             List<SelectListItem> ParameterTypeList = await parametersService.GetParameterType();
             List<SelectListItem> ParameterList = await GetParameters();
@@ -144,7 +144,7 @@ namespace ParameterControl.Controllers.Parameters
         }
 
         [HttpPost]
-        public async Task<IActionResult> Edit([FromBody] Parameter request)
+        public async Task<IActionResult> Edit([FromBody] modParameter.Parameter request)
         {
             if (!ModelState.IsValid)
             {
@@ -171,7 +171,7 @@ namespace ParameterControl.Controllers.Parameters
         [HttpGet]
         public async Task<ActionResult> View(int code)
         {
-            Parameter parameter = await parametersService.GetParameterByCode(code);
+            modParameter.Parameter parameter = await parametersService.GetParameterByCode(code);
 
             ParameterViewModel model = await parametersService.GetParameterFormat(parameter);
 
@@ -209,7 +209,7 @@ namespace ParameterControl.Controllers.Parameters
         [HttpGet]
         public async Task<ActionResult> Desactive(int code)
         {
-            Parameter parameter = await parametersService.GetParameterByCode(code);
+            modParameter.Parameter parameter = await parametersService.GetParameterByCode(code);
 
             return View("Actions/DesactiveParameter", parameter);
         }
