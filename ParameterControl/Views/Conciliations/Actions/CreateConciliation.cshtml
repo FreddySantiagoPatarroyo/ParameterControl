@@ -63,7 +63,7 @@
                 <div class="field">
                     <label asp-for="ControlType" class="label_form">Tipo control*</label>
                     <div class="input">
-                        <input asp-for="ControlType" placeholder="Tipo de control" autocomplete="off" />
+                        <input asp-for="ControlType" placeholder="Tipo de control" autocomplete="off" maxlength="1"/>
                     </div>
                     <span id="ControlTypeError" class="text_error"></span>
                 </div>
@@ -101,7 +101,7 @@
                     <label asp-for="Policy" class="label_form">Politicas*</label>
                     <div id="input_select_policies" class="input">
                         <input class="input_select" id="input_select_filter_policies" asp-for="Policy" placeholder="Seleccione una opción" onclick="showOptionsPolicies()" readonly />
-                        <input asp-for="Policy" class="oculte" />
+                        <input asp-for="PolicyCode" class="oculte" />
                         <i class="icon icon_select icon_153"></i>
                     </div>
                     <div id="options_policies" class="options">
@@ -120,7 +120,7 @@
                     <div id="select_helper_policies" class="select_helper" onclick="showOptionsPolicies()"></div>
                 </div>
 
-                <span id="PoliciesError" class="text_error"></span>
+                <span id="PolicyError" class="text_error"></span>
             </div>
 
             <div class="form_group">
@@ -232,11 +232,11 @@
             if (name == null || value == null || name == '' || value == '') {
                 console.log("vacio");
                 document.getElementById("input_select_filter_policies").value = '';
-                document.getElementById("Policies").value = '';
+                document.getElementById("PolicyCode").value = '';
             } else {
                 console.log(value);
                 document.getElementById("input_select_filter_policies").value = name;
-                document.getElementById("Policies").value = value;
+                document.getElementById("PolicyCode").value = value;
             }
 
             showOptionsPolicies();
@@ -285,22 +285,22 @@
         let isValidName = false;
         let isValidEmail = false;
         //let isValidDestination = false;
-        let isValidPolicies = false;
+        let isValidPolicy = false;
         let isValidRequired = false;
         let isValidControlType = false;
         let isValidOperationType = false;
 
         const sendData = async () => {
             isValidName = validateInputEmpty("Name", "El nombre es requerido", "NameError");
-            isValidEmail = validateInputEmpty("Email", "El email del usuario asignado es requerido", "EmailError");
+            isValidEmail = validateEmail("Email", "El Email es requerido", "Digite un email válido", "EmailError");
             // isValidDestination = validateInputEmpty("Destination", "El destino es requerido", "DestinationError");
-            isValidPolicies = validateInputEmpty("Policies", "La politica es requerida", "PoliciesError");
+            isValidPolicy = validateInputEmpty("input_select_filter_policies", "La politica es requerida", "PolicyError");
             isValidRequired = validateInputEmpty("input_select_filter_required", "Este campo es requerido", "RequiredError");
             isValidControlType = validateInputEmpty("ControlType", "El tipo de control es requerido", "ControlTypeError");
             isValidOperationType = validateInputEmpty("OperationType", "El tipo de operacion es requerido", "OperationTypeError");
 
 
-            if (isValidName && isValidEmail && isValidPolicies && isValidRequired && validateInputEmpty && isValidOperationType) {
+            if (isValidName && isValidEmail && isValidPolicy && isValidRequired && validateInputEmpty && isValidOperationType) {
                 document.getElementById('btn_container').style.display = 'none';
                 document.getElementById('loading').style.display = 'flex';
 
@@ -309,8 +309,9 @@
                     Name: $('#Name').val(),
                     Email: $('#Email').val(),
                     Destination: $('#Destination').val(),
-                    Policies: $('#Policies').val(),
-                    Required: $('#Required').val() === "True" ? true : false,
+                    Policy: $('#input_select_filter_policies').val(),
+                    PolicyCode: $('#PolicyCode').val(),
+                    Required: $('#Required').val(),
                     ControlType: $('#ControlType').val(),
                     OperationType: $('#OperationType').val(),
                     State: true
@@ -346,6 +347,22 @@
         const validateInputEmpty = (idInput, messaje, idError) => {
             if ($(`#${idInput}`).val() == "" || $(`#${idInput}`).val() == null) {
                 $(`#${idError}`).text(`${messaje}`);
+                return false;
+            } else {
+                $(`#${idError}`).text("");
+                return true;
+            }
+        }
+
+        const validateEmail = (idInput, requiredMessage, formatMessage, idError) => {
+            const email = $(`#${idInput}`).val();
+            const emailFormat = /^[a-zA-Z0-9._-]+@@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+
+            if (!email) {
+                $(`#${idError}`).text(requiredMessage);
+                return false;
+            } else if (!emailFormat.test(email)) {
+                $(`#${idError}`).text(formatMessage);
                 return false;
             } else {
                 $(`#${idError}`).text("");

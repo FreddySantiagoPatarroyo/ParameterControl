@@ -141,13 +141,10 @@ namespace ParameterControl.Controllers.Conciliations
             {
                 try
                 {
-                    request.UserOwner = authenticatedUser.GetUserOwnerId();
-                    request.CreationDate = DateTime.Now;
-                    request.UpdateDate = DateTime.Now;
                     _logger.LogInformation($"Inicia método ConciliationController.Create {JsonConvert.SerializeObject(request)}");
-                    //var responseIn = await conciliationsServices.InsertConciliation(request);
-                    //_logger.LogInformation($"Finaliza método ConciliationController.Create {responseIn}");
-                    return Ok(new { message = "Se creo la politica de manera exitosa", state = "Success" });
+                    var responseIn = await conciliationsServices.InsertConciliation(request);
+                    _logger.LogInformation($"Finaliza método ConciliationController.Create {responseIn}");
+                    return Ok(new { message = "Se creo la conciliación de manera exitosa", state = "Success" });
                 }
                 catch (Exception ex)
                 {
@@ -190,9 +187,8 @@ namespace ParameterControl.Controllers.Conciliations
             {
                 try
                 {
-                    request.UserOwner = authenticatedUser.GetUserOwnerId();
-                    request.UpdateDate = DateTime.Now;
                     _logger.LogInformation($"Inicia método ConciliationsController.Edit {JsonConvert.SerializeObject(request)}");
+                    var responseIn = await conciliationsServices.UpdateConciliation(request);
                     return Ok(new { message = "Se actualizo la conciliación de manera exitosa", state = "Success" });
                 }
                 catch (Exception ex)
@@ -237,10 +233,7 @@ namespace ParameterControl.Controllers.Conciliations
             try
             {
                 modConciliation.Conciliation request = await conciliationsServices.GetConciliationsByCode(code);
-                request.UserOwner = authenticatedUser.GetUserOwnerId();
-                request.UpdateDate = DateTime.Now;
-                request.State = true;
-                _logger.LogInformation($"Inicia método ConciliationsController.Active {JsonConvert.SerializeObject(request)}");
+                var responseIn = await conciliationsServices.ActiveConciliation(request);
                 return Ok(new { message = "Se activo la conciliación de manera exitosa", state = "Success" });
             }
             catch (Exception ex)
@@ -264,9 +257,7 @@ namespace ParameterControl.Controllers.Conciliations
             try
             {
                 modConciliation.Conciliation request = await conciliationsServices.GetConciliationsByCode(code);
-                request.UserOwner = authenticatedUser.GetUserOwnerId();
-                request.UpdateDate = DateTime.Now;
-                request.State = false;
+                var responseIn = await conciliationsServices.DesactiveConciliation(request);
                 _logger.LogInformation($"Inicia método ConciliationsController.Desactive {JsonConvert.SerializeObject(request)}");
                 return Ok(new { message = "Se desactivo la conciliación de manera exitosa", state = "Success" });
             }
@@ -350,7 +341,7 @@ namespace ParameterControl.Controllers.Conciliations
 
         public async Task<List<SelectListItem>> GetPolicies()
         {
-            List<modPolicy.Policy> policies = await policiesServices.GetPolicies();
+            List<modPolicy.Policy> policies = await conciliationsServices.GetPolicies();
             return policies.Select(policy => new SelectListItem(policy.Name, policy.Code.ToString())).ToList();
         }
     }

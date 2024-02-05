@@ -66,7 +66,7 @@
                 <div class="field">
                     <label asp-for="ControlType" class="label_form">Tipo control*</label>
                     <div class="input">
-                        <input asp-for="ControlType" placeholder="Tipo de control" autocomplete="off" />
+                        <input asp-for="ControlType" placeholder="Tipo de control" autocomplete="off" maxlength="1"/>
                     </div>
                     <span id="ControlTypeError" class="text_error"></span>
                 </div>
@@ -104,7 +104,7 @@
                     <label asp-for="Policy" class="label_form">Politicas*</label>
                     <div id="input_select_policies" class="input">
                         <input class="input_select" id="input_select_filter_policies" asp-for="Policy" placeholder="Seleccione una opción" onclick="showOptionsPolicies()" readonly />
-                        <input class="oculte" asp-for="Policy" />
+                        <input class="oculte" asp-for="PolicyCode" />
                         <i class="icon icon_select icon_153"></i>
                     </div>
                     <div id="options_policies" class="options">
@@ -234,11 +234,11 @@
             if (name == null || value == null || name == '' || value == '') {
                 console.log("vacio");
                 document.getElementById("input_select_filter_policies").value = '';
-                document.getElementById("Policies").value = '';
+                document.getElementById("PolicyCode").value = '';
             } else {
                 console.log(value);
                 document.getElementById("input_select_filter_policies").value = name;
-                document.getElementById("Policies").value = value;
+                document.getElementById("PolicyCode").value = value;
             }
 
             showOptionsPolicies();
@@ -296,8 +296,8 @@
         const sendData = async () => {
             isValidCode = validateInputEmpty("Code", "El código es requerido", "CodeError");
             isValidName = validateInputEmpty("Name", "El nombre es requerido", "NameError");
-            isValidEmail = validateInputEmpty("Email", "El email del usuario asignado es requerido", "EmailError");
-            isValidPolicies = validateInputEmpty("Policies", "La política es requerida", "PoliciesError");
+            isValidEmail = validateEmail("Email", "El Email es requerido", "Digite un email válido", "EmailError");
+            isValidPolicies = validateInputEmpty("input_select_filter_policies", "La política es requerida", "PoliciesError");
             isValidRequired = validateInputEmpty("input_select_filter_required", "Este campo es requerido", "RequiredError");
             isValidControlType = validateInputEmpty("ControlType", "El tipo de control es requerido", "ControlTypeError");
             isValidOperationType = validateInputEmpty("OperationType", "El tipo de operacion es requerido", "OperationTypeError");
@@ -313,8 +313,9 @@
                     Name: $('#Name').val(),
                     Email: $('#Email').val(),
                     Destination: $('#Destination').val(),
-                    Policies: $('#Policies').val(),
-                    Required: $('#Required').val() === "True" ? true : false,
+                    Policy: $('#input_select_filter_policies').val(),
+                    PolicyCode: $('#PolicyCode').val(),
+                    Required: $('#Required').val(),
                     State: true,
                     ControlType: $('#ControlType').val(),
                     OperationType: $('#OperationType').val(),
@@ -372,6 +373,22 @@
             }
 
             return date;
+        }
+
+        const validateEmail = (idInput, requiredMessage, formatMessage, idError) => {
+            const email = $(`#${idInput}`).val();
+            const emailFormat = /^[a-zA-Z0-9._-]+@@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+
+            if (!email) {
+                $(`#${idError}`).text(requiredMessage);
+                return false;
+            } else if (!emailFormat.test(email)) {
+                $(`#${idError}`).text(formatMessage);
+                return false;
+            } else {
+                $(`#${idError}`).text("");
+                return true;
+            }
         }
     </script>
 

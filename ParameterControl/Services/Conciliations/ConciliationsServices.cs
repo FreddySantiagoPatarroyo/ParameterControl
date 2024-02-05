@@ -230,22 +230,31 @@ namespace ParameterControl.Services.Conciliations
         public async Task<List<SelectListItem>> GetOperationsType()
         {
             List<SelectListItem> operationsType = new List<SelectListItem>().ToList();
-            operationsType.Add(new SelectListItem("Model", "1"));
-            operationsType.Add(new SelectListItem("Fija", "2"));
+            operationsType.Add(new SelectListItem("Model", "Model"));
+            operationsType.Add(new SelectListItem("Fija", "Fija"));
             return operationsType;
         }
 
 		public async Task<List<modPolicy.Policy>> GetPolicies()
         {
             List<modPolicy.Policy> policies = await policiesServices.GetPolicies();
-            return policies;
+            List<modPolicy.Policy> policiesActives = new List<modPolicy.Policy>();
+
+            foreach (var policy in policies)
+            {
+                if(policy.State == true) { 
+                    policiesActives.Add(policy);
+                }
+            }
+
+            return policiesActives;
         }
 
         public async Task<List<SelectListItem>> GetRequired()
         {
             List<SelectListItem> required = new List<SelectListItem>().ToList();
-            required.Add(new SelectListItem("Si", "True"));
-            required.Add(new SelectListItem("No", "False"));
+            required.Add(new SelectListItem("Si", "SI"));
+            required.Add(new SelectListItem("No", "NO"));
             return required;
         }
 
@@ -318,17 +327,6 @@ namespace ParameterControl.Services.Conciliations
             return conciliationsFilterPagination;
         }
 
-        public async Task<string> InsertConciliation(modConciliation.Conciliation request)
-        {
-            ConciliationModel conciliation = new ConciliationModel
-            {
-            };
-
-            var response = await conciliationServices.InsertConciliation(conciliation);
-
-            return response.Equals(1) ? "Conciliacion creada correctamente" : "Error creando la conciliacion";
-        }
-
         private async Task<List<modConciliation.Conciliation>> MapperConciliation(List<ConciliationModel> conciliationModel)
         {
             return await Task.Run(() =>
@@ -367,15 +365,51 @@ namespace ParameterControl.Services.Conciliations
                     State = conciliation.State,
                     StatePolicy = conciliation.StatePolicy
                 };
-                Console.WriteLine(conciliation.PolicyId);
-                Console.WriteLine(model.PolicyCode);
                 return model;
             });
+        }
+
+        public async Task<string> InsertConciliation(modConciliation.Conciliation request)
+        {
+            ConciliationModel conciliation = new ConciliationModel
+            {
+                ConciliationName = request.Name,
+                Email = request.Email,
+                Destination =  request.Destination,
+                AssignmentType = request.ControlType,
+                OperationType = request.OperationType,
+                PolicyId = request.PolicyCode,
+                RequiredApproval = request.Required,
+                CreationDate = DateTime.Now,
+                ModifieldDate = DateTime.Now,
+                ModifieldBy = "CreateToUserDev",
+                State = request.State,
+            };
+
+            var response = await conciliationServices.InsertConciliation(conciliation);
+
+            return response.Equals(1) ? "Conciliacion creada correctamente" : "Error creando la conciliacion";
         }
 
         public async Task<string> UpdateConciliation(modConciliation.Conciliation conciliation)
         {
             var mapping = await MapperUpdateConciliation(conciliation);
+            var response = await conciliationServices.UpdateConciliation(mapping);
+
+            return response.Equals(1) ? "Conciliacion actualizada correctamente" : "Error actualizando la conciliacion";
+        }
+
+        public async Task<string> ActiveConciliation(modConciliation.Conciliation conciliation)
+        {
+            var mapping = await MapperActiveConciliation(conciliation);
+            var response = await conciliationServices.UpdateConciliation(mapping);
+
+            return response.Equals(1) ? "Conciliacion actualizada correctamente" : "Error actualizando la conciliacion";
+        }
+
+        public async Task<string> DesactiveConciliation(modConciliation.Conciliation conciliation)
+        {
+            var mapping = await MapperDesctiveConciliation(conciliation);
             var response = await conciliationServices.UpdateConciliation(mapping);
 
             return response.Equals(1) ? "Conciliacion actualizada correctamente" : "Error actualizando la conciliacion";
@@ -389,9 +423,62 @@ namespace ParameterControl.Services.Conciliations
                 {
                     Code = conciliation.Code,
                     ConciliationName = conciliation.Name,
-                    Description = conciliation.Description,
-                    ModifieldBy = conciliation.UserOwner,
-                    State = conciliation.State
+                    Email = conciliation.Email,
+                    Destination = conciliation.Destination,
+                    AssignmentType = conciliation.ControlType,
+                    OperationType = conciliation.OperationType,
+                    PolicyId = conciliation.PolicyCode,
+                    RequiredApproval = conciliation.Required,
+                    CreationDate = conciliation.CreationDate,
+                    ModifieldDate = DateTime.Now,
+                    ModifieldBy = "CreateToUserDev",
+                    State = conciliation.State,
+                };
+                return model;
+            });
+        }
+
+        private async Task<ConciliationModel> MapperActiveConciliation(modConciliation.Conciliation conciliation)
+        {
+            return await Task.Run(() =>
+            {
+                ConciliationModel model = new ConciliationModel
+                {
+                    Code = conciliation.Code,
+                    ConciliationName = conciliation.Name,
+                    Email = conciliation.Email,
+                    Destination = conciliation.Destination,
+                    AssignmentType = conciliation.ControlType,
+                    OperationType = conciliation.OperationType,
+                    PolicyId = conciliation.PolicyCode,
+                    RequiredApproval = conciliation.Required,
+                    CreationDate = conciliation.CreationDate,
+                    ModifieldDate = DateTime.Now,
+                    ModifieldBy = "CreateToUserDev",
+                    State = true,
+                };
+                return model;
+            });
+        }
+
+        private async Task<ConciliationModel> MapperDesctiveConciliation(modConciliation.Conciliation conciliation)
+        {
+            return await Task.Run(() =>
+            {
+                ConciliationModel model = new ConciliationModel
+                {
+                    Code = conciliation.Code,
+                    ConciliationName = conciliation.Name,
+                    Email = conciliation.Email,
+                    Destination = conciliation.Destination,
+                    AssignmentType = conciliation.ControlType,
+                    OperationType = conciliation.OperationType,
+                    PolicyId = conciliation.PolicyCode,
+                    RequiredApproval = conciliation.Required,
+                    CreationDate = conciliation.CreationDate,
+                    ModifieldDate = DateTime.Now,
+                    ModifieldBy = "CreateToUserDev",
+                    State = false,
                 };
                 return model;
             });

@@ -32,7 +32,7 @@ namespace ParameterControl.Stage.DataAccess
                             command.Parameters.Add(new OracleParameter("PARAM_NAME", entity.Name));
                             command.Parameters.Add(new OracleParameter("PARAM_DESCRIPTION", entity.Description));
                             command.Parameters.Add(new OracleParameter("PARAM_MODIFIELDBY", entity.ModifieldBy));
-                            command.Parameters.Add(new OracleParameter("PARAM_OBJETIVO", entity.Objetive));
+                            command.Parameters.Add(new OracleParameter("PARAM_OBJETIVO", entity.Impact));
                             command.Parameters.Add(new OracleParameter("PARAM_ESTADO_ACTIVACION", Convert.ToInt32(entity.State)));
                             OracleDataReader reader = command.ExecuteReader();
                             return response = 1;

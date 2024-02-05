@@ -153,10 +153,14 @@ namespace ParameterControl.Stage.Impl
                     Code = Convert.ToInt32(dr["COD_ESCENARIO"]),
                     Name = dr["NOMBRE_ESCENARIO"] is DBNull ? string.Empty : dr["NOMBRE_ESCENARIO"].ToString(),
                     Description = dr["DESCRIPCION"] is DBNull ? string.Empty : dr["DESCRIPCION"].ToString(),
-                    Objetive = dr["IMPACTO"] is DBNull ? string.Empty : dr["IMPACTO"].ToString(),
-                    //CreationDate = dr["FECHA_CREACION"] is DBNull ? DateTime.Now : Convert.ToDateTime(dr["FECHA_CREACION"]),
+                    Impact = dr["IMPACTO"] is DBNull ? string.Empty : dr["IMPACTO"].ToString(),
+                    Conciliation = Convert.ToInt32(dr["COD_CONCILIACION"]),
+                    CreationDate = dr["FECHA_CREACION"] is DBNull ? DateTime.Now : Convert.ToDateTime(dr["FECHA_CREACION"]),
                     ModifieldDate = dr["FECHA_ACTUALIZACION"] is DBNull ? DateTime.Now : Convert.ToDateTime(dr["FECHA_ACTUALIZACION"]),
-                    ModifieldBy = dr["MODIFICADO_POR"] is DBNull ? string.Empty : dr["MODIFICADO_POR"].ToString()
+                    ModifieldBy = dr["MODIFICADO_POR"] is DBNull ? string.Empty : dr["MODIFICADO_POR"].ToString(),
+                    State = dr["ESTADO_ACTIVACION"] is DBNull ? false : Convert.ToBoolean(dr["ESTADO_ACTIVACION"]),
+                    ConciliationName = dr["NOMBRE_CONCILIACION"] is DBNull ? string.Empty : dr["NOMBRE_CONCILIACION"].ToString(),
+                    StateConciliation = dr["ESTADO_ACTIVACION_CONCILIACION"] is DBNull ? false : Convert.ToBoolean(dr["ESTADO_ACTIVACION_CONCILIACION"])
                 };
                 return model;
             });
