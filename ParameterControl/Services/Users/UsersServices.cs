@@ -13,11 +13,11 @@ namespace ParameterControl.Services.Users
     public class UsersServices : IUsersServices
     {
         private List<modUser.User> users = new List<modUser.User>();
-        private readonly IUserService _authService;
+        private readonly IUserService _userService;
 
         public UsersServices(IConfiguration configuration)
         {
-            _authService = new UserService(configuration);
+            _userService = new UserService(configuration);
             users = new List<modUser.User>()
             {
                 new modUser.User(){
@@ -81,25 +81,25 @@ namespace ParameterControl.Services.Users
 
         public async Task<List<modUser.User>> GetUsers()
         {
-            var collectionUsers = await _authService.SelectAllUser();
+            var collectionUsers = await _userService.SelectAllUser();
             var response = await MapperUser(collectionUsers);
             return response;
         }
 
         public async Task<int> CountUsers()
         {
-            var collectionUsers = await _authService.SelectAllUser();
+            var collectionUsers = await _userService.SelectAllUser();
             var response = await MapperUser(collectionUsers);
             return response.Count();
 
-            //return await _authService.SelectCountUser();
+            //return await _userService.SelectCountUser();
         }
 
         public async Task<List<modUser.User>> GetUsersPagination(PaginationViewModel pagination)
         {
             try
             {
-                var response = await _authService.SelectPaginatorUser(pagination.Page, pagination.RecordsPage);
+                var response = await _userService.SelectPaginatorUser(pagination.Page, pagination.RecordsPage);
                 var result = await MapperUser(response);
 
                 return result;
@@ -173,7 +173,7 @@ namespace ParameterControl.Services.Users
 
         public async Task<modUser.User> GetUsersByCode(int code)
         {
-            var response = await _authService.SelectByIdUser(new UserModel { Code = code });
+            var response = await _userService.SelectByIdUser(new UserModel { Code = code });
             var user = await MapperToUser(response);
             return user;
         }
@@ -256,7 +256,7 @@ namespace ParameterControl.Services.Users
                     User = request.UserOwner
                 };
 
-                var response = await _authService.InsertUser(user);
+                var response = await _userService.InsertUser(user);
 
                 return response.Equals(1) ? "Usuario creado correctamente" : "Error creando el usuario";
             }
@@ -303,7 +303,7 @@ namespace ParameterControl.Services.Users
         public async Task<string> UpdateUser(modUser.User User)
         {
             var mapping = await MapperUpdateUser(User);
-            var response = await _authService.UpdateUser(mapping);
+            var response = await _userService.UpdateUser(mapping);
 
             return response.Equals(1) ? "Usuario actualizado correctamente" : "Error actualizando el usuario";
         }
@@ -323,7 +323,7 @@ namespace ParameterControl.Services.Users
 
         public async Task<modUser.User> GetByEmailAndUserName(string userName, string email)
         {
-            var collectionUsers = await _authService.SelectAllUser();
+            var collectionUsers = await _userService.SelectAllUser();
             var response = await MapperUser(collectionUsers);
             var user = response.FirstOrDefault(x => x.User_.Equals(userName) && x.Email.Equals(email));
             return user;
