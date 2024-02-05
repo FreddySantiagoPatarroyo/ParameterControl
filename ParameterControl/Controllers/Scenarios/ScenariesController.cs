@@ -1,9 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
+using ParameterControl.Models.Conciliation;
 using ParameterControl.Models.Filter;
+using ParameterControl.Models.Pagination;
 using ParameterControl.Models.Scenery;
 using ParameterControl.Services.Authenticated;
+using ParameterControl.Services.Conciliations;
 using ParameterControl.Services.Rows;
 using ParameterControl.Services.Scenarios;
 using modConciliation = ParameterControl.Models.Conciliation;
@@ -34,9 +37,10 @@ namespace ParameterControl.Controllers.Scenarios
         }
 
         [HttpGet]
-        public async Task<ActionResult> Scenarios()
+        public async Task<ActionResult> Scenarios(PaginationViewModel paginationViewModel)
         {
-            List<modScenery.Scenery> Scenarios = await scenariosServices.GetScenarios();
+            List<modScenery.Scenery> Scenarios = await scenariosServices.GetScenariosPagination(paginationViewModel);
+            int TotalScenarios = await scenariosServices.CountScenarios();
 
             TableScenarios.Data = await scenariosServices.GetScenariosFormat(Scenarios);
 
@@ -48,13 +52,22 @@ namespace ParameterControl.Controllers.Scenarios
             TableScenarios.IsInactivate = true;
             TableScenarios.Filter = true;
 
+            var resultViemModel = new PaginationResult<TableScenariosViewModel>()
+            {
+                Elements = TableScenarios,
+                Page = paginationViewModel.Page,
+                RecordsPage = paginationViewModel.RecordsPage,
+                TotalRecords = TotalScenarios,
+                BaseUrl = Url.Action() + "?"
+            };
+
             ViewBag.ApplyFilter = false;
 
-            return View("Scenarios", TableScenarios);
+            return View("Scenarios", resultViemModel);
         }
 
         [HttpGet]
-        public async Task<ActionResult> ScenariosFilter(string filterColunm = "", string filterValue = "", string typeRow = "")
+        public async Task<ActionResult> ScenariosFilter(PaginationViewModel paginationViewModel, string filterColunm = "", string filterValue = "", string typeRow = "")
         {
 
             if (filterColunm == null || filterColunm == "" || filterValue == null || filterValue == "")
@@ -70,7 +83,9 @@ namespace ParameterControl.Controllers.Scenarios
             };
 
             List<SceneryViewModel> scenariosFilter = await scenariosServices.GetFilterScenarios(filter);
-            TableScenarios.Data = scenariosFilter;
+            int TotalScenarios = scenariosFilter.Count();
+
+            TableScenarios.Data = scenariosServices.GetFilterPagination(scenariosFilter, paginationViewModel, TotalScenarios);
 
             TableScenarios.Rows = rows.RowsScenarios();
 
@@ -80,9 +95,18 @@ namespace ParameterControl.Controllers.Scenarios
             TableScenarios.IsInactivate = true;
             TableScenarios.Filter = true;
 
+            var resultViemModel = new PaginationResult<TableScenariosViewModel>()
+            {
+                Elements = TableScenarios,
+                Page = paginationViewModel.Page,
+                RecordsPage = paginationViewModel.RecordsPage,
+                TotalRecords = TotalScenarios,
+                BaseUrl = Url.Action() + "?filterColunm=" + filterColunm + "&filterValue=" + filterValue + "&typeRow=" + typeRow + "&"
+            };
+
             ViewBag.ApplyFilter = true;
 
-            return View("Scenarios", TableScenarios);
+            return View("Scenarios", resultViemModel);
         }
 
 
@@ -113,12 +137,9 @@ namespace ParameterControl.Controllers.Scenarios
             {
                 try
                 {
-                    request.UserOwner = authenticatedUser.GetUserOwnerId();
-                    request.CreationDate = DateTime.Now;
-                    request.UpdateDate = DateTime.Now;
                     _logger.LogInformation($"Inicia método ConciliationController.Create {JsonConvert.SerializeObject(request)}");
-                    //var responseIn = await conciliationsServices.InsertConciliation(request);
-                    //_logger.LogInformation($"Finaliza método ConciliationController.Create {responseIn}");
+                    var responseIn = await scenariosServices.InsertScenery(request);
+                    _logger.LogInformation($"Finaliza método ConciliationController.Create {responseIn}");
                     return Ok(new { message = "Se creo el escenario de manera exitosa", state = "Success" });
                 }
                 catch (Exception ex)
@@ -140,16 +161,6 @@ namespace ParameterControl.Controllers.Scenarios
 
             SceneryCreateViewModel model = await scenariosServices.GetSceneryFormatCreate(scenery);
 
-            //SceneryCreateViewModel model = new SceneryCreateViewModel()
-            //{
-            //    Code = scenery.Code,
-            //    Name = scenery.Name,
-            //    Impact = scenery.Impact,
-            //    Conciliation = scenery.Conciliation,
-            //    State = scenery.State,
-            //    CreationDate = scenery.CreationDate
-            //};
-
             model.ImpactOptions = ImpactOptionsList;
             model.ConciliationOptions = ConciliationOptionsList;
 
@@ -168,9 +179,9 @@ namespace ParameterControl.Controllers.Scenarios
             {
                 try
                 {
-                    request.UserOwner = authenticatedUser.GetUserOwnerId();
-                    request.UpdateDate = DateTime.Now;
                     _logger.LogInformation($"Inicia método ScenariosController.Edit {JsonConvert.SerializeObject(request)}");
+                    var responseIn = await scenariosServices.UpdateScenery(request);
+                    _logger.LogInformation($"Finaliza método ConciliationController.Edit {responseIn}");
                     return Ok(new { message = "Se actualizo el escenario de manera exitosa", state = "Success" });
                 }
                 catch (Exception ex)
@@ -186,7 +197,9 @@ namespace ParameterControl.Controllers.Scenarios
         {
             Scenery scenery = await scenariosServices.GetSceneryByCode(code);
 
-            return View("Actions/ViewScenery", scenery);
+            SceneryViewModel model = await scenariosServices.GetSceneryFormat(scenery);
+
+            return View("Actions/ViewScenery", model);
         }
 
         [HttpGet]
@@ -203,10 +216,9 @@ namespace ParameterControl.Controllers.Scenarios
             try
             {
                 Scenery request = await scenariosServices.GetSceneryByCode(code);
-                request.UserOwner = authenticatedUser.GetUserOwnerId();
-                request.UpdateDate = DateTime.Now;
-                request.State = true;
                 _logger.LogInformation($"Inicia método ScenariosController.Active {JsonConvert.SerializeObject(request)}");
+                var responseIn = await scenariosServices.ActiveScenery(request);
+                _logger.LogInformation($"Finaliza método ConciliationController.Active {responseIn}");
                 return Ok(new { message = "Se activo el escenario de manera exitosa", state = "Success" });
             }
             catch (Exception ex)
@@ -230,10 +242,9 @@ namespace ParameterControl.Controllers.Scenarios
             try
             {
                 Scenery request = await scenariosServices.GetSceneryByCode(code);
-                request.UserOwner = authenticatedUser.GetUserOwnerId();
-                request.UpdateDate = DateTime.Now;
-                request.State = false;
                 _logger.LogInformation($"Inicia método ScenariosController.Desactive {JsonConvert.SerializeObject(request)}");
+                var responseIn = await scenariosServices.DesactiveScenery(request);
+                _logger.LogInformation($"Finaliza método ConciliationController.Desactive {responseIn}");
                 return Ok(new { message = "Se desactivo el escenario de manera exitosa", state = "Success" });
             }
             catch (Exception ex)
@@ -316,7 +327,7 @@ namespace ParameterControl.Controllers.Scenarios
 
         public async Task<List<SelectListItem>> GetConciliation()
         {
-            List<modConciliation.Conciliation> conciliations = await scenariosServices.GetConciliation();
+            List<modConciliation.Conciliation> conciliations = await scenariosServices.GetConciliations();
             return conciliations.Select(policy => new SelectListItem(policy.Name, policy.Code.ToString())).ToList();
         }
     }

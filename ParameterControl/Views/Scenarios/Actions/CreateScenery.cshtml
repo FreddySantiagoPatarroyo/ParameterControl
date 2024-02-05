@@ -72,7 +72,7 @@
                     <label asp-for="Conciliation" class="label_form">Conciliacion*</label>
                     <div id="input_select_conciliation" class="input">
                         <input class="input_select" id="input_select_filter_conciliation" asp-for="Conciliation" placeholder="Seleccione una opción" onclick="showOptionsConciliation()" />
-                        <input class="oculte" asp-for="Conciliation" />
+                        <input class="oculte" asp-for="CodeConciliation" />
                         <i class="icon icon_select icon_153"></i>
                     </div>
                     <div id="options_conciliation" class="options">
@@ -120,6 +120,7 @@
 @section Scripts {
     <partial name="_ValidationScriptsPartial.cshtml" />
     <script>
+        /* ----------- Select de impacto ----------- */
         let viewOptions = false;
 
         const showOptionsImpact = () => {
@@ -155,8 +156,7 @@
 
         }
 
-
-
+        /* ----------- Select de conciliaciones ----------- */
         let viewOptionsConciliation = false;
 
         const showOptionsConciliation = () => {
@@ -181,11 +181,11 @@
             if (name == null || value == null || name == '' || value == '') {
                 console.log("vacio");
                 document.getElementById("input_select_filter_conciliation").value = '';
-                document.getElementById("Conciliation").value = '';
+                document.getElementById("CodeConciliation").value = '';
             } else {
                 console.log(value);
                 document.getElementById("input_select_filter_conciliation").value = name;
-                document.getElementById("Conciliation").value = value;
+                document.getElementById("CodeConciliation").value = value;
             }
 
             showOptionsConciliation();
@@ -194,7 +194,7 @@
     </script>
 
     <script>
-        const urlScenery = '@Url.Action("Edit")';
+        const urlScenery = '@Url.Action("Create")';
         let data;
         let isValidCode = false;
         let isValidName = false;
@@ -205,7 +205,7 @@
             isValidCode = validateInputEmpty("Code", "El codigo es requerido", "CodeError");
             isValidName = validateInputEmpty("Name", "El nombre es requerido", "NameError");
             // isValidImpact = validateInputEmpty("Impact", "El impacto es requerido", "ImpactError");
-            isValidConciliation = validateInputEmpty("Conciliation", "La conciliacion es requerido", "ConciliationError");
+            isValidConciliation = validateInputEmpty("input_select_filter_conciliation", "La conciliacion es requerido", "ConciliationError");
 
 
             if (isValidCode && isValidName && isValidConciliation) {
@@ -213,11 +213,10 @@
                 document.getElementById('loading').style.display = 'flex';
 
                 data = {
-                    Id: $('#Id').val(),
-                    Code: $('#Code').val(),
                     Name: $('#Name').val(),
                     Impact: $('#Impact').val(),
-                    Conciliation: $('#Conciliation').val(),
+                    Conciliation: $('#input_select_filter_conciliation').val(),
+                    CodeConciliation: $('#CodeConciliation').val(),
                     State: true
                 }
 

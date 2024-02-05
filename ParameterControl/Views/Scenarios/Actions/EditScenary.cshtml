@@ -46,7 +46,7 @@
 
             <div class="form_group">
                 <div class="field">
-                    <label asp-for="Impact" class="label_form">Impacto*</label>
+                    <label asp-for="Impact" class="label_form">Impacto</label>
                     <div id="input_select" class="input">
                         <input class="input_select" id="input_select_filter" asp-for="Impact"  placeholder="Seleccione una opción" onclick="showOptionsImpact()" />
                         <input class="oculte" asp-for="Impact" />
@@ -68,12 +68,13 @@
                     <div id="select_helper" class="select_helper" onclick="showOptionsImpact()"></div>
                 </div>
             </div>
+
             <div class="form_group">
                 <div class="field">
                     <label asp-for="Conciliation" class="label_form">Conciliacion*</label>
                     <div id="input_select_conciliation" class="input">
                         <input class="input_select" id="input_select_filter_conciliation" asp-for="Conciliation" placeholder="Seleccione una opción" onclick="showOptionsConciliation()"/>
-                        <input class="oculte" asp-for="Conciliation" />
+                        <input class="oculte" asp-for="CodeConciliation" />
                         <i class="icon icon_select icon_153"></i>
                     </div>
                     <div id="options_conciliation" class="options">
@@ -93,8 +94,6 @@
                 </div>
                 <span id="ConciliationError" class="text_error"></span>
             </div>
-
-     
 
             <p class="note_text"><span>Nota: </span>Los campos con (*) son obligatorios</p>
 
@@ -121,6 +120,7 @@
 @section Scripts {
     <partial name="_ValidationScriptsPartial.cshtml" />
     <script>
+        /* ----------- Select de impacto ----------- */
         let viewOptions = false;
 
         const showOptionsImpact = () => {
@@ -156,8 +156,7 @@
 
         }
 
-
-
+        /* ----------- Select de conciliaciones ----------- */
         let viewOptionsConciliation = false;
 
         const showOptionsConciliation = () => {
@@ -182,11 +181,11 @@
             if (name == null || value == null || name == '' || value == '') {
                 console.log("vacio");
                 document.getElementById("input_select_filter_conciliation").value = '';
-                document.getElementById("Conciliation").value = '';
+                document.getElementById("CodeConciliation").value = '';
             } else {
                 console.log(value);
                 document.getElementById("input_select_filter_conciliation").value = name;
-                document.getElementById("Conciliation").value = value;
+                document.getElementById("CodeConciliation").value = value;
             }
 
             showOptionsConciliation();
@@ -206,7 +205,7 @@
             isValidCode = validateInputEmpty("Code", "El codigo es requerido", "CodeError");
             isValidName = validateInputEmpty("Name", "El nombre es requerido", "NameError");
             // isValidImpact = validateInputEmpty("Impact", "El impacto es requerido", "ImpactError");
-            isValidConciliation = validateInputEmpty("Conciliation", "La conciliacion es requerido", "ConciliationError");
+            isValidConciliation = validateInputEmpty("input_select_filter_conciliation", "La conciliacion es requerido", "ConciliationError");
             
 
             if (isValidCode && isValidName && isValidConciliation) {
@@ -218,8 +217,9 @@
                 data = {
                     Code: $('#Code').val(),
                     Name: $('#Name').val(),
-                    Impact: $('#Inpact').val(),
-                    Conciliation: $('#Conciliation').val(),
+                    Impact: $('#Impact').val(),
+                    Conciliation: $('#input_select_filter_conciliation').val(),
+                    CodeConciliation: $('#CodeConciliation').val(),
                     State: true,
                     CreationDate: new Date(CreationDateFormat)
                 }

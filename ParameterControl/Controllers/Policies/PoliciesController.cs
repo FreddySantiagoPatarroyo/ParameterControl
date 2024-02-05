@@ -14,7 +14,7 @@ using modPolicy = ParameterControl.Models.Policy;
 
 namespace ParameterControl.Controllers.Policies
 {
-    [Authorize(Roles = "E")]
+    [Authorize(Roles = "A")]
     public class PoliciesController : Controller
     {
         public TablePoliciesViewModel TablePolicies = new TablePoliciesViewModel();
