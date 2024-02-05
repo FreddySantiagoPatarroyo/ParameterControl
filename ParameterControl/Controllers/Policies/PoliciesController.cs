@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
 using ParameterControl.Models.Filter;
@@ -13,6 +14,7 @@ using modPolicy = ParameterControl.Models.Policy;
 
 namespace ParameterControl.Controllers.Policies
 {
+    [Authorize(Roles = "E")]
     public class PoliciesController : Controller
     {
         public TablePoliciesViewModel TablePolicies = new TablePoliciesViewModel();

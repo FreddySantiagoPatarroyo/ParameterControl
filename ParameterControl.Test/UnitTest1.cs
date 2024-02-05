@@ -35,8 +35,7 @@ namespace ParameterControl.Test
                 {
                     Name = "PO_AIC_435",
                     Description = "Conciliacion Mandante Bonos Prepagos",
-                    Objetive = "Mitigar pérdidas de ingresos por inconsistencias en el aprovisionamiento de las ofertas prepago sin costo en la plataforma YELLOWBRICK",
-                    Conciliation = 1
+                    Objetive = "Mitigar pérdidas de ingresos por inconsistencias en el aprovisionamiento de las ofertas prepago sin costo en la plataforma YELLOWBRICK"
                 };
                 var response = await _policiesServices.InsertPolicy(policy);
 

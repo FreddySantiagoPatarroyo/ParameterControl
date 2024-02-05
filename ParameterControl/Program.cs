@@ -8,6 +8,7 @@ using ParameterControl.Services.Results;
 using ParameterControl.Services.Rows;
 using ParameterControl.Services.Scenarios;
 using ParameterControl.Services.Users;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -27,6 +28,14 @@ builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 builder.Services.AddScoped<Rows>();
 
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(option =>
+    {
+        option.LoginPath = "/Login/Login";
+        option.ExpireTimeSpan = TimeSpan.FromMinutes(5);
+        option.AccessDeniedPath = "/Home/Error";
+    });
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -41,6 +50,8 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+
+app.UseAuthentication();
 
 app.UseAuthorization();
 

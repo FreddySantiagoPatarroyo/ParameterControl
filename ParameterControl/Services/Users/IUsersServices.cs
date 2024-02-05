@@ -8,17 +8,17 @@ namespace ParameterControl.Services.Users
 {
     public interface IUsersServices
     {
-        Task<List<User>> GetUsers();
-        Task<User> GetUsersByCode(int code);
+        Task<List<modUser.User>> GetUsers();
+        Task<modUser.User> GetUsersByCode(int code);
         Task<List<UserViewModel>> GetFilterUsers(FilterViewModel filterModel);
-        Task<List<UserViewModel>> GetUsersFormat(List<User> users);
+        Task<List<UserViewModel>> GetUsersFormat(List<modUser.User> users);
         Task<UserViewModel> GetUserFormat(modUser.User user);
         Task<UserCreateViewModel> GetUserFormatCreate(modUser.User user);
         Task<string> InsertUser(modUser.User user);
         Task<string> UpdateUser(modUser.User user);
         Task<int> CountUsers();
         List<UserViewModel> GetFilterPagination(List<UserViewModel> inicialUsers, PaginationViewModel paginationViewModel, int totalData);
-        Task<List<User>> GetUsersPagination(PaginationViewModel pagination);
-        Task<List<User>> GetUsersFake();
+        Task<List<modUser.User>> GetUsersPagination(PaginationViewModel pagination);
+        Task<List<modUser.User>> GetUsersFake();
     }
 }

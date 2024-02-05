@@ -5,13 +5,13 @@ VisualStudioVersion = 17.8.34309.116
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ParameterControl", "ParameterControl\ParameterControl.csproj", "{DE383B5E-4639-4625-A510-FD8FAB7689A0}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ParameterControl.Auth", "ParameterControl.Auth", "{91079B39-5F50-456A-805D-3800C3F2B7EF}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ParameterControl.User", "ParameterControl.User", "{91079B39-5F50-456A-805D-3800C3F2B7EF}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ParameterControl.Auth.Entities", "ParameterControl.Auth.Entities\ParameterControl.Auth.Entities.csproj", "{A116EB3A-DA1A-42C3-BFEA-116E083930A8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ParameterControl.User.Entities", "ParameterControl.Auth.Entities\ParameterControl.User.Entities.csproj", "{A116EB3A-DA1A-42C3-BFEA-116E083930A8}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ParameterControl.Auth.Interfaces", "ParameterControl.Auth.Interfaces\ParameterControl.Auth.Interfaces.csproj", "{6ABEB100-AA9D-495A-9F29-F4EE624E13A9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ParameterControl.User.Interfaces", "ParameterControl.Auth.Interfaces\ParameterControl.User.Interfaces.csproj", "{6ABEB100-AA9D-495A-9F29-F4EE624E13A9}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ParameterControl.Auth.Impl", "ParameterControl.Auth.Impl\ParameterControl.Auth.Impl.csproj", "{36F054AC-086E-4116-AD55-68006C369DC5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ParameterControl.User.Impl", "ParameterControl.Auth.Impl\ParameterControl.User.Impl.csproj", "{36F054AC-086E-4116-AD55-68006C369DC5}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ParameterControl.Conciliation", "ParameterControl.Conciliation", "{61F796B3-8DFB-498E-8B54-D8559B8510B7}"
 EndProject
@@ -35,7 +35,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ParameterControl.Policy.Int
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ParameterControl.Test", "ParameterControl.Test\ParameterControl.Test.csproj", "{2DDB2A2E-0DBF-422F-9C5F-284F6A5069D9}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ParameterControl.Auth.DataAccess", "ParameterControl.Auth.DataAccess\ParameterControl.Auth.DataAccess.csproj", "{A5B7BCFB-6E39-4AFC-B5E0-E105311E4CAE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ParameterControl.User.DataAccess", "ParameterControl.Auth.DataAccess\ParameterControl.User.DataAccess.csproj", "{A5B7BCFB-6E39-4AFC-B5E0-E105311E4CAE}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ParameterControl.Parameter", "ParameterControl.Parameter", "{BCD33ACB-1CCE-427E-AD50-1ACB6BCE3B1C}"
 EndProject
@@ -49,23 +49,23 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ParameterControl.Parameter.
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ParameterControl.LoadControl", "ParameterControl.LoadControl", "{3373F4CA-3671-4006-8DBC-8292289876BC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ParameterControl.LoadControl.Entities", "ParameterControl.LoadControl.Entities\ParameterControl.LoadControl.Entities.csproj", "{6B7F9384-3FEE-40BF-B933-5D6B4B8AF89D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ParameterControl.LoadControl.Entities", "ParameterControl.LoadControl.Entities\ParameterControl.LoadControl.Entities.csproj", "{6B7F9384-3FEE-40BF-B933-5D6B4B8AF89D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ParameterControl.LoadControl.DataAccess", "ParameterControl.LoadControl.DataAccess\ParameterControl.LoadControl.DataAccess.csproj", "{5E4DDEAE-7C95-4DE5-8C57-6D3250138003}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ParameterControl.LoadControl.DataAccess", "ParameterControl.LoadControl.DataAccess\ParameterControl.LoadControl.DataAccess.csproj", "{5E4DDEAE-7C95-4DE5-8C57-6D3250138003}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ParameterControl.LoadControl.Impl", "ParameterControl.LoadControl.Impl\ParameterControl.LoadControl.Impl.csproj", "{C1C5F3B4-04AC-4266-A4C2-15B12FD1B7F4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ParameterControl.LoadControl.Impl", "ParameterControl.LoadControl.Impl\ParameterControl.LoadControl.Impl.csproj", "{C1C5F3B4-04AC-4266-A4C2-15B12FD1B7F4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ParameterControl.LoadControl.Interfaces", "ParameterControl.LoadControl.Interfaces\ParameterControl.LoadControl.Interfaces.csproj", "{1B015430-0B73-4427-AD4A-B5A7E9A6E410}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ParameterControl.LoadControl.Interfaces", "ParameterControl.LoadControl.Interfaces\ParameterControl.LoadControl.Interfaces.csproj", "{1B015430-0B73-4427-AD4A-B5A7E9A6E410}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ParameterControl.Stage", "ParameterControl.Stage", "{E93AE403-0ED6-4FA3-BC71-4114F36B0CF6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ParameterControl.Stage.DataAccess", "ParameterControl.Stage.DataAccess\ParameterControl.Stage.DataAccess.csproj", "{A1641FDE-E19E-4C0B-9E3A-C35EFA6A24A8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ParameterControl.Stage.DataAccess", "ParameterControl.Stage.DataAccess\ParameterControl.Stage.DataAccess.csproj", "{A1641FDE-E19E-4C0B-9E3A-C35EFA6A24A8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ParameterControl.Stage.Entities", "ParameterControl.Stage.Entities\ParameterControl.Stage.Entities.csproj", "{747E948A-681E-4D8F-AC5A-4DC2F9CA60D4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ParameterControl.Stage.Entities", "ParameterControl.Stage.Entities\ParameterControl.Stage.Entities.csproj", "{747E948A-681E-4D8F-AC5A-4DC2F9CA60D4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ParameterControl.Stage.Impl", "ParameterControl.Stage.Impl\ParameterControl.Stage.Impl.csproj", "{EDDB7FDF-36FD-4FA3-A95A-04F2FF6F3264}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ParameterControl.Stage.Impl", "ParameterControl.Stage.Impl\ParameterControl.Stage.Impl.csproj", "{EDDB7FDF-36FD-4FA3-A95A-04F2FF6F3264}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ParameterControl.Stage.Interfaces", "ParameterControl.Stage.Interfaces\ParameterControl.Stage.Interfaces.csproj", "{3A8910A7-4664-461E-A43B-1AF641E61144}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ParameterControl.Stage.Interfaces", "ParameterControl.Stage.Interfaces\ParameterControl.Stage.Interfaces.csproj", "{3A8910A7-4664-461E-A43B-1AF641E61144}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

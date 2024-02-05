@@ -1,8 +1,8 @@
-﻿using ParameterControl.Auth.Entities;
+﻿using ParameterControl.User.Entities;
 
-namespace ParameterControl.Auth.Interfaces
+namespace ParameterControl.User.Interfaces
 {
-    public interface IAuthService
+    public interface IUserService
     {
         Task<int> InsertUser(UserModel entity);
         Task<int> UpdateUser(UserModel entity);

@@ -1,6 +1,6 @@
-﻿using ParameterControl.Auth.Entities;
-using ParameterControl.Auth.Impl;
-using ParameterControl.Auth.Interfaces;
+﻿using ParameterControl.User.Entities;
+using ParameterControl.User.Impl;
+using ParameterControl.User.Interfaces;
 using ParameterControl.Models.Filter;
 using ParameterControl.Models.Pagination;
 using ParameterControl.Models.Policy;
@@ -12,15 +12,15 @@ namespace ParameterControl.Services.Users
 {
     public class UsersServices : IUsersServices
     {
-        private List<User> users = new List<User>();
-        private readonly IAuthService _authService;
+        private List<modUser.User> users = new List<modUser.User>();
+        private readonly IUserService _userService;
 
         public UsersServices(IConfiguration configuration)
         {
-            _authService = new AuthService(configuration);
-            users = new List<User>()
+            _userService = new UserService(configuration);
+            users = new List<modUser.User>()
             {
-                new User(){
+                new modUser.User(){
                    Code = 1,
                    User_ = "EjemploUsuario",
                    Email = "ejemplo@gmail.com",
@@ -30,7 +30,7 @@ namespace ParameterControl.Services.Users
                    State = true,
                     UserOwner = "User1"
                 },
-                 new User(){
+                 new modUser.User(){
                    Code = 2,
                    User_ = "EjemploUsuario",
                    Email = "ejemplo@gmail.com",
@@ -40,7 +40,7 @@ namespace ParameterControl.Services.Users
                    State = true,
                     UserOwner = "User1"
                 },
-                  new User(){
+                  new modUser.User(){
                    Code = 3,
                    User_ = "EjemploUsuario",
                    Email = "ejemplo@gmail.com",
@@ -50,7 +50,7 @@ namespace ParameterControl.Services.Users
                    State = false,
                     UserOwner = "User1"
                 },
-                   new User(){
+                   new modUser.User(){
                    Code = 4,
                    User_ = "EjemploUsuario1",
                    Email = "ejemplo@gmail.com",
@@ -60,7 +60,7 @@ namespace ParameterControl.Services.Users
                    State = false,
                     UserOwner = "User1"
                 },
-                    new User(){
+                    new modUser.User(){
                    Code = 5,
                    User_ = "EjemploUsuario1",
                    Email = "ejemplo@gmail.com",
@@ -74,32 +74,32 @@ namespace ParameterControl.Services.Users
             };
         }
 
-        public async Task<List<User>> GetUsersFake()
+        public async Task<List<modUser.User>> GetUsersFake()
         {
             return users;
         }
 
-        public async Task<List<User>> GetUsers()
+        public async Task<List<modUser.User>> GetUsers()
         {
-            var collectionUsers = await _authService.SelectAllUser();
+            var collectionUsers = await _userService.SelectAllUser();
             var response = await MapperUser(collectionUsers);
             return response;
         }
 
         public async Task<int> CountUsers()
         {
-            var collectionUsers = await _authService.SelectAllUser();
+            var collectionUsers = await _userService.SelectAllUser();
             var response = await MapperUser(collectionUsers);
             return response.Count();
 
-            //return await _authService.SelectCountUser();
+            //return await _userService.SelectCountUser();
         }
 
         public async Task<List<modUser.User>> GetUsersPagination(PaginationViewModel pagination)
         {
             try
             {
-                var response = await _authService.SelectPaginatorUser(pagination.Page, pagination.RecordsPage);
+                var response = await _userService.SelectPaginatorUser(pagination.Page, pagination.RecordsPage);
                 var result = await MapperUser(response);
 
                 return result;
@@ -171,9 +171,9 @@ namespace ParameterControl.Services.Users
             return userModel;
         }
 
-        public async Task<User> GetUsersByCode(int code)
+        public async Task<modUser.User> GetUsersByCode(int code)
         {
-            var response = await _authService.SelectByIdUser(new UserModel { Code = code });
+            var response = await _userService.SelectByIdUser(new UserModel { Code = code });
             var user = await MapperToUser(response);
             return user;
         }
@@ -245,18 +245,18 @@ namespace ParameterControl.Services.Users
             return usersFilterPagination;
         }
 
-        public async Task<string> InsertUser(User request)
+        public async Task<string> InsertUser(modUser.User request)
         {
             try
             {
-                var user = new Auth.Entities.UserModel
+                var user = new User.Entities.UserModel
                 {
                     UserName = request.Name,
                     Email = request.Email,
                     User = request.UserOwner
                 };
 
-                var response = await _authService.InsertUser(user);
+                var response = await _userService.InsertUser(user);
 
                 return response.Equals(1) ? "Usuario creado correctamente" : "Error creando el usuario";
             }
@@ -266,11 +266,11 @@ namespace ParameterControl.Services.Users
             }
         }
 
-        private async Task<List<User>> MapperUser(List<UserModel> userModel)
+        private async Task<List<modUser.User>> MapperUser(List<UserModel> userModel)
         {
             return await Task.Run(() =>
             {
-                List<User> users = new List<User>();
+                List<modUser.User> users = new List<modUser.User>();
                 if (userModel.Count > 0)
                 {
                     foreach (var user in userModel)
@@ -303,7 +303,7 @@ namespace ParameterControl.Services.Users
         public async Task<string> UpdateUser(modUser.User User)
         {
             var mapping = await MapperUpdateUser(User);
-            var response = await _authService.UpdateUser(mapping);
+            var response = await _userService.UpdateUser(mapping);
 
             return response.Equals(1) ? "Usuario actualizado correctamente" : "Error actualizando el usuario";
         }
@@ -319,6 +319,14 @@ namespace ParameterControl.Services.Users
                 };
                 return model;
             });
+        }
+
+        public async Task<modUser.User> GetByEmailAndUserName(string userName, string email)
+        {
+            var collectionUsers = await _userService.SelectAllUser();
+            var response = await MapperUser(collectionUsers);
+            var user = response.FirstOrDefault(x => x.User_.Equals(userName) && x.Email.Equals(email));
+            return user;
         }
     }
 }

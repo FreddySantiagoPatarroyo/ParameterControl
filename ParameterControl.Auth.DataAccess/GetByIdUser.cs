@@ -1,9 +1,9 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Oracle.ManagedDataAccess.Client;
-using ParameterControl.Auth.Entities;
+using ParameterControl.User.Entities;
 using System.Data;
 
-namespace ParameterControl.Auth.DataAccess
+namespace ParameterControl.User.DataAccess
 {
     public class GetByIdUser
     {
