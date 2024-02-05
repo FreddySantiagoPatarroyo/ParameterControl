@@ -34,6 +34,7 @@
         public int Destination { get; set; }
         public bool State { get; set; } = false;
         public string ModifieldBy { get; set; } = string.Empty;
+        public bool StatePolicy { get; set; } = false;
 
     }
 }

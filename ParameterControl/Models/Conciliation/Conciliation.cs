@@ -20,13 +20,16 @@ namespace ParameterControl.Models.Conciliation
         [Required(ErrorMessage = "El campo de politicas es requerido")]
         public string Policy { get; set; } = string.Empty;
 
+        public int PolicyCode { get; set; }
+
         [Required(ErrorMessage = "Este campo es requerido")]
-        public bool Required { get; set; } = false;
+        public string Required { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "El tipo de algo es requerido")]
         public string ControlType { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "El tipo de operacion es requerido")]
         public string OperationType { get; set; } = string.Empty;
+        public bool StatePolicy { get; set; } = false;
     }
 }

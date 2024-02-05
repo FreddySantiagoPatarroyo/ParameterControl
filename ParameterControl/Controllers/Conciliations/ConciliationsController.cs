@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
 using ParameterControl.Models.Conciliation;
 using ParameterControl.Models.Filter;
+using ParameterControl.Models.Pagination;
+using ParameterControl.Models.Policy;
 using ParameterControl.Services.Authenticated;
 using ParameterControl.Services.Conciliations;
 using ParameterControl.Services.Policies;
@@ -37,10 +39,11 @@ namespace ParameterControl.Controllers.Conciliations
         }
 
         [HttpGet]
-        public async Task<ActionResult> Conciliations()
+        public async Task<ActionResult> Conciliations(PaginationViewModel paginationViewModel)
         {
 
-            List<modConciliation.Conciliation> Conciliations = await conciliationsServices.GetConciliations();
+            List<modConciliation.Conciliation> Conciliations = await conciliationsServices.GetConciliationsPagination(paginationViewModel);
+            int TotalConciliations = await conciliationsServices.CountConciliations();
 
             TableConciliations.Data = await conciliationsServices.GetConciliationsFormat(Conciliations);
 
@@ -52,13 +55,22 @@ namespace ParameterControl.Controllers.Conciliations
             TableConciliations.IsInactivate = true;
             TableConciliations.Filter = true;
 
+            var resultViemModel = new PaginationResult<TableConciliationViewModel>()
+            {
+                Elements = TableConciliations,
+                Page = paginationViewModel.Page,
+                RecordsPage = paginationViewModel.RecordsPage,
+                TotalRecords = TotalConciliations,
+                BaseUrl = Url.Action() + "?"
+            };
+
             ViewBag.ApplyFilter = false;
 
-            return View("Conciliations", TableConciliations);
+            return View("Conciliations", resultViemModel);
         }
 
         [HttpGet]
-        public async Task<ActionResult> ConciliationsFilter(string filterColunm = "", string filterValue = "", string typeRow = "")
+        public async Task<ActionResult> ConciliationsFilter(PaginationViewModel paginationViewModel, string filterColunm = "", string filterValue = "", string typeRow = "")
         {
   
             if (filterColunm == null || filterColunm == "" || filterValue == null || filterValue == "")
@@ -74,7 +86,9 @@ namespace ParameterControl.Controllers.Conciliations
             };
 
             List<ConciliationViewModel> conciliationsFilter = await conciliationsServices.GetFilterConciliations(filter);
-            TableConciliations.Data = conciliationsFilter;
+            int TotalConciliations = conciliationsFilter.Count();
+
+            TableConciliations.Data = conciliationsServices.GetFilterPagination(conciliationsFilter, paginationViewModel, TotalConciliations);
 
             TableConciliations.Rows = rows.RowsConciliations();
 
@@ -84,9 +98,18 @@ namespace ParameterControl.Controllers.Conciliations
             TableConciliations.IsInactivate = true;
             TableConciliations.Filter = true;
 
+            var resultViemModel = new PaginationResult<TableConciliationViewModel>()
+            {
+                Elements = TableConciliations,
+                Page = paginationViewModel.Page,
+                RecordsPage = paginationViewModel.RecordsPage,
+                TotalRecords = TotalConciliations,
+                BaseUrl = Url.Action() + "?filterColunm=" + filterColunm + "&filterValue=" + filterValue + "&typeRow=" + typeRow + "&"
+            };
+
             ViewBag.ApplyFilter = true;
 
-            return View("ConciliationsFilter", TableConciliations);
+            return View("ConciliationsFilter", resultViemModel);
         }
 
         [HttpGet]
@@ -188,6 +211,16 @@ namespace ParameterControl.Controllers.Conciliations
             ConciliationViewModel model = await conciliationsServices.GetConciliationFormat(conciliation);
 
             return View("Actions/ViewConciliation", model);
+        }
+
+        [HttpGet]
+        public async Task<ActionResult> ViewPolicy(int code)
+        {
+            modPolicy.Policy policy = await policiesServices.GetPolicyByCode(code);
+
+            PolicyViewModel model = await policiesServices.GetPolicyFormat(policy);
+
+            return View("Actions/ViewPolicyConciliations", model);
         }
 
         [HttpGet]

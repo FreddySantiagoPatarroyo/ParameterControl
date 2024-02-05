@@ -4,6 +4,7 @@ using ParameterControl.Conciliation.Impl;
 using ParameterControl.Conciliation.Interfaces;
 using ParameterControl.Models.Conciliation;
 using ParameterControl.Models.Filter;
+using ParameterControl.Models.Pagination;
 using ParameterControl.Models.Policy;
 using ParameterControl.Policy.Entities;
 using ParameterControl.Services.Policies;
@@ -33,7 +34,7 @@ namespace ParameterControl.Services.Conciliations
                     Email = "ejemplo@gmail.com",
                     Destination = 123,
                     Policy = "Politica1",
-                    Required = true,
+                    Required = "Si",
                     ControlType = "Voz",
                     OperationType = "Model",
                     State = true,
@@ -48,7 +49,7 @@ namespace ParameterControl.Services.Conciliations
                     Email = "ejemplo@gmail.com",
                     Destination = 145,
                     Policy = "Politica2",
-                    Required = false,
+                    Required = "Si",
                     ControlType = "Voz",
                     OperationType = "Model",
                     State = true,
@@ -63,7 +64,7 @@ namespace ParameterControl.Services.Conciliations
                     Email = "ejemplo@gmail.com",
                     Destination = 213,
                     Policy = "Politica1",
-                    Required = true,
+                    Required = "Si",
                     ControlType = "Voz",
                     OperationType = "Model",
                     State = true,
@@ -78,7 +79,7 @@ namespace ParameterControl.Services.Conciliations
                     Email = "ejemplo@gmail.com",
                     Destination = 123,
                     Policy = "Politica1",
-                    Required = false,
+                    Required = "Si",
                     ControlType = "Voz",
                     OperationType = "Model",
                     State = false,
@@ -93,7 +94,7 @@ namespace ParameterControl.Services.Conciliations
                     Email = "ejemplo@gmail.com",
                     Destination = 123,
                     Policy = "Politica1",
-                    Required = true,
+                    Required = "No",
                     ControlType = "Voz",
                     OperationType = "Model",
                     State = true,
@@ -112,6 +113,27 @@ namespace ParameterControl.Services.Conciliations
             return response;
         }
 
+        public async Task<int> CountConciliations()
+        {
+            var collectionConciliations = await conciliationServices.SelectAllConciliation();
+            return collectionConciliations.Count();
+        }
+
+        public async Task<List<modConciliation.Conciliation>> GetConciliationsPagination(PaginationViewModel pagination)
+        {
+            try
+            {
+                var response = await conciliationServices.SelectPaginatorConciliation(pagination.Page, pagination.RecordsPage);
+                var result = await MapperConciliation(response);
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
         public async Task<List<ConciliationViewModel>> GetConciliationsFormat(List<modConciliation.Conciliation> conciliations)
         {
             List<ConciliationViewModel> conciliationsModel = new List<ConciliationViewModel>();
@@ -126,11 +148,13 @@ namespace ParameterControl.Services.Conciliations
                 conciliationModel.Email = conciliation.Email;
                 conciliationModel.Destination = conciliation.Destination;
                 conciliationModel.Policy = conciliation.Policy;
+                conciliationModel.PolicyCode = conciliation.PolicyCode;
                 conciliationModel.Required = conciliation.Required;
                 conciliationModel.ControlType = conciliation.ControlType;
                 conciliationModel.OperationType = conciliation.OperationType;
-                conciliationModel.RequiredFormat = conciliation.Required ? "Si" : "No";
+                conciliationModel.RequiredFormat = conciliation.Required;
                 conciliationModel.State = conciliation.State;
+                conciliationModel.StatePolicy = conciliation.StatePolicy;
                 conciliationModel.CodeFormat = "CO_" + conciliation.Code;
                 conciliationModel.StateFormat = conciliation.State ? "Activo" : "Inactivo";
                 conciliationModel.CreationDate = conciliation.CreationDate;
@@ -154,11 +178,13 @@ namespace ParameterControl.Services.Conciliations
             conciliationModel.Email = conciliation.Email;
             conciliationModel.Destination = conciliation.Destination;
             conciliationModel.Policy = conciliation.Policy;
+            conciliationModel.PolicyCode = conciliation.PolicyCode;
             conciliationModel.Required = conciliation.Required;
             conciliationModel.ControlType = conciliation.ControlType;
             conciliationModel.OperationType = conciliation.OperationType;
-            conciliationModel.RequiredFormat = conciliation.Required ? "Si" : "No";
+            conciliationModel.RequiredFormat = conciliation.Required;
             conciliationModel.State = conciliation.State;
+            conciliationModel.StatePolicy = conciliation.StatePolicy;
             conciliationModel.CodeFormat = "CO_" + conciliation.Code;
             conciliationModel.StateFormat = conciliation.State ? "Activo" : "Inactivo";
             conciliationModel.CreationDate = conciliation.CreationDate;
@@ -180,11 +206,13 @@ namespace ParameterControl.Services.Conciliations
             conciliationModel.Email = conciliation.Email;
             conciliationModel.Destination = conciliation.Destination;
             conciliationModel.Policy = conciliation.Policy;
+            conciliationModel.PolicyCode = conciliation.PolicyCode;
             conciliationModel.Required = conciliation.Required;
             conciliationModel.ControlType = conciliation.ControlType;
             conciliationModel.OperationType = conciliation.OperationType;
-            conciliationModel.RequiredFormat = conciliation.Required ? "Si" : "No";
+            conciliationModel.RequiredFormat = conciliation.Required;
             conciliationModel.State = conciliation.State;
+            conciliationModel.StatePolicy = conciliation.StatePolicy;
             conciliationModel.CodeFormat = "CO_" + conciliation.Code;
             conciliationModel.CreationDate = conciliation.CreationDate;
             conciliationModel.UpdateDate = conciliation.UpdateDate;
@@ -270,6 +298,26 @@ namespace ParameterControl.Services.Conciliations
             return conciliationsFilter;
         }
 
+        public List<ConciliationViewModel> GetFilterPagination(List<ConciliationViewModel> inicialConciliations, PaginationViewModel paginationViewModel, int totalData)
+        {
+            var limit = paginationViewModel.Page * paginationViewModel.RecordsPage;
+            var index = limit - paginationViewModel.RecordsPage;
+            var count = 0;
+
+            if (limit > totalData)
+            {
+                count = totalData - index;
+            }
+            else
+            {
+                count = paginationViewModel.RecordsPage;
+            }
+
+            List<ConciliationViewModel> conciliationsFilterPagination = inicialConciliations.GetRange(index, count);
+
+            return conciliationsFilterPagination;
+        }
+
         public async Task<string> InsertConciliation(modConciliation.Conciliation request)
         {
             ConciliationModel conciliation = new ConciliationModel
@@ -303,10 +351,24 @@ namespace ParameterControl.Services.Conciliations
             {
                 modConciliation.Conciliation model = new modConciliation.Conciliation
                 {
-                    Code = Convert.ToInt32(conciliation.Code),
+                    Code = conciliation.Code,
                     Name = conciliation.ConciliationName,
-                    Description = conciliation.Description                     
+                    Description = conciliation.Description,
+                    Email = conciliation.Email,
+                    Destination = conciliation.Destination,
+                    Policy = conciliation.PolicyName,
+                    PolicyCode = conciliation.PolicyId,
+                    Required = conciliation.RequiredApproval,
+                    ControlType = conciliation.AssignmentType,
+                    OperationType = conciliation.OperationType,
+                    CreationDate = conciliation.CreationDate,
+                    UpdateDate = conciliation.ModifieldDate,
+                    UserOwner = conciliation.ModifieldBy,
+                    State = conciliation.State,
+                    StatePolicy = conciliation.StatePolicy
                 };
+                Console.WriteLine(conciliation.PolicyId);
+                Console.WriteLine(model.PolicyCode);
                 return model;
             });
         }
@@ -333,11 +395,6 @@ namespace ParameterControl.Services.Conciliations
                 };
                 return model;
             });
-        }
-
-        public async Task<int> CountConciliations()
-        {
-            return await conciliationServices.SelectCountConciliation();
         }
     }
 }
