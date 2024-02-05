@@ -1,4 +1,4 @@
-﻿namespace ParameterControl.Auth.Entities
+﻿namespace ParameterControl.User.Entities
 {
     public class UserModel
     {

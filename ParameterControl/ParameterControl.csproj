@@ -24,8 +24,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ParameterControl.Auth.Impl\ParameterControl.Auth.Impl.csproj" />
-    <ProjectReference Include="..\ParameterControl.Auth.Interfaces\ParameterControl.Auth.Interfaces.csproj" />
+    <ProjectReference Include="..\ParameterControl.Auth.Impl\ParameterControl.User.Impl.csproj" />
+    <ProjectReference Include="..\ParameterControl.Auth.Interfaces\ParameterControl.User.Interfaces.csproj" />
     <ProjectReference Include="..\ParameterControl.Conciliation.Entities\ParameterControl.Conciliation.Entities.csproj" />
     <ProjectReference Include="..\ParameterControl.Conciliation.Impl\ParameterControl.Conciliation.Impl.csproj" />
     <ProjectReference Include="..\ParameterControl.Conciliation.Interfaces\ParameterControl.Conciliation.Interfaces.csproj" />

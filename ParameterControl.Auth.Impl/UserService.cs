@@ -1,12 +1,12 @@
 ﻿using Microsoft.Extensions.Configuration;
-using ParameterControl.Auth.DataAccess;
-using ParameterControl.Auth.Entities;
-using ParameterControl.Auth.Interfaces;
+using ParameterControl.User.DataAccess;
+using ParameterControl.User.Entities;
+using ParameterControl.User.Interfaces;
 using System.Data;
 
-namespace ParameterControl.Auth.Impl
+namespace ParameterControl.User.Impl
 {
-    public class AuthService : IAuthService
+    public class UserService : IUserService
     {
         private readonly SetUser _setUser;
         private readonly RemoveUser _removeUser;
@@ -16,7 +16,7 @@ namespace ParameterControl.Auth.Impl
         private readonly GetPaginatorUser _getPaginatorUser;
         private readonly CountUser _getCountUser;
 
-        public AuthService(IConfiguration configuration)
+        public UserService(IConfiguration configuration)
         {
             _setUser = new SetUser(configuration);
             _removeUser = new RemoveUser(configuration);
@@ -173,6 +173,27 @@ namespace ParameterControl.Auth.Impl
             try
             {
                 return await _getCountUser.SelectCountUser();
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
+        public async Task<UserModel> SelectByEmailAndUserName(UserModel entity)
+        {
+            try
+            {
+                UserModel mapper = new UserModel();
+                return await Task.Run(async () =>
+                {
+                    var response = await _getByIdUser.SelectByIdUser(entity);
+                    foreach (DataRow row in response.Rows)
+                    {
+                        mapper = await MapperToUser(row);
+                    }
+                    return mapper;
+                });
             }
             catch (Exception ex)
             {

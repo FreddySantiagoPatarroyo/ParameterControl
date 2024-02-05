@@ -8,8 +8,6 @@ using ParameterControl.Services.Rows;
 using ParameterControl.Services.Users;
 using modUser = ParameterControl.Models.User;
 using ParameterControl.Models.Pagination;
-using ParameterControl.Services.Policies;
-using ParameterControl.Models.Policy;
 
 
 namespace ParameterControl.Controllers.Users
@@ -39,7 +37,7 @@ namespace ParameterControl.Controllers.Users
         public async Task<ActionResult> Users(PaginationViewModel paginationViewModel)
         {
 
-            List<User> Users = await usersServices.GetUsersPagination(paginationViewModel);
+            List<modUser.User> Users = await usersServices.GetUsersPagination(paginationViewModel);
             int TotalUsers = await usersServices.CountUsers();
 
             TableUsers.Data = await usersServices.GetUsersFormat(Users);
@@ -182,7 +180,7 @@ namespace ParameterControl.Controllers.Users
         [HttpGet]
         public async Task<ActionResult> View(int code)
         {
-            User user = await usersServices.GetUsersByCode(code);
+            modUser.User user = await usersServices.GetUsersByCode(code);
 
             return View("Actions/ViewUser", user);
         }
@@ -217,7 +215,7 @@ namespace ParameterControl.Controllers.Users
         [HttpGet]
         public async Task<ActionResult> Desactive(int code)
         {
-            User user = await usersServices.GetUsersByCode(code);
+            modUser.User user = await usersServices.GetUsersByCode(code);
 
             return View("Actions/DesactiveUser", user);
         }

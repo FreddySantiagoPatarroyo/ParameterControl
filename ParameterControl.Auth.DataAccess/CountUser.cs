@@ -2,7 +2,7 @@
 using Oracle.ManagedDataAccess.Client;
 using System.Data;
 
-namespace ParameterControl.Auth.DataAccess
+namespace ParameterControl.User.DataAccess
 {
     public class CountUser
     {
