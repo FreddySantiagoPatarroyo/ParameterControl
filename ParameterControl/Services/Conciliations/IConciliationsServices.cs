@@ -25,5 +25,6 @@ namespace ParameterControl.Services.Conciliations
         List<ConciliationViewModel> GetFilterPagination(List<ConciliationViewModel> inicialConciliations, PaginationViewModel paginationViewModel, int totalData);
         Task<string> ActiveConciliation(modConciliation.Conciliation conciliation);
         Task<string> DesactiveConciliation(modConciliation.Conciliation conciliation);
+        Task<bool> ValidateScenariosActivos(int codeConciliacion);
     }
 }

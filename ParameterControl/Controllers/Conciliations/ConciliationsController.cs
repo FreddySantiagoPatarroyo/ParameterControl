@@ -254,17 +254,25 @@ namespace ParameterControl.Controllers.Conciliations
         [HttpPost]
         public async Task<ActionResult> DesactiveConciliation([FromBody] int code)
         {
-            try
+            if (await conciliationsServices.ValidateScenariosActivos(code))
             {
-                modConciliation.Conciliation request = await conciliationsServices.GetConciliationsByCode(code);
-                var responseIn = await conciliationsServices.DesactiveConciliation(request);
-                _logger.LogInformation($"Inicia método ConciliationsController.Desactive {JsonConvert.SerializeObject(request)}");
-                return Ok(new { message = "Se desactivo la conciliación de manera exitosa", state = "Success" });
+                _logger.LogError($"Error en el método PoliciesController.Desactive");
+                return BadRequest(new { message = "La conciliacion cuenta con esenarios activos, desactive los escenarios para desactivar la conciliacion", state = "Error" });
             }
-            catch (Exception ex)
+            else
             {
-                _logger.LogError($"Error en el método PoliciesController.Desactive : {JsonConvert.SerializeObject(ex.Message)}");
-                return BadRequest(new { message = "Error al desactivar la conciliación", state = "Error" });
+                try
+                {
+                    modConciliation.Conciliation request = await conciliationsServices.GetConciliationsByCode(code);
+                    var responseIn = await conciliationsServices.DesactiveConciliation(request);
+                    _logger.LogInformation($"Inicia método ConciliationsController.Desactive {JsonConvert.SerializeObject(request)}");
+                    return Ok(new { message = "Se desactivo la conciliación de manera exitosa", state = "Success" });
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError($"Error en el método PoliciesController.Desactive : {JsonConvert.SerializeObject(ex.Message)}");
+                    return BadRequest(new { message = "Error al desactivar la conciliación", state = "Error" });
+                }
             }
         }
 

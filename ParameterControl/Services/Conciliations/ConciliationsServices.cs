@@ -8,8 +8,12 @@ using ParameterControl.Models.Pagination;
 using ParameterControl.Models.Policy;
 using ParameterControl.Policy.Entities;
 using ParameterControl.Services.Policies;
+using ParameterControl.Services.Scenarios;
+using ParameterControl.Stage.Impl;
+using ParameterControl.Stage.Interfaces;
 using modConciliation = ParameterControl.Models.Conciliation;
 using modPolicy = ParameterControl.Models.Policy;
+using modScenary = ParameterControl.Models.Scenery;
 
 namespace ParameterControl.Services.Conciliations
 {
@@ -18,16 +22,18 @@ namespace ParameterControl.Services.Conciliations
         private List<modConciliation.Conciliation> conciliations = new List<modConciliation.Conciliation>();
         private readonly IPoliciesServices policiesServices;
         private readonly IConciliationService conciliationServices;
+        private readonly IStageService _stageService;
 
         public ConciliationsServices(
             IPoliciesServices policiesServices,
             IConfiguration configuration
         )
         {
+            _stageService = new StageService(configuration);
             conciliationServices = new ConciliationService(configuration);
             conciliations = new List<modConciliation.Conciliation>()
             {
-                new modConciliation.Conciliation(){
+            new modConciliation.Conciliation(){
                     Code = 1,
                     Name = "Conciliacion_1",
                     Description = "Descriptionasdasdasdasdasdasdasdasdasdasd",
@@ -367,6 +373,20 @@ namespace ParameterControl.Services.Conciliations
                 };
                 return model;
             });
+        }
+
+        public async Task<bool> ValidateScenariosActivos(int codeConciliacion)
+        {
+            var Scenarios = await _stageService.SelectAllStage();
+
+            foreach (var Scenary in Scenarios)
+            {
+                if (Scenary.Conciliation == codeConciliacion)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
 
         public async Task<string> InsertConciliation(modConciliation.Conciliation request)
