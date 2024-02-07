@@ -154,9 +154,11 @@ namespace ParameterControl.Parameter.Impl
                     Parameter = dr["PARAMETRO"] is DBNull ? string.Empty : dr["PARAMETRO"].ToString(),
                     Value = dr["VALOR"] is DBNull ? string.Empty : dr["VALOR"].ToString(),
                     Description = dr["DESCRIPCION"] is DBNull ? string.Empty : dr["DESCRIPCION"].ToString(),
+                    ParameterType = dr["TIPO"] is DBNull ? string.Empty : dr["TIPO"].ToString(),
                     CreationDate = dr["FECHA_CREACION"] is DBNull ? DateTime.Now : Convert.ToDateTime(dr["FECHA_CREACION"]),
                     ModifieldDate = dr["FECHA_ACTUALIZACION"] is DBNull ? DateTime.Now : Convert.ToDateTime(dr["FECHA_ACTUALIZACION"]),
-                    ModifieldBy = dr["MODIFICADO_POR"] is DBNull ? string.Empty : dr["MODIFICADO_POR"].ToString()
+                    ModifieldBy = dr["MODIFICADO_POR"] is DBNull ? string.Empty : dr["MODIFICADO_POR"].ToString(),
+                    State = dr["ESTADO_ACTIVACION"] is DBNull ? false : Convert.ToBoolean(dr["ESTADO_ACTIVACION"]),
                 };
                 return model;
             });

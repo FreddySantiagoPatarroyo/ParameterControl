@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
 using ParameterControl.Models.Filter;
+using ParameterControl.Models.Pagination;
 using ParameterControl.Models.Parameter;
 using modParameter = ParameterControl.Models.Parameter;
 
@@ -18,5 +19,9 @@ namespace ParameterControl.Services.Parameters
         Task<string> InsertParameter(modParameter.Parameter parameter);
         Task<string> UpdateParameter(modParameter.Parameter parameter);
         Task<int> CountParameters();
+        Task<List<modParameter.Parameter>> GetParametersPagination(PaginationViewModel pagination);
+        List<ParameterViewModel> GetFilterPagination(List<ParameterViewModel> inicialParameters, PaginationViewModel paginationViewModel, int totalData);
+        Task<string> ActiveParameter(modParameter.Parameter Parameter);
+        Task<string> DesactiveParameter(modParameter.Parameter Parameter);
     }
 }

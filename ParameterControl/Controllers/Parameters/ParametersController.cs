@@ -1,9 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
+using ParameterControl.Conciliation.Impl;
+using ParameterControl.Models.Conciliation;
 using ParameterControl.Models.Filter;
+using ParameterControl.Models.Pagination;
 using ParameterControl.Models.Parameter;
 using ParameterControl.Services.Authenticated;
+using ParameterControl.Services.Conciliations;
 using ParameterControl.Services.Parameters;
 using ParameterControl.Services.Rows;
 using modParameter = ParameterControl.Models.Parameter;
@@ -33,9 +37,10 @@ namespace ParameterControl.Controllers.Parameters
         }
 
         [HttpGet]
-        public async Task<ActionResult> Parameters()
+        public async Task<ActionResult> Parameters(PaginationViewModel paginationViewModel)
         {
-            List<modParameter.Parameter> parameters = await parametersService.GetParameters();
+            List<modParameter.Parameter> parameters = await parametersService.GetParametersPagination(paginationViewModel);
+            int TotalParameters = await parametersService.CountParameters();
 
             TableParameters.Data = await parametersService.GetParametersFormat(parameters);
 
@@ -48,13 +53,22 @@ namespace ParameterControl.Controllers.Parameters
             TableParameters.IsInactivate = true;
             TableParameters.Filter = true;
 
+            var resultViemModel = new PaginationResult<TableParametersViewModel>()
+            {
+                Elements = TableParameters,
+                Page = paginationViewModel.Page,
+                RecordsPage = paginationViewModel.RecordsPage,
+                TotalRecords = TotalParameters,
+                BaseUrl = Url.Action() + "?"
+            };
+
             ViewBag.ApplyFilter = false;
 
-            return View("Parameters", TableParameters);
+            return View("Parameters", resultViemModel);
         }
 
         [HttpGet]
-        public async Task<ActionResult> ParametersFilter(string filterColunm = "", string filterValue = "", string typeRow = "")
+        public async Task<ActionResult> ParametersFilter(PaginationViewModel paginationViewModel, string filterColunm = "", string filterValue = "", string typeRow = "")
         {
             if (filterColunm == null || filterColunm == "" || filterValue == null || filterValue == "")
             {
@@ -69,7 +83,9 @@ namespace ParameterControl.Controllers.Parameters
             };
 
             List<ParameterViewModel> parametersFilter = await parametersService.GetFilterParameters(filter);
-            TableParameters.Data = parametersFilter;
+            int TotalParameters = parametersFilter.Count();
+
+            TableParameters.Data = parametersService.GetFilterPagination(parametersFilter, paginationViewModel, TotalParameters);
 
             TableParameters.Rows = rows.RowsParameters();
 
@@ -79,9 +95,18 @@ namespace ParameterControl.Controllers.Parameters
             TableParameters.IsEdit = true;
             TableParameters.IsInactivate = true;
 
+            var resultViemModel = new PaginationResult<TableParametersViewModel>()
+            {
+                Elements = TableParameters,
+                Page = paginationViewModel.Page,
+                RecordsPage = paginationViewModel.RecordsPage,
+                TotalRecords = TotalParameters,
+                BaseUrl = Url.Action() + "?filterColunm=" + filterColunm + "&filterValue=" + filterValue + "&typeRow=" + typeRow + "&"
+            };
+
             ViewBag.ApplyFilter = true;
 
-            return View("ParametersFilter", TableParameters);
+            return View("ParametersFilter", resultViemModel);
         }
 
         [HttpGet]
@@ -106,16 +131,16 @@ namespace ParameterControl.Controllers.Parameters
             if (!ModelState.IsValid)
             {
                 _logger.LogError($"Error en el modelo : {JsonConvert.SerializeObject(request)}");
+
                 return BadRequest(new { message = "Error en la informacion enviada", state = "Error" });
             }
             else
             {
                 try
                 {
-                    request.UserOwner = authenticatedUser.GetUserOwnerId();
-                    request.CreationDate = DateTime.Now;
-                    request.UpdateDate = DateTime.Now;
                     _logger.LogInformation($"Inicia método ParametersController.Create {JsonConvert.SerializeObject(request)}");
+                    var responseIn = await parametersService.InsertParameter(request);
+                    _logger.LogInformation($"Finaliza método ParametersController.Create {responseIn}");
                     return Ok(new { message = "Se creo el parametro de manera exitosa", state = "Success" });
                 }
                 catch (Exception ex)
@@ -155,9 +180,9 @@ namespace ParameterControl.Controllers.Parameters
             {
                 try
                 {
-                    request.UserOwner = authenticatedUser.GetUserOwnerId();
-                    request.UpdateDate = DateTime.Now;
                     _logger.LogInformation($"Inicia método ParametersController.Edit {JsonConvert.SerializeObject(request)}");
+                    var responseIn = await parametersService.UpdateParameter(request);
+                    _logger.LogInformation($"Finaliza método ParametersController.Edit {responseIn}");
                     return Ok(new { message = "Se actualizo el parametro de manera exitosa", state = "Success" });
                 }
                 catch (Exception ex)
@@ -193,10 +218,9 @@ namespace ParameterControl.Controllers.Parameters
             {
                 modParameter.Parameter request = await parametersService.GetParameterByCode(code);
 
-                request.UserOwner = authenticatedUser.GetUserOwnerId();
-                request.UpdateDate = DateTime.Now;
-                request.State = true;
                 _logger.LogInformation($"Inicia método ParametersController.Active {JsonConvert.SerializeObject(request)}");
+                var responseIn = await parametersService.ActiveParameter(request);
+                _logger.LogInformation($"Finaliza método ParametersController.Active {responseIn}");
                 return Ok(new { message = "Se activo el parametro de manera exitosa", state = "Success" });
             }
             catch (Exception ex)
@@ -221,10 +245,9 @@ namespace ParameterControl.Controllers.Parameters
             {
                 modParameter.Parameter request = await parametersService.GetParameterByCode(code);
 
-                request.UserOwner = authenticatedUser.GetUserOwnerId();
-                request.UpdateDate = DateTime.Now;
-                request.State = false;
                 _logger.LogInformation($"Inicia método ParametersController.Deactive {JsonConvert.SerializeObject(request)}");
+                var responseIn = await parametersService.DesactiveParameter(request);
+                _logger.LogInformation($"Finaliza método ParametersController.Deactive {responseIn}");
                 return Ok(new { message = "Se desactivo el parametro de manera exitosa", state = "Success" });
             }
             catch (Exception ex)
@@ -309,9 +332,7 @@ namespace ParameterControl.Controllers.Parameters
         {
             List<modParameter.Parameter> parameters = await parametersService.GetListParameter();
 
-            List<ParameterViewModel> parametersModel = await parametersService.GetParametersFormat(parameters);
-
-            return parametersModel.Select(parameter => new SelectListItem(parameter.ParameterFormat, parameter.Code.ToString())).ToList();
+            return parameters.Select(parameter => new SelectListItem(parameter.Parameter_, parameter.Code.ToString())).ToList();
         }
     }
 }

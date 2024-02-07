@@ -75,9 +75,9 @@
             </div>
             <div class="form_group">
                 <div class="field">
-                    <label asp-for="ParameterFormat" class="label_form">Parámetro*</label>
+                    <label asp-for="Parameter_" class="label_form">Parámetro*</label>
                     <div class="input">
-                        <input asp-for="ParameterFormat" placeholder="CO_AIC_245_FS" autocomplete="off" readonly/>
+                        <input asp-for="Parameter_" placeholder="CO_AIC_245_FS" autocomplete="off" readonly />
                     </div>
                     <span id="ParameterError" class="text_error"></span>
                 </div>
@@ -207,7 +207,7 @@
         let isValidList = false;
 
         const sendData = async () => {
-            isValidPatameter = validateInputEmpty("ParameterFormat", "El parametro es requerido", "ParameterError");
+            isValidPatameter = validateInputEmpty("Parameter_", "El parametro es requerido", "ParameterError");
             isValidValue = validateInputEmpty("Value", "El valor es requerido", "ValueError");
             //isValidDescription = validateInputEmpty("Description", "La descripcion es requerido", "DescriptionError");
             isValidParameterType = validateInputEmpty("ParameterType", "El tipo de parametro es requerido", "ParameterTypeError");
@@ -221,7 +221,7 @@
 
                 data = {
                     Code: $('#Code').val(),
-                    Parameter_: $('#ParameterFormat').val(),
+                    Parameter_: $('#Parameter_').val(),
                     Value: $('#Value').val(),
                     Description: $('#Description').val(),
                     ParameterType: $('#ParameterType').val(),

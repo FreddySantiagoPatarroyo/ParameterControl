@@ -8,6 +8,8 @@ using ParameterControl.Conciliation.Interfaces;
 using ParameterControl.Parameter.Interfaces;
 using ParameterControl.Parameter.Impl;
 using ParameterControl.Conciliation.Entities;
+using ParameterControl.Models.Conciliation;
+using ParameterControl.Models.Pagination;
 
 namespace ParameterControl.Services.Parameters
 {
@@ -126,6 +128,27 @@ namespace ParameterControl.Services.Parameters
             return response;
         }
 
+        public async Task<int> CountParameters()
+        {
+            var collectionParameters = await _parameterServices.SelectAllParameter();
+            return collectionParameters.Count();
+        }
+
+        public async Task<List<modParameter.Parameter>> GetParametersPagination(PaginationViewModel pagination)
+        {
+            try
+            {
+                var response = await _parameterServices.SelectPaginatorParameter(pagination.Page, pagination.RecordsPage);
+                var result = await MapperParameter(response);
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
         public async Task<List<ParameterViewModel>> GetParametersFormat(List<modParameter.Parameter> parameters)
         {
             List<ParameterViewModel> parametersModel = new List<ParameterViewModel>();
@@ -135,12 +158,12 @@ namespace ParameterControl.Services.Parameters
                 ParameterViewModel parameterModel = new ParameterViewModel();
 
                 parameterModel.Code = parameter.Code;
+                parameterModel.Parameter_ = parameter.Parameter_;
                 parameterModel.Value = parameter.Value;
                 parameterModel.Description = parameter.Description;
                 parameterModel.ParameterType = parameter.ParameterType;
                 parameterModel.List = parameter.List;
                 parameterModel.State = parameter.State;
-                parameterModel.ParameterFormat = "V_" + parameter.Parameter_;
                 parameterModel.StateFormat = parameter.State ? "Activo" : "Inactivo";
                 parameterModel.CreationDate = parameter.CreationDate;
                 parameterModel.UpdateDate = parameter.UpdateDate;
@@ -164,7 +187,6 @@ namespace ParameterControl.Services.Parameters
             parameterModel.ParameterType = parameter.ParameterType;
             parameterModel.List = parameter.List;
             parameterModel.State = parameter.State;
-            parameterModel.ParameterFormat = "V_" + parameter.Parameter_;
             parameterModel.StateFormat = parameter.State ? "Activo" : "Inactivo";
             parameterModel.CreationDate = parameter.CreationDate;
             parameterModel.UpdateDate = parameter.UpdateDate;
@@ -184,7 +206,6 @@ namespace ParameterControl.Services.Parameters
             parameterModel.Description = parameter.Description;
             parameterModel.ParameterType = parameter.ParameterType;
             parameterModel.List = parameter.List;
-            parameterModel.ParameterFormat = "V_" + parameter.Parameter_;
             parameterModel.State = parameter.State;
             parameterModel.CreationDate = parameter.CreationDate;
             parameterModel.UpdateDate = parameter.UpdateDate;
@@ -247,6 +268,26 @@ namespace ParameterControl.Services.Parameters
             return parametersFilter;
         }
 
+        public List<ParameterViewModel> GetFilterPagination(List<ParameterViewModel> inicialParameters, PaginationViewModel paginationViewModel, int totalData)
+        {
+            var limit = paginationViewModel.Page * paginationViewModel.RecordsPage;
+            var index = limit - paginationViewModel.RecordsPage;
+            var count = 0;
+
+            if (limit > totalData)
+            {
+                count = totalData - index;
+            }
+            else
+            {
+                count = paginationViewModel.RecordsPage;
+            }
+
+            List<ParameterViewModel> parametersFilterPagination = inicialParameters.GetRange(index, count);
+
+            return parametersFilterPagination;
+        }
+
         public async Task<List<SelectListItem>> GetParameterType()
         {
             List<SelectListItem> parameterType = new List<SelectListItem>().ToList();
@@ -264,17 +305,6 @@ namespace ParameterControl.Services.Parameters
             List<modParameter.Parameter> listParameter = await GetParameters();
 
             return listParameter;
-        }
-
-        public async Task<string> InsertParameter(modParameter.Parameter request)
-        {
-            ParameterModel Parameter = new ParameterModel
-            {
-            };
-
-            var response = await _parameterServices.InsertParameter(Parameter);
-
-            return response.Equals(1) ? "Conciliacion creada correctamente" : "Error creando la conciliacion";
         }
 
         private async Task<List<modParameter.Parameter>> MapperParameter(List<ParameterModel> ParameterModel)
@@ -301,10 +331,37 @@ namespace ParameterControl.Services.Parameters
                 {
                     Code = Convert.ToInt32(Parameter.Code),
                     Parameter_ = Parameter.Parameter,
-                    Description = Parameter.Description
+                    Value = Parameter.Value,
+                    Description = Parameter.Description,
+                    ParameterType = Parameter.ParameterType,
+                    CreationDate = Parameter.CreationDate,
+                    UpdateDate = Parameter.ModifieldDate,
+                    UserOwner = Parameter.ModifieldBy,
+                    State = Parameter.State,
+
                 };
                 return model;
             });
+        }
+
+        public async Task<string> InsertParameter(modParameter.Parameter request)
+        {
+            ParameterModel Parameter = new ParameterModel
+            {
+                Parameter = request.Parameter_,
+                ParameterType = request.ParameterType,
+                Value = request.Value,
+                Description = request.Description,
+                CreationDate = DateTime.Now,
+                ModifieldDate = DateTime.Now,
+                ModifieldBy = "CreateToUserDev",
+                State = request.State,
+
+            };
+
+            var response = await _parameterServices.InsertParameter(Parameter);
+
+            return response.Equals(1) ? "Parametro creada correctamente" : "Error creando el Parametro";
         }
 
         public async Task<string> UpdateParameter(modParameter.Parameter Parameter)
@@ -312,7 +369,23 @@ namespace ParameterControl.Services.Parameters
             var mapping = await MapperUpdateParameter(Parameter);
             var response = await _parameterServices.UpdateParameter(mapping);
 
-            return response.Equals(1) ? "Conciliacion actualizada correctamente" : "Error actualizando la conciliacion";
+            return response.Equals(1) ? "Parametro actualizada correctamente" : "Error actualizando el Parametro";
+        }
+
+        public async Task<string> ActiveParameter(modParameter.Parameter Parameter)
+        {
+            var mapping = await MapperActiveParameter(Parameter);
+            var response = await _parameterServices.UpdateParameter(mapping);
+
+            return response.Equals(1) ? "Parametro activo correctamente" : "Error activar el Parametro";
+        }
+
+        public async Task<string> DesactiveParameter(modParameter.Parameter Parameter)
+        {
+            var mapping = await MapperDesctiveParameter(Parameter);
+            var response = await _parameterServices.UpdateParameter(mapping);
+
+            return response.Equals(1) ? "Parametro desactivo correctamente" : "Error desactivar el Parametro";
         }
 
         private async Task<ParameterModel> MapperUpdateParameter(modParameter.Parameter Parameter)
@@ -323,16 +396,56 @@ namespace ParameterControl.Services.Parameters
                 {
                     Code = Parameter.Code,
                     Parameter = Parameter.Parameter_,
+                    ParameterType = Parameter.ParameterType,
+                    Value = Parameter.Value,
                     Description = Parameter.Description,
-                    ModifieldBy = Parameter.UserOwner
+                    CreationDate = Parameter.CreationDate,
+                    ModifieldDate = DateTime.Now,
+                    ModifieldBy = "CreateToUserDev",
+                    State = Parameter.State,
                 };
                 return model;
             });
         }
 
-        public async Task<int> CountParameters()
+        private async Task<ParameterModel> MapperActiveParameter(modParameter.Parameter Parameter)
         {
-            return await _parameterServices.SelectCountParameter();
+            return await Task.Run(() =>
+            {
+                ParameterModel model = new ParameterModel
+                {
+                    Code = Parameter.Code,
+                    Parameter = Parameter.Parameter_,
+                    ParameterType = Parameter.ParameterType,
+                    Value = Parameter.Value,
+                    Description = Parameter.Description,
+                    CreationDate = Parameter.CreationDate,
+                    ModifieldDate = DateTime.Now,
+                    ModifieldBy = "CreateToUserDev",
+                    State = true,
+                };
+                return model;
+            });
+        }
+
+        private async Task<ParameterModel> MapperDesctiveParameter(modParameter.Parameter Parameter)
+        {
+            return await Task.Run(() =>
+            {
+                ParameterModel model = new ParameterModel
+                {
+                    Code = Parameter.Code,
+                    Parameter = Parameter.Parameter_,
+                    ParameterType = Parameter.ParameterType,
+                    Value = Parameter.Value,
+                    Description = Parameter.Description,
+                    CreationDate = Parameter.CreationDate,
+                    ModifieldDate = DateTime.Now,
+                    ModifieldBy = "CreateToUserDev",
+                    State = false,
+                };
+                return model;
+            });
         }
     }
 }
