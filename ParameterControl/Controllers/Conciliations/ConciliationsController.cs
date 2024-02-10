@@ -119,12 +119,14 @@ namespace ParameterControl.Controllers.Conciliations
             List<SelectListItem> PoliciesOptionsList = await GetPolicies();
             List<SelectListItem> RequiredOptionList = await conciliationsServices.GetRequired();
             List<SelectListItem> OperationTypeOptionsList = await conciliationsServices.GetOperationsType();
+            List<SelectListItem> EmailsOptionsList = await conciliationsServices.GetEmailUsers();
 
             ConciliationCreateViewModel model = new ConciliationCreateViewModel()
             {
                 OperationTypeOptions = OperationTypeOptionsList,
                 PoliciesOption = PoliciesOptionsList,
-                RequiredOption = RequiredOptionList
+                RequiredOption = RequiredOptionList,
+                Emails = EmailsOptionsList
             };
 
             return View("Actions/CreateConciliation", model);
@@ -163,6 +165,7 @@ namespace ParameterControl.Controllers.Conciliations
             List<SelectListItem> PoliciesOptionsList = await GetPolicies();
             List<SelectListItem> RequiredOptionsList = await conciliationsServices.GetRequired();
             List<SelectListItem> OperationTypeOptionsList = await conciliationsServices.GetOperationsType();
+            List<SelectListItem> EmailsOptionsList = await conciliationsServices.GetEmailUsers();
 
             ConciliationCreateViewModel model = await conciliationsServices.GetConciliationFormatCreate(conciliation);
 
@@ -171,6 +174,7 @@ namespace ParameterControl.Controllers.Conciliations
             model.OperationTypeOptions = OperationTypeOptionsList;
             model.PoliciesOption = PoliciesOptionsList;
             model.RequiredOption = RequiredOptionsList;
+            model.Emails = EmailsOptionsList;
 
             return View("Actions/EditConciliation", model);
         }

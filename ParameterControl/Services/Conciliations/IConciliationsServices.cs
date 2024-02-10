@@ -26,5 +26,6 @@ namespace ParameterControl.Services.Conciliations
         Task<string> ActiveConciliation(modConciliation.Conciliation conciliation);
         Task<string> DesactiveConciliation(modConciliation.Conciliation conciliation);
         Task<bool> ValidateScenariosActivos(int codeConciliacion);
+        Task<List<SelectListItem>> GetEmailUsers();
     }
 }

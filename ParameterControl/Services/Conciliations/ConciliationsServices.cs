@@ -5,15 +5,13 @@ using ParameterControl.Conciliation.Interfaces;
 using ParameterControl.Models.Conciliation;
 using ParameterControl.Models.Filter;
 using ParameterControl.Models.Pagination;
-using ParameterControl.Models.Policy;
-using ParameterControl.Policy.Entities;
 using ParameterControl.Services.Policies;
-using ParameterControl.Services.Scenarios;
 using ParameterControl.Stage.Impl;
 using ParameterControl.Stage.Interfaces;
+using ParameterControl.User.Impl;
+using ParameterControl.User.Interfaces;
 using modConciliation = ParameterControl.Models.Conciliation;
 using modPolicy = ParameterControl.Models.Policy;
-using modScenary = ParameterControl.Models.Scenery;
 
 namespace ParameterControl.Services.Conciliations
 {
@@ -23,6 +21,7 @@ namespace ParameterControl.Services.Conciliations
         private readonly IPoliciesServices policiesServices;
         private readonly IConciliationService conciliationServices;
         private readonly IStageService _stageService;
+        private readonly IUserService _userService;
 
         public ConciliationsServices(
             IPoliciesServices policiesServices,
@@ -30,6 +29,7 @@ namespace ParameterControl.Services.Conciliations
         )
         {
             _stageService = new StageService(configuration);
+            _userService = new UserService(configuration);
             conciliationServices = new ConciliationService(configuration);
             conciliations = new List<modConciliation.Conciliation>()
             {
@@ -381,12 +381,20 @@ namespace ParameterControl.Services.Conciliations
 
             foreach (var Scenary in Scenarios)
             {
-                if (Scenary.Conciliation == codeConciliacion)
+                if (Scenary.Conciliation == codeConciliacion && Scenary.State == true)
                 {
                     return true;
                 }
             }
             return false;
+        }
+
+        public async Task<List<SelectListItem>> GetEmailUsers()
+        {
+            var collectionUsers = await _userService.SelectAllUser();
+            var Emails = collectionUsers.Select(user => new SelectListItem(user.Email, user.Email)).ToList();
+
+            return Emails;
         }
 
         public async Task<string> InsertConciliation(modConciliation.Conciliation request)

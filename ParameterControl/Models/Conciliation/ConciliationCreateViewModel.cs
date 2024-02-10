@@ -8,6 +8,7 @@ namespace ParameterControl.Models.Conciliation
         public List<SelectListItem> OperationTypeOptions = new List<SelectListItem>();
         public List<SelectListItem> PoliciesOption = new List<SelectListItem>();
         public List<SelectListItem> RequiredOption = new List<SelectListItem>();
+        public List<SelectListItem> Emails = new List<SelectListItem>();
         public string RequiredFormat { get; set; } = string.Empty;
     }
 }

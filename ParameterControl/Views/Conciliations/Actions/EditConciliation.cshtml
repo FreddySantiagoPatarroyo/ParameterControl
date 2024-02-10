@@ -45,12 +45,29 @@
 
             <div class="form_group">
                 <div class="field">
-                    <label  asp-for="Email" class="label_form">Email Usuario Asignado*</label>
-                    <div class="input">
-                        <input asp-for="Email" placeholder="Digite el email">
+                    <label asp-for="Email" class="label_form">Email*</label>
+                    <div id="input_select_emails" class="input">
+                        <input class="input_select" id="input_select_filter_emails" name="input_select_filter_emails" asp-for="Email" placeholder="Seleccione una opción" onclick="showOptionsEmails()" readonly />
+                        <input asp-for="Email" class="oculte" />
+                        <i class="icon icon_select icon_153"></i>
                     </div>
-                    <span id="EmailError" class="text_error"></span>
+                    <div id="optionsEmails" class="options">
+                        <ul class="options_list">
+                            <li onclick="selectOptionEmails('@null', '@null')" class="option">
+                                <p class="option_text">Seleccione una opción</p>
+                            </li>
+                            @foreach (var Option in Model.Emails)
+                            {
+                                <li onclick="selectOptionEmails('@Option.Text', '@Option.Value')" class="option">
+                                    <p class="option_text">@Option.Text</p>
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                    <div id="select_helper_emails" class="select_helper" onclick="showOptionsEmails()"></div>
                 </div>
+
+                <span id="EmailError" class="text_error"></span>
             </div>
 
             <div class="form_group">
@@ -207,6 +224,40 @@
                 document.getElementById("OperationType").value = value;
             }
             showOptions();
+        }
+
+        /* ----------- Select de emails ----------- */
+        let viewOptionsEmails = false;
+
+        const showOptionsEmails = () => {
+
+            let widthOptionEmails = document.getElementById("input_select_emails").clientWidth;
+            let optionsEmails = document.getElementById("optionsEmails");
+            optionsEmails.style.width = widthOptionEmails + "px";
+
+            viewOptionsEmails = !viewOptionsEmails;
+
+            if (viewOptionsEmails) {
+                document.getElementById('optionsEmails').style.display = 'block';
+                document.getElementById('select_helper_emails').style.display = 'block';
+            } else {
+                document.getElementById('optionsEmails').style.display = 'none';
+                document.getElementById('select_helper_emails').style.display = 'none';
+            }
+        }
+
+        const selectOptionEmails = (name, value) => {
+
+            if (name == null || value == null || name == '' || value == '') {
+                console.log("vacio");
+                document.getElementById("input_select_filter_emails").value = '';
+                document.getElementById("Email").value = '';
+            } else {
+                console.log(value);
+                document.getElementById("input_select_filter_emails").value = name;
+                document.getElementById("Email").value = value;
+            }
+            showOptionsEmails();
         }
 
         /* ----------- Select de politicas ----------- */
