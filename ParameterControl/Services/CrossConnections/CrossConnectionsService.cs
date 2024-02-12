@@ -1,15 +1,20 @@
 ﻿using ParameterControl.Models.CrossConnection;
 using ParameterControl.Models.Filter;
-using ParameterControl.Models.Policy;
-using ParameterControl.Policy.Entities;
+using ParameterControl.LoadControl.Interfaces;
 using modCrossConnection = ParameterControl.Models.CrossConnection;
+using ParameterControl.LoadControl.Impl;
+using ParameterControl.LoadControl.Entities;
 
 namespace ParameterControl.Services.CrossConnections
 {
     public class CrossConnectionsService:ICrossConnectionsService
     {
         private List<modCrossConnection.CrossConnection> crossConnections = new List<modCrossConnection.CrossConnection>();
-        public CrossConnectionsService() {
+        private ILoadControlService _loadControlService;
+        public CrossConnectionsService(
+            IConfiguration configuration
+        ) {
+            _loadControlService = new LoadControlService(configuration);
             crossConnections = new List<modCrossConnection.CrossConnection>()
             {
                 new modCrossConnection.CrossConnection(){
@@ -71,7 +76,9 @@ namespace ParameterControl.Services.CrossConnections
 
         public async Task<List<modCrossConnection.CrossConnection>> GetCrossConnections()
         {
-            return crossConnections;
+            var collectionCrossConnections = await _loadControlService.SelectAllLoadControl();
+            var response = await MapperCrossConnections(collectionCrossConnections);
+            return response;
         }
 
         public async Task<List<CrossConnectionViewModel>> GetCrossConnectionsFormat(List<modCrossConnection.CrossConnection> crossConnections)
@@ -170,6 +177,40 @@ namespace ParameterControl.Services.CrossConnections
             }
 
             return crossConnetionsFilter;
+        }
+
+        private async Task<List<CrossConnection>> MapperCrossConnections(List<LoadControlModel> loadControls)
+        {
+            return await Task.Run(() =>
+            {
+                List<CrossConnection> crossConnections = new List<CrossConnection>();
+                if (loadControls.Count > 0)
+                {
+                    foreach (var crossConnection in loadControls)
+                    {
+                        crossConnections.Add(MapperToCrossConnection(crossConnection).Result);
+                    }
+                }
+                return crossConnections;
+            });
+        }
+
+        private async Task<CrossConnection> MapperToCrossConnection(LoadControlModel loadControl)
+        {
+            return await Task.Run(() =>
+            {
+                CrossConnection model = new CrossConnection
+                {
+                    Table = loadControl.Table,
+                    Periodicity = loadControl.Periodicity,
+                    Status = loadControl.Status,
+                    Error = loadControl.Error,
+                    LastLoad = loadControl.LastLoad,
+                    LastExecution = loadControl.LastExecution,
+                    State = loadControl.State,
+                };
+                return model;
+            });
         }
     }
 }

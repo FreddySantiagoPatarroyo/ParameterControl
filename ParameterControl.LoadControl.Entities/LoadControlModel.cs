@@ -9,8 +9,8 @@
         public string Backup { get; set; } = string.Empty;
         public string Status { get; set; } = string.Empty;
         public string Error { get; set; } = string.Empty;
-        public string LastLoad { get; set; } = string.Empty;
-        public string LastExecution { get; set; } = string.Empty;
+        public DateTime LastLoad { get; set; }
+        public DateTime LastExecution { get; set; }
         public string Session { get; set; } = string.Empty;
         public string LocalRouteSqlUnLoad { get; set; } = string.Empty;
         public string FlagSisNotStart { get; set; } = string.Empty;
@@ -25,5 +25,6 @@
         public string FlagDep { get; set; } = string.Empty;
         public string DaysDep { get; set; } = string.Empty;
         public string ModifieldBy { get; set; } = string.Empty;
+        public bool State {  get; set; } = false;
     }
 }

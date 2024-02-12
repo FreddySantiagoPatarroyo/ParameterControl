@@ -108,24 +108,29 @@
                                                 <p id="text_row" class="text flex_box">@GetRowInfo(Row.Value)?.GetValue(CrossConnections)?.ToString()</p>
                                             </div>
                                         }
-                                        <div class="row_table flex_box actions">
-                                            @if (Model.IsView)
-                                            {
-                                                <button class="button_icon button_primary disabled" title="Ver" disabled>
-                                                    <i class="icon icon_041"></i>
-                                                </button>
-                                            }
-                                            @if(Model.IsEdit){
-                                                <button class="button_icon button_primary disabled" title="Editar" disabled>
-                                                    <i class="icon icon_106"></i>
-                                                </button>
-                                            }
-                                            @if(Model.IsActivate){
-                                                <a class="button_icon button_primary" title="Activar" asp-controller="CrossConnections" asp-action="Active">
-                                                    <i class="icon icon_199"></i>
-                                                </a>
-                                            }
-                                        </div>
+                                        @if (Model.IsView || Model.IsEdit || Model.IsInactivate)
+                                        {
+                                            <div class="row_table flex_box actions">
+                                                @if (Model.IsView)
+                                                {
+                                                    <button class="button_icon button_primary disabled" title="Ver" disabled>
+                                                        <i class="icon icon_041"></i>
+                                                    </button>
+                                                }
+                                                @if (Model.IsEdit)
+                                                {
+                                                    <button class="button_icon button_primary disabled" title="Editar" disabled>
+                                                        <i class="icon icon_106"></i>
+                                                    </button>
+                                                }
+                                                @if (Model.IsActivate)
+                                                {
+                                                    <a class="button_icon button_primary" title="Activar" asp-controller="CrossConnections" asp-action="Active">
+                                                        <i class="icon icon_199"></i>
+                                                    </a>
+                                                }
+                                            </div>
+                                        }
                                     </div>
                                 }
                             }

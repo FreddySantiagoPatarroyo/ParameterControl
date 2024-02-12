@@ -36,6 +36,9 @@
     <ProjectReference Include="..\ParameterControl.Policy.Interfaces\ParameterControl.Policy.Interfaces.csproj" />
     <ProjectReference Include="..\ParameterControl.Stage.Impl\ParameterControl.Stage.Impl.csproj" />
     <ProjectReference Include="..\ParameterControl.Stage.Interfaces\ParameterControl.Stage.Interfaces.csproj" />
+	<ProjectReference Include="..\ParameterControl.LoadControl.Entities\ParameterControl.LoadControl.Entities.csproj" />
+	<ProjectReference Include="..\ParameterControl.LoadControl.Impl\ParameterControl.LoadControl.Impl.csproj" />
+	<ProjectReference Include="..\ParameterControl.LoadControl.Interfaces\ParameterControl.LoadControl.Interfaces.csproj" />
   </ItemGroup>
 
 </Project>

@@ -97,13 +97,13 @@ namespace ParameterControl.LoadControl.Impl
                     Backup = dr["RESPALDO"] is DBNull ? string.Empty : dr["RESPALDO"].ToString(),
                     Status = dr["ESTADO"] is DBNull ? string.Empty : dr["ESTADO"].ToString(),
                     Error = dr["ERROR"] is DBNull ? string.Empty : dr["ERROR"].ToString(),
-                    LastLoad = dr["ULTIMA_CARGA"] is DBNull ? string.Empty : dr["ULTIMA_CARGA"].ToString(),
-                    LastExecution = dr["ULTIMA_EJECUCION"] is DBNull ? string.Empty : dr["ULTIMA_EJECUCION"].ToString(),
+                    LastLoad = dr["ULTIMA_CARGA"] is DBNull ? DateTime.Now : Convert.ToDateTime(dr["ULTIMA_CARGA"]),
+                    LastExecution = dr["ULTIMA_EJECUCION"] is DBNull ? DateTime.Now : Convert.ToDateTime(dr["ULTIMA_EJECUCION"]),
                     Session = dr["SESION"] is DBNull ? string.Empty : dr["SESION"].ToString(),
                     LocalRouteSqlUnLoad = dr["RUTA_LOCAL_SQLUNLOAD"] is DBNull ? string.Empty : dr["RUTA_LOCAL_SQLUNLOAD"].ToString(),
                     FlagSisNotStart = dr["FLAG_SISNOT_INICIO"] is DBNull ? string.Empty : dr["FLAG_SISNOT_INICIO"].ToString(),
                     FlagSisNotOk = dr["FLAG_SISNOT_OK"] is DBNull ? string.Empty : dr["FLAG_SISNOT_OK"].ToString(),
-                    FlagSisNotKo = dr["FLAG_SISNOT_KO"] is DBNull ? string.Empty : dr["ULTIMA_CFLAG_SISNOT_KOARGA"].ToString(),
+                    FlagSisNotKo = dr["FLAG_SISNOT_KO"] is DBNull ? string.Empty : dr["FLAG_SISNOT_KO"].ToString(),
                     StartDate = dr["FECHA_INICIAL"] is DBNull ? DateTime.Now : Convert.ToDateTime(dr["FECHA_INICIAL"]),
                     EndDate = dr["FECHA_FINAL"] is DBNull ? DateTime.Now : Convert.ToDateTime(dr["FECHA_FINAL"]),
                     FormulaEndDate = dr["FORMULA_FECHA_INICIAL"] is DBNull ? string.Empty : dr["FORMULA_FECHA_INICIAL"].ToString(),
@@ -112,6 +112,7 @@ namespace ParameterControl.LoadControl.Impl
                     FlagStatistics = dr["FLAG_ESTADISTICAS"] is DBNull ? string.Empty : dr["FLAG_ESTADISTICAS"].ToString(),
                     FlagDep = dr["FLAG_DEP"] is DBNull ? string.Empty : dr["FLAG_DEP"].ToString(),
                     DaysDep = dr["DIAS_DEP"] is DBNull ? string.Empty : dr["DIAS_DEP"].ToString(),
+                    State = dr["ESTADO_ACTIVACION"] is DBNull ? false : Convert.ToBoolean(dr["ESTADO_ACTIVACION"]),
                 };
                 return model;
             });
