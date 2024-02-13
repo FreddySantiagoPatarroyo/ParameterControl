@@ -114,6 +114,7 @@ namespace ParameterControl.Services.CrossConnections
                 CrossConnectionViewModel crossConnectionModel = new CrossConnectionViewModel();
 
                 crossConnectionModel.Code = crossConnection.Code;
+                crossConnectionModel.Package = crossConnection.Package;
                 crossConnectionModel.Table = crossConnection.Table;
                 crossConnectionModel.Periodicity = crossConnection.Periodicity;
                 crossConnectionModel.Status = crossConnection.Status;
@@ -137,6 +138,7 @@ namespace ParameterControl.Services.CrossConnections
             CrossConnectionViewModel crossConnectionModel = new CrossConnectionViewModel();
 
             crossConnectionModel.Code = crossConnection.Code;
+            crossConnectionModel.Package = crossConnection.Package;
             crossConnectionModel.Table = crossConnection.Table;
             crossConnectionModel.Periodicity = crossConnection.Periodicity;
             crossConnectionModel.Status = crossConnection.Status;
@@ -249,6 +251,7 @@ namespace ParameterControl.Services.CrossConnections
                 CrossConnection model = new CrossConnection
                 {
                     Code = loadControl.Code,
+                    Package = loadControl.Package,
                     Table = loadControl.Table,
                     Periodicity = loadControl.Periodicity,
                     Status = loadControl.Status,
@@ -256,6 +259,63 @@ namespace ParameterControl.Services.CrossConnections
                     LastLoad = loadControl.LastLoad,
                     LastExecution = loadControl.LastExecution,
                     State = loadControl.State,
+                };
+                return model;
+            });
+        }
+
+        public async Task<string> ActiveCrossConnection(modCrossConnection.CrossConnection crossConnection) 
+        { 
+        
+            var mapping = await MapperActiveCrossConnection(crossConnection);
+            var response = await _loadControlService.UpdateLoadControl(mapping);
+
+            return response.Equals(1) ? "Toma transversal activada correctamente" : "Error activando la toma transversal";
+        }
+
+        public async Task<string> DesactiveCrossConnection(modCrossConnection.CrossConnection crossConnection)
+        {
+            var mapping = await MapperDesctiveCrossConnection(crossConnection);
+            var response = await _loadControlService.UpdateLoadControl(mapping);
+
+            return response.Equals(1) ? "Toma transversal desactivada correctamente" : "Error desactivando la Toma transversal";
+        }
+
+        private async Task<LoadControlModel> MapperActiveCrossConnection(modCrossConnection.CrossConnection crossConnection)
+        {
+            return await Task.Run(() =>
+            {
+                LoadControlModel model = new LoadControlModel
+                {
+                    Code = crossConnection.Code,
+                    Package = crossConnection.Package,
+                    Table = crossConnection.Table,
+                    Periodicity = crossConnection.Periodicity,
+                    Status = crossConnection.Status,
+                    Error = crossConnection.Error,
+                    LastLoad = crossConnection.LastLoad,
+                    LastExecution = crossConnection.LastExecution,
+                    State = true,
+                };
+                return model;
+            });
+        }
+
+        private async Task<LoadControlModel> MapperDesctiveCrossConnection(modCrossConnection.CrossConnection crossConnection)
+        {
+            return await Task.Run(() =>
+            {
+                LoadControlModel model = new LoadControlModel
+                {
+                    Code = crossConnection.Code,
+                    Package = crossConnection.Package,
+                    Table = crossConnection.Table,
+                    Periodicity = crossConnection.Periodicity,
+                    Status = crossConnection.Status,
+                    Error = crossConnection.Error,
+                    LastLoad = crossConnection.LastLoad,
+                    LastExecution = crossConnection.LastExecution,
+                    State = false,
                 };
                 return model;
             });

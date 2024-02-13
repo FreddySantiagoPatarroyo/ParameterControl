@@ -238,6 +238,11 @@ namespace ParameterControl.Services.Rows
         {
             List<Row> rows = new List<Row>()
             {
+                new Row()
+                {
+                    Value = "Package",
+                    Name = "Paquete"
+                },
                  new Row()
                 {
                     Value = "Table",

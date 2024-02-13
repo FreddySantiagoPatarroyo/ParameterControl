@@ -7,6 +7,10 @@
     align-items: center;
 }
 
+.text_break {
+    word-break: break-all;
+}
+
 .pages {
     display: flex;
     flex-wrap: nowrap;

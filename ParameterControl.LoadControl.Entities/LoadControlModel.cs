@@ -23,7 +23,7 @@
         public string FlagDrop { get; set; } = string.Empty;
         public string FlagStatistics { get; set; } = string.Empty;
         public string FlagDep { get; set; } = string.Empty;
-        public string DaysDep { get; set; } = string.Empty;
+        public int DaysDep { get; set; }
         public string ModifieldBy { get; set; } = string.Empty;
         public bool State {  get; set; } = false;
     }

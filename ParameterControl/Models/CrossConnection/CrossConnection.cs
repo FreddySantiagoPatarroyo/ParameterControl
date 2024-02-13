@@ -6,6 +6,9 @@ namespace ParameterControl.Models.CrossConnection
     {
         public int Code { get; set; }
 
+        [Required(ErrorMessage = "El paquete es requerido")]
+        public string Package { get; set; } = string.Empty;
+
         [Required(ErrorMessage = "La tabla es requerido")]
         public string Table { get; set; } = string.Empty;
 

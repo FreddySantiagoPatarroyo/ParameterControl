@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Newtonsoft.Json;
+using ParameterControl.Conciliation.Impl;
 using ParameterControl.Models.Conciliation;
 using ParameterControl.Models.CrossConnection;
 using ParameterControl.Models.Filter;
@@ -114,6 +116,56 @@ namespace ParameterControl.Controllers.CrossConnections
             CrossConnectionViewModel model = await crossConnectionsService.GetCrossConnectionFormat(crossConnection);
 
             return View("Actions/ViewCrossConnection", model);
+        }
+
+        [HttpGet]
+        public async Task<ActionResult> Active(int code)
+        {
+            modCrossConnection.CrossConnection crossConnection = await crossConnectionsService.GetCrossConnectionByCode(code);
+
+            return View("Actions/ActiveCrossConnection", crossConnection);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> ActiveCrossConnection([FromBody] int code)
+        {
+            try
+            {
+                modCrossConnection.CrossConnection request = await crossConnectionsService.GetCrossConnectionByCode(code);
+                var responseIn = await crossConnectionsService.ActiveCrossConnection(request);
+                return Ok(new { message = "Se activo la toma transversal de manera exitosa", state = "Success" });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error en el método CrossConnectionsController.Active : {JsonConvert.SerializeObject(ex.Message)}");
+                return BadRequest(new { message = "Error al activar la toma transversal", state = "Error" });
+            }
+        }
+
+        [HttpGet]
+        public async Task<ActionResult> Desactive(int code)
+        {
+            modCrossConnection.CrossConnection crossConnection = await crossConnectionsService.GetCrossConnectionByCode(code);
+
+            return View("Actions/DesactiveCrossConnection", crossConnection);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> DesactiveCrossConnection([FromBody] int code)
+        {
+            try
+            {
+                var request = await crossConnectionsService.GetCrossConnectionByCode(code);
+                _logger.LogInformation($"Inicia método CrossConnectionsController.Desactive {JsonConvert.SerializeObject(request)}");
+                var responseIn = await crossConnectionsService.DesactiveCrossConnection(request);
+                return Ok(new { message = "Se desactivo la toma transversal de manera exitosa", state = "Success" });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error en el método CrossConnectionsController.Desactive : {JsonConvert.SerializeObject(ex.Message)}");
+                return BadRequest(new { message = "Error al desactivar la toma transversal", state = "Error" });
+            }
+            
         }
 
         [HttpGet]

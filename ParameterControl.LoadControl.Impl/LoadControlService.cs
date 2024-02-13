@@ -135,7 +135,7 @@ namespace ParameterControl.LoadControl.Impl
                     FlagDrop = dr["FLAG_DROP"] is DBNull ? string.Empty : dr["FLAG_DROP"].ToString(),
                     FlagStatistics = dr["FLAG_ESTADISTICAS"] is DBNull ? string.Empty : dr["FLAG_ESTADISTICAS"].ToString(),
                     FlagDep = dr["FLAG_DEP"] is DBNull ? string.Empty : dr["FLAG_DEP"].ToString(),
-                    DaysDep = dr["DIAS_DEP"] is DBNull ? string.Empty : dr["DIAS_DEP"].ToString(),
+                    DaysDep = dr["DIAS_DEP"] is DBNull ? 0 : Convert.ToInt32(dr["DIAS_DEP"]),
                     State = dr["ESTADO_ACTIVACION"] is DBNull ? false : Convert.ToBoolean(dr["ESTADO_ACTIVACION"]),
                 };
                 return model;
