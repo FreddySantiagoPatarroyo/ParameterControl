@@ -4,6 +4,8 @@ using ParameterControl.LoadControl.Interfaces;
 using modCrossConnection = ParameterControl.Models.CrossConnection;
 using ParameterControl.LoadControl.Impl;
 using ParameterControl.LoadControl.Entities;
+using ParameterControl.Models.Pagination;
+using ParameterControl.Models.Conciliation;
 
 namespace ParameterControl.Services.CrossConnections
 {
@@ -79,6 +81,27 @@ namespace ParameterControl.Services.CrossConnections
             var collectionCrossConnections = await _loadControlService.SelectAllLoadControl();
             var response = await MapperCrossConnections(collectionCrossConnections);
             return response;
+        }
+
+        public async Task<int> CountCrossConnections()
+        {
+            var collectionCrossConnections = await _loadControlService.SelectAllLoadControl();
+            return collectionCrossConnections.Count();
+        }
+
+        public async Task<List<modCrossConnection.CrossConnection>> GetCrossConnectionsPagination(PaginationViewModel pagination)
+        {
+            try
+            {
+                var response = await _loadControlService.SelectPaginatorLoadControl(pagination.Page, pagination.RecordsPage);
+                var result = await MapperCrossConnections(response);
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
         }
 
         public async Task<List<CrossConnectionViewModel>> GetCrossConnectionsFormat(List<modCrossConnection.CrossConnection> crossConnections)
@@ -177,6 +200,26 @@ namespace ParameterControl.Services.CrossConnections
             }
 
             return crossConnetionsFilter;
+        }
+
+        public List<CrossConnectionViewModel> GetFilterPagination(List<CrossConnectionViewModel> inicialCrossConnections, PaginationViewModel paginationViewModel, int totalData)
+        {
+            var limit = paginationViewModel.Page * paginationViewModel.RecordsPage;
+            var index = limit - paginationViewModel.RecordsPage;
+            var count = 0;
+
+            if (limit > totalData)
+            {
+                count = totalData - index;
+            }
+            else
+            {
+                count = paginationViewModel.RecordsPage;
+            }
+
+            List<CrossConnectionViewModel> crossConnectionsFilterPagination = inicialCrossConnections.GetRange(index, count);
+
+            return crossConnectionsFilterPagination;
         }
 
         private async Task<List<CrossConnection>> MapperCrossConnections(List<LoadControlModel> loadControls)

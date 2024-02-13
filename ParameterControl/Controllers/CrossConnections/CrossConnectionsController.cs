@@ -1,8 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using ParameterControl.Models.Conciliation;
 using ParameterControl.Models.CrossConnection;
 using ParameterControl.Models.Filter;
+using ParameterControl.Models.Pagination;
 using ParameterControl.Services.Authenticated;
+using ParameterControl.Services.Conciliations;
 using ParameterControl.Services.CrossConnections;
 using ParameterControl.Services.Rows;
 
@@ -31,9 +34,10 @@ namespace ParameterControl.Controllers.CrossConnections
         }
 
         [HttpGet]
-        public async Task<ActionResult> CrossConnections()
+        public async Task<ActionResult> CrossConnections(PaginationViewModel paginationViewModel)
         {
-            List<modCrossConnection.CrossConnection> crossConnections = await crossConnectionsService.GetCrossConnections();
+            List<modCrossConnection.CrossConnection> crossConnections = await crossConnectionsService.GetCrossConnectionsPagination(paginationViewModel);
+            int TotalCrossConnections = await crossConnectionsService.CountCrossConnections();
 
             TableCrossConnections.Data = await crossConnectionsService.GetCrossConnectionsFormat(crossConnections);
 
@@ -46,12 +50,21 @@ namespace ParameterControl.Controllers.CrossConnections
             TableCrossConnections.IsView = false;
             TableCrossConnections.IsInactivate = true;
 
+            var resultViemModel = new PaginationResult<TableCrossConnectionViewModel>()
+            {
+                Elements = TableCrossConnections,
+                Page = paginationViewModel.Page,
+                RecordsPage = paginationViewModel.RecordsPage,
+                TotalRecords = TotalCrossConnections,
+                BaseUrl = Url.Action() + "?"
+            };
+
             ViewBag.ApplyFilter = false;
 
-            return View("CrossConnections", TableCrossConnections);
+            return View("CrossConnections", resultViemModel);
         }
 
-        public async Task<ActionResult> CrossConnectionsFilter(string filterColunm = "", string filterValue = "", string typeRow = "")
+        public async Task<ActionResult> CrossConnectionsFilter(PaginationViewModel paginationViewModel, string filterColunm = "", string filterValue = "", string typeRow = "")
         {
 
             if (filterColunm == null || filterColunm == "" || filterValue == null || filterValue == "")
@@ -67,7 +80,9 @@ namespace ParameterControl.Controllers.CrossConnections
             };
 
             List<CrossConnectionViewModel> crossConnectionsFilter = await crossConnectionsService.GetFilterCrossConnections(filter);
-            TableCrossConnections.Data = crossConnectionsFilter;
+            int TotalCrossConnections = crossConnectionsFilter.Count();
+
+            TableCrossConnections.Data = crossConnectionsService.GetFilterPagination(crossConnectionsFilter, paginationViewModel, TotalCrossConnections);
 
             TableCrossConnections.Rows = rows.RowsCrossConnection();
 
@@ -78,9 +93,18 @@ namespace ParameterControl.Controllers.CrossConnections
             TableCrossConnections.IsView = false;
             TableCrossConnections.IsInactivate = true;
 
+            var resultViemModel = new PaginationResult<TableCrossConnectionViewModel>()
+            {
+                Elements = TableCrossConnections,
+                Page = paginationViewModel.Page,
+                RecordsPage = paginationViewModel.RecordsPage,
+                TotalRecords = TotalCrossConnections,
+                BaseUrl = Url.Action() + "?filterColunm=" + filterColunm + "&filterValue=" + filterValue + "&typeRow=" + typeRow + "&"
+            };
+
             ViewBag.ApplyFilter = true;
 
-            return View("CrossConnectionsFilter", TableCrossConnections);
+            return View("CrossConnectionsFilter", resultViemModel);
         }
 
         //[HttpGet]

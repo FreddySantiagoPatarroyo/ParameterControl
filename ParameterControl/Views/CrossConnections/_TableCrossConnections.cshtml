@@ -2,7 +2,8 @@
 @using System.Reflection;
 @using ParameterControl.Models.Pagination
 @using ParameterControl.Models.CrossConnection
-@model TableCrossConnectionViewModel
+@using ParameterControl.Models.Pagination
+@model PaginationResult<TableCrossConnectionViewModel>
 
 @{
     PropertyInfo GetRowInfo(string RowValue)
@@ -16,7 +17,7 @@
     <div class="card_policies card_element flex_box" id="card_policies">
         <div class="flex_box titulation">
             <p class="title_table font_bold">Tomas Transversales</p>
-            @if (Model.IsCreate)
+            @if (Model.Elements.IsCreate)
             {
                 <a class="button button_primary" asp-controller="CrossConnections" asp-action="Create">
                     <p class="text font_bold">Crear</p>
@@ -25,7 +26,7 @@
         </div>
         <div class="list">
             <div class="element_table">
-                @if (Model.Filter)
+                @if (Model.Elements.Filter)
                 {
                     <div class="content_filter flex_box">
                         <a class="button button_primary" title="Filtrar" asp-controller="CrossConnections" asp-action="Filter">
@@ -44,52 +45,52 @@
                 <div id="table" class="content_table">
                     <div class="tables flex_box">
                         <div class="columns">
-                            @foreach (var Colunm in Model.Rows)
+                            @foreach (var Colunm in Model.Elements.Rows)
                             {
                                 <div class="@Colunm.Name column flex_box order">
                                     <p class="text font_bold">@Colunm.Name</p>
                                 </div>
                             }
-                            @if (Model.IsView || Model.IsEdit || Model.IsInactivate)
+                            @if (Model.Elements.IsView || Model.Elements.IsEdit || Model.Elements.IsInactivate)
                             {
                                 <div class="column actions flex_box">
                                     <p class="text font_bold">Acciones</p>
                                 </div>
                             }
                         </div>
-                        @if (Model.Data.Count() == 0)
+                        @if (Model.Elements.Data.Count() == 0)
                         {
                             <p>No existe informacion</p>
                         }
                         else
                         {
-                            @foreach (var CrossConnections in Model.Data)
+                            @foreach (var CrossConnections in Model.Elements.Data)
                             {
                                 @if (CrossConnections.State)
                                 {
                                     <div class="rows">
-                                        @foreach (var Row in Model.Rows)
+                                        @foreach (var Row in Model.Elements.Rows)
                                         {
                                             <div class="row_table flex_box">
                                                 <p id="text_row" class="text flex_box">@GetRowInfo(Row.Value)?.GetValue(CrossConnections)?.ToString()</p>
                                             </div>
                                         }
-                                        @if (Model.IsView || Model.IsEdit || Model.IsInactivate)
+                                        @if (Model.Elements.IsView || Model.Elements.IsEdit || Model.Elements.IsInactivate)
                                         {
                                             <div class="row_table flex_box actions">
-                                                @if (Model.IsView)
+                                                @if (Model.Elements.IsView)
                                                 {
                                                     <a class="button_icon button_primary" title="Ver" asp-controller="CrossConnections" asp-action="View">
                                                         <i class="icon icon_041"></i>
                                                     </a>
                                                 }
-                                                @if (Model.IsEdit)
+                                                @if (Model.Elements.IsEdit)
                                                 {
                                                     <a class="button_icon button_primary" title="Editar" asp-controller="CrossConnections" asp-action="Edit">
                                                         <i class="icon icon_106"></i>
                                                     </a>
                                                 }
-                                                @if (Model.IsInactivate)
+                                                @if (Model.Elements.IsInactivate)
                                                 {
                                                     <a class="button_icon button_primary" title="Inactivar" asp-controller="CrossConnections" asp-action="Desactive">
                                                         <i class="icon icon_196"></i>
@@ -102,28 +103,28 @@
                                 else
                                 {
                                     <div class="rows disabled">
-                                        @foreach (var Row in Model.Rows)
+                                        @foreach (var Row in Model.Elements.Rows)
                                         {
                                             <div class="row_table flex_box">
                                                 <p id="text_row" class="text flex_box">@GetRowInfo(Row.Value)?.GetValue(CrossConnections)?.ToString()</p>
                                             </div>
                                         }
-                                        @if (Model.IsView || Model.IsEdit || Model.IsInactivate)
+                                        @if (Model.Elements.IsView || Model.Elements.IsEdit || Model.Elements.IsInactivate)
                                         {
                                             <div class="row_table flex_box actions">
-                                                @if (Model.IsView)
+                                                @if (Model.Elements.IsView)
                                                 {
                                                     <button class="button_icon button_primary disabled" title="Ver" disabled>
                                                         <i class="icon icon_041"></i>
                                                     </button>
                                                 }
-                                                @if (Model.IsEdit)
+                                                @if (Model.Elements.IsEdit)
                                                 {
                                                     <button class="button_icon button_primary disabled" title="Editar" disabled>
                                                         <i class="icon icon_106"></i>
                                                     </button>
                                                 }
-                                                @if (Model.IsActivate)
+                                                @if (Model.Elements.IsActivate)
                                                 {
                                                     <a class="button_icon button_primary" title="Activar" asp-controller="CrossConnections" asp-action="Active">
                                                         <i class="icon icon_199"></i>
@@ -138,52 +139,7 @@
                     </div>
                 </div>
                 <div class="pagination flex_box">
-                    <div id="pagination_mobile" class="custom_pagination pagination_mobile flex_box">
-                        <button class="button button_primary">
-                            <i class="icon text icon_160"></i>
-                            <p class="text font_bold">Anterior</p>
-                        </button>
-                        <p class="pages font_light">
-                            pagina 1 de 2
-                        </p>
-                        <button class="button button_primary">
-                            <p class="text font_bold">Siguiente</p>
-                            <i class="icon text icon_158"></i>
-                        </button>
-                    </div>
-                    <div id="pagination_desktop" class="custom_pagination pagination_desktop flex_box">
-                        <div class="navigator flex_box">
-                            <button class="button button_primary">
-                                <p class="text font_bold">Primera</p>
-                            </button>
-                            <button class="button_icon button_primary">
-                                <i class="icon text icon_152"></i>
-                            </button>
-                            <div class="pages flex_box">
-                                <button class="button_icon button_primary">
-                                    <p class="text font_bold">1</p>
-                                </button>
-                                <button class="button_icon button_primary">
-                                    <p class="text font_bold">2</p>
-                                </button>
-                                <button class="button_icon button_primary">
-                                    <p class="text font_bold">3</p>
-                                </button>
-                                <button class="button_icon button_primary">
-                                    <p class="text font_bold">4</p>
-                                </button>
-                                <button class="button_icon button_primary">
-                                    <p class="text font_bold">5</p>
-                                </button>
-                            </div>
-                            <button class="button_icon button_primary">
-                                <i class="icon text icon_151"></i>
-                            </button>
-                            <button class="button button_primary">
-                                <p class="text font_bold">Ultima</p>
-                            </button>
-                        </div>
-                    </div>
+                    <partial name="_Pagination" />
                 </div>
             </div>
         </div>
