@@ -25,18 +25,22 @@
         </div>
         <div class="list">
             <div class="element_table">
-                <div class="content_filter flex_box">
+                @if (Model.Elements.Filter)
+                {
+                    <div class="content_filter flex_box">
                         <a class="button button_primary" title="Filtrar" asp-controller="Users" asp-action="Filter">
-                        <p class="text font_bold">Filtrar Tabla</p>
-                    </a>
-
-                    @if (ViewBag.ApplyFilter)
-                    {
-                        <a class="button button_secondary" title="Filtrar" asp-controller="Users" asp-action="Users">
-                            <p class="text font_bold">Eliminar filtros</p>
+                            <p class="text font_bold">Filtrar Tabla</p>
                         </a>
-                    }
-                </div>
+
+                        @if (ViewBag.ApplyFilter)
+                        {
+                            <a class="button button_secondary" title="Filtrar" asp-controller="Users" asp-action="Users">
+                                <p class="text font_bold">Eliminar filtros</p>
+                            </a>
+                        }
+                    </div>
+                }
+               
 
                 <div id="table" class="content_table">
                     <div class="tables flex_box">
@@ -47,9 +51,13 @@
                                     <p class="text font_bold">@Colunm.Name</p>
                                 </div>
                             }
-                            <div class="column actions flex_box">
-                                <p class="text font_bold">Acciones</p>
-                            </div>
+                            @if (Model.Elements.IsView || Model.Elements.IsEdit || Model.Elements.IsInactivate || Model.Elements.IsActivate)
+                            {
+                                <div class="column actions flex_box">
+                                    <p class="text font_bold">Acciones</p>
+                                </div>
+                            }
+                           
                         </div>
                         @if (Model.Elements.Data.Count() == 0)
                         {
@@ -68,17 +76,31 @@
                                                 <p id="text_row" class="text flex_box">@GetRowInfo(Row.Value)?.GetValue(User)?.ToString()</p>
                                             </div>
                                         }
-                                        <div class="row_table flex_box actions">
-                                            <a class="button_icon button_primary" title="Ver" asp-controller="Users" asp-action="View" asp-route-code="@User.Code">
-                                                <i class="icon icon_041"></i>
-                                            </a>
-                                            <a class="button_icon button_primary" title="Editar" asp-controller="Users" asp-action="Edit" asp-route-code="@User.Code">
-                                                <i class="icon icon_106"></i>
-                                            </a>
-                                            <a class="button_icon button_primary" title="Inactivar" asp-controller="Users" asp-action="Desactive" asp-route-code="@User.Code">
-                                                <i class="icon icon_196"></i>
-                                            </a>
-                                        </div>
+                                        @if (Model.Elements.IsView || Model.Elements.IsEdit || Model.Elements.IsInactivate)
+                                        {
+                                            <div class="row_table flex_box actions">
+                                                @if (Model.Elements.IsView)
+                                                {
+                                                    <a class="button_icon button_primary" title="Ver" asp-controller="Users" asp-action="View" asp-route-code="@User.Code">
+                                                        <i class="icon icon_041"></i>
+                                                    </a>
+                                                }
+                                                @if (Model.Elements.IsEdit)
+                                                {
+                                                    <a class="button_icon button_primary" title="Editar" asp-controller="Users" asp-action="Edit" asp-route-code="@User.Code">
+                                                        <i class="icon icon_106"></i>
+                                                    </a>
+                                                }
+                                                @if (Model.Elements.IsInactivate)
+                                                {
+                                                    <a class="button_icon button_primary" title="Inactivar" asp-controller="Users" asp-action="Desactive" asp-route-code="@User.Code">
+                                                        <i class="icon icon_196"></i>
+                                                    </a>
+                                                }
+                                               
+                                            </div>
+                                        }
+                                        
                                     </div>
                                 }
                                 else
@@ -90,17 +112,30 @@
                                                 <p id="text_row" class="text flex_box">@GetRowInfo(Row.Value)?.GetValue(User)?.ToString()</p>
                                             </div>
                                         }
-                                        <div class="row_table flex_box actions">
-                                            <button class="button_icon button_primary disabled" title="Ver" disabled>
-                                                <i class="icon icon_041"></i>
-                                            </button>
-                                            <button class="button_icon button_primary disabled" title="Editar" disabled>
-                                                <i class="icon icon_106"></i>
-                                            </button>
-                                            <a class="button_icon button_primary" title="Activar" asp-controller="Users" asp-action="Active" asp-route-code="@User.Code">
-                                                <i class="icon icon_199"></i>
-                                            </a>
-                                        </div>
+                                        @if (Model.Elements.IsView || Model.Elements.IsEdit || Model.Elements.IsActivate)
+                                        {
+                                            <div class="row_table flex_box actions">
+                                                @if (Model.Elements.IsView)
+                                                {
+                                                    <a class="button_icon button_primary" title="Ver" asp-controller="Users" asp-action="View" asp-route-code="@User.Code">
+                                                        <i class="icon icon_041"></i>
+                                                    </a>
+                                                }
+                                                @if (Model.Elements.IsEdit)
+                                                {
+                                                    <a class="button_icon button_primary" title="Editar" asp-controller="Users" asp-action="Edit" asp-route-code="@User.Code">
+                                                        <i class="icon icon_106"></i>
+                                                    </a>
+                                                }
+                                                @if (Model.Elements.IsActivate)
+                                                {
+                                                    <a class="button_icon button_primary" title="Activar" asp-controller="Users" asp-action="Active" asp-route-code="@User.Code">
+                                                        <i class="icon icon_199"></i>
+                                                    </a>
+                                                }
+
+                                            </div>
+                                        }
                                     </div>
                                 }
                             }

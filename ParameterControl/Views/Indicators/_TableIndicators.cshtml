@@ -24,49 +24,23 @@
         </div>
         <div class="list">
             <div class="element_table">
-                <div class="content_filter flex_box">
-                    @*  <div class="filter_primary">
-                    <div id="field_primary" class="field">
-                    <label class="name font_normal" for="select_filter">Filtrar Por :</label>
-                    <div id="input" class="input">
-                    <input class="input_select" id="input_select_filter" name="input_select_filter" value="" type="text" placeholder="Seleccione una opción" onclick="showOptions()" readonly />
-                    <i class="icon icon_select icon_153"></i>
-                    </div>
-                    <div id="options" class="options">
-                    <ul class="options_list">
-                    <li onclick="selectOption('@null', '@null')" class="option">
-                    <p class="option_text">Seleccione una opción</p>
-                    </li>
-                    @foreach (var Colunm in Model.Rows)
-                    {
-                    <li onclick="selectOption('@Colunm.Name', '@Colunm.Value')" class="option">
-                    <p class="option_text">@Colunm.Name</p>
-                    </li>
-                    }
-                    </ul>
-                    </div>
-                    <div id="select_helper" class="select_helper" onclick="showOptions()"></div>
-                    </div>
-                    </div>
+                @if (Model.Filter)
+                {
+                    <div class="content_filter flex_box">
 
-                    <div class="filter_secondary">
-                    <div id="field_secundary" class="field">
-                    <div id="input" class="input">
-                    <input class="input_select" id="input_filter" name="input_filter" type="text" placeholder="Filtro" onkeyup="selectValue()" />
-                    </div>
-                    </div>
-                    </div> *@
-                    <a class="button button_primary" title="Filtrar" asp-controller="Indicators" asp-action="Filter">
-                        <p class="text font_bold">Filtrar Tabla</p>
-                    </a>
-
-                    @if (ViewBag.ApplyFilter)
-                    {
-                        <a class="button button_secondary" title="Filtrar" asp-controller="Indicators" asp-action="Indicators">
-                            <p class="text font_bold">Eliminar filtros</p>
+                        <a class="button button_primary" title="Filtrar" asp-controller="Indicators" asp-action="Filter">
+                            <p class="text font_bold">Filtrar Tabla</p>
                         </a>
-                    }
-                </div>
+
+                        @if (ViewBag.ApplyFilter)
+                        {
+                            <a class="button button_secondary" title="Filtrar" asp-controller="Indicators" asp-action="Indicators">
+                                <p class="text font_bold">Eliminar filtros</p>
+                            </a>
+                        }
+                    </div>
+                }
+                
 
                 <div id="table" class="content_table">
                     <div class="tables flex_box">
@@ -77,9 +51,12 @@
                                     <p class="text font_bold">@Colunm.Name</p>
                                 </div>
                             }
-                            <div class="column actions flex_box">
-                                <p class="text font_bold">Acciones</p>
-                            </div>
+                            @if (Model.IsView || Model.IsEdit || Model.IsInactivate || Model.IsActivate)
+                            {
+                                <div class="column actions flex_box">
+                                    <p class="text font_bold">Acciones</p>
+                                </div>
+                            }
                         </div>
                         @if (Model.Data.Count() == 0)
                         {
@@ -98,17 +75,29 @@
                                                 <p id="text_row" class="text flex_box">@GetRowInfo(Row.Value)?.GetValue(Indicator)?.ToString()</p>
                                             </div>
                                         }
-                                        <div class="row_table flex_box actions">
-                                            <a class="button_icon button_primary" title="Ver" asp-controller="Indicators" asp-action="View" asp-route-id="@Indicator.Id">
-                                                <i class="icon icon_041"></i>
-                                            </a>
-                                            <a class="button_icon button_primary" title="Editar" asp-controller="Indicators" asp-action="Edit" asp-route-id="@Indicator.Id">
-                                                <i class="icon icon_106"></i>
-                                            </a>
-                                            <a class="button_icon button_primary" title="Inactivar" asp-controller="Indicators" asp-action="Desactive" asp-route-id="@Indicator.Id">
-                                                <i class="icon icon_196"></i>
-                                            </a>
-                                        </div>
+                                        @if (Model.IsView || Model.IsEdit || Model.IsInactivate)
+                                        {
+                                            <div class="row_table flex_box actions">
+                                                @if(Model.IsView){
+                                                    <a class="button_icon button_primary" title="Ver" asp-controller="Indicators" asp-action="View" asp-route-id="@Indicator.Id">
+                                                        <i class="icon icon_041"></i>
+                                                    </a>
+                                                }
+                                                @if(Model.IsEdit){
+                                                    <a class="button_icon button_primary" title="Editar" asp-controller="Indicators" asp-action="Edit" asp-route-id="@Indicator.Id">
+                                                        <i class="icon icon_106"></i>
+                                                    </a>
+                                                }
+                                                @if (Model.IsInactivate)
+                                                {
+                                                    <a class="button_icon button_primary" title="Inactivar" asp-controller="Indicators" asp-action="Desactive" asp-route-id="@Indicator.Id">
+                                                        <i class="icon icon_196"></i>
+                                                    </a>
+                                                }
+                                               
+                                            </div>
+                                        }
+                                        
                                     </div>
                                 }
                                 else
@@ -120,17 +109,30 @@
                                                 <p id="text_row" class="text flex_box">@GetRowInfo(Row.Value)?.GetValue(Indicator)?.ToString()</p>
                                             </div>
                                         }
-                                        <div class="row_table flex_box actions">
-                                            <button class="button_icon button_primary disabled" title="Ver" disabled>
-                                                <i class="icon icon_041"></i>
-                                            </button>
-                                            <button class="button_icon button_primary disabled" title="Editar" disabled>
-                                                <i class="icon icon_106"></i>
-                                            </button>
-                                            <a class="button_icon button_primary" title="Activar" asp-controller="Indicators" asp-action="Active" asp-route-id="@Indicator.Id">
-                                                <i class="icon icon_199"></i>
-                                            </a>
-                                        </div>
+                                        @if (Model.IsView || Model.IsEdit || Model.IsActivate)
+                                        {
+                                            <div class="row_table flex_box actions">
+                                                @if (Model.IsView)
+                                                {
+                                                    <a class="button_icon button_primary" title="Ver" asp-controller="Indicators" asp-action="View" asp-route-id="@Indicator.Id">
+                                                        <i class="icon icon_041"></i>
+                                                    </a>
+                                                }
+                                                @if (Model.IsEdit)
+                                                {
+                                                    <a class="button_icon button_primary" title="Editar" asp-controller="Indicators" asp-action="Edit" asp-route-id="@Indicator.Id">
+                                                        <i class="icon icon_106"></i>
+                                                    </a>
+                                                }
+                                                @if (Model.IsActivate)
+                                                {
+                                                    <a class="button_icon button_primary" title="Activar" asp-controller="Indicators" asp-action="Active" asp-route-id="@Indicator.Id">
+                                                        <i class="icon icon_196"></i>
+                                                    </a>
+                                                }
+
+                                            </div>
+                                        }
                                     </div>
                                 }
                             }

@@ -56,6 +56,7 @@ namespace ParameterControl.Controllers.Conciliations
             TableConciliations.IsCreate = true;
             TableConciliations.IsActivate = true;
             TableConciliations.IsEdit = true;
+            TableConciliations.IsView = true;
             TableConciliations.IsInactivate = true;
             TableConciliations.Filter = true;
 
@@ -99,6 +100,7 @@ namespace ParameterControl.Controllers.Conciliations
             TableConciliations.IsCreate = true;
             TableConciliations.IsActivate = true;
             TableConciliations.IsEdit = true;
+            TableConciliations.IsView = true;
             TableConciliations.IsInactivate = true;
             TableConciliations.Filter = true;
 

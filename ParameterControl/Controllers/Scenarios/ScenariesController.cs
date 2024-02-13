@@ -49,6 +49,7 @@ namespace ParameterControl.Controllers.Scenarios
             TableScenarios.IsCreate = true;
             TableScenarios.IsActivate = true;
             TableScenarios.IsEdit = true;
+            TableScenarios.IsView = true;
             TableScenarios.IsInactivate = true;
             TableScenarios.Filter = true;
 
@@ -92,6 +93,7 @@ namespace ParameterControl.Controllers.Scenarios
             TableScenarios.IsCreate = true;
             TableScenarios.IsActivate = true;
             TableScenarios.IsEdit = true;
+            TableScenarios.IsView = true;
             TableScenarios.IsInactivate = true;
             TableScenarios.Filter = true;
 

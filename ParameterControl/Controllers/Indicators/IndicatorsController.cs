@@ -45,6 +45,7 @@ namespace ParameterControl.Controllers.Indicators
             TableIndicators.IsCreate = true;
             TableIndicators.IsActivate = true;
             TableIndicators.IsEdit = true;
+            TableIndicators.IsView = true;
             TableIndicators.IsInactivate = true;
 
             ViewBag.ApplyFilter = false;
@@ -77,6 +78,7 @@ namespace ParameterControl.Controllers.Indicators
             TableIndicators.IsCreate = true;
             TableIndicators.IsActivate = true;
             TableIndicators.IsEdit = true;
+            TableIndicators.IsView = true;
             TableIndicators.IsInactivate = true;
 
             ViewBag.ApplyFilter = true;

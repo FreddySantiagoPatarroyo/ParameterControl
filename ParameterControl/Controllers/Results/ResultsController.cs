@@ -45,6 +45,7 @@ namespace ParameterControl.Controllers.Results
             TableResults.IsCreate = false;
             TableResults.IsActivate = true;
             TableResults.IsEdit = false;
+            TableResults.IsView = false;
             TableResults.IsInactivate = true;
 
             ViewBag.ApplyFilter = false;
@@ -78,6 +79,7 @@ namespace ParameterControl.Controllers.Results
             TableResults.IsCreate = true;
             TableResults.IsActivate = true;
             TableResults.IsEdit = true;
+            TableResults.IsView = false;
             TableResults.IsInactivate = true;
 
             ViewBag.ApplyFilter = true;

@@ -47,6 +47,7 @@ namespace ParameterControl.Controllers.Users
             TableUsers.IsCreate = true;
             TableUsers.IsActivate = true;
             TableUsers.IsEdit = true;
+            TableUsers.IsView = true;
             TableUsers.IsInactivate = true;
 
             var resultViemModel = new PaginationResult<TableUserViewModel>()
@@ -90,6 +91,7 @@ namespace ParameterControl.Controllers.Users
             TableUsers.IsCreate = true;
             TableUsers.IsActivate = true;
             TableUsers.IsEdit = true;
+            TableUsers.IsView = true;
             TableUsers.IsInactivate = true;
 
             var resultViemModel = new PaginationResult<TableUserViewModel>()

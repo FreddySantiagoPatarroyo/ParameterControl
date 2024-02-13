@@ -50,6 +50,7 @@ namespace ParameterControl.Controllers.Parameters
             TableParameters.IsCreate = true;
             TableParameters.IsActivate = true;
             TableParameters.IsEdit = true;
+            TableParameters.IsView = true;
             TableParameters.IsInactivate = true;
             TableParameters.Filter = true;
 
@@ -93,6 +94,7 @@ namespace ParameterControl.Controllers.Parameters
             TableParameters.IsCreate = true;
             TableParameters.IsActivate = true;
             TableParameters.IsEdit = true;
+            TableParameters.IsView = true;
             TableParameters.IsInactivate = true;
 
             var resultViemModel = new PaginationResult<TableParametersViewModel>()

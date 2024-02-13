@@ -51,7 +51,7 @@
                                     <p class="text font_bold">@Colunm.Name</p>
                                 </div>
                             }
-                            @if (Model.Elements.IsView || Model.Elements.IsEdit || Model.Elements.IsInactivate)
+                            @if (Model.Elements.IsView || Model.Elements.IsEdit || Model.Elements.IsInactivate || Model.Elements.IsActivate)
                             {
                                 <div class="column actions flex_box">
                                     <p class="text font_bold">Acciones</p>
@@ -109,7 +109,7 @@
                                                 <p id="text_row" class="text flex_box">@GetRowInfo(Row.Value)?.GetValue(CrossConnections)?.ToString()</p>
                                             </div>
                                         }
-                                        @if (Model.Elements.IsView || Model.Elements.IsEdit || Model.Elements.IsInactivate)
+                                        @if (Model.Elements.IsView || Model.Elements.IsEdit || Model.Elements.IsActivate)
                                         {
                                             <div class="row_table flex_box actions">
                                                 @if (Model.Elements.IsView)

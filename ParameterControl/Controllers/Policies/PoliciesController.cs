@@ -50,6 +50,7 @@ namespace ParameterControl.Controllers.Policies
             TablePolicies.IsCreate = true;
             TablePolicies.IsActivate = true;
             TablePolicies.IsEdit = true;
+            TablePolicies.IsView = true;
             TablePolicies.IsInactivate = true;
 
             var resultViemModel = new PaginationResult<TablePoliciesViewModel>()
@@ -92,6 +93,7 @@ namespace ParameterControl.Controllers.Policies
             TablePolicies.IsCreate = true;
             TablePolicies.IsActivate = true;
             TablePolicies.IsEdit = true;
+            TablePolicies.IsView = true;
             TablePolicies.IsInactivate = true;
 
 
