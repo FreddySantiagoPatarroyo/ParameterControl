@@ -122,15 +122,15 @@
                                             <div class="row_table flex_box actions">
                                                 @if (Model.Elements.IsView)
                                                 {
-                                                    <a class="button_icon button_primary" title="Ver" asp-controller="Conciliations" asp-action="View" asp-route-code="@Conciliation.Code">
+                                                    <button class="button_icon button_primary disabled" title="Ver" disabled>
                                                         <i class="icon icon_041"></i>
-                                                    </a>
+                                                    </button>
                                                 }
                                                 @if (Model.Elements.IsEdit)
                                                 {
-                                                    <a class="button_icon button_primary" title="Editar" asp-controller="Conciliations" asp-action="Edit" asp-route-code="@Conciliation.Code">
+                                                    <button class="button_icon button_primary disabled" title="Editar" disabled>
                                                         <i class="icon icon_106"></i>
-                                                    </a>
+                                                    </button>
                                                 }
                                                 @if (Model.Elements.IsActivate)
                                                 {

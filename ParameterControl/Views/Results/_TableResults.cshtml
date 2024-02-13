@@ -113,14 +113,16 @@
                                             <div class="row_table flex_box actions">
                                                 @if (Model.IsView)
                                                 {
-                                                    <a class="button_icon button_primary" title="Ver" asp-controller="Results" asp-action="View" asp-route-id="@Result.Id">
+                                                    <button class="button_icon button_primary disabled" title="Ver" disabled>
                                                         <i class="icon icon_041"></i>
-                                                    </a>
+                                                    </button>
                                                 }
-
-                                                @*  <a class="button_icon button_primary" title="Editar" asp-controller="Results" asp-action="Edit" asp-route-id="@Result.Id">
+                                                @*@if (Model.IsEdit)
+                                                    {
+                                                    <button class="button_icon button_primary disabled" title="Editar" disabled>
                                                     <i class="icon icon_106"></i>
-                                                    </a> *@
+                                                    </button>
+                                                    }*@
                                                 @if (Model.IsActivate)
                                                 {
                                                     <a class="button_icon button_primary" title="Inactivar" asp-controller="Results" asp-action="Desactive" asp-route-id="@Result.Id">
