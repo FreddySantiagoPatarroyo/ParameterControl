@@ -7,6 +7,7 @@ namespace ParameterControl.Services.CrossConnections
     public interface ICrossConnectionsService
     {
         Task<int> CountCrossConnections();
+        Task<CrossConnection> GetCrossConnectionByCode(int code);
 
         //Task<CrossConnection> GetCrossConnectionByCode(int code);
         Task<CrossConnectionViewModel> GetCrossConnectionFormat(CrossConnection crossConnection);

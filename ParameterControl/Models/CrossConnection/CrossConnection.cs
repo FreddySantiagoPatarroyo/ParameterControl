@@ -4,6 +4,8 @@ namespace ParameterControl.Models.CrossConnection
 {
     public class CrossConnection
     {
+        public int Code { get; set; }
+
         [Required(ErrorMessage = "La tabla es requerido")]
         public string Table { get; set; } = string.Empty;
 

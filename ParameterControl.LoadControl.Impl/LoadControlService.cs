@@ -11,12 +11,14 @@ namespace ParameterControl.LoadControl.Impl
         private readonly ModifyLoadControl _modifyLoadControl;
         private readonly GetAllLoadControl _getAllLoadControl;
         private readonly GetPaginatorLoadControl _getPaginatorLoadControl;
+        private readonly GetByIdLoadControl _getByIdLoadControl;
 
         public LoadControlService(IConfiguration configuration)
         {
             _modifyLoadControl = new ModifyLoadControl(configuration);
             _getAllLoadControl = new GetAllLoadControl(configuration);
             _getPaginatorLoadControl = new GetPaginatorLoadControl(configuration);
+            _getByIdLoadControl = new GetByIdLoadControl(configuration);
         }
 
         public async Task<List<LoadControlModel>> SelectAllLoadControl()
@@ -29,6 +31,27 @@ namespace ParameterControl.LoadControl.Impl
                     var response = await _getAllLoadControl.SelectAllLoadControl();
                     mapper = await MapperLoadControl(response);
 
+                    return mapper;
+                });
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
+        public async Task<LoadControlModel> SelectByIdLoadControl(LoadControlModel entity)
+        {
+            try
+            {
+                LoadControlModel mapper = new LoadControlModel();
+                return await Task.Run(async () =>
+                {
+                    var response = await _getByIdLoadControl.SelectByIdLoadControl(entity);
+                    foreach (DataRow row in response.Rows)
+                    {
+                        mapper = await MapperToLoadControl(row);
+                    }
                     return mapper;
                 });
             }
@@ -91,6 +114,7 @@ namespace ParameterControl.LoadControl.Impl
             {
                 LoadControlModel model = new LoadControlModel
                 {
+                    Code = Convert.ToInt32(dr["COD_CARGA"]),
                     Package = dr["PAQUETE"] is DBNull ? string.Empty : dr["PAQUETE"].ToString(),
                     Table = dr["TABLA"] is DBNull ? string.Empty : dr["TABLA"].ToString(),
                     Periodicity = dr["PERIODICIDAD"] is DBNull ? string.Empty : dr["PERIODICIDAD"].ToString(),

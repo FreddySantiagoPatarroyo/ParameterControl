@@ -6,6 +6,7 @@ using ParameterControl.LoadControl.Impl;
 using ParameterControl.LoadControl.Entities;
 using ParameterControl.Models.Pagination;
 using ParameterControl.Models.Conciliation;
+using ParameterControl.Conciliation.Entities;
 
 namespace ParameterControl.Services.CrossConnections
 {
@@ -112,6 +113,7 @@ namespace ParameterControl.Services.CrossConnections
             {
                 CrossConnectionViewModel crossConnectionModel = new CrossConnectionViewModel();
 
+                crossConnectionModel.Code = crossConnection.Code;
                 crossConnectionModel.Table = crossConnection.Table;
                 crossConnectionModel.Periodicity = crossConnection.Periodicity;
                 crossConnectionModel.Status = crossConnection.Status;
@@ -134,6 +136,7 @@ namespace ParameterControl.Services.CrossConnections
 
             CrossConnectionViewModel crossConnectionModel = new CrossConnectionViewModel();
 
+            crossConnectionModel.Code = crossConnection.Code;
             crossConnectionModel.Table = crossConnection.Table;
             crossConnectionModel.Periodicity = crossConnection.Periodicity;
             crossConnectionModel.Status = crossConnection.Status;
@@ -148,11 +151,12 @@ namespace ParameterControl.Services.CrossConnections
             return crossConnectionModel;
         }
 
-        //public async Task<modCrossConnection.CrossConnection> GetCrossConnectionByCode(int code)
-        //{
-        //    modCrossConnection.CrossConnection crossConnection = crossConnections.Find(crossConnection => crossConnection.Code == code);
-        //    return crossConnection;
-        //}
+        public async Task<modCrossConnection.CrossConnection> GetCrossConnectionByCode(int code)
+        {
+            var response = await _loadControlService.SelectByIdLoadControl(new LoadControlModel { Code = code });
+            var CrossConnection = await MapperToCrossConnection(response);
+            return CrossConnection;
+        }
 
         public async Task<List<CrossConnectionViewModel>> GetFilterCrossConnections(FilterViewModel filterModel)
         {
@@ -244,6 +248,7 @@ namespace ParameterControl.Services.CrossConnections
             {
                 CrossConnection model = new CrossConnection
                 {
+                    Code = loadControl.Code,
                     Table = loadControl.Table,
                     Periodicity = loadControl.Periodicity,
                     Status = loadControl.Status,

@@ -47,7 +47,7 @@ namespace ParameterControl.Controllers.CrossConnections
             TableCrossConnections.IsCreate = false;
             TableCrossConnections.IsActivate = true;
             TableCrossConnections.IsEdit = false;
-            TableCrossConnections.IsView = false;
+            TableCrossConnections.IsView = true;
             TableCrossConnections.IsInactivate = true;
 
             var resultViemModel = new PaginationResult<TableCrossConnectionViewModel>()
@@ -90,7 +90,7 @@ namespace ParameterControl.Controllers.CrossConnections
             TableCrossConnections.IsCreate = false;
             TableCrossConnections.IsActivate = true;
             TableCrossConnections.IsEdit = false;
-            TableCrossConnections.IsView = false;
+            TableCrossConnections.IsView = true;
             TableCrossConnections.IsInactivate = true;
 
             var resultViemModel = new PaginationResult<TableCrossConnectionViewModel>()
@@ -107,15 +107,14 @@ namespace ParameterControl.Controllers.CrossConnections
             return View("CrossConnectionsFilter", resultViemModel);
         }
 
-        //[HttpGet]
-        //public async Task<ActionResult> View(int code)
-        //{
-        //    modCrossConnection.CrossConnection crossConnection = await crossConnectionsService.GetCrossConnectionByCode(code);
+        [HttpGet]
+        public async Task<ActionResult> View(int code)
+        {
+            modCrossConnection.CrossConnection crossConnection = await crossConnectionsService.GetCrossConnectionByCode(code);
+            CrossConnectionViewModel model = await crossConnectionsService.GetCrossConnectionFormat(crossConnection);
 
-        //    CrossConnectionViewModel model = await crossConnectionsService.GetCrossConnectionFormat(crossConnection);
-
-        //    return View("Actions/ViewCrossConnection", model);
-        //}
+            return View("Actions/ViewCrossConnection", model);
+        }
 
         [HttpGet]
         public ActionResult Filter()

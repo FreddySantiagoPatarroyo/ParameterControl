@@ -9,5 +9,6 @@ namespace ParameterControl.LoadControl.Interfaces
         Task<int> UpdateLoadControl(LoadControlModel entity);
         Task<List<LoadControlModel>> SelectAllLoadControl();
         Task<List<LoadControlModel>> SelectPaginatorLoadControl(int page, int row);
+        Task<LoadControlModel> SelectByIdLoadControl(LoadControlModel entity);
     }
 }
