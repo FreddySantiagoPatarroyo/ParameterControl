@@ -31,7 +31,6 @@ namespace ParameterControl.Stage.DataAccess
                             command.CommandType = CommandType.StoredProcedure;
                             command.Parameters.Add(new OracleParameter("PARAM_CODE", entity.Code));
                             command.Parameters.Add(new OracleParameter("PARAM_NOMBRE_ESCENARIO", entity.Name));
-                            command.Parameters.Add(new OracleParameter("PARAM_DESCRIPCION", entity.Description));
                             command.Parameters.Add(new OracleParameter("PARAM_IMPACTO", entity.Impact));
                             command.Parameters.Add(new OracleParameter("PARAM_COD_CONCILIACION", entity.Conciliation));
                             command.Parameters.Add(new OracleParameter("PARAM_MODIFICADO_POR", entity.ModifieldBy));

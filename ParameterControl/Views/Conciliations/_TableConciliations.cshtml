@@ -73,7 +73,7 @@
                                             <div class="row_table flex_box">
                                                 @if (Row.Value == "Policy")
                                                 {
-                                                    <a id="text_row" class="text flex_box" asp-controller="Conciliations" asp-action="ViewPolicy" asp-route-code="@Conciliation.PolicyCode">@GetRowInfo(Row.Value)?.GetValue(Conciliation)?.ToString()</a>
+                                                    <a id="text_row" class="link_table flex_box" asp-controller="Conciliations" asp-action="ViewPolicy" asp-route-code="@Conciliation.PolicyCode">@GetRowInfo(Row.Value)?.GetValue(Conciliation)?.ToString()</a>
                                                 }
                                                 else
                                                 {

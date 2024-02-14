@@ -21,15 +21,15 @@
     text-align: center;
 }
 
-    .pages a {
-        flex-shrink: 0;
-        margin: 0 5px;
-    }
+.pages a {
+    flex-shrink: 0;
+    margin: 0 5px;
+}
 
-        .pages a.button_disable {
-            pointer-events: none;
-            opacity: 0.5;
-        }
+.pages a.button_disable {
+    pointer-events: none;
+    opacity: 0.5;
+}
 
 .card_element {
     display: flex;
@@ -278,6 +278,20 @@
     display: none;
 }
 
+.link_table {
+    position: relative;
+    width: 100%;
+    color: var(--button_primary);
+    font-size: 14px;
+    z-index: 2;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    text-align: center;
+    margin-right: 20px;
+    display: block;
+}
+
 .color-icon::-webkit-calendar-picker-indicator {
     filter: invert(1); /* Invierte los colores, convierte el ícono a blanco */
 }
@@ -293,6 +307,10 @@
 
     .field .options .options_list .option:hover{
         background: var(--bg_option_select_hover);
+    }
+
+    .link_table:hover {
+        color: var(--button_primary_hover);
     }
 
 }
