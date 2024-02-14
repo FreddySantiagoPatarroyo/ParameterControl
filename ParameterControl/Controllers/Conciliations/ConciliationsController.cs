@@ -45,20 +45,18 @@ namespace ParameterControl.Controllers.Conciliations
         [HttpGet]
         public async Task<ActionResult> Conciliations(PaginationViewModel paginationViewModel)
         {
-
             List<modConciliation.Conciliation> Conciliations = await conciliationsServices.GetConciliationsPagination(paginationViewModel);
             int TotalConciliations = await conciliationsServices.CountConciliations();
 
             TableConciliations.Data = await conciliationsServices.GetConciliationsFormat(Conciliations);
-
             TableConciliations.Rows = rows.RowsConciliations();
-
             TableConciliations.IsCreate = true;
             TableConciliations.IsActivate = true;
             TableConciliations.IsEdit = true;
             TableConciliations.IsView = true;
             TableConciliations.IsInactivate = true;
             TableConciliations.Filter = true;
+            ViewBag.ApplyFilter = false;
 
             var resultViemModel = new PaginationResult<TableConciliationViewModel>()
             {
@@ -69,15 +67,12 @@ namespace ParameterControl.Controllers.Conciliations
                 BaseUrl = Url.Action() + "?"
             };
 
-            ViewBag.ApplyFilter = false;
-
             return View("Conciliations", resultViemModel);
         }
 
         [HttpGet]
         public async Task<ActionResult> ConciliationsFilter(PaginationViewModel paginationViewModel, string filterColunm = "", string filterValue = "", string typeRow = "")
         {
-  
             if (filterColunm == null || filterColunm == "" || filterValue == null || filterValue == "")
             {
                 return RedirectToAction("Conciliations");
@@ -94,15 +89,14 @@ namespace ParameterControl.Controllers.Conciliations
             int TotalConciliations = conciliationsFilter.Count();
 
             TableConciliations.Data = conciliationsServices.GetFilterPagination(conciliationsFilter, paginationViewModel, TotalConciliations);
-
             TableConciliations.Rows = rows.RowsConciliations();
-
             TableConciliations.IsCreate = true;
             TableConciliations.IsActivate = true;
             TableConciliations.IsEdit = true;
             TableConciliations.IsView = true;
             TableConciliations.IsInactivate = true;
             TableConciliations.Filter = true;
+            ViewBag.ApplyFilter = true;
 
             var resultViemModel = new PaginationResult<TableConciliationViewModel>()
             {
@@ -113,15 +107,12 @@ namespace ParameterControl.Controllers.Conciliations
                 BaseUrl = Url.Action() + "?filterColunm=" + filterColunm + "&filterValue=" + filterValue + "&typeRow=" + typeRow + "&"
             };
 
-            ViewBag.ApplyFilter = true;
-
             return View("ConciliationsFilter", resultViemModel);
         }
 
         [HttpGet]
         public async Task<ActionResult> Create()
         {
-
             List<SelectListItem> PoliciesOptionsList = await GetPolicies();
             List<SelectListItem> RequiredOptionList = await conciliationsServices.GetRequired();
             List<SelectListItem> OperationTypeOptionsList = await conciliationsServices.GetOperationsType();
@@ -147,9 +138,8 @@ namespace ParameterControl.Controllers.Conciliations
             }
             else
             {
-                try
-                {
-                    _logger.LogInformation($"Inicia método ConciliationController.Create {JsonConvert.SerializeObject(request)}");
+                try 
+                { 
                     var responseIn = await conciliationsServices.InsertConciliation(request);
                     _logger.LogInformation($"Finaliza método ConciliationController.Create {responseIn}");
                     return Ok(new { message = "Se creo la conciliación de manera exitosa", state = "Success" });
@@ -160,7 +150,6 @@ namespace ParameterControl.Controllers.Conciliations
                     return BadRequest(new { message = "Error al crear la conciliación", state = "Error" });
                 }
             }
-
         }
 
         [HttpGet]
@@ -174,9 +163,6 @@ namespace ParameterControl.Controllers.Conciliations
             List<SelectListItem> EmailsOptionsList = await conciliationsServices.GetEmailUsers();
 
             ConciliationCreateViewModel model = await conciliationsServices.GetConciliationFormatCreate(conciliation);
-
-            Console.WriteLine(model.CreationDate);
-            
             model.OperationTypeOptions = OperationTypeOptionsList;
             model.PoliciesOption = PoliciesOptionsList;
             model.RequiredOption = RequiredOptionsList;
@@ -197,8 +183,8 @@ namespace ParameterControl.Controllers.Conciliations
             {
                 try
                 {
-                    _logger.LogInformation($"Inicia método ConciliationsController.Edit {JsonConvert.SerializeObject(request)}");
                     var responseIn = await conciliationsServices.UpdateConciliation(request);
+                    _logger.LogInformation($"Finaliza método ConciliationController.Edit {responseIn}");
                     return Ok(new { message = "Se actualizo la conciliación de manera exitosa", state = "Success" });
                 }
                 catch (Exception ex)
@@ -213,7 +199,6 @@ namespace ParameterControl.Controllers.Conciliations
         public async Task<ActionResult> View(int code)
         {
             modConciliation.Conciliation conciliation = await conciliationsServices.GetConciliationsByCode(code);
-
             ConciliationViewModel model = await conciliationsServices.GetConciliationFormat(conciliation);
 
             return View("Actions/ViewConciliation", model);
@@ -223,7 +208,6 @@ namespace ParameterControl.Controllers.Conciliations
         public async Task<ActionResult> ViewPolicy(int code)
         {
             modPolicy.Policy policy = await policiesServices.GetPolicyByCode(code);
-
             PolicyViewModel model = await policiesServices.GetPolicyFormat(policy);
 
             return View("Actions/ViewPolicyConciliations", model);
@@ -233,7 +217,6 @@ namespace ParameterControl.Controllers.Conciliations
         public async Task<ActionResult> Active(int code)
         {
             modConciliation.Conciliation conciliation = await conciliationsServices.GetConciliationsByCode(code);
-
             return View("Actions/ActiveConciliation", conciliation);
         }
 
@@ -244,6 +227,7 @@ namespace ParameterControl.Controllers.Conciliations
             {
                 modConciliation.Conciliation request = await conciliationsServices.GetConciliationsByCode(code);
                 var responseIn = await conciliationsServices.ActiveConciliation(request);
+                _logger.LogInformation($"Finaliza método ConciliationController.Active {responseIn}");
                 return Ok(new { message = "Se activo la conciliación de manera exitosa", state = "Success" });
             }
             catch (Exception ex)
@@ -257,7 +241,6 @@ namespace ParameterControl.Controllers.Conciliations
         public async Task<ActionResult> Desactive(int code)
         {
             modConciliation.Conciliation conciliation = await conciliationsServices.GetConciliationsByCode(code);
-
             return View("Actions/DesactiveConciliation", conciliation);
         }
 
@@ -266,7 +249,7 @@ namespace ParameterControl.Controllers.Conciliations
         {
             if (await conciliationsServices.ValidateScenariosActivos(code))
             {
-                _logger.LogError($"Error en el método PoliciesController.Desactive");
+                _logger.LogError($"Error en el método ConciliationController.Desactive");
                 return BadRequest(new { message = "La conciliacion cuenta con esenarios activos, desactive los escenarios para desactivar la conciliacion", state = "Error" });
             }
             else
@@ -275,12 +258,12 @@ namespace ParameterControl.Controllers.Conciliations
                 {
                     modConciliation.Conciliation request = await conciliationsServices.GetConciliationsByCode(code);
                     var responseIn = await conciliationsServices.DesactiveConciliation(request);
-                    _logger.LogInformation($"Inicia método ConciliationsController.Desactive {JsonConvert.SerializeObject(request)}");
+                    _logger.LogInformation($"Finaliza método ConciliationController.Desactive {responseIn}");
                     return Ok(new { message = "Se desactivo la conciliación de manera exitosa", state = "Success" });
                 }
                 catch (Exception ex)
                 {
-                    _logger.LogError($"Error en el método PoliciesController.Desactive : {JsonConvert.SerializeObject(ex.Message)}");
+                    _logger.LogError($"Error en el método ConciliationController.Desactive : {JsonConvert.SerializeObject(ex.Message)}");
                     return BadRequest(new { message = "Error al desactivar la conciliación", state = "Error" });
                 }
             }
@@ -292,7 +275,6 @@ namespace ParameterControl.Controllers.Conciliations
             FilterViewModel model = new FilterViewModel()
             {
                 Rows = rows.RowsConciliations()
-
             };
 
             return View("Actions/Filter", model);
@@ -301,7 +283,6 @@ namespace ParameterControl.Controllers.Conciliations
         [HttpPost]
         public async Task<ActionResult> FilterConciliations(FilterViewModel filter)
         {
-
             if (filter.TypeRow == "Select")
             {
                 filter.ValueFilter = filter.ValueFilterOptions;
@@ -354,6 +335,7 @@ namespace ParameterControl.Controllers.Conciliations
                     filter.TypeRow = "General";
                     break;
             }
+
             return Ok(filter);
         }
 

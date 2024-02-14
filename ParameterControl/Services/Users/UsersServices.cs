@@ -39,38 +39,7 @@ namespace ParameterControl.Services.Users
                    UpdateDate = DateTime.Parse("2023-11-09"),
                    State = true,
                     UserOwner = "User1"
-                },
-                  new modUser.User(){
-                   Code = 3,
-                   User_ = "EjemploUsuario",
-                   Email = "ejemplo@gmail.com",
-                   Name = "name3",
-                   CreationDate = DateTime.Parse("2024-01-10"),
-                   UpdateDate = DateTime.Parse("2023-11-09"),
-                   State = false,
-                    UserOwner = "User1"
-                },
-                   new modUser.User(){
-                   Code = 4,
-                   User_ = "EjemploUsuario1",
-                   Email = "ejemplo@gmail.com",
-                   Name = "name4",
-                   CreationDate = DateTime.Parse("2024-01-10"),
-                   UpdateDate = DateTime.Parse("2023-11-09"),
-                   State = false,
-                    UserOwner = "User1"
-                },
-                    new modUser.User(){
-                   Code = 5,
-                   User_ = "EjemploUsuario1",
-                   Email = "ejemplo@gmail.com",
-                   Name = "name5",
-                   CreationDate = DateTime.Parse("2024-01-10"),
-                   UpdateDate = DateTime.Parse("2023-11-09"),
-                   State = true,
-                   UserOwner = "User1"
-                },
-
+                }
             };
         }
 
@@ -89,10 +58,7 @@ namespace ParameterControl.Services.Users
         public async Task<int> CountUsers()
         {
             var collectionUsers = await _userService.SelectAllUser();
-            var response = await MapperUser(collectionUsers);
-            return response.Count();
-
-            //return await _userService.SelectCountUser();
+            return collectionUsers.Count();
         }
 
         public async Task<List<modUser.User>> GetUsersPagination(PaginationViewModel pagination)
@@ -117,7 +83,6 @@ namespace ParameterControl.Services.Users
             foreach (modUser.User user in users)
             {
                 UserViewModel userModel = new UserViewModel();
-
                 userModel.Code = user.Code;
                 userModel.User_ = user.User_;
                 userModel.Email = user.Email;
@@ -139,7 +104,6 @@ namespace ParameterControl.Services.Users
         public async Task<UserViewModel> GetUserFormat(modUser.User user)
         {
             UserViewModel userModel = new UserViewModel();
-
             userModel.Code = user.Code;
             userModel.User_ = user.User_;
             userModel.Email = user.Email;
@@ -158,7 +122,6 @@ namespace ParameterControl.Services.Users
         public async Task<UserCreateViewModel> GetUserFormatCreate(modUser.User user)
         {
             UserCreateViewModel userModel = new UserCreateViewModel();
-
             userModel.Code = user.Code;
             userModel.User_ = user.User_;
             userModel.Email = user.Email;
@@ -197,8 +160,6 @@ namespace ParameterControl.Services.Users
 
         private async Task<List<UserViewModel>> applyFilter(FilterViewModel filterModel, List<UserViewModel> allUsers)
         {
-            Console.WriteLine(filterModel.TypeRow.ToString());
-
             var property = typeof(UserViewModel).GetProperty(filterModel.ColumValue);
 
             List<UserViewModel> usersFilter = new List<UserViewModel>();

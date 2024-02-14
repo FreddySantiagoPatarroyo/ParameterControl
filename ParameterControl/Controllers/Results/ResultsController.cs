@@ -39,15 +39,12 @@ namespace ParameterControl.Controllers.Results
             List<modResult.Result> results = await resultsServices.GetResults();
 
             TableResults.Data = await resultsServices.GetResultsFormat(results);
-
             TableResults.Rows = rows.RowsResults();
-
             TableResults.IsCreate = false;
             TableResults.IsActivate = true;
             TableResults.IsEdit = false;
             TableResults.IsView = false;
             TableResults.IsInactivate = true;
-
             ViewBag.ApplyFilter = false;
 
             return View("Results", TableResults);
@@ -57,7 +54,6 @@ namespace ParameterControl.Controllers.Results
         [HttpGet]
         public async Task<ActionResult> ResultsFilter(string filterColunm = "", string filterValue = "", string typeRow = "")
         {
-
             if (filterColunm == null || filterColunm == "" || filterValue == null || filterValue == "")
             {
                 return RedirectToAction("Results");
@@ -73,15 +69,12 @@ namespace ParameterControl.Controllers.Results
             List<ResultViewModel> resultsFilter = await resultsServices.GetFilterResults(filter);
 
             TableResults.Data = resultsFilter;
-
             TableResults.Rows = rows.RowsResults();
-
             TableResults.IsCreate = true;
             TableResults.IsActivate = true;
             TableResults.IsEdit = true;
             TableResults.IsView = false;
             TableResults.IsInactivate = true;
-
             ViewBag.ApplyFilter = true;
 
             return View("ResultsFilter", TableResults);
@@ -108,7 +101,6 @@ namespace ParameterControl.Controllers.Results
         public async Task<ActionResult> View(string id)
         {
             Result result = await resultsServices.GetResultsById(id);
-
             return View("Actions/ViewResult", result);
         }
 
@@ -116,7 +108,6 @@ namespace ParameterControl.Controllers.Results
         public async Task<ActionResult> Active(string id)
         {
             modResult.Result result = await resultsServices.GetResultsById(id);
-
             return View("Actions/ActiveResult", result);
         }
 
@@ -143,7 +134,6 @@ namespace ParameterControl.Controllers.Results
         public async Task<ActionResult> Desactive(string id)
         {
             Result result = await resultsServices.GetResultsById(id);
-
             return View("Actions/DesactiveResult", result);
         }
 

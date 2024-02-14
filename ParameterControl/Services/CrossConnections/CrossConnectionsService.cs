@@ -37,42 +37,6 @@ namespace ParameterControl.Services.CrossConnections
                     LastLoad = DateTime.Now,
                     LastExecution = DateTime.Now,
                     State = true
-                },
-                new modCrossConnection.CrossConnection(){
-                    Table = "Tabla3",
-                    Periodicity = "Periocidad2",
-                    Status = "Error",
-                    Error = "Error3",
-                    LastLoad = DateTime.Now,
-                    LastExecution = DateTime.Now,
-                    State = true
-                },
-                new modCrossConnection.CrossConnection(){
-                    Table = "Tabla4",
-                    Periodicity = "Periocidad4",
-                    Status = "Pendiente",
-                    Error = "Error4",
-                    LastLoad = DateTime.Now,
-                    LastExecution = DateTime.Now,
-                    State = true
-                },
-                new modCrossConnection.CrossConnection(){
-                    Table = "Tabla5",
-                    Periodicity = "Periocidad5",
-                    Status = "Pendiente",
-                    Error = "Error5",
-                    LastLoad = DateTime.Now,
-                    LastExecution = DateTime.Now,
-                    State = true
-                },
-                new modCrossConnection.CrossConnection(){
-                    Table = "Tabla6",
-                    Periodicity = "Periocidad6",
-                    Status = "Pendiente",
-                    Error = "Error6",
-                    LastLoad = DateTime.Now,
-                    LastExecution = DateTime.Now,
-                    State = true
                 }
             };
         }
@@ -112,7 +76,6 @@ namespace ParameterControl.Services.CrossConnections
             foreach (modCrossConnection.CrossConnection crossConnection in crossConnections)
             {
                 CrossConnectionViewModel crossConnectionModel = new CrossConnectionViewModel();
-
                 crossConnectionModel.Code = crossConnection.Code;
                 crossConnectionModel.Package = crossConnection.Package;
                 crossConnectionModel.Table = crossConnection.Table;
@@ -134,9 +97,7 @@ namespace ParameterControl.Services.CrossConnections
 
         public async Task<CrossConnectionViewModel> GetCrossConnectionFormat(modCrossConnection.CrossConnection crossConnection)
         {
-
             CrossConnectionViewModel crossConnectionModel = new CrossConnectionViewModel();
-
             crossConnectionModel.Code = crossConnection.Code;
             crossConnectionModel.Package = crossConnection.Package;
             crossConnectionModel.Table = crossConnection.Table;
@@ -179,8 +140,6 @@ namespace ParameterControl.Services.CrossConnections
 
         private async Task<List<CrossConnectionViewModel>> applyFilter(FilterViewModel filterModel, List<CrossConnectionViewModel> allCrossConnetions)
         {
-            Console.WriteLine(filterModel.TypeRow.ToString());
-
             var property = typeof(CrossConnectionViewModel).GetProperty(filterModel.ColumValue);
 
             List<CrossConnectionViewModel> crossConnetionsFilter = new List<CrossConnectionViewModel>();
@@ -266,7 +225,6 @@ namespace ParameterControl.Services.CrossConnections
 
         public async Task<string> ActiveCrossConnection(modCrossConnection.CrossConnection crossConnection) 
         { 
-        
             var mapping = await MapperActiveCrossConnection(crossConnection);
             var response = await _loadControlService.UpdateLoadControl(mapping);
 

@@ -39,15 +39,12 @@ namespace ParameterControl.Controllers.Indicators
             List<Indicator> indicators = await indicatorsService.GetIndicators();
 
             TableIndicators.Data = await indicatorsService.GetindicatorsFormat(indicators);
-
             TableIndicators.Rows = rows.RowsIndicators();
-
             TableIndicators.IsCreate = true;
             TableIndicators.IsActivate = true;
             TableIndicators.IsEdit = true;
             TableIndicators.IsView = true;
             TableIndicators.IsInactivate = true;
-
             ViewBag.ApplyFilter = false;
 
             return View("Indicators", TableIndicators);
@@ -72,15 +69,12 @@ namespace ParameterControl.Controllers.Indicators
             List<IndicatorViewModel> indicatorsFilter = await indicatorsService.GetFilterIndicators(filter);
 
             TableIndicators.Data = indicatorsFilter;
-
             TableIndicators.Rows = rows.RowsIndicators();
-
             TableIndicators.IsCreate = true;
             TableIndicators.IsActivate = true;
             TableIndicators.IsEdit = true;
             TableIndicators.IsView = true;
             TableIndicators.IsInactivate = true;
-
             ViewBag.ApplyFilter = true;
 
             return View("IndicatorsFilter", TableIndicators);
@@ -89,7 +83,6 @@ namespace ParameterControl.Controllers.Indicators
         [HttpGet]
         public async Task<ActionResult> Create()
         {
-
             IndicatorCreationViewModel model = new IndicatorCreationViewModel();
 
             return View("Actions/CreateIndicators", model);
@@ -170,7 +163,6 @@ namespace ParameterControl.Controllers.Indicators
         public async Task<ActionResult> View(string id)
         {
             Indicator indicator = await indicatorsService.GetIndicatorsById(id);
-
             return View("Actions/ViewIndicators", indicator);
         }
 
@@ -178,7 +170,6 @@ namespace ParameterControl.Controllers.Indicators
         public async Task<ActionResult> Active(string id)
         {
             modIndicator.Indicator indicator = await indicatorsService.GetIndicatorsById(id);
-
             return View("Actions/ActiveIndicators", indicator);
         }
 
@@ -205,7 +196,6 @@ namespace ParameterControl.Controllers.Indicators
         public async Task<ActionResult> Desactive(string id)
         {
             Indicator indicator = await indicatorsService.GetIndicatorsById(id);
-
             return View("Actions/DesactiveIndicators", indicator);
         }
 
@@ -243,7 +233,6 @@ namespace ParameterControl.Controllers.Indicators
         [HttpPost]
         public async Task<ActionResult> FilterIndicators(FilterViewModel filter)
         {
-
             if (filter.TypeRow == "Select")
             {
                 filter.ValueFilter = filter.ValueFilterOptions;

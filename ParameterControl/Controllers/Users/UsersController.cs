@@ -36,7 +36,6 @@ namespace ParameterControl.Controllers.Users
         [HttpGet]
         public async Task<ActionResult> Users(PaginationViewModel paginationViewModel)
         {
-
             List<modUser.User> Users = await usersServices.GetUsersPagination(paginationViewModel);
             int TotalUsers = await usersServices.CountUsers();
 
@@ -49,6 +48,7 @@ namespace ParameterControl.Controllers.Users
             TableUsers.IsEdit = true;
             TableUsers.IsView = true;
             TableUsers.IsInactivate = true;
+            ViewBag.ApplyFilter = false;
 
             var resultViemModel = new PaginationResult<TableUserViewModel>()
             {
@@ -59,8 +59,6 @@ namespace ParameterControl.Controllers.Users
                 BaseUrl = Url.Action() + "?"
             };
 
-            ViewBag.ApplyFilter = false;
-
             return View("Users", resultViemModel);
         }
 
@@ -68,7 +66,6 @@ namespace ParameterControl.Controllers.Users
         [HttpGet]
         public async Task<ActionResult> UsersFilter(PaginationViewModel paginationViewModel, string filterColunm = "", string filterValue = "", string typeRow = "")
         {
-
             if (filterColunm == null || filterColunm == "" || filterValue == null || filterValue == "")
             {
                 return RedirectToAction("Users");
@@ -85,14 +82,13 @@ namespace ParameterControl.Controllers.Users
             int TotalUsers = usersFilter.Count();
 
             TableUsers.Data = usersServices.GetFilterPagination(usersFilter, paginationViewModel, TotalUsers);
-
             TableUsers.Rows = rows.RowsUsers();
-
             TableUsers.IsCreate = true;
             TableUsers.IsActivate = true;
             TableUsers.IsEdit = true;
             TableUsers.IsView = true;
             TableUsers.IsInactivate = true;
+            ViewBag.ApplyFilter = true;
 
             var resultViemModel = new PaginationResult<TableUserViewModel>()
             {
@@ -103,8 +99,6 @@ namespace ParameterControl.Controllers.Users
                 BaseUrl = Url.Action() + "?filterColunm=" + filterColunm + "&filterValue=" + filterValue + "&typeRow=" + typeRow + "&"
             };
 
-            ViewBag.ApplyFilter = true;
-
             return View("UsersFilter", resultViemModel);
         }
 
@@ -112,7 +106,6 @@ namespace ParameterControl.Controllers.Users
         public async Task<ActionResult> Create()
         {
             UserCreateViewModel model = new UserCreateViewModel();
-
             return View("Actions/CreateUser", model);
         }
 
@@ -131,7 +124,7 @@ namespace ParameterControl.Controllers.Users
                     request.UserOwner = authenticatedUser.GetUserOwnerId();
                     request.CreationDate = DateTime.Now;
                     request.UpdateDate = DateTime.Now;
-                    _logger.LogInformation($"Inicia método UsersController.Create {JsonConvert.SerializeObject(request)}");
+                    _logger.LogInformation($"Finaliza método UsersController.Create {JsonConvert.SerializeObject(request)}");
 
                     return Ok(new { message = "Se creo el usuario de manera exitosa", state = "Success" });
                 }
@@ -141,7 +134,6 @@ namespace ParameterControl.Controllers.Users
                     return BadRequest(new { message = "Error al crear el usuario", state = "Error" });
                 }
             }
-
         }
 
         [HttpGet]
@@ -168,7 +160,7 @@ namespace ParameterControl.Controllers.Users
                 {
                     request.UserOwner = authenticatedUser.GetUserOwnerId();
                     request.UpdateDate = DateTime.Now;
-                    _logger.LogInformation($"Inicia método UsersController.Edit {JsonConvert.SerializeObject(request)}");
+                    _logger.LogInformation($"Finaliza método UsersController.Edit {JsonConvert.SerializeObject(request)}");
                     return Ok(new { message = "Se actualizo el usuario de manera exitosa", state = "Success" });
                 }
                 catch (Exception ex)
@@ -183,7 +175,6 @@ namespace ParameterControl.Controllers.Users
         public async Task<ActionResult> View(int code)
         {
             modUser.User user = await usersServices.GetUsersByCode(code);
-
             return View("Actions/ViewUser", user);
         }
 
@@ -191,7 +182,6 @@ namespace ParameterControl.Controllers.Users
         public async Task<ActionResult> Active(int code)
         {
             modUser.User user = await usersServices.GetUsersByCode(code);
-
             return View("Actions/ActiveUser", user);
         }
 
@@ -204,7 +194,7 @@ namespace ParameterControl.Controllers.Users
                 request.UserOwner = authenticatedUser.GetUserOwnerId();
                 request.UpdateDate = DateTime.Now;
                 request.State = true;
-                _logger.LogInformation($"Inicia método UsersController.Active {JsonConvert.SerializeObject(request)}");
+                _logger.LogInformation($"Finaliza método UsersController.Active {JsonConvert.SerializeObject(request)}");
                 return Ok(new { message = "Se activo el usuario de manera exitosa", state = "Success" });
             }
             catch (Exception ex)
@@ -218,7 +208,6 @@ namespace ParameterControl.Controllers.Users
         public async Task<ActionResult> Desactive(int code)
         {
             modUser.User user = await usersServices.GetUsersByCode(code);
-
             return View("Actions/DesactiveUser", user);
         }
 
@@ -231,7 +220,7 @@ namespace ParameterControl.Controllers.Users
                 request.UserOwner = authenticatedUser.GetUserOwnerId();
                 request.UpdateDate = DateTime.Now;
                 request.State = false;
-                _logger.LogInformation($"Inicia método UsersController.Desactive {JsonConvert.SerializeObject(request)}");
+                _logger.LogInformation($"Finaliza método UsersController.Desactive {JsonConvert.SerializeObject(request)}");
                 return Ok(new { message = "Se desactivo el usuario de manera exitosa", state = "Success" });
             }
             catch (Exception ex)

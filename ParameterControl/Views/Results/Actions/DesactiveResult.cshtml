@@ -68,12 +68,14 @@
 
             if (json.state == "Success") {
                 document.getElementById('LayoytSuccess').style.display = 'block';
+                document.getElementById('layout_message_success').innerHTML = json.message;
                 document.getElementById('loading').style.display = 'none';
                 setTimeout(() => {
                     location.href = '/Results/Results';
                 }, 3000)
             } else {
                 document.getElementById('LayoytError').style.display = 'block';
+                document.getElementById('layout_message_error').innerHTML = json.message;
                 document.getElementById('loading').style.display = 'none';
             }
         }

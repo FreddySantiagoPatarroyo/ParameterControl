@@ -76,7 +76,6 @@ namespace ParameterControl.Services.Results
                     UpdateDate = DateTime.Parse("2023-11-09"),
                     UserOwner = "User1"
                 },
-
             };
         }
 
@@ -92,7 +91,6 @@ namespace ParameterControl.Services.Results
             foreach (modResult.Result result in results)
             {
                 ResultViewModel resultModel = new ResultViewModel();
-
                 resultModel.Id = result.Id;
                 resultModel.Conciliation = result.Conciliation;
                 resultModel.Scenery = result.Scenery;
@@ -143,8 +141,6 @@ namespace ParameterControl.Services.Results
 
         private async Task<List<ResultViewModel>> applyFilter(FilterViewModel filterModel, List<ResultViewModel> allResults)
         {
-            Console.WriteLine(filterModel.TypeRow.ToString());
-
             var property = typeof(ResultViewModel).GetProperty(filterModel.ColumValue);
 
             List<ResultViewModel> resultsFilter = new List<ResultViewModel>();

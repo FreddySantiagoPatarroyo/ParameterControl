@@ -83,8 +83,7 @@ namespace ParameterControl.Services.Indicators
                     CreationDate = DateTime.Parse("2024-01-10"),
                     UpdateDate = DateTime.Parse("2023-11-09"),
                     UserOwner = "User1"
-                },
-
+                }
             };
         }
 
@@ -100,7 +99,6 @@ namespace ParameterControl.Services.Indicators
             foreach (modIndicator.Indicator indicator in indicators)
             {
                 IndicatorViewModel indicatorModel = new IndicatorViewModel();
-
                 indicatorModel.Id = indicator.Id;
                 indicatorModel.Name = indicator.Name;
                 indicatorModel.Description = indicator.Description;
@@ -145,8 +143,6 @@ namespace ParameterControl.Services.Indicators
 
         private async Task<List<IndicatorViewModel>> applyFilter(FilterViewModel filterModel, List<IndicatorViewModel> allIndicators)
         {
-            Console.WriteLine(filterModel.TypeRow.ToString());
-
             var property = typeof(IndicatorViewModel).GetProperty(filterModel.ColumValue);
 
             List<IndicatorViewModel> IndicatorsFilter = new List<IndicatorViewModel>();

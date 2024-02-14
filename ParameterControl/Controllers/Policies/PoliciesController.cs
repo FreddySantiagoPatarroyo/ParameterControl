@@ -43,15 +43,14 @@ namespace ParameterControl.Controllers.Policies
             int TotalPolicies = await policiesServices.CountPolicies();
 
             TablePolicies.Data = await policiesServices.GetPolicesFormat(policies);
-
             TablePolicies.Rows = rows.RowsPolicies();
-
             TablePolicies.Filter = true;
             TablePolicies.IsCreate = true;
             TablePolicies.IsActivate = true;
             TablePolicies.IsEdit = true;
             TablePolicies.IsView = true;
             TablePolicies.IsInactivate = true;
+            ViewBag.ApplyFilter = false;
 
             var resultViemModel = new PaginationResult<TablePoliciesViewModel>()
             {
@@ -61,8 +60,6 @@ namespace ParameterControl.Controllers.Policies
                 TotalRecords = TotalPolicies,
                 BaseUrl = Url.Action() + "?"
             };
-
-            ViewBag.ApplyFilter = false;
 
             return View("Policies", resultViemModel);
         }
@@ -86,16 +83,14 @@ namespace ParameterControl.Controllers.Policies
             int TotalPolicies = policiesFilter.Count();
 
             TablePolicies.Data = policiesServices.GetFilterPagination(policiesFilter, paginationViewModel, TotalPolicies);
-
             TablePolicies.Rows = rows.RowsPolicies();
-
             TablePolicies.Filter = true;
             TablePolicies.IsCreate = true;
             TablePolicies.IsActivate = true;
             TablePolicies.IsEdit = true;
             TablePolicies.IsView = true;
             TablePolicies.IsInactivate = true;
-
+            ViewBag.ApplyFilter = true;
 
             var resultViemModel = new PaginationResult<TablePoliciesViewModel>()
             {
@@ -106,8 +101,6 @@ namespace ParameterControl.Controllers.Policies
                 BaseUrl = Url.Action() + "?filterColunm=" + filterColunm + "&filterValue=" + filterValue + "&typeRow=" + typeRow + "&"
             };
 
-            ViewBag.ApplyFilter = true;
-
             return View("PoliciesFilter", resultViemModel);
         }
 
@@ -115,7 +108,6 @@ namespace ParameterControl.Controllers.Policies
         public async Task<ActionResult> Create()
         {
             PolicyCreateViewModel model = new PolicyCreateViewModel();
-
             return View("Actions/CreatePolicy", model);
         }
 
@@ -148,7 +140,6 @@ namespace ParameterControl.Controllers.Policies
         public async Task<ActionResult> Edit(int code)
         {
             modPolicy.Policy policy = await policiesServices.GetPolicyByCode(code);
-
             PolicyCreateViewModel model = await policiesServices.GetPolicyFormatCreate(policy);
 
             return View("Actions/EditPolicy", model);
@@ -160,15 +151,12 @@ namespace ParameterControl.Controllers.Policies
             if (!ModelState.IsValid)
             {
                 _logger.LogError($"Error en el modelo : {JsonConvert.SerializeObject(request)}");
-                
-               
                 return BadRequest(new { message = "Error en la informacion enviada", state = "Error" });
             }
             else
             {
                 try
                 {
-                    _logger.LogInformation($"Inicia método PoliciesController.Edit {JsonConvert.SerializeObject(request)}");
                     var responseIn = await policiesServices.UpdatePolicy(request);
                     _logger.LogInformation($"Finaliza método PoliciesController.Edit {responseIn}");
                     return Ok(new { message = "Se actualizo la politica de manera exitosa", state = "Success" });
@@ -185,7 +173,6 @@ namespace ParameterControl.Controllers.Policies
         public async Task<ActionResult> View(int code)
         {
             modPolicy.Policy policy = await policiesServices.GetPolicyByCode(code);
-
             PolicyViewModel model = await policiesServices.GetPolicyFormat(policy);
 
             return View("Actions/ViewPolicy", model);
@@ -195,7 +182,6 @@ namespace ParameterControl.Controllers.Policies
         public async Task<ActionResult> Active(int code)
         {
             modPolicy.Policy policy = await policiesServices.GetPolicyByCode(code);
-
             return View("Actions/ActivePolicy", policy);
         }
 
@@ -205,8 +191,8 @@ namespace ParameterControl.Controllers.Policies
             try
             {
                 modPolicy.Policy request = await policiesServices.GetPolicyByCode(code);
-                _logger.LogInformation($"Inicia método PoliciesController.Active {JsonConvert.SerializeObject(request)}");
                 var responseIn = await policiesServices.ActivePolicy(request);
+                _logger.LogInformation($"Finaliza método PoliciesController.Active {responseIn}");
                 return Ok(new { message = "Se activo la politica de manera exitosa", state = "Success" });
             }
             catch (Exception ex)
@@ -220,7 +206,6 @@ namespace ParameterControl.Controllers.Policies
         public async Task<ActionResult> Desactive(int code)
         {
             modPolicy.Policy policy = await policiesServices.GetPolicyByCode(code);
-
             return View("Actions/DesactivePolicy", policy);
         }
 
@@ -230,8 +215,8 @@ namespace ParameterControl.Controllers.Policies
             try
             {
                 modPolicy.Policy request = await policiesServices.GetPolicyByCode(code);
-                _logger.LogInformation($"Inicia método PoliciesController.Desactive {JsonConvert.SerializeObject(request)}");
                 var responseIn = await policiesServices.DesactivePolicy(request);
+                _logger.LogInformation($"Finaliza método PoliciesController.Desactive {responseIn}");
                 return Ok(new { message = "Se desactivo la politica de manera exitosa", state = "Success" });
             }
             catch (Exception ex)
@@ -303,39 +288,39 @@ namespace ParameterControl.Controllers.Policies
                     filter.TypeRow = "General";
                     break;
             }
+
             return Ok(filter);
         }
 
-        [HttpGet]
-        public async Task<ActionResult> Index()
-        {
-            return View();
-        }
+        //[HttpGet]
+        //public async Task<ActionResult> Index()
+        //{
+        //    return View();
+        //}
 
-        [HttpPost]
-        public async Task<IActionResult> Index([FromBody] PaginationViewModel pagination)
-        {
-            if (!ModelState.IsValid)
-            {
-                _logger.LogError($"Error en el modelo : {JsonConvert.SerializeObject(pagination)}");
-                return BadRequest(new { message = "Error en la consulta enviada", state = "Error" });
-            }
-            else
-            {
-                try
-                {
-                    _logger.LogInformation($"Inicia método PoliciesController.Index {JsonConvert.SerializeObject(pagination)}");
-                    var responseIn = await policiesServices.GetPoliciesPagination(pagination);
-                    _logger.LogInformation($"Finaliza método PoliciesController.Index {responseIn}");
-                    return Ok(new { message = "Se creo la politica de manera exitosa", state = "Success" });
-                }
-                catch (Exception ex)
-                {
-                    _logger.LogError($"Error en el método PoliciesController.Index : {JsonConvert.SerializeObject(ex.Message)}");
-                    return BadRequest(new { message = "Error al crear la politica", state = "Error" });
-                }
-            }
-
-        }
+        //[HttpPost]
+        //public async Task<IActionResult> Index([FromBody] PaginationViewModel pagination)
+        //{
+        //    if (!ModelState.IsValid)
+        //    {
+        //        _logger.LogError($"Error en el modelo : {JsonConvert.SerializeObject(pagination)}");
+        //        return BadRequest(new { message = "Error en la consulta enviada", state = "Error" });
+        //    }
+        //    else
+        //    {
+        //        try
+        //        {
+        //            _logger.LogInformation($"Inicia método PoliciesController.Index {JsonConvert.SerializeObject(pagination)}");
+        //            var responseIn = await policiesServices.GetPoliciesPagination(pagination);
+        //            _logger.LogInformation($"Finaliza método PoliciesController.Index {responseIn}");
+        //            return Ok(new { message = "Se creo la politica de manera exitosa", state = "Success" });
+        //        }
+        //        catch (Exception ex)
+        //        {
+        //            _logger.LogError($"Error en el método PoliciesController.Index : {JsonConvert.SerializeObject(ex.Message)}");
+        //            return BadRequest(new { message = "Error al crear la politica", state = "Error" });
+        //        }
+        //    }
+        //}
     }
 }

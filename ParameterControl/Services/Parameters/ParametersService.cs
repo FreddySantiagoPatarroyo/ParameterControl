@@ -45,78 +45,6 @@ namespace ParameterControl.Services.Parameters
                     CreationDate = DateTime.Parse("2024-01-10"),
                     UpdateDate = DateTime.Parse("2023-11-09"),
                     UserOwner = "User1"
-                },
-                new modParameter.Parameter(){
-                    Code = 3,
-                    Parameter_ = "Parameter3",
-                    ParameterType = "GENERAL",
-                    List = "Ejemplo List",
-                    Value = "ACT",
-                    Description = "Descripcion ejemplo",
-                    State = true,
-                    CreationDate = DateTime.Parse("2024-01-10"),
-                    UpdateDate = DateTime.Parse("2023-11-09"),
-                    UserOwner = "User1"
-                },
-                new modParameter.Parameter(){
-                    Code = 4,
-                    Parameter_ = "Parameter4",
-                    ParameterType = "GENERAL",
-                    List = "Ejemplo List",
-                    Value = "ACT",
-                    Description = "Descripcion ejemplo",
-                    State = false,
-                    CreationDate = DateTime.Parse("2024-01-10"),
-                    UpdateDate = DateTime.Parse("2023-11-09"),
-                    UserOwner = "User1"
-                },
-                new modParameter.Parameter(){
-                    Code = 5,
-                    Parameter_ = "Parameter5",
-                    ParameterType = "GENERAL",
-                    List = "Ejemplo List",
-                    Value = "ACT",
-                    Description = "Descripcion ejemplo",
-                    State = true,
-                    CreationDate = DateTime.Parse("2024-01-10"),
-                    UpdateDate = DateTime.Parse("2023-11-09"),
-                    UserOwner = "User1"
-                },
-                new modParameter.Parameter(){
-                    Code = 6,
-                    Parameter_ = "Parameter6",
-                    ParameterType = "GENERAL",
-                    List = "Ejemplo List",
-                    Description = "Descripcion ejemplo",
-                    Value = "ACT",
-                    State = false,
-                    CreationDate = DateTime.Parse("2024-01-10"),
-                    UpdateDate = DateTime.Parse("2023-11-09"),
-                    UserOwner = "User1"
-                },
-                new modParameter.Parameter(){
-                    Code = 7,
-                    Parameter_ = "Parameter7",
-                    ParameterType = "GENERAL",
-                    List = "Ejemplo List",
-                    Value = "ACT",
-                    Description = "Descripcion ejemplo",
-                    State = true,
-                    CreationDate = DateTime.Parse("2024-01-10"),
-                    UpdateDate = DateTime.Parse("2023-11-09"),
-                    UserOwner = "User1"
-                },
-                new modParameter.Parameter(){
-                    Code = 8,
-                    Parameter_ = "Parameter8",
-                    ParameterType = "GENERAL",
-                    List = "Ejemplo List",
-                    Value = "ACT",
-                    Description = "Descripcion ejemplo",
-                    State = false,
-                    CreationDate = DateTime.Parse("2024-01-10"),
-                    UpdateDate = DateTime.Parse("2023-11-09"),
-                    UserOwner = "User1"
                 }
             };
         }
@@ -156,7 +84,6 @@ namespace ParameterControl.Services.Parameters
             foreach (modParameter.Parameter parameter in parameters)
             {
                 ParameterViewModel parameterModel = new ParameterViewModel();
-
                 parameterModel.Code = parameter.Code;
                 parameterModel.Parameter_ = parameter.Parameter_;
                 parameterModel.Value = parameter.Value;
@@ -179,7 +106,6 @@ namespace ParameterControl.Services.Parameters
         public async Task<ParameterViewModel> GetParameterFormat(modParameter.Parameter parameter)
         {
             ParameterViewModel parameterModel = new ParameterViewModel();
-
             parameterModel.Code = parameter.Code;
             parameterModel.Parameter_ = parameter.Parameter_;
             parameterModel.Value = parameter.Value;
@@ -199,7 +125,6 @@ namespace ParameterControl.Services.Parameters
         public async Task<ParameterCreateViewModel> GetParameterFormatCreate(modParameter.Parameter parameter)
         {
             ParameterCreateViewModel parameterModel = new ParameterCreateViewModel();
-
             parameterModel.Code = parameter.Code;
             parameterModel.Parameter_ = parameter.Parameter_;
             parameterModel.Value = parameter.Value;
@@ -239,8 +164,6 @@ namespace ParameterControl.Services.Parameters
 
         private async Task<List<ParameterViewModel>> applyFilter(FilterViewModel filterModel, List<ParameterViewModel> allParameters)
         {
-            Console.WriteLine(filterModel.TypeRow.ToString());
-
             var property = typeof(ParameterViewModel).GetProperty(filterModel.ColumValue);
 
             List<ParameterViewModel> parametersFilter = new List<ParameterViewModel>();
@@ -358,10 +281,9 @@ namespace ParameterControl.Services.Parameters
                 State = request.State,
 
             };
-
             var response = await _parameterServices.InsertParameter(Parameter);
 
-            return response.Equals(1) ? "Parametro creada correctamente" : "Error creando el Parametro";
+            return response.Equals(1) ? "Parametro creado correctamente" : "Error creando el Parametro";
         }
 
         public async Task<string> UpdateParameter(modParameter.Parameter Parameter)
@@ -369,7 +291,7 @@ namespace ParameterControl.Services.Parameters
             var mapping = await MapperUpdateParameter(Parameter);
             var response = await _parameterServices.UpdateParameter(mapping);
 
-            return response.Equals(1) ? "Parametro actualizada correctamente" : "Error actualizando el Parametro";
+            return response.Equals(1) ? "Parametro actualizado correctamente" : "Error actualizando el Parametro";
         }
 
         public async Task<string> ActiveParameter(modParameter.Parameter Parameter)
@@ -377,7 +299,7 @@ namespace ParameterControl.Services.Parameters
             var mapping = await MapperActiveParameter(Parameter);
             var response = await _parameterServices.UpdateParameter(mapping);
 
-            return response.Equals(1) ? "Parametro activo correctamente" : "Error activar el Parametro";
+            return response.Equals(1) ? "Parametro activado correctamente" : "Error activando el Parametro";
         }
 
         public async Task<string> DesactiveParameter(modParameter.Parameter Parameter)
@@ -385,7 +307,7 @@ namespace ParameterControl.Services.Parameters
             var mapping = await MapperDesctiveParameter(Parameter);
             var response = await _parameterServices.UpdateParameter(mapping);
 
-            return response.Equals(1) ? "Parametro desactivo correctamente" : "Error desactivar el Parametro";
+            return response.Equals(1) ? "Parametro desactivado correctamente" : "Error desactivando el Parametro";
         }
 
         private async Task<ParameterModel> MapperUpdateParameter(modParameter.Parameter Parameter)

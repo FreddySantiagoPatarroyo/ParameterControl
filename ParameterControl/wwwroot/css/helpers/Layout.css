@@ -17,10 +17,10 @@
 .layout .text_error,
 .layout .text_success {
     padding: 16px 32px;
-    white-space: nowrap;
+   /* white-space: nowrap;
     text-overflow: Ellipsis;
     white-space: nowrap;
-    overflow: hidden;
+    overflow: hidden;*/
 }
 
 .layout .text_error{

@@ -62,51 +62,6 @@ namespace ParameterControl.Services.Conciliations
                     CreationDate = DateTime.Parse("2024-01-10"),
                     UpdateDate = DateTime.Parse("2023-11-09"),
                     UserOwner = "User1"
-                },
-                new modConciliation.Conciliation(){
-                    Code = 3,
-                    Name = "Conciliacion_1",
-                    Description = "Description",
-                    Email = "ejemplo@gmail.com",
-                    Destination = 213,
-                    Policy = "Politica1",
-                    Required = "Si",
-                    ControlType = "Voz",
-                    OperationType = "Model",
-                    State = true,
-                    CreationDate = DateTime.Parse("2024-01-10"),
-                    UpdateDate = DateTime.Parse("2023-11-09"),
-                    UserOwner = "User1"
-                },
-                new modConciliation.Conciliation(){
-                    Code = 4,
-                    Name = "Conciliacion_1",
-                    Description = "Description",
-                    Email = "ejemplo@gmail.com",
-                    Destination = 123,
-                    Policy = "Politica1",
-                    Required = "Si",
-                    ControlType = "Voz",
-                    OperationType = "Model",
-                    State = false,
-                    CreationDate = DateTime.Parse("2024-01-10"),
-                    UpdateDate = DateTime.Parse("2023-11-09"),
-                    UserOwner = "User1"
-                },
-                new modConciliation.Conciliation(){
-                    Code = 5,
-                    Name = "Conciliacion_1",
-                    Description = "Description",
-                    Email = "ejemplo@gmail.com",
-                    Destination = 123,
-                    Policy = "Politica1",
-                    Required = "No",
-                    ControlType = "Voz",
-                    OperationType = "Model",
-                    State = true,
-                    CreationDate = DateTime.Parse("2024-01-10"),
-                    UpdateDate = DateTime.Parse("2023-11-09"),
-                    UserOwner = "User1"
                 }
             };
             this.policiesServices = policiesServices;
@@ -147,7 +102,6 @@ namespace ParameterControl.Services.Conciliations
             foreach (modConciliation.Conciliation conciliation in conciliations)
             {
                 ConciliationViewModel conciliationModel = new ConciliationViewModel();
-
                 conciliationModel.Code = conciliation.Code;
                 conciliationModel.Name = conciliation.Name;
                 conciliationModel.Description = conciliation.Description;
@@ -177,7 +131,6 @@ namespace ParameterControl.Services.Conciliations
         public async Task<ConciliationViewModel> GetConciliationFormat(modConciliation.Conciliation conciliation)
         {
             ConciliationViewModel conciliationModel = new ConciliationViewModel();
-
             conciliationModel.Code = conciliation.Code;
             conciliationModel.Name = conciliation.Name;
             conciliationModel.Description = conciliation.Description;
@@ -203,9 +156,7 @@ namespace ParameterControl.Services.Conciliations
 
         public async Task<ConciliationCreateViewModel> GetConciliationFormatCreate(modConciliation.Conciliation conciliation)
         {
-
             ConciliationCreateViewModel conciliationModel = new ConciliationCreateViewModel();
-
             conciliationModel.Code = conciliation.Code;
             conciliationModel.Name = conciliation.Name;
             conciliationModel.Description = conciliation.Description;
@@ -269,7 +220,6 @@ namespace ParameterControl.Services.Conciliations
             List<modConciliation.Conciliation> allConciliations = await GetConciliations();
             List<ConciliationViewModel> conciliationsFilter = await GetConciliationsFormat(allConciliations);
 
-
             if (filterModel.ColumValue == null || filterModel.ColumValue == "" || filterModel.ValueFilter == null || filterModel.ValueFilter == "")
             {
                 return conciliationsFilter;
@@ -284,8 +234,6 @@ namespace ParameterControl.Services.Conciliations
 
         private async Task<List<ConciliationViewModel>> applyFilter(FilterViewModel filterModel, List<ConciliationViewModel> allConciliations)
         {
-            Console.WriteLine(filterModel.TypeRow.ToString());
-
             var property = typeof(ConciliationViewModel).GetProperty(filterModel.ColumValue);
 
             List<ConciliationViewModel> conciliationsFilter = new List<ConciliationViewModel>();
@@ -432,7 +380,7 @@ namespace ParameterControl.Services.Conciliations
             var mapping = await MapperActiveConciliation(conciliation);
             var response = await conciliationServices.UpdateConciliation(mapping);
 
-            return response.Equals(1) ? "Conciliacion actualizada correctamente" : "Error actualizando la conciliacion";
+            return response.Equals(1) ? "Conciliacion activada correctamente" : "Error activando la conciliacion";
         }
 
         public async Task<string> DesactiveConciliation(modConciliation.Conciliation conciliation)
@@ -440,7 +388,7 @@ namespace ParameterControl.Services.Conciliations
             var mapping = await MapperDesctiveConciliation(conciliation);
             var response = await conciliationServices.UpdateConciliation(mapping);
 
-            return response.Equals(1) ? "Conciliacion actualizada correctamente" : "Error actualizando la conciliacion";
+            return response.Equals(1) ? "Conciliacion desactivada correctamente" : "Error desactivando la conciliacion";
         }
 
         private async Task<ConciliationModel> MapperUpdateConciliation(modConciliation.Conciliation conciliation)

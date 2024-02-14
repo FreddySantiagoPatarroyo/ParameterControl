@@ -9,10 +9,7 @@ using ParameterControl.Stage.Entities;
 using ParameterControl.Stage.Impl;
 using ParameterControl.Stage.Interfaces;
 using modConciliation = ParameterControl.Models.Conciliation;
-
 using modScenarios = ParameterControl.Models.Scenery;
-
-
 
 namespace ParameterControl.Services.Scenarios
 {
@@ -42,66 +39,6 @@ namespace ParameterControl.Services.Scenarios
                 },
                 new Scenery(){
                     Code = 2,
-                    Name = "ESC_AIC_001",
-                    Impact = "CLIENTE",
-                    Conciliation = "Conciliacion1",
-                    State = false,
-                    CreationDate = DateTime.Parse("2024-01-10"),
-                    UpdateDate = DateTime.Parse("2023-11-09"),
-                    UserOwner = "User1"
-                },
-                new Scenery(){
-                    Code = 3,
-                    Name = "ESC_AIC_001",
-                    Impact = "CLIENTE",
-                    Conciliation = "Conciliacion1",
-                    State = true,
-                    CreationDate = DateTime.Parse("2024-01-10"),
-                    UpdateDate = DateTime.Parse("2023-11-09"),
-                    UserOwner = "User1"
-                },
-                new Scenery(){
-                    Code = 4,
-                    Name = "ESC_AIC_001",
-                    Impact = "CLIENTE",
-                    Conciliation = "Conciliacion1",
-                    State = false,
-                    CreationDate = DateTime.Parse("2024-01-10"),
-                    UpdateDate = DateTime.Parse("2023-11-09"),
-                    UserOwner = "User1"
-                },
-                new Scenery(){
-                    Code = 5,
-                    Name = "ESC_AIC_001",
-                    Impact = "CLIENTE",
-                    Conciliation = "Conciliacion1",
-                    State = true,
-                    CreationDate = DateTime.Parse("2024-01-10"),
-                    UpdateDate = DateTime.Parse("2023-11-09"),
-                    UserOwner = "User1"
-                },
-                new Scenery(){
-                    Code = 6,
-                    Name = "ESC_AIC_001",
-                    Impact = "COMPAÑIA",
-                    Conciliation = "Conciliacion1",
-                    State = false,
-                    CreationDate = DateTime.Parse("2024-01-10"),
-                    UpdateDate = DateTime.Parse("2023-11-09"),
-                    UserOwner = "User1"
-                },
-                new Scenery(){
-                    Code = 7,
-                    Name = "ESC_AIC_001",
-                    Impact = "CLIENTE",
-                    Conciliation = "Conciliacion1",
-                    State = true,
-                    CreationDate = DateTime.Parse("2024-01-10"),
-                    UpdateDate = DateTime.Parse("2023-11-09"),
-                    UserOwner = "User1"
-                },
-                new Scenery(){
-                    Code = 8,
                     Name = "ESC_AIC_001",
                     Impact = "CLIENTE",
                     Conciliation = "Conciliacion1",
@@ -149,7 +86,6 @@ namespace ParameterControl.Services.Scenarios
             foreach (modScenarios.Scenery scenery in scenarios)
             {
                 SceneryViewModel sceneryModel = new SceneryViewModel();
-
                 sceneryModel.Code = scenery.Code;
                 sceneryModel.Name = scenery.Name;
                 sceneryModel.Impact = scenery.Impact;
@@ -173,7 +109,6 @@ namespace ParameterControl.Services.Scenarios
         {
 
             SceneryViewModel sceneryModel = new SceneryViewModel();
-
             sceneryModel.Code = scenery.Code;
             sceneryModel.Name = scenery.Name;
             sceneryModel.Impact = scenery.Impact;
@@ -194,7 +129,6 @@ namespace ParameterControl.Services.Scenarios
         {
 
             SceneryCreateViewModel sceneryModel = new SceneryCreateViewModel();
-
             sceneryModel.Code = scenery.Code;
             sceneryModel.Name = scenery.Name;
             sceneryModel.Impact = scenery.Impact;
@@ -204,7 +138,6 @@ namespace ParameterControl.Services.Scenarios
             sceneryModel.CodeFormat = "ESC_" + scenery.Code;
             sceneryModel.CreationDate = scenery.CreationDate;
             sceneryModel.UpdateDate = scenery.UpdateDate;
-
 
             return sceneryModel;
         }
@@ -236,8 +169,6 @@ namespace ParameterControl.Services.Scenarios
 
         private async Task<List<SceneryViewModel>> applyFilter(FilterViewModel filterModel, List<SceneryViewModel> allScenarios)
         {
-            Console.WriteLine(filterModel.TypeRow.ToString());
-
             var property = typeof(SceneryViewModel).GetProperty(filterModel.ColumValue);
 
             List<SceneryViewModel> scenariosFilter = new List<SceneryViewModel>();
@@ -378,7 +309,7 @@ namespace ParameterControl.Services.Scenarios
             var mapping = await MapperActiveScenery(scenery);
             var response = await _stageService.UpdateStage(mapping);
 
-            return response.Equals(1) ? "Escenario activo correctamente" : "Error actualizando el escenario";
+            return response.Equals(1) ? "Escenario activado correctamente" : "Error activando el escenario";
         }
 
         public async Task<string> DesactiveScenery(Scenery scenery)
@@ -386,7 +317,7 @@ namespace ParameterControl.Services.Scenarios
             var mapping = await MapperDesactiveScenery(scenery);
             var response = await _stageService.UpdateStage(mapping);
 
-            return response.Equals(1) ? "Escenario desactivo correctamente" : "Error actualizando el escenario";
+            return response.Equals(1) ? "Escenario desactivado correctamente" : "Error desactivando el escenario";
         }
 
         private async Task<StageModel> MapperUpdateScenery(Scenery scenery)

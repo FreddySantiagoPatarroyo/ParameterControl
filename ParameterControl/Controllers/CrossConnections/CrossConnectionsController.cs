@@ -42,15 +42,14 @@ namespace ParameterControl.Controllers.CrossConnections
             int TotalCrossConnections = await crossConnectionsService.CountCrossConnections();
 
             TableCrossConnections.Data = await crossConnectionsService.GetCrossConnectionsFormat(crossConnections);
-
             TableCrossConnections.Rows = rows.RowsCrossConnection();
-
             TableCrossConnections.Filter = true;
             TableCrossConnections.IsCreate = false;
             TableCrossConnections.IsActivate = true;
             TableCrossConnections.IsEdit = false;
             TableCrossConnections.IsView = true;
             TableCrossConnections.IsInactivate = true;
+            ViewBag.ApplyFilter = false;
 
             var resultViemModel = new PaginationResult<TableCrossConnectionViewModel>()
             {
@@ -61,14 +60,11 @@ namespace ParameterControl.Controllers.CrossConnections
                 BaseUrl = Url.Action() + "?"
             };
 
-            ViewBag.ApplyFilter = false;
-
             return View("CrossConnections", resultViemModel);
         }
 
         public async Task<ActionResult> CrossConnectionsFilter(PaginationViewModel paginationViewModel, string filterColunm = "", string filterValue = "", string typeRow = "")
         {
-
             if (filterColunm == null || filterColunm == "" || filterValue == null || filterValue == "")
             {
                 return RedirectToAction("CrossConnections");
@@ -85,15 +81,14 @@ namespace ParameterControl.Controllers.CrossConnections
             int TotalCrossConnections = crossConnectionsFilter.Count();
 
             TableCrossConnections.Data = crossConnectionsService.GetFilterPagination(crossConnectionsFilter, paginationViewModel, TotalCrossConnections);
-
             TableCrossConnections.Rows = rows.RowsCrossConnection();
-
             TableCrossConnections.Filter = true;
             TableCrossConnections.IsCreate = false;
             TableCrossConnections.IsActivate = true;
             TableCrossConnections.IsEdit = false;
             TableCrossConnections.IsView = true;
             TableCrossConnections.IsInactivate = true;
+            ViewBag.ApplyFilter = true;
 
             var resultViemModel = new PaginationResult<TableCrossConnectionViewModel>()
             {
@@ -103,8 +98,6 @@ namespace ParameterControl.Controllers.CrossConnections
                 TotalRecords = TotalCrossConnections,
                 BaseUrl = Url.Action() + "?filterColunm=" + filterColunm + "&filterValue=" + filterValue + "&typeRow=" + typeRow + "&"
             };
-
-            ViewBag.ApplyFilter = true;
 
             return View("CrossConnectionsFilter", resultViemModel);
         }
@@ -122,7 +115,6 @@ namespace ParameterControl.Controllers.CrossConnections
         public async Task<ActionResult> Active(int code)
         {
             modCrossConnection.CrossConnection crossConnection = await crossConnectionsService.GetCrossConnectionByCode(code);
-
             return View("Actions/ActiveCrossConnection", crossConnection);
         }
 
@@ -133,6 +125,7 @@ namespace ParameterControl.Controllers.CrossConnections
             {
                 modCrossConnection.CrossConnection request = await crossConnectionsService.GetCrossConnectionByCode(code);
                 var responseIn = await crossConnectionsService.ActiveCrossConnection(request);
+                _logger.LogInformation($"Finaliza método CrossConnectionsController.Active {responseIn}");
                 return Ok(new { message = "Se activo la toma transversal de manera exitosa", state = "Success" });
             }
             catch (Exception ex)
@@ -146,7 +139,6 @@ namespace ParameterControl.Controllers.CrossConnections
         public async Task<ActionResult> Desactive(int code)
         {
             modCrossConnection.CrossConnection crossConnection = await crossConnectionsService.GetCrossConnectionByCode(code);
-
             return View("Actions/DesactiveCrossConnection", crossConnection);
         }
 
@@ -156,8 +148,8 @@ namespace ParameterControl.Controllers.CrossConnections
             try
             {
                 var request = await crossConnectionsService.GetCrossConnectionByCode(code);
-                _logger.LogInformation($"Inicia método CrossConnectionsController.Desactive {JsonConvert.SerializeObject(request)}");
                 var responseIn = await crossConnectionsService.DesactiveCrossConnection(request);
+                _logger.LogInformation($"Finaliza método CrossConnectionsController.Desactive {responseIn}");
                 return Ok(new { message = "Se desactivo la toma transversal de manera exitosa", state = "Success" });
             }
             catch (Exception ex)
@@ -165,7 +157,6 @@ namespace ParameterControl.Controllers.CrossConnections
                 _logger.LogError($"Error en el método CrossConnectionsController.Desactive : {JsonConvert.SerializeObject(ex.Message)}");
                 return BadRequest(new { message = "Error al desactivar la toma transversal", state = "Error" });
             }
-            
         }
 
         [HttpGet]
@@ -231,6 +222,7 @@ namespace ParameterControl.Controllers.CrossConnections
                     filter.TypeRow = "General";
                     break;
             }
+
             return Ok(filter);
         }
     }

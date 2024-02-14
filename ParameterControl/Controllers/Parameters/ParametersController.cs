@@ -43,9 +43,7 @@ namespace ParameterControl.Controllers.Parameters
             int TotalParameters = await parametersService.CountParameters();
 
             TableParameters.Data = await parametersService.GetParametersFormat(parameters);
-
             TableParameters.Rows = rows.RowsParameters();
-
             TableParameters.Filter = true;
             TableParameters.IsCreate = true;
             TableParameters.IsActivate = true;
@@ -53,6 +51,7 @@ namespace ParameterControl.Controllers.Parameters
             TableParameters.IsView = true;
             TableParameters.IsInactivate = true;
             TableParameters.Filter = true;
+            ViewBag.ApplyFilter = false;
 
             var resultViemModel = new PaginationResult<TableParametersViewModel>()
             {
@@ -62,8 +61,6 @@ namespace ParameterControl.Controllers.Parameters
                 TotalRecords = TotalParameters,
                 BaseUrl = Url.Action() + "?"
             };
-
-            ViewBag.ApplyFilter = false;
 
             return View("Parameters", resultViemModel);
         }
@@ -133,14 +130,12 @@ namespace ParameterControl.Controllers.Parameters
             if (!ModelState.IsValid)
             {
                 _logger.LogError($"Error en el modelo : {JsonConvert.SerializeObject(request)}");
-
                 return BadRequest(new { message = "Error en la informacion enviada", state = "Error" });
             }
             else
             {
                 try
                 {
-                    _logger.LogInformation($"Inicia método ParametersController.Create {JsonConvert.SerializeObject(request)}");
                     var responseIn = await parametersService.InsertParameter(request);
                     _logger.LogInformation($"Finaliza método ParametersController.Create {responseIn}");
                     return Ok(new { message = "Se creo el parametro de manera exitosa", state = "Success" });
@@ -161,9 +156,7 @@ namespace ParameterControl.Controllers.Parameters
             List<SelectListItem> ParameterTypeList = await parametersService.GetParameterType();
             List<SelectListItem> ParameterList = await GetParameters();
 
-
             ParameterCreateViewModel model = await parametersService.GetParameterFormatCreate(parameter);
-
             model.ParameterTypeOption = ParameterTypeList;
             model.ListParameter = ParameterList;
 
@@ -182,7 +175,6 @@ namespace ParameterControl.Controllers.Parameters
             {
                 try
                 {
-                    _logger.LogInformation($"Inicia método ParametersController.Edit {JsonConvert.SerializeObject(request)}");
                     var responseIn = await parametersService.UpdateParameter(request);
                     _logger.LogInformation($"Finaliza método ParametersController.Edit {responseIn}");
                     return Ok(new { message = "Se actualizo el parametro de manera exitosa", state = "Success" });
@@ -199,7 +191,6 @@ namespace ParameterControl.Controllers.Parameters
         public async Task<ActionResult> View(int code)
         {
             modParameter.Parameter parameter = await parametersService.GetParameterByCode(code);
-
             ParameterViewModel model = await parametersService.GetParameterFormat(parameter);
 
             return View("Actions/ViewParameter", model);
@@ -209,7 +200,6 @@ namespace ParameterControl.Controllers.Parameters
         public async Task<ActionResult> Active(int code)
         {
             modParameter.Parameter parameter = await parametersService.GetParameterByCode(code);
-
             return View("Actions/ActiveParameter", parameter);
         }
 
@@ -219,8 +209,6 @@ namespace ParameterControl.Controllers.Parameters
             try
             {
                 modParameter.Parameter request = await parametersService.GetParameterByCode(code);
-
-                _logger.LogInformation($"Inicia método ParametersController.Active {JsonConvert.SerializeObject(request)}");
                 var responseIn = await parametersService.ActiveParameter(request);
                 _logger.LogInformation($"Finaliza método ParametersController.Active {responseIn}");
                 return Ok(new { message = "Se activo el parametro de manera exitosa", state = "Success" });
@@ -236,7 +224,6 @@ namespace ParameterControl.Controllers.Parameters
         public async Task<ActionResult> Desactive(int code)
         {
             modParameter.Parameter parameter = await parametersService.GetParameterByCode(code);
-
             return View("Actions/DesactiveParameter", parameter);
         }
 
@@ -246,15 +233,13 @@ namespace ParameterControl.Controllers.Parameters
             try
             {
                 modParameter.Parameter request = await parametersService.GetParameterByCode(code);
-
-                _logger.LogInformation($"Inicia método ParametersController.Deactive {JsonConvert.SerializeObject(request)}");
                 var responseIn = await parametersService.DesactiveParameter(request);
-                _logger.LogInformation($"Finaliza método ParametersController.Deactive {responseIn}");
+                _logger.LogInformation($"Finaliza método ParametersController.Desactive {responseIn}");
                 return Ok(new { message = "Se desactivo el parametro de manera exitosa", state = "Success" });
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Error en el método ParametersController.Deactive : {JsonConvert.SerializeObject(ex.Message)}");
+                _logger.LogError($"Error en el método ParametersController.Desactive : {JsonConvert.SerializeObject(ex.Message)}");
                 return BadRequest(new { message = "Error al desactivar el parametro", state = "Error" });
             }
         }
@@ -274,7 +259,6 @@ namespace ParameterControl.Controllers.Parameters
         [HttpPost]
         public async Task<ActionResult> FilterParameters(FilterViewModel filter)
         {
-
             if (filter.TypeRow == "Select")
             {
                 filter.ValueFilter = filter.ValueFilterOptions;
@@ -327,13 +311,13 @@ namespace ParameterControl.Controllers.Parameters
                     filter.TypeRow = "General";
                     break;
             }
+
             return Ok(filter);
         }
 
         public async Task<List<SelectListItem>> GetParameters()
         {
             List<modParameter.Parameter> parameters = await parametersService.GetListParameter();
-
             return parameters.Select(parameter => new SelectListItem(parameter.Parameter_, parameter.Code.ToString())).ToList();
         }
     }

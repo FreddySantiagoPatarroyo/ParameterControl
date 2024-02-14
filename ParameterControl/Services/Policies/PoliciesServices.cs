@@ -37,60 +37,6 @@ namespace ParameterControl.Services.Policies
                     CreationDate = DateTime.Parse("2024-01-10"),
                     UpdateDate = DateTime.Parse("2023-11-09"),
                     UserOwner = "User1"
-                },
-                new modPolicy.Policy(){
-                    Code = 3,
-                    Name = "Politica_1",
-                    Description = "Descripcion ejemplo",
-                    State = true,
-                    CreationDate = DateTime.Parse("2024-02-10"),
-                    UpdateDate = DateTime.Parse("2023-11-09"),
-                    UserOwner = "User1"
-                },
-                new modPolicy.Policy(){
-                    Code = 4,
-                    Name = "Name",
-                    Description = "Description",
-                    State = false,
-                    CreationDate = DateTime.Parse("2024-01-10"),
-                    UpdateDate = DateTime.Parse("2023-11-09"),
-                    UserOwner = "User1"
-                },
-                new modPolicy.Policy(){
-                    Code = 5,
-                    Name = "Politica_1",
-                    Description = "Descripcion ejemplo",
-                    State = true,
-                    CreationDate = DateTime.Parse("2024-01-10"),
-                    UpdateDate = DateTime.Parse("2023-11-09"),
-                    UserOwner = "User1"
-                },
-                new modPolicy.Policy(){
-                    Code = 6,
-                    Name = "Name",
-                    Description = "Description",
-                    State = false,
-                    CreationDate = DateTime.Parse("2024-01-10"),
-                    UpdateDate = DateTime.Parse("2023-11-09"),
-                    UserOwner = "User1"
-                },
-                new modPolicy.Policy(){
-                    Code = 7,
-                    Name = "Politica_1",
-                    Description = "Descripcion ejemplo",
-                    State = true,
-                    CreationDate = DateTime.Parse("2024-01-10"),
-                    UpdateDate = DateTime.Parse("2023-11-09"),
-                    UserOwner = "User1"
-                },
-                new modPolicy.Policy(){
-                    Code = 8,
-                    Name = "Name",
-                    Description = "Description",
-                    State = false,
-                    CreationDate = DateTime.Parse("2024-01-10"),
-                    UpdateDate = DateTime.Parse("2023-11-09"),
-                    UserOwner = "User1"
                 }
             };
         }
@@ -135,7 +81,6 @@ namespace ParameterControl.Services.Policies
             foreach (modPolicy.Policy policy in policies)
             {
                 PolicyViewModel policyModel = new PolicyViewModel();
-
                 policyModel.Code = policy.Code;
                 policyModel.Name = policy.Name;
                 policyModel.Description = policy.Description;
@@ -155,9 +100,7 @@ namespace ParameterControl.Services.Policies
 
         public async Task<PolicyViewModel> GetPolicyFormat(modPolicy.Policy policy)
         {
-
             PolicyViewModel policyModel = new PolicyViewModel();
-
             policyModel.Code = policy.Code;
             policyModel.Name = policy.Name;
             policyModel.Description = policy.Description;
@@ -174,9 +117,7 @@ namespace ParameterControl.Services.Policies
 
         public async Task<PolicyCreateViewModel> GetPolicyFormatCreate(modPolicy.Policy policy)
         {
-
             PolicyCreateViewModel policyModel = new PolicyCreateViewModel();
-
             policyModel.Code = policy.Code;
             policyModel.Name = policy.Name;
             policyModel.Description = policy.Description;
@@ -214,8 +155,6 @@ namespace ParameterControl.Services.Policies
 
         private async Task<List<PolicyViewModel>> applyFilter(FilterViewModel filterModel, List<PolicyViewModel> allPolicies)
         {
-            Console.WriteLine(filterModel.TypeRow.ToString());
-
             var property = typeof(PolicyViewModel).GetProperty(filterModel.ColumValue);
 
             List<PolicyViewModel> policiesFilter = new List<PolicyViewModel>();
@@ -335,7 +274,7 @@ namespace ParameterControl.Services.Policies
             var mapping = await MapperActiveePolicy(policy);
             var response = await _policyService.UpdatePolicy(mapping);
 
-            return response.Equals(1) ? "Politica actualizada correctamente" : "Error actualizando la politica";
+            return response.Equals(1) ? "Politica activada correctamente" : "Error activando la politica";
         }
 
         public async Task<string> DesactivePolicy(modPolicy.Policy policy)
@@ -343,7 +282,7 @@ namespace ParameterControl.Services.Policies
             var mapping = await MapperDesactiveePolicy(policy);
             var response = await _policyService.UpdatePolicy(mapping);
 
-            return response.Equals(1) ? "Politica actualizada correctamente" : "Error actualizando la politica";
+            return response.Equals(1) ? "Politica desactivada correctamente" : "Error desactivando la politica";
         }
 
         private async Task<PolicyModel> MapperUpdatePolicy(modPolicy.Policy policy)

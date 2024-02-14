@@ -43,15 +43,14 @@ namespace ParameterControl.Controllers.Scenarios
             int TotalScenarios = await scenariosServices.CountScenarios();
 
             TableScenarios.Data = await scenariosServices.GetScenariosFormat(Scenarios);
-
             TableScenarios.Rows = rows.RowsScenarios();
-
             TableScenarios.IsCreate = true;
             TableScenarios.IsActivate = true;
             TableScenarios.IsEdit = true;
             TableScenarios.IsView = true;
             TableScenarios.IsInactivate = true;
             TableScenarios.Filter = true;
+            ViewBag.ApplyFilter = false;
 
             var resultViemModel = new PaginationResult<TableScenariosViewModel>()
             {
@@ -62,15 +61,12 @@ namespace ParameterControl.Controllers.Scenarios
                 BaseUrl = Url.Action() + "?"
             };
 
-            ViewBag.ApplyFilter = false;
-
             return View("Scenarios", resultViemModel);
         }
 
         [HttpGet]
         public async Task<ActionResult> ScenariosFilter(PaginationViewModel paginationViewModel, string filterColunm = "", string filterValue = "", string typeRow = "")
         {
-
             if (filterColunm == null || filterColunm == "" || filterValue == null || filterValue == "")
             {
                 return RedirectToAction("Scenarios");
@@ -87,15 +83,14 @@ namespace ParameterControl.Controllers.Scenarios
             int TotalScenarios = scenariosFilter.Count();
 
             TableScenarios.Data = scenariosServices.GetFilterPagination(scenariosFilter, paginationViewModel, TotalScenarios);
-
             TableScenarios.Rows = rows.RowsScenarios();
-
             TableScenarios.IsCreate = true;
             TableScenarios.IsActivate = true;
             TableScenarios.IsEdit = true;
             TableScenarios.IsView = true;
             TableScenarios.IsInactivate = true;
             TableScenarios.Filter = true;
+            ViewBag.ApplyFilter = true;
 
             var resultViemModel = new PaginationResult<TableScenariosViewModel>()
             {
@@ -106,8 +101,6 @@ namespace ParameterControl.Controllers.Scenarios
                 BaseUrl = Url.Action() + "?filterColunm=" + filterColunm + "&filterValue=" + filterValue + "&typeRow=" + typeRow + "&"
             };
 
-            ViewBag.ApplyFilter = true;
-
             return View("Scenarios", resultViemModel);
         }
 
@@ -115,7 +108,6 @@ namespace ParameterControl.Controllers.Scenarios
         [HttpGet]
         public async Task<ActionResult> Create()
         {
-
             List<SelectListItem> ImpactOptionsList = await scenariosServices.GetImpact();
             List<SelectListItem> ConciliationOptionsList = await GetConciliation();
 
@@ -139,18 +131,16 @@ namespace ParameterControl.Controllers.Scenarios
             {
                 try
                 {
-                    _logger.LogInformation($"Inicia método ConciliationController.Create {JsonConvert.SerializeObject(request)}");
                     var responseIn = await scenariosServices.InsertScenery(request);
-                    _logger.LogInformation($"Finaliza método ConciliationController.Create {responseIn}");
+                    _logger.LogInformation($"Finaliza método ScenariosController.Create {responseIn}");
                     return Ok(new { message = "Se creo el escenario de manera exitosa", state = "Success" });
                 }
                 catch (Exception ex)
                 {
-                    _logger.LogError($"Error en el método ConciliationController.Create : {JsonConvert.SerializeObject(ex.Message)}");
+                    _logger.LogError($"Error en el método ScenariosController.Create : {JsonConvert.SerializeObject(ex.Message)}");
                     return BadRequest(new { message = "Error al crear el escenario", state = "Error" });
                 }
             }
-
         }
 
         [HttpGet]
@@ -162,7 +152,6 @@ namespace ParameterControl.Controllers.Scenarios
             List<SelectListItem> ConciliationOptionsList = await GetConciliation();
 
             SceneryCreateViewModel model = await scenariosServices.GetSceneryFormatCreate(scenery);
-
             model.ImpactOptions = ImpactOptionsList;
             model.ConciliationOptions = ConciliationOptionsList;
 
@@ -181,9 +170,8 @@ namespace ParameterControl.Controllers.Scenarios
             {
                 try
                 {
-                    _logger.LogInformation($"Inicia método ScenariosController.Edit {JsonConvert.SerializeObject(request)}");
                     var responseIn = await scenariosServices.UpdateScenery(request);
-                    _logger.LogInformation($"Finaliza método ConciliationController.Edit {responseIn}");
+                    _logger.LogInformation($"Finaliza método ScenariosController.Edit {responseIn}");
                     return Ok(new { message = "Se actualizo el escenario de manera exitosa", state = "Success" });
                 }
                 catch (Exception ex)
@@ -198,7 +186,6 @@ namespace ParameterControl.Controllers.Scenarios
         public async Task<ActionResult> View(int code)
         {
             Scenery scenery = await scenariosServices.GetSceneryByCode(code);
-
             SceneryViewModel model = await scenariosServices.GetSceneryFormat(scenery);
 
             return View("Actions/ViewScenery", model);
@@ -208,7 +195,6 @@ namespace ParameterControl.Controllers.Scenarios
         public async Task<ActionResult> Active(int code)
         {
             modScenery.Scenery scenery = await scenariosServices.GetSceneryByCode(code);
-
             return View("Actions/ActiveScenery", scenery);
         }
 
@@ -218,9 +204,8 @@ namespace ParameterControl.Controllers.Scenarios
             try
             {
                 Scenery request = await scenariosServices.GetSceneryByCode(code);
-                _logger.LogInformation($"Inicia método ScenariosController.Active {JsonConvert.SerializeObject(request)}");
                 var responseIn = await scenariosServices.ActiveScenery(request);
-                _logger.LogInformation($"Finaliza método ConciliationController.Active {responseIn}");
+                _logger.LogInformation($"Finaliza método ScenariosController.Active {responseIn}");
                 return Ok(new { message = "Se activo el escenario de manera exitosa", state = "Success" });
             }
             catch (Exception ex)
@@ -234,7 +219,6 @@ namespace ParameterControl.Controllers.Scenarios
         public async Task<ActionResult> Desactive(int code)
         {
             modScenery.Scenery scenery = await scenariosServices.GetSceneryByCode(code);
-
             return View("Actions/DesactiveScenery", scenery);
         }
 
@@ -244,9 +228,8 @@ namespace ParameterControl.Controllers.Scenarios
             try
             {
                 Scenery request = await scenariosServices.GetSceneryByCode(code);
-                _logger.LogInformation($"Inicia método ScenariosController.Desactive {JsonConvert.SerializeObject(request)}");
                 var responseIn = await scenariosServices.DesactiveScenery(request);
-                _logger.LogInformation($"Finaliza método ConciliationController.Desactive {responseIn}");
+                _logger.LogInformation($"Finaliza método ScenariosController.Desactive {responseIn}");
                 return Ok(new { message = "Se desactivo el escenario de manera exitosa", state = "Success" });
             }
             catch (Exception ex)
@@ -271,7 +254,6 @@ namespace ParameterControl.Controllers.Scenarios
         [HttpPost]
         public async Task<ActionResult> FilterScenarios(FilterViewModel filter)
         {
-
             if (filter.TypeRow == "Select")
             {
                 filter.ValueFilter = filter.ValueFilterOptions;
