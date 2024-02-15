@@ -3,52 +3,69 @@
 
 @{
     ViewData["Title"] = "Ver toma transversal";
+    string ErrorEntyNull = "No existe una toma transversal con el codigo " + ViewBag.CodeSend + ",CrossConnections";
+    string ErrorSuccess = "Se genero un problema al obtener la informacion,CrossConnections";
 }
 
 <partial name="_Menu" />
 
-<div class="box_view">
-    <div class="bg__blur"></div>
-    <form class="form__container">
+@if (!ViewBag.Success)
+{
+    <partial name="_ModalError" model="ErrorSuccess" />
+}
+else
+{
+    @if (ViewBag.EntyNull)
+    {
+        <partial name="_ModalError" model="ErrorEntyNull" />
+    }
+    else
+    {
+        <div class="box_view">
+            <div class="bg__blur"></div>
+            <form class="form__container">
 
-        <div class="card__container">
-            <div class="header_form">
-                <img src="/images/iconApple.png" />
-                <h1>Detalles de la toma transversal</h1>
-            </div>
+                <div class="card__container">
+                    <div class="header_form">
+                        <img src="/images/iconApple.png" />
+                        <h1>Detalles de la toma transversal</h1>
+                    </div>
 
-            <div class="form_group">
-                <p class="title_form">Paquete:</p>
-                <p>@Model.Package</p>
-            </div>
-            <div class="form_group">
-                <p class="title_form">Tabla:</p>
-                <p>@Model.Table</p>
-            </div>
-            <div class="form_groupm">
-                <p class="title_form">Periocidad:</p>
-                <p>@Model.Periodicity</p>
-            </div>
-            <div class="form_group">
-                <p class="title_form">Estado:</p>
-                <p>@Model.Status</p>
-            </div>
-            <div class="form_group">
-                <p class="title_form">Error:</p>
-                <p>@Model.Error</p>
-            </div>
-            <div class="form_group">
-                <p class="title_form">Ultima Carga:</p>
-                <p>@Model.LastLoadFormat</p>
-            </div>
-            <div class="form_group">
-                <p class="title_form">Ultima Ejecución:</p>
-                <p>@Model.LastExecutionFormat</p>
-            </div>
+                    <div class="form_group">
+                        <p class="title_form">Paquete:</p>
+                        <p>@Model.Package</p>
+                    </div>
+                    <div class="form_group">
+                        <p class="title_form">Tabla:</p>
+                        <p>@Model.Table</p>
+                    </div>
+                    <div class="form_groupm">
+                        <p class="title_form">Periocidad:</p>
+                        <p>@Model.Periodicity</p>
+                    </div>
+                    <div class="form_group">
+                        <p class="title_form">Estado:</p>
+                        <p>@Model.Status</p>
+                    </div>
+                    <div class="form_group">
+                        <p class="title_form">Error:</p>
+                        <p>@Model.Error</p>
+                    </div>
+                    <div class="form_group">
+                        <p class="title_form">Ultima Carga:</p>
+                        <p>@Model.LastLoadFormat</p>
+                    </div>
+                    <div class="form_group">
+                        <p class="title_form">Ultima Ejecución:</p>
+                        <p>@Model.LastExecutionFormat</p>
+                    </div>
 
-            <div class="btn_container">
-                <a class="button button_secondary btn_cancel-view" asp-controller="CrossConnections" asp-action="CrossConnections"><p class="text font_bold">Cancelar</p></a>
-            </div>
+                    <div class="btn_container">
+                        <a class="button button_secondary btn_cancel-view" asp-controller="CrossConnections" asp-action="CrossConnections"><p class="text font_bold">Cancelar</p></a>
+                    </div>
+                </div>
+            </form>
         </div>
-    </form>
-</div>
+
+    }
+}

@@ -6,6 +6,7 @@ using ParameterControl.Models.Conciliation;
 using ParameterControl.Models.Filter;
 using ParameterControl.Models.Pagination;
 using ParameterControl.Models.Parameter;
+using ParameterControl.Models.Policy;
 using ParameterControl.Services.Authenticated;
 using ParameterControl.Services.Conciliations;
 using ParameterControl.Services.Parameters;
@@ -111,7 +112,6 @@ namespace ParameterControl.Controllers.Parameters
         [HttpGet]
         public async Task<ActionResult> Create()
         {
-
             List<SelectListItem> ParameterTypeOptionList = await parametersService.GetParameterType();
             List<SelectListItem> GetListParameterList = await GetParameters();
 
@@ -151,16 +151,33 @@ namespace ParameterControl.Controllers.Parameters
         [HttpGet]
         public async Task<ActionResult> Edit(int code)
         {
-            modParameter.Parameter parameter = await parametersService.GetParameterByCode(code);
+            try
+            {
+                ViewBag.CodeSend = code;
+                modParameter.Parameter parameter = await parametersService.GetParameterByCode(code);
+                if (parameter.Code == 0)
+                {
+                    ViewBag.Success = true;
+                    ViewBag.EntyNull = true;
+                    return View("Actions/EditParameter", null);
+                }
+                List<SelectListItem> ParameterTypeList = await parametersService.GetParameterType();
+                List<SelectListItem> ParameterList = await GetParameters();
 
-            List<SelectListItem> ParameterTypeList = await parametersService.GetParameterType();
-            List<SelectListItem> ParameterList = await GetParameters();
+                ParameterCreateViewModel model = await parametersService.GetParameterFormatCreate(parameter);
+                model.ParameterTypeOption = ParameterTypeList;
+                model.ListParameter = ParameterList;
 
-            ParameterCreateViewModel model = await parametersService.GetParameterFormatCreate(parameter);
-            model.ParameterTypeOption = ParameterTypeList;
-            model.ListParameter = ParameterList;
-
-            return View("Actions/EditParameter", model);
+                ViewBag.Success = true;
+                ViewBag.EntyNull = false;
+                return View("Actions/EditParameter", model);
+            }
+            catch (Exception)
+            {
+                ViewBag.Success = false;
+                ViewBag.EntyNull = false;
+                return View("Actions/EditParameter", null);
+            }
         }
 
         [HttpPost]
@@ -190,17 +207,54 @@ namespace ParameterControl.Controllers.Parameters
         [HttpGet]
         public async Task<ActionResult> View(int code)
         {
-            modParameter.Parameter parameter = await parametersService.GetParameterByCode(code);
-            ParameterViewModel model = await parametersService.GetParameterFormat(parameter);
+            try
+            {
+                ViewBag.CodeSend = code;
+                modParameter.Parameter parameter = await parametersService.GetParameterByCode(code);
+                if (parameter.Code == 0)
+                {
+                    ViewBag.Success = true;
+                    ViewBag.EntyNull = true;
+                    return View("Actions/ViewParameter", null);
+                }
+                ParameterViewModel model = await parametersService.GetParameterFormat(parameter);
 
-            return View("Actions/ViewParameter", model);
+                ViewBag.Success = true;
+                ViewBag.EntyNull = false;
+                return View("Actions/ViewParameter", model);
+            }
+            catch (Exception)
+            {
+                ViewBag.Success = false;
+                ViewBag.EntyNull = false;
+                return View("Actions/ViewParameter", null);
+            }
         }
 
         [HttpGet]
         public async Task<ActionResult> Active(int code)
         {
-            modParameter.Parameter parameter = await parametersService.GetParameterByCode(code);
-            return View("Actions/ActiveParameter", parameter);
+            try
+            {
+                ViewBag.CodeSend = code;
+                modParameter.Parameter parameter = await parametersService.GetParameterByCode(code);
+                if (parameter.Code == 0)
+                {
+                    ViewBag.Success = true;
+                    ViewBag.EntyNull = true;
+                    return View("Actions/ActiveParameter", null);
+                }
+
+                ViewBag.Success = true;
+                ViewBag.EntyNull = false;
+                return View("Actions/ActiveParameter", parameter);
+            }
+            catch (Exception)
+            {
+                ViewBag.Success = false;
+                ViewBag.EntyNull = false;
+                return View("Actions/ActiveParameter", null);
+            }
         }
 
         [HttpPost]
@@ -223,8 +277,27 @@ namespace ParameterControl.Controllers.Parameters
         [HttpGet]
         public async Task<ActionResult> Desactive(int code)
         {
-            modParameter.Parameter parameter = await parametersService.GetParameterByCode(code);
-            return View("Actions/DesactiveParameter", parameter);
+            try
+            {
+                ViewBag.CodeSend = code;
+                modParameter.Parameter parameter = await parametersService.GetParameterByCode(code);
+                if (parameter.Code == 0)
+                {
+                    ViewBag.Success = true;
+                    ViewBag.EntyNull = true;
+                    return View("Actions/DesactiveParameter", null);
+                }
+
+                ViewBag.Success = true;
+                ViewBag.EntyNull = false;
+                return View("Actions/DesactiveParameter", parameter);
+            }
+            catch (Exception)
+            {
+                ViewBag.Success = false;
+                ViewBag.EntyNull = false;
+                return View("Actions/DesactiveParameter", null);
+            }
         }
 
         [HttpPost]

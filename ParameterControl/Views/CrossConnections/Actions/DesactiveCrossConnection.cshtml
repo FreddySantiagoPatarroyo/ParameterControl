@@ -3,81 +3,94 @@
 
 @{
     ViewData["Title"] = "Desactivar Tomas Transversales";
-    string MessageError = "Error al desactivar una toma transversal";
-    string MessageSuccess = "La toma transversal se desactivo correctamente";
+    string ErrorEntyNull = "No existe una toma transversal con el codigo " + ViewBag.CodeSend + ",CrossConnections";
+    string ErrorSuccess = "Se genero un problema al obtener la informacion,CrossConnections";
 }
 
 <partial name="_Menu" />
 
-<div id="box_delete">
-    <div class="bg__blur"></div>
-    <form class="form__container">
+@if (!ViewBag.Success)
+{
+    <partial name="_ModalError" model="ErrorSuccess" />
+}
+else
+{
+    @if (ViewBag.EntyNull)
+    {
+        <partial name="_ModalError" model="ErrorEntyNull" />
+    }
+    else
+    {
+        <div id="box_delete">
+            <div class="bg__blur"></div>
+            <form class="form__container">
 
-        <div class="card__container">
-            <div class="header_form">
-                <img src="/images/iconApple.png" />
-                <h1>Desactivar Toma Transversal</h1>
-                <h2 class="text_break">¿Está seguro de desactivar la toma transversal @Model.Table?</h2>
-            </div>
+                <div class="card__container">
+                    <div class="header_form">
+                        <img src="/images/iconApple.png" />
+                        <h1>Desactivar Toma Transversal</h1>
+                        <h2 class="text_break">¿Está seguro de desactivar la toma transversal @Model.Table?</h2>
+                    </div>
 
-            <input type="hidden" asp-for="Code" />
+                    <input type="hidden" asp-for="Code" />
 
-            <div id="btn_container" class="btn_container">
-                <a class="button button_secondary" asp-controller="CrossConnections" asp-action="CrossConnections"><p class="text font_bold">Cancelar</p></a>
-                <a href="javascript:void(0)" onclick="sendData()" class="button button_primary"><p class="text font_bold">Desactivar</p></a>
-            </div>
-            <div id="loading" class="loading">
-                <span class="loader"></span>
-            </div>
-            <div id="LayoytError" class="layout_content">
-                <partial name="_MessageError" model="MessageError" />
-            </div>
-            <div id="LayoytSuccess" class="layout_content">
-                <partial name="_MessageSuccess" model="MessageSuccess" />
-            </div>
+                    <div id="btn_container" class="btn_container">
+                        <a class="button button_secondary" asp-controller="CrossConnections" asp-action="CrossConnections"><p class="text font_bold">Cancelar</p></a>
+                        <a href="javascript:void(0)" onclick="sendData()" class="button button_primary"><p class="text font_bold">Desactivar</p></a>
+                    </div>
+                    <div id="loading" class="loading">
+                        <span class="loader"></span>
+                    </div>
+                    <div id="LayoytError" class="layout_content">
+                        <partial name="_MessageError" />
+                    </div>
+                    <div id="LayoytSuccess" class="layout_content">
+                        <partial name="_MessageSuccess" />
+                    </div>
+                </div>
+            </form>
         </div>
-    </form>
-</div>
 
+        @section Scripts {
+            <script>
+                const urlConciliation = '@Url.Action("DesactiveCrossConnection")';
+                let data;
 
-@section Scripts {
-    <script>
-        const urlConciliation = '@Url.Action("DesactiveCrossConnection")';
-        let data;
+                const sendData = async () => {
 
-        const sendData = async () => {
+                    document.getElementById('btn_container').style.display = 'none';
+                    document.getElementById('loading').style.display = 'flex';
 
-            document.getElementById('btn_container').style.display = 'none';
-            document.getElementById('loading').style.display = 'flex';
+                    data = $('#Code').val();
 
-            data = $('#Code').val();
+                    console.log(data)
 
-            console.log(data)
+                    const result = await fetch(urlConciliation, {
+                        method: 'POST',
+                        body: JSON.stringify(data),
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    })
 
-            const result = await fetch(urlConciliation, {
-                method: 'POST',
-                body: JSON.stringify(data),
-                headers: {
-                    'Content-Type': 'application/json'
+                    const json = await result.json();
+
+                    console.log(json);
+
+                    if (json.state == "Success") {
+                        document.getElementById('LayoytSuccess').style.display = 'block';
+                        document.getElementById('layout_message_success').innerHTML = json.message;
+                        document.getElementById('loading').style.display = 'none';
+                        setTimeout(() => {
+                            location.href = '/CrossConnections/CrossConnections';
+                        }, 3000)
+                    } else {
+                        document.getElementById('LayoytError').style.display = 'block';
+                        document.getElementById('layout_message_error').innerHTML = json.message;
+                        document.getElementById('loading').style.display = 'none';
+                    }
                 }
-            })
-
-            const json = await result.json();
-
-            console.log(json);
-
-            if (json.state == "Success") {
-                document.getElementById('LayoytSuccess').style.display = 'block';
-                document.getElementById('layout_message_success').innerHTML = json.message;
-                document.getElementById('loading').style.display = 'none';
-                setTimeout(() => {
-                    location.href = '/CrossConnections/CrossConnections';
-                }, 3000)
-            } else {
-                document.getElementById('LayoytError').style.display = 'block';
-                document.getElementById('layout_message_error').innerHTML = json.message;
-                document.getElementById('loading').style.display = 'none';
-            }
+            </script>
         }
-    </script>
+    }
 }

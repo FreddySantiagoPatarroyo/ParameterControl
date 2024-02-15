@@ -6,6 +6,7 @@ using ParameterControl.Models.Conciliation;
 using ParameterControl.Models.CrossConnection;
 using ParameterControl.Models.Filter;
 using ParameterControl.Models.Pagination;
+using ParameterControl.Models.Policy;
 using ParameterControl.Services.Authenticated;
 using ParameterControl.Services.Conciliations;
 using ParameterControl.Services.CrossConnections;
@@ -105,17 +106,55 @@ namespace ParameterControl.Controllers.CrossConnections
         [HttpGet]
         public async Task<ActionResult> View(int code)
         {
-            modCrossConnection.CrossConnection crossConnection = await crossConnectionsService.GetCrossConnectionByCode(code);
-            CrossConnectionViewModel model = await crossConnectionsService.GetCrossConnectionFormat(crossConnection);
+            try
+            {
+                ViewBag.CodeSend = code;
+                modCrossConnection.CrossConnection crossConnection = await crossConnectionsService.GetCrossConnectionByCode(code);
+                if (crossConnection.Code == 0)
+                {
+                    ViewBag.Success = true;
+                    ViewBag.EntyNull = true;
+                    return View("Actions/ViewCrossConnection", null);
+                }
 
-            return View("Actions/ViewCrossConnection", model);
+                CrossConnectionViewModel model = await crossConnectionsService.GetCrossConnectionFormat(crossConnection);
+
+                ViewBag.Success = true;
+                ViewBag.EntyNull = false;
+                return View("Actions/ViewCrossConnection", model);
+            }
+            catch (Exception)
+            {
+                ViewBag.Success = false;
+                ViewBag.EntyNull = false;
+                return View("Actions/ViewCrossConnection", null);
+            }
         }
 
         [HttpGet]
         public async Task<ActionResult> Active(int code)
         {
-            modCrossConnection.CrossConnection crossConnection = await crossConnectionsService.GetCrossConnectionByCode(code);
-            return View("Actions/ActiveCrossConnection", crossConnection);
+            try
+            {
+                ViewBag.CodeSend = code;
+                modCrossConnection.CrossConnection crossConnection = await crossConnectionsService.GetCrossConnectionByCode(code);
+                if (crossConnection.Code == 0)
+                {
+                    ViewBag.Success = true;
+                    ViewBag.EntyNull = true;
+                    return View("Actions/ActiveCrossConnection", null);
+                }
+
+                ViewBag.Success = true;
+                ViewBag.EntyNull = false;
+                return View("Actions/ActiveCrossConnection", crossConnection);
+            }
+            catch (Exception)
+            {
+                ViewBag.Success = false;
+                ViewBag.EntyNull = false;
+                return View("Actions/ActiveCrossConnection", null);
+            }
         }
 
         [HttpPost]
@@ -138,8 +177,27 @@ namespace ParameterControl.Controllers.CrossConnections
         [HttpGet]
         public async Task<ActionResult> Desactive(int code)
         {
-            modCrossConnection.CrossConnection crossConnection = await crossConnectionsService.GetCrossConnectionByCode(code);
-            return View("Actions/DesactiveCrossConnection", crossConnection);
+            try
+            {
+                ViewBag.CodeSend = code;
+                modCrossConnection.CrossConnection crossConnection = await crossConnectionsService.GetCrossConnectionByCode(code);
+                if (crossConnection.Code == 0)
+                {
+                    ViewBag.Success = true;
+                    ViewBag.EntyNull = true;
+                    return View("Actions/DesactiveCrossConnection", null);
+                }
+
+                ViewBag.Success = true;
+                ViewBag.EntyNull = false;
+                return View("Actions/DesactiveCrossConnection", crossConnection);
+            }
+            catch (Exception)
+            {
+                ViewBag.Success = false;
+                ViewBag.EntyNull = false;
+                return View("Actions/DesactiveCrossConnection", null);
+            }
         }
 
         [HttpPost]
