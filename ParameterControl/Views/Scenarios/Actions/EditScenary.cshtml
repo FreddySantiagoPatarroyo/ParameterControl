@@ -3,279 +3,290 @@
 
 @{
     ViewData["Title"] = "Editar Escenarios";
-    string MessageError = "Error al actualizar el escenario";
-    string MessageSuccess = "El escenario se actualizo correctamente";
+    string ErrorEntyNull = "No existe un escenario con el codigo " + ViewBag.CodeSend + ",Scenarios";
+    string ErrorSuccess = "Se genero un problema al obtener la informacion,Scenarios";
 }
 
 <partial name="_Menu" />
 
-<div class="box_edit">
-    <div class="bg__blur"></div>
+@if (!ViewBag.Success)
+{
+    <partial name="_ModalError" model="ErrorSuccess" />
+}
+else
+{
+    @if (ViewBag.EntyNull)
+    {
+        <partial name="_ModalError" model="ErrorEntyNull" />
+    }
+    else
+    {
+        <div class="box_edit">
+            <div class="bg__blur"></div>
 
-    <div asp-validation-summary="ModelOnly" class="text_error"></div>
+            <div asp-validation-summary="ModelOnly" class="text_error"></div>
 
-    <form class="form__container">
-        <div class="card__container">
-            <div class="header_form">
-                <img src="/images/iconApple.png" />
-                <h1>Editar Escenario</h1>
-            </div>
-
-            <input type="hidden" asp-for="Code" />
-            <input type="hidden" asp-for="CreationDate" />
-
-           <div class="form_group">
-                <div class="field">
-                    <label asp-for="CodeFormat" class="label_form">Código*</label>
-                    <div class="input">
-                        <input asp-for="CodeFormat" placeholder="Codigo" readonly/>
+            <form class="form__container">
+                <div class="card__container">
+                    <div class="header_form">
+                        <img src="/images/iconApple.png" />
+                        <h1>Editar Escenario</h1>
                     </div>
-                    <span id="CodeError" class="text_error"></span>
+
+                    <input type="hidden" asp-for="Code" />
+                    <input type="hidden" asp-for="CreationDate" />
+
+                    <div class="form_group">
+                        <div class="field">
+                            <label asp-for="CodeFormat" class="label_form">Código*</label>
+                            <div class="input">
+                                <input asp-for="CodeFormat" placeholder="Codigo" readonly />
+                            </div>
+                            <span id="CodeError" class="text_error"></span>
+                        </div>
+                    </div>
+
+                    <div class="form_group">
+                        <div class="field">
+                            <label asp-for="Name" class="label_form">Nombre*</label>
+                            <div class="input">
+                                <input asp-for="Name" placeholder="Nombre" />
+                            </div>
+                            <span id="NameError" class="text_error"></span>
+                        </div>
+                    </div>
+
+                    <div class="form_group">
+                        <div class="field">
+                            <label asp-for="Impact" class="label_form">Impacto</label>
+                            <div id="input_select" class="input">
+                                <input class="input_select" id="input_select_filter" asp-for="Impact" placeholder="Seleccione una opción" onclick="showOptionsImpact()" />
+                                <input class="oculte" asp-for="Impact" />
+                                <i class="icon icon_select icon_153"></i>
+                            </div>
+                            <div id="options" class="options">
+                                <ul class="options_list">
+                                    <li onclick="selectOption('@null', '@null')" class="option">
+                                        <p class="option_text">Seleccione una opción</p>
+                                    </li>
+                                    @foreach (var Option in Model.ImpactOptions)
+                                    {
+                                        <li onclick="selectOption('@Option.Text', '@Option.Value')" class="option">
+                                            <p class="option_text">@Option.Text</p>
+                                        </li>
+                                    }
+                                </ul>
+                            </div>
+                            <div id="select_helper" class="select_helper" onclick="showOptionsImpact()"></div>
+                        </div>
+                    </div>
+
+                    <div class="form_group">
+                        <div class="field">
+                            <label asp-for="Conciliation" class="label_form">Conciliacion*</label>
+                            <div id="input_select_conciliation" class="input">
+                                <input class="input_select" id="input_select_filter_conciliation" asp-for="Conciliation" placeholder="Seleccione una opción" onclick="showOptionsConciliation()" />
+                                <input class="oculte" asp-for="CodeConciliation" />
+                                <i class="icon icon_select icon_153"></i>
+                            </div>
+                            <div id="options_conciliation" class="options">
+                                <ul class="options_list">
+                                    <li onclick="selectOptionConciliation('@null', '@null')" class="option">
+                                        <p class="option_text">Seleccione una opción</p>
+                                    </li>
+                                    @foreach (var Option in Model.ConciliationOptions)
+                                    {
+                                        <li onclick="selectOptionConciliation('@Option.Text', '@Option.Value')" class="option">
+                                            <p class="option_text">@Option.Text</p>
+                                        </li>
+                                    }
+                                </ul>
+                            </div>
+                            <div id="select_helper_conciliation" class="select_helper" onclick="showOptionsConciliation()"></div>
+                        </div>
+                        <span id="ConciliationError" class="text_error"></span>
+                    </div>
+
+                    <p class="note_text"><span>Nota: </span>Los campos con (*) son obligatorios</p>
+
+                    <div id="btn_container" class="btn_container">
+                        <a class="button button_secondary" asp-controller="Scenarios" asp-action="Scenarios"><p class="text font_bold">Cancelar</p></a>
+                        <a href="javascript:void(0)" onclick="sendData()" class="button button_primary"><p class="text font_bold">Actualizar</p></a>
+                    </div>
+                    <div id="loading" class="loading">
+                        <span class="loader"></span>
+                    </div>
+                    <div id="LayoytError" class="layout_content">
+                        <partial name="_MessageError" />
+                    </div>
+                    <div id="LayoytSuccess" class="layout_content">
+                        <partial name="_MessageSuccess" />
+                    </div>
                 </div>
-            </div>
-
-            <div class="form_group">
-                <div class="field">
-                    <label asp-for="Name" class="label_form">Nombre*</label>
-                    <div class="input">
-                        <input asp-for="Name" placeholder="Nombre" />
-                    </div>
-                    <span id="NameError" class="text_error"></span>
-                </div>
-            </div>
-
-            <div class="form_group">
-                <div class="field">
-                    <label asp-for="Impact" class="label_form">Impacto</label>
-                    <div id="input_select" class="input">
-                        <input class="input_select" id="input_select_filter" asp-for="Impact"  placeholder="Seleccione una opción" onclick="showOptionsImpact()" />
-                        <input class="oculte" asp-for="Impact" />
-                        <i class="icon icon_select icon_153"></i>
-                    </div>
-                    <div id="options" class="options">
-                        <ul class="options_list">
-                            <li onclick="selectOption('@null', '@null')" class="option">
-                                <p class="option_text">Seleccione una opción</p>
-                            </li>
-                            @foreach (var Option in Model.ImpactOptions)
-                            {
-                                <li onclick="selectOption('@Option.Text', '@Option.Value')" class="option">
-                                    <p class="option_text">@Option.Text</p>
-                                </li>
-                            }
-                        </ul>
-                    </div>
-                    <div id="select_helper" class="select_helper" onclick="showOptionsImpact()"></div>
-                </div>
-            </div>
-
-            <div class="form_group">
-                <div class="field">
-                    <label asp-for="Conciliation" class="label_form">Conciliacion*</label>
-                    <div id="input_select_conciliation" class="input">
-                        <input class="input_select" id="input_select_filter_conciliation" asp-for="Conciliation" placeholder="Seleccione una opción" onclick="showOptionsConciliation()"/>
-                        <input class="oculte" asp-for="CodeConciliation" />
-                        <i class="icon icon_select icon_153"></i>
-                    </div>
-                    <div id="options_conciliation" class="options">
-                        <ul class="options_list">
-                            <li onclick="selectOptionConciliation('@null', '@null')" class="option">
-                                <p class="option_text">Seleccione una opción</p>
-                            </li>
-                            @foreach (var Option in Model.ConciliationOptions)
-                            {
-                                <li onclick="selectOptionConciliation('@Option.Text', '@Option.Value')" class="option">
-                                    <p class="option_text">@Option.Text</p>
-                                </li>
-                            }
-                        </ul>
-                    </div>
-                    <div id="select_helper_conciliation" class="select_helper" onclick="showOptionsConciliation()"></div>
-                </div>
-                <span id="ConciliationError" class="text_error"></span>
-            </div>
-
-            <p class="note_text"><span>Nota: </span>Los campos con (*) son obligatorios</p>
-
-            <div id="btn_container" class="btn_container">
-                <a class="button button_secondary" asp-controller="Scenarios" asp-action="Scenarios"><p class="text font_bold">Cancelar</p></a>
-                <a href="javascript:void(0)" onclick="sendData()" class="button button_primary"><p class="text font_bold">Actualizar</p></a>
-            </div>
-            <div id="loading" class="loading">
-                <span class="loader"></span>
-            </div>
-            <div id="LayoytError" class="layout_content">
-                <partial name="_MessageError" model="MessageError" />
-            </div>
-            <div id="LayoytSuccess" class="layout_content">
-                <partial name="_MessageSuccess" model="MessageSuccess" />
-            </div>
+            </form>
         </div>
-    </form>
-</div>
 
+        @section Scripts {
+            <partial name="_ValidationScriptsPartial.cshtml" />
+            <script>
+                /* ----------- Select de impacto ----------- */
+                let viewOptions = false;
 
+                const showOptionsImpact = () => {
 
+                    let widthOption = document.getElementById("input_select").clientWidth;
+                    let options = document.getElementById("options");
+                    options.style.width = widthOption + "px";
 
-@section Scripts {
-    <partial name="_ValidationScriptsPartial.cshtml" />
-    <script>
-        /* ----------- Select de impacto ----------- */
-        let viewOptions = false;
+                    viewOptions = !viewOptions;
 
-        const showOptionsImpact = () => {
-
-            let widthOption = document.getElementById("input_select").clientWidth;
-            let options = document.getElementById("options");
-            options.style.width = widthOption + "px";
-
-            viewOptions = !viewOptions;
-
-            if (viewOptions) {
-                document.getElementById('options').style.display = 'block';
-                document.getElementById('select_helper').style.display = 'block';
-            } else {
-                document.getElementById('options').style.display = 'none';
-                document.getElementById('select_helper').style.display = 'none';
-            }
-        }
-
-        const selectOption = (name, value) => {
-
-            if (name == null || value == null || name == '' || value == '') {
-                console.log("vacio");
-                document.getElementById("input_select_filter").value = '';
-                document.getElementById("Impact").value = '';
-            } else {
-                console.log(value);
-                document.getElementById("input_select_filter").value = name;
-                document.getElementById("Impact").value = value;
-            }
-
-            showOptionsImpact();
-
-        }
-
-        /* ----------- Select de conciliaciones ----------- */
-        let viewOptionsConciliation = false;
-
-        const showOptionsConciliation = () => {
-
-            let widthOptionConciliation = document.getElementById("input_select_conciliation").clientWidth;
-            let optionsConciliation = document.getElementById("options_conciliation");
-            optionsConciliation.style.width = widthOptionConciliation + "px";
-
-            viewOptionsConciliation = !viewOptionsConciliation;
-
-            if (viewOptionsConciliation) {
-                document.getElementById('options_conciliation').style.display = 'block';
-                document.getElementById('select_helper_conciliation').style.display = 'block';
-            } else {
-                document.getElementById('options_conciliation').style.display = 'none';
-                document.getElementById('select_helper_conciliation').style.display = 'none';
-            }
-        }
-
-        const selectOptionConciliation = (name, value) => {
-
-            if (name == null || value == null || name == '' || value == '') {
-                console.log("vacio");
-                document.getElementById("input_select_filter_conciliation").value = '';
-                document.getElementById("CodeConciliation").value = '';
-            } else {
-                console.log(value);
-                document.getElementById("input_select_filter_conciliation").value = name;
-                document.getElementById("CodeConciliation").value = value;
-            }
-
-            showOptionsConciliation();
-
-        }
-    </script>
-
-    <script>
-        const urlScenery = '@Url.Action("Edit")';
-        let data;
-        let isValidCode = false;
-        let isValidName = false;
-        // let isValidImpact = false;
-        let isValidConciliation = false;
-
-        const sendData = async () => {
-            isValidCode = validateInputEmpty("Code", "El codigo es requerido", "CodeError");
-            isValidName = validateInputEmpty("Name", "El nombre es requerido", "NameError");
-            // isValidImpact = validateInputEmpty("Impact", "El impacto es requerido", "ImpactError");
-            isValidConciliation = validateInputEmpty("input_select_filter_conciliation", "La conciliacion es requerido", "ConciliationError");
-            
-
-            if (isValidCode && isValidName && isValidConciliation) {
-                document.getElementById('btn_container').style.display = 'none';
-                document.getElementById('loading').style.display = 'flex';
-
-                const CreationDateFormat = FormatDate($('#CreationDate').val());
-
-                data = {
-                    Code: $('#Code').val(),
-                    Name: $('#Name').val(),
-                    Impact: $('#Impact').val(),
-                    Conciliation: $('#input_select_filter_conciliation').val(),
-                    CodeConciliation: $('#CodeConciliation').val(),
-                    State: true,
-                    CreationDate: new Date(CreationDateFormat)
-                }
-
-                console.log(data)
-
-                const result = await fetch(urlScenery, {
-                    method: 'POST',
-                    body: JSON.stringify(data),
-                    headers: {
-                        'Content-Type': 'application/json'
+                    if (viewOptions) {
+                        document.getElementById('options').style.display = 'block';
+                        document.getElementById('select_helper').style.display = 'block';
+                    } else {
+                        document.getElementById('options').style.display = 'none';
+                        document.getElementById('select_helper').style.display = 'none';
                     }
-                })
-
-                const json = await result.json();
-
-                console.log(json);
-
-                if (json.state == "Success") {
-                    document.getElementById('LayoytSuccess').style.display = 'block';
-                    document.getElementById('layout_message_success').innerHTML = json.message;
-                    document.getElementById('loading').style.display = 'none';
-                    setTimeout(() => {
-                        location.href = '/Scenarios/Scenarios';
-                    }, 3000)
-                } else {
-                    document.getElementById('LayoytError').style.display = 'block';
-                    document.getElementById('layout_message_error').innerHTML = json.message;
-                    document.getElementById('loading').style.display = 'none';
                 }
-            }
+
+                const selectOption = (name, value) => {
+
+                    if (name == null || value == null || name == '' || value == '') {
+                        console.log("vacio");
+                        document.getElementById("input_select_filter").value = '';
+                        document.getElementById("Impact").value = '';
+                    } else {
+                        console.log(value);
+                        document.getElementById("input_select_filter").value = name;
+                        document.getElementById("Impact").value = value;
+                    }
+
+                    showOptionsImpact();
+
+                }
+
+                /* ----------- Select de conciliaciones ----------- */
+                let viewOptionsConciliation = false;
+
+                const showOptionsConciliation = () => {
+
+                    let widthOptionConciliation = document.getElementById("input_select_conciliation").clientWidth;
+                    let optionsConciliation = document.getElementById("options_conciliation");
+                    optionsConciliation.style.width = widthOptionConciliation + "px";
+
+                    viewOptionsConciliation = !viewOptionsConciliation;
+
+                    if (viewOptionsConciliation) {
+                        document.getElementById('options_conciliation').style.display = 'block';
+                        document.getElementById('select_helper_conciliation').style.display = 'block';
+                    } else {
+                        document.getElementById('options_conciliation').style.display = 'none';
+                        document.getElementById('select_helper_conciliation').style.display = 'none';
+                    }
+                }
+
+                const selectOptionConciliation = (name, value) => {
+
+                    if (name == null || value == null || name == '' || value == '') {
+                        console.log("vacio");
+                        document.getElementById("input_select_filter_conciliation").value = '';
+                        document.getElementById("CodeConciliation").value = '';
+                    } else {
+                        console.log(value);
+                        document.getElementById("input_select_filter_conciliation").value = name;
+                        document.getElementById("CodeConciliation").value = value;
+                    }
+
+                    showOptionsConciliation();
+
+                }
+            </script>
+
+            <script>
+                const urlScenery = '@Url.Action("Edit")';
+                let data;
+                let isValidCode = false;
+                let isValidName = false;
+                // let isValidImpact = false;
+                let isValidConciliation = false;
+
+                const sendData = async () => {
+                    isValidCode = validateInputEmpty("Code", "El codigo es requerido", "CodeError");
+                    isValidName = validateInputEmpty("Name", "El nombre es requerido", "NameError");
+                    // isValidImpact = validateInputEmpty("Impact", "El impacto es requerido", "ImpactError");
+                    isValidConciliation = validateInputEmpty("input_select_filter_conciliation", "La conciliacion es requerido", "ConciliationError");
+
+
+                    if (isValidCode && isValidName && isValidConciliation) {
+                        document.getElementById('btn_container').style.display = 'none';
+                        document.getElementById('loading').style.display = 'flex';
+
+                        const CreationDateFormat = FormatDate($('#CreationDate').val());
+
+                        data = {
+                            Code: $('#Code').val(),
+                            Name: $('#Name').val(),
+                            Impact: $('#Impact').val(),
+                            Conciliation: $('#input_select_filter_conciliation').val(),
+                            CodeConciliation: $('#CodeConciliation').val(),
+                            State: true,
+                            CreationDate: new Date(CreationDateFormat)
+                        }
+
+                        console.log(data)
+
+                        const result = await fetch(urlScenery, {
+                            method: 'POST',
+                            body: JSON.stringify(data),
+                            headers: {
+                                'Content-Type': 'application/json'
+                            }
+                        })
+
+                        const json = await result.json();
+
+                        console.log(json);
+
+                        if (json.state == "Success") {
+                            document.getElementById('LayoytSuccess').style.display = 'block';
+                            document.getElementById('layout_message_success').innerHTML = json.message;
+                            document.getElementById('loading').style.display = 'none';
+                            setTimeout(() => {
+                                location.href = '/Scenarios/Scenarios';
+                            }, 3000)
+                        } else {
+                            document.getElementById('LayoytError').style.display = 'block';
+                            document.getElementById('layout_message_error').innerHTML = json.message;
+                            document.getElementById('loading').style.display = 'none';
+                        }
+                    }
+                }
+
+                const validateInputEmpty = (idInput, messaje, idError) => {
+                    if ($(`#${idInput}`).val() == "" || $(`#${idInput}`).val() == null) {
+                        $(`#${idError}`).text(`${messaje}`);
+                        return false;
+                    } else {
+                        $(`#${idError}`).text("");
+                        return true;
+                    }
+                }
+                const FormatDate = (date) => {
+
+                    const validateAm = date.toString().includes("a. m.");
+                    const validatePm = date.toString().includes("p. m.");
+
+                    if (validateAm) {
+                        date = date.replace("a. m.", "AM")
+                    }
+
+                    if (validatePm) {
+                        date = date.replace("p. m.", "PM")
+                    }
+
+                    return date;
+                }
+            </script>
         }
-
-        const validateInputEmpty = (idInput, messaje, idError) => {
-            if ($(`#${idInput}`).val() == "" || $(`#${idInput}`).val() == null) {
-                $(`#${idError}`).text(`${messaje}`);
-                return false;
-            } else {
-                $(`#${idError}`).text("");
-                return true;
-            }
-        }
-        const FormatDate = (date) => {
-
-            const validateAm = date.toString().includes("a. m.");
-            const validatePm = date.toString().includes("p. m.");
-
-            if (validateAm) {
-                date = date.replace("a. m.", "AM")
-            }
-
-            if (validatePm) {
-                date = date.replace("p. m.", "PM")
-            }
-
-            return date;
-        }
-    </script>
+    }
 }

@@ -155,20 +155,37 @@ namespace ParameterControl.Controllers.Conciliations
         [HttpGet]
         public async Task<ActionResult> Edit(int code)
         {
-            modConciliation.Conciliation conciliation = await conciliationsServices.GetConciliationsByCode(code);
+            try
+            {
+                ViewBag.CodeSend = code;
+                modConciliation.Conciliation conciliation = await conciliationsServices.GetConciliationsByCode(code);
+                if (conciliation.Code == 0)
+                {
+                    ViewBag.Success = true;
+                    ViewBag.EntyNull = true;
+                    return View("Actions/EditConciliation", null);
+                }
+                List<SelectListItem> PoliciesOptionsList = await GetPolicies();
+                List<SelectListItem> RequiredOptionsList = await conciliationsServices.GetRequired();
+                List<SelectListItem> OperationTypeOptionsList = await conciliationsServices.GetOperationsType();
+                List<SelectListItem> EmailsOptionsList = await conciliationsServices.GetEmailUsers();
 
-            List<SelectListItem> PoliciesOptionsList = await GetPolicies();
-            List<SelectListItem> RequiredOptionsList = await conciliationsServices.GetRequired();
-            List<SelectListItem> OperationTypeOptionsList = await conciliationsServices.GetOperationsType();
-            List<SelectListItem> EmailsOptionsList = await conciliationsServices.GetEmailUsers();
+                ConciliationCreateViewModel model = await conciliationsServices.GetConciliationFormatCreate(conciliation);
+                model.OperationTypeOptions = OperationTypeOptionsList;
+                model.PoliciesOption = PoliciesOptionsList;
+                model.RequiredOption = RequiredOptionsList;
+                model.Emails = EmailsOptionsList;
 
-            ConciliationCreateViewModel model = await conciliationsServices.GetConciliationFormatCreate(conciliation);
-            model.OperationTypeOptions = OperationTypeOptionsList;
-            model.PoliciesOption = PoliciesOptionsList;
-            model.RequiredOption = RequiredOptionsList;
-            model.Emails = EmailsOptionsList;
-
-            return View("Actions/EditConciliation", model);
+                ViewBag.Success = true;
+                ViewBag.EntyNull = false;
+                return View("Actions/EditConciliation", model);
+            }
+            catch (Exception)
+            {
+                ViewBag.Success = false;
+                ViewBag.EntyNull = false;
+                return View("Actions/EditConciliation", null);
+            }
         }
 
 
@@ -198,26 +215,81 @@ namespace ParameterControl.Controllers.Conciliations
         [HttpGet]
         public async Task<ActionResult> View(int code)
         {
-            modConciliation.Conciliation conciliation = await conciliationsServices.GetConciliationsByCode(code);
-            ConciliationViewModel model = await conciliationsServices.GetConciliationFormat(conciliation);
+            try
+            {
+                ViewBag.CodeSend = code;
+                modConciliation.Conciliation conciliation = await conciliationsServices.GetConciliationsByCode(code);
+                if (conciliation.Code == 0)
+                {
+                    ViewBag.Success = true;
+                    ViewBag.EntyNull = true;
+                    return View("Actions/ViewConciliation", null);
+                }
+                ConciliationViewModel model = await conciliationsServices.GetConciliationFormat(conciliation);
 
-            return View("Actions/ViewConciliation", model);
+                ViewBag.Success = true;
+                ViewBag.EntyNull = false;
+                return View("Actions/ViewConciliation", model);
+            }
+            catch (Exception)
+            {
+                ViewBag.Success = false;
+                ViewBag.EntyNull = false;
+                return View("Actions/ViewConciliation", null);
+            } 
         }
 
         [HttpGet]
         public async Task<ActionResult> ViewPolicy(int code)
         {
-            modPolicy.Policy policy = await policiesServices.GetPolicyByCode(code);
-            PolicyViewModel model = await policiesServices.GetPolicyFormat(policy);
+            try
+            {
+                ViewBag.CodeSend = code;
+                modPolicy.Policy policy = await policiesServices.GetPolicyByCode(code);
+                if (policy.Code == 0)
+                {
+                    ViewBag.Success = true;
+                    ViewBag.EntyNull = true;
+                    return View("Actions/ViewPolicyConciliations", null);
+                }
+                PolicyViewModel model = await policiesServices.GetPolicyFormat(policy);
 
-            return View("Actions/ViewPolicyConciliations", model);
+                ViewBag.Success = true;
+                ViewBag.EntyNull = false;
+                return View("Actions/ViewPolicyConciliations", model);
+            }
+            catch (Exception)
+            {
+                ViewBag.Success = false;
+                ViewBag.EntyNull = false;
+                return View("Actions/ViewPolicyConciliations", null);
+            }
         }
 
         [HttpGet]
         public async Task<ActionResult> Active(int code)
         {
-            modConciliation.Conciliation conciliation = await conciliationsServices.GetConciliationsByCode(code);
-            return View("Actions/ActiveConciliation", conciliation);
+            try
+            {
+                ViewBag.CodeSend = code;
+                modConciliation.Conciliation conciliation = await conciliationsServices.GetConciliationsByCode(code);
+                if (conciliation.Code == 0)
+                {
+                    ViewBag.Success = true;
+                    ViewBag.EntyNull = true;
+                    return View("Actions/ActiveConciliation", null);
+                }
+
+                ViewBag.Success = true;
+                ViewBag.EntyNull = false;
+                return View("Actions/ActiveConciliation", conciliation);
+            }
+            catch (Exception)
+            {
+                ViewBag.Success = false;
+                ViewBag.EntyNull = false;
+                return View("Actions/ActiveConciliation", null);
+            }
         }
 
         [HttpPost]
@@ -240,8 +312,27 @@ namespace ParameterControl.Controllers.Conciliations
         [HttpGet]
         public async Task<ActionResult> Desactive(int code)
         {
-            modConciliation.Conciliation conciliation = await conciliationsServices.GetConciliationsByCode(code);
-            return View("Actions/DesactiveConciliation", conciliation);
+            try
+            {
+                ViewBag.CodeSend = code;
+                modConciliation.Conciliation conciliation = await conciliationsServices.GetConciliationsByCode(code);
+                if (conciliation.Code == 0)
+                {
+                    ViewBag.Success = true;
+                    ViewBag.EntyNull = true;
+                    return View("Actions/DesactiveConciliation", null);
+                }
+
+                ViewBag.Success = true;
+                ViewBag.EntyNull = false;
+                return View("Actions/DesactiveConciliation", conciliation);
+            }
+            catch (Exception)
+            {
+                ViewBag.Success = false;
+                ViewBag.EntyNull = false;
+                return View("Actions/DesactiveConciliation", null);
+            }
         }
 
         [HttpPost]

@@ -1,0 +1,26 @@
+﻿@model string
+
+@{
+    string[] FormatModel = Model.Split(",");
+    string Message = FormatModel[0];
+    string Controller = FormatModel[1];
+}
+
+<partial name="_Menu" />
+
+<div class="box_delete">
+    <div class="bg__blur"></div>
+    <form class="form__container">
+        <div class="card__container">
+            <div class="header_form">
+                <img src="/images/iconApple.png" />
+                <h1>Error</h1>
+                <h2>@Message</h2>
+            </div>
+
+            <div id="btn_container" class="btn_container">
+                <a class="button button_secondary" asp-controller="@Controller" asp-action="@Controller"><p class="text font_bold">Volver</p></a>
+            </div>
+        </div>
+    </form>
+</div>

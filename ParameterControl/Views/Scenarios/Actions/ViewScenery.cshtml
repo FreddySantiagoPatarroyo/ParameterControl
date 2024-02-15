@@ -2,40 +2,57 @@
 @model SceneryViewModel;
 
 @{
+    ViewData["Title"] = "Ver Escenarios";
+    string ErrorEntyNull = "No existe un escenario con el codigo " + ViewBag.CodeSend + ",Scenarios";
+    string ErrorSuccess = "Se genero un problema al obtener la informacion,Scenarios";
 }
 
 <partial name="_Menu" />
 
-<div class="box_view">
-    <div class="bg__blur"></div>
-    <form class="form__container">
+@if (!ViewBag.Success)
+{
+    <partial name="_ModalError" model="ErrorSuccess" />
+}
+else
+{
+    @if (ViewBag.EntyNull)
+    {
+        <partial name="_ModalError" model="ErrorEntyNull" />
+    }
+    else
+    {
+        <div class="box_view">
+            <div class="bg__blur"></div>
+            <form class="form__container">
 
-        <div class="card__container">
-            <div class="header_form">
-                <img src="/images/iconApple.png" />
-                <h1>Detalles del Escenario</h1>
-            </div>
+                <div class="card__container">
+                    <div class="header_form">
+                        <img src="/images/iconApple.png" />
+                        <h1>Detalles del Escenario</h1>
+                    </div>
 
-            <div class="form_group">
-                <p class="title_form">Código:</p>
-                <p>@Model.CodeFormat</p>
-            </div>
-            <div class="form_groupm">
-                <p class="title_form">Nombre:</p>
-                <p>@Model.Name</p>
-            </div>
-            <div class="form_group">
-                <p class="title_form">Descripción:</p>
-                <p>@Model.Impact</p>
-            </div>
-            <div class="form_group">
-                <p class="title_form">Conciliación:</p>
-                <p>@Model.Conciliation</p>
-            </div>
+                    <div class="form_group">
+                        <p class="title_form">Código:</p>
+                        <p>@Model.CodeFormat</p>
+                    </div>
+                    <div class="form_groupm">
+                        <p class="title_form">Nombre:</p>
+                        <p>@Model.Name</p>
+                    </div>
+                    <div class="form_group">
+                        <p class="title_form">Descripción:</p>
+                        <p>@Model.Impact</p>
+                    </div>
+                    <div class="form_group">
+                        <p class="title_form">Conciliación:</p>
+                        <p>@Model.Conciliation</p>
+                    </div>
 
-            <div class="btn_container">
-                <a class="button button_secondary btn_cancel-view" asp-controller="Scenarios" asp-action="Scenarios"><p class="text font_bold">Cancelar</p></a>
-            </div>
+                    <div class="btn_container">
+                        <a class="button button_secondary btn_cancel-view" asp-controller="Scenarios" asp-action="Scenarios"><p class="text font_bold">Cancelar</p></a>
+                    </div>
+                </div>
+            </form>
         </div>
-    </form>
-</div>
+    }
+}

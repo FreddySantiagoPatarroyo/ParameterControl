@@ -9,6 +9,7 @@ using ParameterControl.Services.Authenticated;
 using ParameterControl.Services.Policies;
 using ParameterControl.Services.Rows;
 using System.Collections.Generic;
+using System.Reflection;
 using modPolicy = ParameterControl.Models.Policy;
 
 
@@ -139,10 +140,29 @@ namespace ParameterControl.Controllers.Policies
         [HttpGet]
         public async Task<ActionResult> Edit(int code)
         {
-            modPolicy.Policy policy = await policiesServices.GetPolicyByCode(code);
-            PolicyCreateViewModel model = await policiesServices.GetPolicyFormatCreate(policy);
+            try
+            {
+                ViewBag.CodeSend = code;
+                modPolicy.Policy policy = await policiesServices.GetPolicyByCode(code);
+                if (policy.Code == 0)
+                {
+                    ViewBag.Success = true;
+                    ViewBag.EntyNull = true;
+                    return View("Actions/EditPolicy", null);
+                }
+                PolicyCreateViewModel model = await policiesServices.GetPolicyFormatCreate(policy);
 
-            return View("Actions/EditPolicy", model);
+                ViewBag.Success = true;
+                ViewBag.EntyNull = false;
+                return View("Actions/EditPolicy", model);
+            }
+            catch (Exception)
+            {
+                ViewBag.Success = false;
+                ViewBag.EntyNull = false;
+                return View("Actions/EditPolicy", null);
+            }
+            
         }
 
         [HttpPost]
@@ -172,17 +192,53 @@ namespace ParameterControl.Controllers.Policies
         [HttpGet]
         public async Task<ActionResult> View(int code)
         {
-            modPolicy.Policy policy = await policiesServices.GetPolicyByCode(code);
-            PolicyViewModel model = await policiesServices.GetPolicyFormat(policy);
+            try
+            {
+                ViewBag.CodeSend = code;
+                modPolicy.Policy policy = await policiesServices.GetPolicyByCode(code);
+                if (policy.Code == 0)
+                {
+                    ViewBag.Success = true;
+                    ViewBag.EntyNull = true;
+                    return View("Actions/ViewPolicy", null);
+                }
+                PolicyViewModel model = await policiesServices.GetPolicyFormat(policy);
 
-            return View("Actions/ViewPolicy", model);
+                ViewBag.Success = true;
+                ViewBag.EntyNull = false;
+                return View("Actions/ViewPolicy", model);
+            }
+            catch (Exception)
+            {
+                ViewBag.Success = false;
+                ViewBag.EntyNull = false;
+                return View("Actions/ViewPolicy", null);
+            }   
         }
 
         [HttpGet]
         public async Task<ActionResult> Active(int code)
         {
-            modPolicy.Policy policy = await policiesServices.GetPolicyByCode(code);
-            return View("Actions/ActivePolicy", policy);
+            try
+            {
+                ViewBag.CodeSend = code;
+                modPolicy.Policy policy = await policiesServices.GetPolicyByCode(code);
+                if (policy.Code == 0)
+                {
+                    ViewBag.Success = true;
+                    ViewBag.EntyNull = true;
+                    return View("Actions/ActivePolicy", null);
+                }
+                ViewBag.Success = true;
+                ViewBag.EntyNull = false;
+                return View("Actions/ActivePolicy", policy);
+            }
+            catch (Exception)
+            {
+                ViewBag.Success = false;
+                ViewBag.EntyNull = false;
+                return View("Actions/ActivePolicy", null);
+            }
         }
 
         [HttpPost]
@@ -205,8 +261,26 @@ namespace ParameterControl.Controllers.Policies
         [HttpGet]
         public async Task<ActionResult> Desactive(int code)
         {
-            modPolicy.Policy policy = await policiesServices.GetPolicyByCode(code);
-            return View("Actions/DesactivePolicy", policy);
+            try
+            {
+                ViewBag.CodeSend = code;
+                modPolicy.Policy policy = await policiesServices.GetPolicyByCode(code);
+                if (policy.Code == 0)
+                {
+                    ViewBag.Success = true;
+                    ViewBag.EntyNull = true;
+                    return View("Actions/DesactivePolicy", null);
+                }
+                ViewBag.Success = true;
+                ViewBag.EntyNull = false;
+                return View("Actions/DesactivePolicy", policy);
+            }
+            catch (Exception)
+            {
+                ViewBag.Success = false;
+                ViewBag.EntyNull = false;
+                return View("Actions/DesactivePolicy", null);
+            }
         }
 
         [HttpPost]

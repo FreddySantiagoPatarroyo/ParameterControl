@@ -4,6 +4,7 @@ using Newtonsoft.Json;
 using ParameterControl.Models.Conciliation;
 using ParameterControl.Models.Filter;
 using ParameterControl.Models.Pagination;
+using ParameterControl.Models.Policy;
 using ParameterControl.Models.Scenery;
 using ParameterControl.Services.Authenticated;
 using ParameterControl.Services.Conciliations;
@@ -146,16 +147,33 @@ namespace ParameterControl.Controllers.Scenarios
         [HttpGet]
         public async Task<ActionResult> Edit(int code)
         {
-            modScenery.Scenery scenery = await scenariosServices.GetSceneryByCode(code);
+            try
+            {
+                ViewBag.CodeSend = code;
+                modScenery.Scenery scenery = await scenariosServices.GetSceneryByCode(code);
+                if (scenery.Code == 0)
+                {
+                    ViewBag.Success = true;
+                    ViewBag.EntyNull = true;
+                    return View("Actions/EditScenary", null);
+                }
+                List<SelectListItem> ImpactOptionsList = await scenariosServices.GetImpact();
+                List<SelectListItem> ConciliationOptionsList = await GetConciliation();
 
-            List<SelectListItem> ImpactOptionsList = await scenariosServices.GetImpact();
-            List<SelectListItem> ConciliationOptionsList = await GetConciliation();
+                SceneryCreateViewModel model = await scenariosServices.GetSceneryFormatCreate(scenery);
+                model.ImpactOptions = ImpactOptionsList;
+                model.ConciliationOptions = ConciliationOptionsList;
 
-            SceneryCreateViewModel model = await scenariosServices.GetSceneryFormatCreate(scenery);
-            model.ImpactOptions = ImpactOptionsList;
-            model.ConciliationOptions = ConciliationOptionsList;
-
-            return View("Actions/EditScenary", model);
+                ViewBag.Success = true;
+                ViewBag.EntyNull = false;
+                return View("Actions/EditScenary", model);
+            }
+            catch (Exception)
+            {
+                ViewBag.Success = false;
+                ViewBag.EntyNull = false;
+                return View("Actions/EditScenary", null);
+            }
         }
 
         [HttpPost]
@@ -185,17 +203,56 @@ namespace ParameterControl.Controllers.Scenarios
         [HttpGet]
         public async Task<ActionResult> View(int code)
         {
-            Scenery scenery = await scenariosServices.GetSceneryByCode(code);
-            SceneryViewModel model = await scenariosServices.GetSceneryFormat(scenery);
+            try
+            {
+                ViewBag.CodeSend = code;
+                Scenery scenery = await scenariosServices.GetSceneryByCode(code);
+                if (scenery.Code == 0)
+                {
+                    ViewBag.Success = true;
+                    ViewBag.EntyNull = true;
+                    return View("Actions/ViewScenery", null);
+                }
+                SceneryViewModel model = await scenariosServices.GetSceneryFormat(scenery);
 
-            return View("Actions/ViewScenery", model);
+                ViewBag.Success = true;
+                ViewBag.EntyNull = false;
+                return View("Actions/ViewScenery", model);
+            }
+            catch (Exception)
+            {
+                ViewBag.Success = false;
+                ViewBag.EntyNull = false;
+                return View("Actions/ViewScenery", null);
+            }
+            
         }
 
         [HttpGet]
         public async Task<ActionResult> Active(int code)
         {
-            modScenery.Scenery scenery = await scenariosServices.GetSceneryByCode(code);
-            return View("Actions/ActiveScenery", scenery);
+            try
+            {
+                ViewBag.CodeSend = code;
+                modScenery.Scenery scenery = await scenariosServices.GetSceneryByCode(code);
+                if(scenery.Code == 0)
+                {
+                    ViewBag.Success = true;
+                    ViewBag.EntyNull = true;
+                    return View("Actions/ActiveScenery", null);
+                }
+                ViewBag.Success = true;
+                ViewBag.EntyNull = false;
+                return View("Actions/ActiveScenery", scenery);
+            }
+            catch (Exception)
+            {
+                ViewBag.Success = false;
+                ViewBag.EntyNull = false;
+                return View("Actions/ActiveScenery", null);
+            }
+           
+            
         }
 
         [HttpPost]
@@ -218,8 +275,27 @@ namespace ParameterControl.Controllers.Scenarios
         [HttpGet]
         public async Task<ActionResult> Desactive(int code)
         {
-            modScenery.Scenery scenery = await scenariosServices.GetSceneryByCode(code);
-            return View("Actions/DesactiveScenery", scenery);
+            try
+            {
+                ViewBag.CodeSend = code;
+                modScenery.Scenery scenery = await scenariosServices.GetSceneryByCode(code);
+                if (scenery.Code == 0)
+                {
+                    ViewBag.Success = true;
+                    ViewBag.EntyNull = true;
+                    return View("Actions/DesactiveScenery", null);
+                }
+                ViewBag.Success = true;
+                ViewBag.EntyNull = false;
+                return View("Actions/DesactiveScenery", scenery);
+            }
+            catch (Exception)
+            {
+                ViewBag.Success = false;
+                ViewBag.EntyNull = false;
+                return View("Actions/DesactiveScenery", null);
+            }
+            
         }
 
         [HttpPost]
