@@ -22,8 +22,8 @@
             </div>
 
             <input type="hidden" asp-for="Code" />
-            <input type="hidden" asp-for="CreationDate" />
-
+          @*   <input type="hidden" asp-for="CreationDate" />
+ *@
             <div class="form_group">
                 <div class="field">
                     <label asp-for="CodeFormat" class="label_form">Código usuario*</label>
@@ -122,7 +122,7 @@
                 document.getElementById('btn_container').style.display = 'none';
                 document.getElementById('loading').style.display = 'flex';
 
-                const CreationDateFormat = FormatDate($('#CreationDate').val());
+                // const CreationDateFormat = FormatDate($('#CreationDate').val());
 
                 data = {
                     Code: $('#Code').val(),
@@ -130,7 +130,7 @@
                     Email: $('#Email').val(),
                     Name: $('#Name').val(),
                     State: true,
-                    CreationDate: new Date(CreationDateFormat)
+                    // CreationDate: new Date(CreationDateFormat)
                 }
 
                 console.log(data)
@@ -171,20 +171,20 @@
                 return true;
             }
         }
-        const FormatDate = (date) => {
+        // const FormatDate = (date) => {
 
-            const validateAm = date.toString().includes("a. m.");
-            const validatePm = date.toString().includes("p. m.");
+        //     const validateAm = date.toString().includes("a. m.");
+        //     const validatePm = date.toString().includes("p. m.");
 
-            if (validateAm) {
-                date = date.replace("a. m.", "AM")
-            }
+        //     if (validateAm) {
+        //         date = date.replace("a. m.", "AM")
+        //     }
 
-            if (validatePm) {
-                date = date.replace("p. m.", "PM")
-            }
+        //     if (validatePm) {
+        //         date = date.replace("p. m.", "PM")
+        //     }
 
-            return date;
-        }
+        //     return date;
+        // }
     </script>
 }

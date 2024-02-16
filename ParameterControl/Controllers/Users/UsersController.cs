@@ -8,6 +8,7 @@ using ParameterControl.Services.Rows;
 using ParameterControl.Services.Users;
 using modUser = ParameterControl.Models.User;
 using ParameterControl.Models.Pagination;
+using ParameterControl.Services.Policies;
 
 
 namespace ParameterControl.Controllers.Users
@@ -149,6 +150,17 @@ namespace ParameterControl.Controllers.Users
         [HttpPost]
         public async Task<ActionResult> EditUser([FromBody] modUser.User request)
         {
+            var user = await usersServices.GetUsersByCode(request.Code);
+
+            if (user.Code == 0)
+            {
+                _logger.LogError($"Error el usuario no existe : {JsonConvert.SerializeObject(request)}");
+                return BadRequest(new { message = "No existe un usuario con el codigo" + user.Code, state = "Error" });
+            }
+            else
+            {
+                request.CreationDate = user.CreationDate;
+            }
             if (!ModelState.IsValid)
             {
                 _logger.LogError($"Error en el modelo : {JsonConvert.SerializeObject(request)}");

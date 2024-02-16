@@ -8,6 +8,7 @@ using ParameterControl.Models.Policy;
 using ParameterControl.Models.Scenery;
 using ParameterControl.Services.Authenticated;
 using ParameterControl.Services.Conciliations;
+using ParameterControl.Services.Policies;
 using ParameterControl.Services.Rows;
 using ParameterControl.Services.Scenarios;
 using modConciliation = ParameterControl.Models.Conciliation;
@@ -179,6 +180,17 @@ namespace ParameterControl.Controllers.Scenarios
         [HttpPost]
         public async Task<ActionResult> Edit([FromBody] modScenery.Scenery request)
         {
+            var scenery = await scenariosServices.GetSceneryByCode(request.Code);
+
+            if (scenery.Code == 0)
+            {
+                _logger.LogError($"Error el escenario no existe : {JsonConvert.SerializeObject(request)}");
+                return BadRequest(new { message = "No existe el escenario con el codigo" + scenery.Code, state = "Error" });
+            }
+            else
+            {
+                request.CreationDate = scenery.CreationDate;
+            }
             if (!ModelState.IsValid)
             {
                 _logger.LogError($"Error en el modelo : {JsonConvert.SerializeObject(request)}");

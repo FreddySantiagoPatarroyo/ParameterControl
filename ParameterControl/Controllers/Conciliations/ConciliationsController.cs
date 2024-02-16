@@ -192,6 +192,18 @@ namespace ParameterControl.Controllers.Conciliations
         [HttpPost]
         public async Task<ActionResult> Edit([FromBody] modConciliation.Conciliation request)
         {
+            var conciliation = await conciliationsServices.GetConciliationsByCode(request.Code);
+
+            if (conciliation.Code == 0)
+            {
+                _logger.LogError($"Error la conciliacion no existe : {JsonConvert.SerializeObject(request)}");
+                return BadRequest(new { message = "No existe una conciliacion con el codigo" + conciliation.Code, state = "Error" });
+            }
+            else
+            {
+                request.CreationDate = conciliation.CreationDate;
+            }
+
             if (!ModelState.IsValid)
             {
                 return BadRequest(new { message = "Error en la informacion enviada", state = "Error" });

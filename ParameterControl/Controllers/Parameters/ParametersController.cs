@@ -10,6 +10,7 @@ using ParameterControl.Models.Policy;
 using ParameterControl.Services.Authenticated;
 using ParameterControl.Services.Conciliations;
 using ParameterControl.Services.Parameters;
+using ParameterControl.Services.Policies;
 using ParameterControl.Services.Rows;
 using modParameter = ParameterControl.Models.Parameter;
 
@@ -183,6 +184,17 @@ namespace ParameterControl.Controllers.Parameters
         [HttpPost]
         public async Task<IActionResult> Edit([FromBody] modParameter.Parameter request)
         {
+            var parameter = await parametersService.GetParameterByCode(request.Code);
+
+            if (parameter.Code == 0)
+            {
+                _logger.LogError($"Error el parametro no existe : {JsonConvert.SerializeObject(request)}");
+                return BadRequest(new { message = "No existe un parametro con el codigo" + parameter.Code, state = "Error" });
+            }
+            else
+            {
+                request.CreationDate = parameter.CreationDate;
+            }
             if (!ModelState.IsValid)
             {
                 _logger.LogError($"Error en el modelo : {JsonConvert.SerializeObject(request)}");

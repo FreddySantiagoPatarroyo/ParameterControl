@@ -1,4 +1,5 @@
-﻿@using ParameterControl.Models.Policy;
+﻿
+@using ParameterControl.Models.Policy;
 @model PolicyCreateViewModel;
 
 @{
@@ -9,8 +10,7 @@
 
 <partial name="_Menu" />
 
-@if (!ViewBag.Success)
-{
+@if(!ViewBag.Success){
     <partial name="_ModalError" model="ErrorSuccess" />
 }
 else
@@ -86,10 +86,10 @@ else
         </div>
 
         @section Scripts {
-    <partial name="_ValidationScriptsPartial.cshtml" />
+            <partial name="_ValidationScriptsPartial.cshtml" />
 
-    <script>
-        const urlPolicy = '@Url.Action("Edit")';
+            <script>
+                const urlPolicy = '@Url.Action("Edit")';
                 let data;
                 let isValidCode = false;
                 let isValidName = false;
@@ -144,30 +144,30 @@ else
                 }
 
                 const validateInputEmpty = (idInput, messaje, idError) => {
-                    if ($(#${ idInput }).val() == "" || $(#${ idInput }).val() == null) {
-                        $(#${ idError }).text(${ messaje });
+                    if ($(`#${idInput}`).val() == "" || $(`#${idInput}`).val() == null) {
+                        $(`#${idError}`).text(`${messaje}`);
                         return false;
                     } else {
-                        $(#${ idError }).text("");
+                        $(`#${idError}`).text("");
                         return true;
                     }
                 }
 
-                // const FormatDate = (date) => {
+                const FormatDate = (date) => {
 
-                //      const validateAm = date.toString().includes("a. m.");
-                //      const validatePm = date.toString().includes("p. m.");
+                    const validateAm = date.toString().includes("a. m.");
+                    const validatePm = date.toString().includes("p. m.");
 
-                //      if (validateAm) {
-                //          date = date.replace("a. m.", "AM")
-                //      }
+               //      if (validateAm) {
+               //          date = date.replace("a. m.", "AM")
+               //      }
 
-                //      if (validatePm) {
-                //          date = date.replace("p. m.", "PM")
-                //      }
+                    if (validatePm) {
+                        date = date.replace("p. m.", "PM")
+                    }
 
-                //      return date;
-                //  }
+                    return date;
+                }
             </script>
         }
     }
