@@ -168,6 +168,18 @@ namespace ParameterControl.Controllers.Policies
         [HttpPost]
         public async Task<ActionResult> Edit([FromBody] modPolicy.Policy request)
         {
+            var policy = await policiesServices.GetPolicyByCode(request.Code);
+
+            if(policy.Code == 0)
+            {
+                _logger.LogError($"Error politica no existe : {JsonConvert.SerializeObject(request)}");
+                return BadRequest(new { message = "No existe una politica con el codigo" + policy.Code, state = "Error" });
+            }
+            else
+            {
+                request.CreationDate = policy.CreationDate;
+            }
+
             if (!ModelState.IsValid)
             {
                 _logger.LogError($"Error en el modelo : {JsonConvert.SerializeObject(request)}");
