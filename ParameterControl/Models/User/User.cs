@@ -12,5 +12,6 @@ namespace ParameterControl.Models.User
         public string Email { get; set; } = string.Empty;
         [Required(ErrorMessage = "El campo nombre de usuario usuario es requerido")]
         public string Name { get; set; } = string.Empty;
+        public bool FirstAccess { get; set; }
     }
 }

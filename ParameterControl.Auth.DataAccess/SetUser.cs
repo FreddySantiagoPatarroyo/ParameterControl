@@ -33,6 +33,8 @@ namespace ParameterControl.User.DataAccess
                         command.Parameters.Add(new OracleParameter("PARAM_IDROL", entity.RolId));
                         command.Parameters.Add(new OracleParameter("PARAM_LOGINGROUP", entity.GroupId));
                         command.Parameters.Add(new OracleParameter("PARAM_MODIFIELDBY", entity.ModifiedBy));
+                        command.Parameters.Add(new OracleParameter("PARAM_ESTADO_ACTIVACION", Convert.ToInt32(entity.State)));
+
                         OracleDataReader reader = command.ExecuteReader();
                         response = 1;
                     }

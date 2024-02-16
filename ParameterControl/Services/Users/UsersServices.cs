@@ -214,7 +214,8 @@ namespace ParameterControl.Services.Users
                 {
                     UserName = request.Name,
                     Email = request.Email,
-                    User = request.UserOwner
+                    User = request.UserOwner,
+                    State = request.State,
                 };
 
                 var response = await _userService.InsertUser(user);
@@ -255,7 +256,8 @@ namespace ParameterControl.Services.Users
                     Name = User.UserName,
                     CreationDate = User.CreationDate,
                     UpdateDate = User.ModifiedDate,
-                    UserOwner = User.ModifiedBy
+                    UserOwner = User.ModifiedBy,
+                    State = User.State,
                 };
                 return model;
             });

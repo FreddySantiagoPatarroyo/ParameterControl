@@ -162,7 +162,8 @@ namespace ParameterControl.User.Impl
                     CreationDate = dr["FECHA_CREACION"] is DBNull ? DateTime.Now : Convert.ToDateTime(dr["FECHA_CREACION"]),
                     ModifiedDate = dr["FECHA_ACTUALIZACION"] is DBNull ? DateTime.Now : Convert.ToDateTime(dr["FECHA_ACTUALIZACION"]),
                     ModifiedBy = dr["MODIFICADO_POR"] is DBNull ? string.Empty : dr["MODIFICADO_POR"].ToString(),
-                    FirstAccess = dr["PRIMER_ACCESO"] is DBNull ? 0 : Convert.ToInt32(dr["PRIMER_ACCESO"])
+                    FirstAccess = dr["PRIMER_ACCESO"] is DBNull ? false : Convert.ToBoolean(dr["PRIMER_ACCESO"]),
+                    State = dr["ESTADO_ACTIVACION"] is DBNull ? false : Convert.ToBoolean(dr["ESTADO_ACTIVACION"])
                 };
                 return model;
             });

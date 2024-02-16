@@ -11,7 +11,8 @@
         public DateTime CreationDate { get; set; }
         public DateTime ModifiedDate { get; set; }
         public string ModifiedBy { get; set; } = string.Empty;
-        public int FirstAccess { get; set; }
+        public bool FirstAccess { get; set; }
+        public bool State {  get; set; }
 
     }
 }
