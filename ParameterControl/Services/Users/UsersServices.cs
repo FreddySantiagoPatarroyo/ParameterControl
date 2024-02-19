@@ -7,6 +7,7 @@ using ParameterControl.Models.Policy;
 using ParameterControl.Models.User;
 using ParameterControl.Policy.Entities;
 using modUser = ParameterControl.Models.User;
+using ParameterControl.Conciliation.Entities;
 
 namespace ParameterControl.Services.Users
 {
@@ -87,6 +88,8 @@ namespace ParameterControl.Services.Users
                 userModel.User_ = user.User_;
                 userModel.Email = user.Email;
                 userModel.Name = user.Name;
+                userModel.FirstAccess = user.FirstAccess;
+                userModel.Password = user.Password;
                 userModel.State = user.State;
                 userModel.CodeFormat = "COD_" + user.Code;
                 userModel.StateFormat = user.State ? "Activo" : "Inactivo";
@@ -108,6 +111,8 @@ namespace ParameterControl.Services.Users
             userModel.User_ = user.User_;
             userModel.Email = user.Email;
             userModel.Name = user.Name;
+            userModel.FirstAccess = user.FirstAccess;
+            userModel.Password = user.Password;
             userModel.State = user.State;
             userModel.CodeFormat = "COD_" + user.Code;
             userModel.StateFormat = user.State ? "Activo" : "Inactivo";
@@ -126,6 +131,8 @@ namespace ParameterControl.Services.Users
             userModel.User_ = user.User_;
             userModel.Email = user.Email;
             userModel.Name = user.Name;
+            userModel.FirstAccess = user.FirstAccess;
+            userModel.Password = user.Password;
             userModel.State = user.State;
             userModel.CodeFormat = "COD_" + user.Code;
             userModel.CreationDate = user.CreationDate;
@@ -206,28 +213,6 @@ namespace ParameterControl.Services.Users
             return usersFilterPagination;
         }
 
-        public async Task<string> InsertUser(modUser.User request)
-        {
-            try
-            {
-                var user = new User.Entities.UserModel
-                {
-                    UserName = request.Name,
-                    Email = request.Email,
-                    User = request.UserOwner,
-                    State = request.State,
-                };
-
-                var response = await _userService.InsertUser(user);
-
-                return response.Equals(1) ? "Usuario creado correctamente" : "Error creando el usuario";
-            }
-            catch (Exception ex)
-            {
-                throw;
-            }
-        }
-
         private async Task<List<modUser.User>> MapperUser(List<UserModel> userModel)
         {
             return await Task.Run(() =>
@@ -254,6 +239,8 @@ namespace ParameterControl.Services.Users
                     User_ = User.User,
                     Email = User.Email,
                     Name = User.UserName,
+                    FirstAccess = User.FirstAccess,
+                    Password = User.Password,
                     CreationDate = User.CreationDate,
                     UpdateDate = User.ModifiedDate,
                     UserOwner = User.ModifiedBy,
@@ -261,6 +248,34 @@ namespace ParameterControl.Services.Users
                 };
                 return model;
             });
+        }
+
+        public async Task<string> InsertUser(modUser.User request)
+        {
+            try
+            {
+                var user = new User.Entities.UserModel
+                {
+                    User = request.User_,
+                    Email = request.Email,
+                    UserName = request.Name,
+                    RolId = request.Rol,
+                    Password = request.Password,
+                    FirstAccess = request.FirstAccess,
+                    CreationDate = DateTime.Now,
+                    ModifiedDate = DateTime.Now,
+                    ModifiedBy = "CreateToUserDev",
+                    State = request.State,
+                };
+
+                var response = await _userService.InsertUser(user);
+
+                return response.Equals(1) ? "Usuario creado correctamente" : "Error creando el usuario";
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
         }
 
         public async Task<string> UpdateUser(modUser.User User)
@@ -271,6 +286,22 @@ namespace ParameterControl.Services.Users
             return response.Equals(1) ? "Usuario actualizado correctamente" : "Error actualizando el usuario";
         }
 
+        public async Task<string> DesactiveUser(modUser.User User)
+        {
+            var mapping = await MapperDesactiveUser(User);
+            var response = await _userService.UpdateUser(mapping);
+
+            return response.Equals(1) ? "Usuario desactivado correctamente" : "Error desactivando el usuario";
+        }
+
+        public async Task<string> ActiveUser(modUser.User User)
+        {
+            var mapping = await MapperActiveUser(User);
+            var response = await _userService.UpdateUser(mapping);
+
+            return response.Equals(1) ? "Usuario activado correctamente" : "Error activando el usuario";
+        }
+
         private async Task<UserModel> MapperUpdateUser(modUser.User User)
         {
             return await Task.Run(() =>
@@ -278,7 +309,60 @@ namespace ParameterControl.Services.Users
                 UserModel model = new UserModel
                 {
                     Code = User.Code,
-                    UserName = User.Name
+                    User = User.User_,
+                    Email = User.Email,
+                    UserName = User.Name,
+                    RolId = User.Rol,
+                    Password = User.Password,
+                    FirstAccess = User.FirstAccess,
+                    CreationDate = User.CreationDate,
+                    ModifiedDate = DateTime.Now,
+                    ModifiedBy = "CreateToUserDev",
+                    State = User.State,
+                };
+                return model;
+            });
+        }
+
+        private async Task<UserModel> MapperDesactiveUser(modUser.User User)
+        {
+            return await Task.Run(() =>
+            {
+                UserModel model = new UserModel
+                {
+                    Code = User.Code,
+                    User = User.User_,
+                    Email = User.Email,
+                    UserName = User.Name,
+                    RolId = User.Rol,
+                    Password = User.Password,
+                    FirstAccess = User.FirstAccess,
+                    CreationDate = User.CreationDate,
+                    ModifiedDate = DateTime.Now,
+                    ModifiedBy = "CreateToUserDev",
+                    State = false,
+                };
+                return model;
+            });
+        }
+
+        private async Task<UserModel> MapperActiveUser(modUser.User User)
+        {
+            return await Task.Run(() =>
+            {
+                UserModel model = new UserModel
+                {
+                    Code = User.Code,
+                    User = User.User_,
+                    Email = User.Email,
+                    UserName = User.Name,
+                    RolId = User.Rol,
+                    Password = User.Password,
+                    FirstAccess = User.FirstAccess,
+                    CreationDate = User.CreationDate,
+                    ModifiedDate = DateTime.Now,
+                    ModifiedBy = "CreateToUserDev",
+                    State = true,
                 };
                 return model;
             });

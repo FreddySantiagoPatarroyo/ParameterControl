@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Identity;
+using System.ComponentModel.DataAnnotations;
 
 namespace ParameterControl.Models.User
 {
@@ -13,5 +14,7 @@ namespace ParameterControl.Models.User
         [Required(ErrorMessage = "El campo nombre de usuario usuario es requerido")]
         public string Name { get; set; } = string.Empty;
         public bool FirstAccess { get; set; }
+        public string Password { get; set; }
+        public int Rol {  get; set; }
     }
 }
