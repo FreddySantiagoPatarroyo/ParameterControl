@@ -18,6 +18,11 @@ namespace ParameterControl.Controllers
             return View();
         }
 
+        public IActionResult Home()
+        {
+            return View("Index");
+        }
+
         public IActionResult Privacy()
         {
             return View();

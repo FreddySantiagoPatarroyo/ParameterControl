@@ -4,7 +4,6 @@ namespace ParameterControl.Models.Conciliation
 {
     public class Conciliation : GeneralData
     {
-
         public int Code { get; set; }
         [Required(ErrorMessage = "El nombre es requerido")]
         public string Name { get; set; } = string.Empty;
