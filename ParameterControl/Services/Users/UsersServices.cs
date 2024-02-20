@@ -90,6 +90,7 @@ namespace ParameterControl.Services.Users
                 userModel.Name = user.Name;
                 userModel.FirstAccess = user.FirstAccess;
                 userModel.Password = user.Password;
+                userModel.Rol = user.Rol;
                 userModel.State = user.State;
                 userModel.CodeFormat = "COD_" + user.Code;
                 userModel.StateFormat = user.State ? "Activo" : "Inactivo";
@@ -113,6 +114,7 @@ namespace ParameterControl.Services.Users
             userModel.Name = user.Name;
             userModel.FirstAccess = user.FirstAccess;
             userModel.Password = user.Password;
+            userModel.Rol = user.Rol;
             userModel.State = user.State;
             userModel.CodeFormat = "COD_" + user.Code;
             userModel.StateFormat = user.State ? "Activo" : "Inactivo";
@@ -133,6 +135,7 @@ namespace ParameterControl.Services.Users
             userModel.Name = user.Name;
             userModel.FirstAccess = user.FirstAccess;
             userModel.Password = user.Password;
+            userModel.Rol = user.Rol;
             userModel.State = user.State;
             userModel.CodeFormat = "COD_" + user.Code;
             userModel.CreationDate = user.CreationDate;
@@ -241,6 +244,7 @@ namespace ParameterControl.Services.Users
                     Name = User.UserName,
                     FirstAccess = User.FirstAccess,
                     Password = User.Password,
+                    Rol = User.RolId,
                     CreationDate = User.CreationDate,
                     UpdateDate = User.ModifiedDate,
                     UserOwner = User.ModifiedBy,

@@ -60,24 +60,24 @@
                     <span id="NameError" class="text_error"></span>
                 </div>
             </div>
-            @* <div class="form_group">
+            <div class="form_group">
                 <div class="field">
-                    <label asp-for="CreationDate" class="label_form">Fecha de creacion*</label>
+                    <label asp-for="Rol" class="label_form">Rol*</label>
                     <div class="input">
-                        <input asp-for="CreationDate" placeholder="fecha" autocomplete="off" class="color_icon_calendar" />
+                        <input asp-for="Rol" placeholder="Rol de usuario" autocomplete="off" />
                     </div>
-                    <span id="CreationDateError" class="text_error"></span>
+                    <span id="RolError" class="text_error"></span>
                 </div>
             </div>
             <div class="form_group">
                 <div class="field">
-                    <label asp-for="UpdateDate" class="label_form">Fecha de actualizacion*</label>
+                    <label asp-for="Password" class="label_form">Contraseña*</label>
                     <div class="input">
-                        <input asp-for="UpdateDate" placeholder="fecha" autocomplete="off" class="color_icon_calendar" />
+                        <input asp-for="Password" placeholder="Contraseña" autocomplete="off" />
                     </div>
-                    <span id="UpdateDateError" class="text_error"></span>
+                    <span id="PasswordError" class="text_error"></span>
                 </div>
-            </div> *@
+            </div>
 
             <p class="note_text"><span>Nota: </span>Los campos con (*) son obligatorios</p>
 
@@ -106,18 +106,18 @@
         let isValidUser_ = false;
         let isValidEmail = false;
         let isValidName = false;
-        // let isValidCreationDate = false;
-        // let isValidUpdateDate = false;
+        let isValidRol = false;
+        let isValidPassword = false;
 
         const sendData = async () => {
             // isValidCode = validateInputEmpty("Code", "El codigo de usuario es requerido", "CodeError");
             isValidUser_ = validateInputEmpty("User_", "El usuario es requerido", "User_Error");
             isValidEmail = validateInputEmpty("Email", "El email es requerido", "EmailError");
             isValidName = validateInputEmpty("Name", "El nombre de usuario es requerido", "NameError");
-            // isValidCreationDate = validateInputEmpty("CreationDate", "La fecha de creación es requerida", "CreationDateError");
-            // isValidUpdateDate = validateInputEmpty("UpdateDate", "La fecha de actualización es requerida", "UpdateDateError");
+            isValidRol = validateInputEmpty("Rol", "El rol es requerido", "RolError");
+            isValidPassword = validateInputEmpty("Password", "La contraseña es requerida", "PasswordError");
 
-            if (isValidUser_ && isValidEmail && isValidName) {
+            if (isValidUser_ && isValidEmail && isValidName && isValidRol && isValidPassword) {
                 document.getElementById('btn_container').style.display = 'none';
                 document.getElementById('loading').style.display = 'flex';
 
@@ -126,7 +126,10 @@
                     User_: $('#User_').val(),
                     Email: $('#Email').val(),
                     Name: $('#Name').val(),
-                    State: true
+                    Rol: $('#Rol').val(),
+                    Password: $('#Password').val(),
+                    FirstAccess: false,
+                    State: true,
                 }
 
                 console.log(data)

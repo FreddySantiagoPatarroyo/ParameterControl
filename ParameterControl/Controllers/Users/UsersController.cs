@@ -9,6 +9,8 @@ using ParameterControl.Services.Users;
 using modUser = ParameterControl.Models.User;
 using ParameterControl.Models.Pagination;
 using ParameterControl.Services.Policies;
+using ParameterControl.Models.Policy;
+using ParameterControl.User.Entities;
 
 
 namespace ParameterControl.Controllers.Users
@@ -122,10 +124,8 @@ namespace ParameterControl.Controllers.Users
             {
                 try
                 {
-                    request.UserOwner = authenticatedUser.GetUserOwnerId();
-                    request.CreationDate = DateTime.Now;
-                    request.UpdateDate = DateTime.Now;
-                    _logger.LogInformation($"Finaliza método UsersController.Create {JsonConvert.SerializeObject(request)}");
+                    var responseIn = await usersServices.InsertUser(request);
+                    _logger.LogInformation($"Finaliza método UsersController.Create {JsonConvert.SerializeObject(responseIn)}");
 
                     return Ok(new { message = "Se creo el usuario de manera exitosa", state = "Success" });
                 }
@@ -140,11 +140,29 @@ namespace ParameterControl.Controllers.Users
         [HttpGet]
         public async Task<ActionResult> Edit(int code)
         {
-            modUser.User user = await usersServices.GetUsersByCode(code);
+            try
+            {
+                ViewBag.CodeSend = code;
+                modUser.User user = await usersServices.GetUsersByCode(code);
+                if (user.Code == 0)
+                {
+                    ViewBag.Success = true;
+                    ViewBag.EntyNull = true;
+                    return View("Actions/EditUser", null);
+                }
+                UserCreateViewModel model = await usersServices.GetUserFormatCreate(user);
 
-            UserCreateViewModel model = await usersServices.GetUserFormatCreate(user);
+                ViewBag.Success = true;
+                ViewBag.EntyNull = false;
+                return View("Actions/EditUser", model);
 
-            return View("Actions/EditUser", model);
+            }
+            catch (Exception)
+            {
+                ViewBag.Success = false;
+                ViewBag.EntyNull = false;
+                return View("Actions/EditUser", null);
+            } 
         }
 
         [HttpPost]
@@ -170,9 +188,8 @@ namespace ParameterControl.Controllers.Users
             {
                 try
                 {
-                    request.UserOwner = authenticatedUser.GetUserOwnerId();
-                    request.UpdateDate = DateTime.Now;
-                    _logger.LogInformation($"Finaliza método UsersController.Edit {JsonConvert.SerializeObject(request)}");
+                    var responseIn = await usersServices.UpdateUser(request);
+                    _logger.LogInformation($"Finaliza método UsersController.Edit {JsonConvert.SerializeObject(responseIn)}");
                     return Ok(new { message = "Se actualizo el usuario de manera exitosa", state = "Success" });
                 }
                 catch (Exception ex)
@@ -186,15 +203,54 @@ namespace ParameterControl.Controllers.Users
         [HttpGet]
         public async Task<ActionResult> View(int code)
         {
-            modUser.User user = await usersServices.GetUsersByCode(code);
-            return View("Actions/ViewUser", user);
+            try
+            {
+                ViewBag.CodeSend = code;
+                modUser.User user = await usersServices.GetUsersByCode(code);
+                if (user.Code == 0)
+                {
+                    ViewBag.Success = true;
+                    ViewBag.EntyNull = true;
+                    return View("Actions/ViewUser", null);
+                }
+                UserViewModel model = await usersServices.GetUserFormat(user);
+
+                ViewBag.Success = true;
+                ViewBag.EntyNull = false;
+                return View("Actions/ViewUser", model);
+            }
+            catch (Exception)
+            {
+                ViewBag.Success = false;
+                ViewBag.EntyNull = false;
+                return View("Actions/ViewUser", null);
+            }
         }
 
         [HttpGet]
         public async Task<ActionResult> Active(int code)
         {
-            modUser.User user = await usersServices.GetUsersByCode(code);
-            return View("Actions/ActiveUser", user);
+            try
+            {
+                ViewBag.CodeSend = code;
+                modUser.User user = await usersServices.GetUsersByCode(code);
+                if (user.Code == 0)
+                {
+                    ViewBag.Success = true;
+                    ViewBag.EntyNull = true;
+                    return View("Actions/ActiveUser", null);
+                }
+
+                ViewBag.Success = true;
+                ViewBag.EntyNull = false;
+                return View("Actions/ActiveUser", user);
+            }
+            catch (Exception)
+            {
+                ViewBag.Success = false;
+                ViewBag.EntyNull = false;
+                return View("Actions/ActiveUser", null);
+            }
         }
 
         [HttpPost]
@@ -203,9 +259,7 @@ namespace ParameterControl.Controllers.Users
             try
             {
                 modUser.User request = await usersServices.GetUsersByCode(code);
-                request.UserOwner = authenticatedUser.GetUserOwnerId();
-                request.UpdateDate = DateTime.Now;
-                request.State = true;
+                var responseIn = await usersServices.ActiveUser(request);
                 _logger.LogInformation($"Finaliza método UsersController.Active {JsonConvert.SerializeObject(request)}");
                 return Ok(new { message = "Se activo el usuario de manera exitosa", state = "Success" });
             }
@@ -219,8 +273,27 @@ namespace ParameterControl.Controllers.Users
         [HttpGet]
         public async Task<ActionResult> Desactive(int code)
         {
-            modUser.User user = await usersServices.GetUsersByCode(code);
-            return View("Actions/DesactiveUser", user);
+            try
+            {
+                ViewBag.CodeSend = code;
+                modUser.User user = await usersServices.GetUsersByCode(code);
+                if (user.Code == 0)
+                {
+                    ViewBag.Success = true;
+                    ViewBag.EntyNull = true;
+                    return View("Actions/DesactiveUser", null);
+                }
+
+                ViewBag.Success = true;
+                ViewBag.EntyNull = false;
+                return View("Actions/DesactiveUser", user);
+            }
+            catch (Exception)
+            {
+                ViewBag.Success = false;
+                ViewBag.EntyNull = false;
+                return View("Actions/DesactiveUser", null);
+            }
         }
 
         [HttpPost]
@@ -229,9 +302,7 @@ namespace ParameterControl.Controllers.Users
             try
             {
                 modUser.User request = await usersServices.GetUsersByCode(code);
-                request.UserOwner = authenticatedUser.GetUserOwnerId();
-                request.UpdateDate = DateTime.Now;
-                request.State = false;
+                var responseIn = await usersServices.DesactiveUser(request);
                 _logger.LogInformation($"Finaliza método UsersController.Desactive {JsonConvert.SerializeObject(request)}");
                 return Ok(new { message = "Se desactivo el usuario de manera exitosa", state = "Success" });
             }

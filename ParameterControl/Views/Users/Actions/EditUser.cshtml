@@ -3,188 +3,205 @@
 
 @{
     ViewData["Title"] = "Editar Usuarios";
-    string MessageError = "Error al crear un usuario";
-    string MessageSuccess = "El usuario se creo correctamente";
+    string ErrorEntyNull = "No existe un usuario con el codigo " + ViewBag.CodeSend + ",Users";
+    string ErrorSuccess = "Se genero un problema al obtener la informacion,Users";
 }
 
 <partial name="_Menu" />
 
-<div class="box_create">
-    <div class="bg__blur"></div>
+@if (!ViewBag.Success)
+{
+    <partial name="_ModalError" model="ErrorSuccess" />
+}
+else
+{
+    @if (ViewBag.EntyNull)
+    {
+        <partial name="_ModalError" model="ErrorEntyNull" />
+    }
+    else
+    {
+        <div class="box_create">
+            <div class="bg__blur"></div>
 
-    <div asp-validation-summary="ModelOnly" class="text_error"></div>
+            <div asp-validation-summary="ModelOnly" class="text_error"></div>
 
-    <form class="form__container">
-        <div class="card__container">
-            <div class="header_form">
-                <img src="/images/iconApple.png" />
-                <h1>Editar Usuario</h1>
-            </div>
+            <form class="form__container">
+                <div class="card__container">
+                    <div class="header_form">
+                        <img src="/images/iconApple.png" />
+                        <h1>Editar Usuario</h1>
+                    </div>
 
-            <input type="hidden" asp-for="Code" />
-          @*   <input type="hidden" asp-for="CreationDate" />
- *@
-            <div class="form_group">
-                <div class="field">
-                    <label asp-for="CodeFormat" class="label_form">Código usuario*</label>
-                    <div class="input">
-                        <input asp-for="CodeFormat" placeholder="Codigo" autocomplete="off" readonly />
+                    <input type="hidden" asp-for="Code" />
+                    <input type="hidden" asp-for="FirstAccess" />
+                    @*<input type="hidden" asp-for="CreationDate" />*@
+                    <div class="form_group">
+                        <div class="field">
+                            <label asp-for="CodeFormat" class="label_form">Código usuario*</label>
+                            <div class="input">
+                                <input asp-for="CodeFormat" placeholder="Codigo" autocomplete="off" readonly />
+                            </div>
+                            <span id="CodeError" class="text_error"></span>
+                        </div>
                     </div>
-                    <span id="CodeError" class="text_error"></span>
-                </div>
-            </div>
-            <div class="form_group">
-                <div class="field">
-                    <label asp-for="User_" class="label_form">Usuario*</label>
-                    <div class="input">
-                        <input asp-for="User_" placeholder="usuario" autocomplete="off" />
+                    <div class="form_group">
+                        <div class="field">
+                            <label asp-for="User_" class="label_form">Usuario*</label>
+                            <div class="input">
+                                <input asp-for="User_" placeholder="usuario" autocomplete="off" />
+                            </div>
+                            <span id="User_Error" class="text_error"></span>
+                        </div>
                     </div>
-                    <span id="User_Error" class="text_error"></span>
-                </div>
-            </div>
-            <div class="form_group">
-                <div class="field">
-                    <label asp-for="Email" class="label_form">Email*</label>
-                    <div class="input">
-                        <input asp-for="Email" placeholder="Email"/>
+                    <div class="form_group">
+                        <div class="field">
+                            <label asp-for="Email" class="label_form">Email*</label>
+                            <div class="input">
+                                <input asp-for="Email" placeholder="Email" />
+                            </div>
+                            <span id="EmailError" class="text_error"></span>
+                        </div>
                     </div>
-                    <span id="EmailError" class="text_error"></span>
-                </div>
-            </div>
-            <div class="form_group">
-                <div class="field">
-                    <label asp-for="Name" class="label_form">Nombre de usuario*</label>
-                    <div class="input">
-                        <input asp-for="Name" placeholder="Nombre de usuario" autocomplete="off" />
+                    <div class="form_group">
+                        <div class="field">
+                            <label asp-for="Name" class="label_form">Nombre de usuario*</label>
+                            <div class="input">
+                                <input asp-for="Name" placeholder="Nombre de usuario" autocomplete="off" />
+                            </div>
+                            <span id="NameError" class="text_error"></span>
+                        </div>
                     </div>
-                    <span id="NameError" class="text_error"></span>
-                </div>
-            </div>
-            @* <div class="form_group">
-                <div class="field">
-                    <label asp-for="CreationDate" class="label_form">Fecha de creacion*</label>
-                    <div class="input">
-                        <input asp-for="CreationDate" placeholder="fecha" autocomplete="off" class="color_icon_calendar" />
+                    <div class="form_group">
+                        <div class="field">
+                            <label asp-for="Rol" class="label_form">Rol*</label>
+                            <div class="input">
+                                <input asp-for="Rol" placeholder="Rol de usuario" autocomplete="off" />
+                            </div>
+                            <span id="RolError" class="text_error"></span>
+                        </div>
                     </div>
-                    <span id="CreationDateError" class="text_error"></span>
-                </div>
-            </div>
-            <div class="form_group">
-                <div class="field">
-                    <label asp-for="UpdateDate" class="label_form">Fecha de actualizacion*</label>
-                    <div class="input">
-                        <input asp-for="UpdateDate" placeholder="fecha" autocomplete="off" class="color_icon_calendar" />
+                    <div class="form_group">
+                        <div class="field">
+                            <label asp-for="Password" class="label_form">Contraseña*</label>
+                            <div class="input">
+                                <input asp-for="Password" placeholder="Contraseña" autocomplete="off" />
+                            </div>
+                            <span id="PasswordError" class="text_error"></span>
+                        </div>
                     </div>
-                    <span id="UpdateDateError" class="text_error"></span>
-                </div>
-            </div> *@
 
-            <p class="note_text"><span>Nota: </span>Los campos con (*) son obligatorios</p>
+                    <p class="note_text"><span>Nota: </span>Los campos con (*) son obligatorios</p>
 
-            <div id="btn_container" class="btn_container">
-                <a class="button button_secondary" asp-controller="Users" asp-action="Users"><p class="text font_bold">Cancelar</p></a>
-                <a href="javascript:void(0)" onclick="sendData()" class="button button_primary"><p class="text font_bold">Actualizar</p></a>
-            </div>
-            <div id="loading" class="loading">
-                <span class="loader"></span>
-            </div>
-            <div id="LayoytError" class="layout_content">
-                <partial name="_MessageError" model="MessageError" />
-            </div>
-            <div id="LayoytSuccess" class="layout_content">
-                <partial name="_MessageSuccess" model="MessageSuccess" />
-            </div>
+                    <div id="btn_container" class="btn_container">
+                        <a class="button button_secondary" asp-controller="Users" asp-action="Users"><p class="text font_bold">Cancelar</p></a>
+                        <a href="javascript:void(0)" onclick="sendData()" class="button button_primary"><p class="text font_bold">Actualizar</p></a>
+                    </div>
+                    <div id="loading" class="loading">
+                        <span class="loader"></span>
+                    </div>
+                    <div id="LayoytError" class="layout_content">
+                        <partial name="_MessageError"/>
+                    </div>
+                    <div id="LayoytSuccess" class="layout_content">
+                        <partial name="_MessageSuccess"/>
+                    </div>
+                </div>
+            </form>
         </div>
-    </form>
-</div>
 
 
-@section Scripts {
-    <script>
-        const urlUser = '@Url.Action("EditUser")';
-        let data;
-        let isValidCode = false;
-        let isValidUser_ = false;
-        let isValidEmail = false;
-        let isValidName = false;
-        // let isValidCreationDate = false;
-        // let isValidUpdateDate = false;
+        @section Scripts {
+            <script>
+                const urlUser = '@Url.Action("EditUser")';
+                let data;
+                let isValidCode = false;
+                let isValidUser_ = false;
+                let isValidEmail = false;
+                let isValidName = false;
+                let isValidRol = false;
+                let isValidPassword = false;
 
-        const sendData = async () => {
-            isValidCode = validateInputEmpty("Code", "El codigo de usuario es requerido", "CodeError");
-            isValidUser_ = validateInputEmpty("User_", "El usuario es requerido", "User_Error");
-            isValidEmail = validateInputEmpty("Email", "El email es requerido", "EmailError");
-            isValidName = validateInputEmpty("Name", "El nombre de usuario es requerido", "NameError");
-            // isValidCreationDate = validateInputEmpty("CreationDate", "La fecha de creación es requerida", "CreationDateError");
-            // isValidUpdateDate = validateInputEmpty("UpdateDate", "La fecha de actualización es requerida", "UpdateDateError");
+                const sendData = async () => {
+                    isValidCode = validateInputEmpty("Code", "El codigo de usuario es requerido", "CodeError");
+                    isValidUser_ = validateInputEmpty("User_", "El usuario es requerido", "User_Error");
+                    isValidEmail = validateInputEmpty("Email", "El email es requerido", "EmailError");
+                    isValidName = validateInputEmpty("Name", "El nombre de usuario es requerido", "NameError");
+                    isValidRol = validateInputEmpty("Rol", "El rol es requerido", "RolError");
+                    isValidPassword = validateInputEmpty("Password", "La contraseña es requerida", "PasswordError");
 
-            if (isValidCode && isValidUser_ && isValidEmail && isValidName) {
-                document.getElementById('btn_container').style.display = 'none';
-                document.getElementById('loading').style.display = 'flex';
+                    if (isValidCode && isValidUser_ && isValidEmail && isValidName && isValidRol && isValidPassword) {
+                        document.getElementById('btn_container').style.display = 'none';
+                        document.getElementById('loading').style.display = 'flex';
 
-                // const CreationDateFormat = FormatDate($('#CreationDate').val());
+                        // const CreationDateFormat = FormatDate($('#CreationDate').val());
 
-                data = {
-                    Code: $('#Code').val(),
-                    User_: $('#User_').val(),
-                    Email: $('#Email').val(),
-                    Name: $('#Name').val(),
-                    State: true,
-                    // CreationDate: new Date(CreationDateFormat)
-                }
+                        data = {
+                            Code: $('#Code').val(),
+                            User_: $('#User_').val(),
+                            Email: $('#Email').val(),
+                            Name: $('#Name').val(),
+                            Rol: $('#Rol').val(),
+                            Password: $('#Password').val(),
+                            FirstAccess: JSON.parse($('#FirstAccess').val().toLowerCase()),
+                            State: true,
+                            // CreationDate: new Date(CreationDateFormat)
+                        }
 
-                console.log(data)
+                        console.log(data)
 
-                const result = await fetch(urlUser, {
-                    method: 'POST',
-                    body: JSON.stringify(data),
-                    headers: {
-                        'Content-Type': 'application/json'
+                        const result = await fetch(urlUser, {
+                            method: 'POST',
+                            body: JSON.stringify(data),
+                            headers: {
+                                'Content-Type': 'application/json'
+                            }
+                        })
+
+                        const json = await result.json();
+
+                        console.log(json);
+
+                        if (json.state == "Success") {
+                            document.getElementById('LayoytSuccess').style.display = 'block';
+                            document.getElementById('layout_message_success').innerHTML = json.message;
+                            document.getElementById('loading').style.display = 'none';
+                            setTimeout(() => {
+                                location.href = '/Users/Users';
+                            }, 3000)
+                        } else {
+                            document.getElementById('LayoytError').style.display = 'block';
+                            document.getElementById('layout_message_error').innerHTML = json.message;
+                            document.getElementById('loading').style.display = 'none';
+                        }
                     }
-                })
-
-                const json = await result.json();
-
-                console.log(json);
-
-                if (json.state == "Success") {
-                    document.getElementById('LayoytSuccess').style.display = 'block';
-                    document.getElementById('layout_message_success').innerHTML = json.message;
-                    document.getElementById('loading').style.display = 'none';
-                    setTimeout(() => {
-                        location.href = '/Users/Users';
-                    }, 3000)
-                } else {
-                    document.getElementById('LayoytError').style.display = 'block';
-                    document.getElementById('layout_message_error').innerHTML = json.message;
-                    document.getElementById('loading').style.display = 'none';
                 }
-            }
+
+                const validateInputEmpty = (idInput, messaje, idError) => {
+                    if ($(`#${idInput}`).val() == "" || $(`#${idInput}`).val() == null) {
+                        $(`#${idError}`).text(`${messaje}`);
+                        return false;
+                    } else {
+                        $(`#${idError}`).text("");
+                        return true;
+                    }
+                }
+                // const FormatDate = (date) => {
+
+                //     const validateAm = date.toString().includes("a. m.");
+                //     const validatePm = date.toString().includes("p. m.");
+
+                //     if (validateAm) {
+                //         date = date.replace("a. m.", "AM")
+                //     }
+
+                //     if (validatePm) {
+                //         date = date.replace("p. m.", "PM")
+                //     }
+
+                //     return date;
+                // }
+            </script>
         }
-
-        const validateInputEmpty = (idInput, messaje, idError) => {
-            if ($(`#${idInput}`).val() == "" || $(`#${idInput}`).val() == null) {
-                $(`#${idError}`).text(`${messaje}`);
-                return false;
-            } else {
-                $(`#${idError}`).text("");
-                return true;
-            }
-        }
-        // const FormatDate = (date) => {
-
-        //     const validateAm = date.toString().includes("a. m.");
-        //     const validatePm = date.toString().includes("p. m.");
-
-        //     if (validateAm) {
-        //         date = date.replace("a. m.", "AM")
-        //     }
-
-        //     if (validatePm) {
-        //         date = date.replace("p. m.", "PM")
-        //     }
-
-        //     return date;
-        // }
-    </script>
+    }
 }

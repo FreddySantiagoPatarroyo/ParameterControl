@@ -35,7 +35,7 @@ namespace ParameterControl.User.DataAccess
                         command.Parameters.Add(new OracleParameter("PARAM_MODIFIELDBY", entity.ModifiedBy));
                         command.Parameters.Add(new OracleParameter("PARAM_ESTADO_ACTIVACION", Convert.ToInt32(entity.State)));
                         command.Parameters.Add(new OracleParameter("PARAM_PRIMER_ACCESO", Convert.ToInt32(entity.FirstAccess)));
-                        command.Parameters.Add(new OracleParameter("PARAM_PASSWORD", entity.Password));
+                        command.Parameters.Add(new OracleParameter("PARAM_CONTRASEÑA", entity.Password));
 
                         OracleDataReader reader = command.ExecuteReader();
                         response = 1;

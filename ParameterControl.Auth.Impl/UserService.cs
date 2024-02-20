@@ -135,12 +135,12 @@ namespace ParameterControl.User.Impl
             {
                 if (dt.Rows.Count > 0)
                 {
-                    List<UserModel> policies = new List<UserModel>();
+                    List<UserModel> users = new List<UserModel>();
                     foreach (DataRow row in dt.Rows)
                     {
-                        policies.Add(MapperToUser(row).Result);
+                        users.Add(MapperToUser(row).Result);
                     }
-                    return policies;
+                    return users;
                 }
                 else
                 {
@@ -159,7 +159,8 @@ namespace ParameterControl.User.Impl
                     User = dr["USUARIO"] is DBNull ? string.Empty : dr["USUARIO"].ToString(),
                     Email = dr["EMAIL"] is DBNull ? string.Empty : dr["EMAIL"].ToString(),
                     UserName = dr["NOMBRE_USUARIO"] is DBNull ? string.Empty : dr["NOMBRE_USUARIO"].ToString(),
-                    Password = dr["PASSWORD"] is DBNull ? string.Empty : dr["PASSWORD"].ToString(),
+                    Password = dr["CONTRASEÑA"] is DBNull ? string.Empty : dr["CONTRASEÑA"].ToString(),
+                    RolId = dr["IDROL"] is DBNull ? 0 : Convert.ToInt32(dr["IDROL"]),
                     CreationDate = dr["FECHA_CREACION"] is DBNull ? DateTime.Now : Convert.ToDateTime(dr["FECHA_CREACION"]),
                     ModifiedDate = dr["FECHA_ACTUALIZACION"] is DBNull ? DateTime.Now : Convert.ToDateTime(dr["FECHA_ACTUALIZACION"]),
                     ModifiedBy = dr["MODIFICADO_POR"] is DBNull ? string.Empty : dr["MODIFICADO_POR"].ToString(),
