@@ -7,11 +7,13 @@ using ParameterControl.Models.Filter;
 using ParameterControl.Models.Pagination;
 using ParameterControl.Models.Parameter;
 using ParameterControl.Models.Policy;
+using ParameterControl.Models.Result;
 using ParameterControl.Services.Authenticated;
 using ParameterControl.Services.Conciliations;
 using ParameterControl.Services.Parameters;
 using ParameterControl.Services.Policies;
 using ParameterControl.Services.Rows;
+using System.Reflection;
 using modParameter = ParameterControl.Models.Parameter;
 
 
@@ -41,88 +43,117 @@ namespace ParameterControl.Controllers.Parameters
         [HttpGet]
         public async Task<ActionResult> Parameters(PaginationViewModel paginationViewModel)
         {
-            List<modParameter.Parameter> parameters = await parametersService.GetParametersPagination(paginationViewModel);
-            int TotalParameters = await parametersService.CountParameters();
-
-            TableParameters.Data = await parametersService.GetParametersFormat(parameters);
-            TableParameters.Rows = rows.RowsParameters();
-            TableParameters.Filter = true;
-            TableParameters.IsCreate = true;
-            TableParameters.IsActivate = true;
-            TableParameters.IsEdit = true;
-            TableParameters.IsView = true;
-            TableParameters.IsInactivate = true;
-            TableParameters.Filter = true;
-            ViewBag.ApplyFilter = false;
-
-            var resultViemModel = new PaginationResult<TableParametersViewModel>()
+            try
             {
-                Elements = TableParameters,
-                Page = paginationViewModel.Page,
-                RecordsPage = paginationViewModel.RecordsPage,
-                TotalRecords = TotalParameters,
-                BaseUrl = Url.Action() + "?"
-            };
+                List<modParameter.Parameter> parameters = await parametersService.GetParametersPagination(paginationViewModel);
+                int TotalParameters = await parametersService.CountParameters();
 
-            return View("Parameters", resultViemModel);
+                TableParameters.Data = await parametersService.GetParametersFormat(parameters);
+                TableParameters.Rows = rows.RowsParameters();
+                TableParameters.Filter = true;
+                TableParameters.IsCreate = true;
+                TableParameters.IsActivate = true;
+                TableParameters.IsEdit = true;
+                TableParameters.IsView = true;
+                TableParameters.IsInactivate = true;
+                TableParameters.Filter = true;
+                ViewBag.ApplyFilter = false;
+
+                var resultViemModel = new PaginationResult<TableParametersViewModel>()
+                {
+                    Elements = TableParameters,
+                    Page = paginationViewModel.Page,
+                    RecordsPage = paginationViewModel.RecordsPage,
+                    TotalRecords = TotalParameters,
+                    BaseUrl = Url.Action() + "?"
+                };
+
+                ViewBag.Success = true;
+                return View("Parameters", resultViemModel);
+            }
+            catch (Exception)
+            {
+                ViewBag.Success = false;
+                return View("Parameters", null);
+            }
+            
         }
 
         [HttpGet]
         public async Task<ActionResult> ParametersFilter(PaginationViewModel paginationViewModel, string filterColunm = "", string filterValue = "", string typeRow = "")
         {
-            if (filterColunm == null || filterColunm == "" || filterValue == null || filterValue == "")
+            try
             {
-                return RedirectToAction("Parameters");
+                if (filterColunm == null || filterColunm == "" || filterValue == null || filterValue == "")
+                {
+                    return RedirectToAction("Parameters");
+                }
+
+                FilterViewModel filter = new FilterViewModel()
+                {
+                    ColumValue = filterColunm,
+                    ValueFilter = filterValue,
+                    TypeRow = typeRow
+                };
+
+                List<ParameterViewModel> parametersFilter = await parametersService.GetFilterParameters(filter);
+                int TotalParameters = parametersFilter.Count();
+
+                TableParameters.Data = parametersService.GetFilterPagination(parametersFilter, paginationViewModel, TotalParameters);
+
+                TableParameters.Rows = rows.RowsParameters();
+
+                TableParameters.Filter = true;
+                TableParameters.IsCreate = true;
+                TableParameters.IsActivate = true;
+                TableParameters.IsEdit = true;
+                TableParameters.IsView = true;
+                TableParameters.IsInactivate = true;
+
+                var resultViemModel = new PaginationResult<TableParametersViewModel>()
+                {
+                    Elements = TableParameters,
+                    Page = paginationViewModel.Page,
+                    RecordsPage = paginationViewModel.RecordsPage,
+                    TotalRecords = TotalParameters,
+                    BaseUrl = Url.Action() + "?filterColunm=" + filterColunm + "&filterValue=" + filterValue + "&typeRow=" + typeRow + "&"
+                };
+
+                ViewBag.ApplyFilter = true;
+
+                ViewBag.Success = true;
+                return View("ParametersFilter", resultViemModel);
             }
-
-            FilterViewModel filter = new FilterViewModel()
+            catch (Exception)
             {
-                ColumValue = filterColunm,
-                ValueFilter = filterValue,
-                TypeRow = typeRow
-            };
-
-            List<ParameterViewModel> parametersFilter = await parametersService.GetFilterParameters(filter);
-            int TotalParameters = parametersFilter.Count();
-
-            TableParameters.Data = parametersService.GetFilterPagination(parametersFilter, paginationViewModel, TotalParameters);
-
-            TableParameters.Rows = rows.RowsParameters();
-
-            TableParameters.Filter = true;
-            TableParameters.IsCreate = true;
-            TableParameters.IsActivate = true;
-            TableParameters.IsEdit = true;
-            TableParameters.IsView = true;
-            TableParameters.IsInactivate = true;
-
-            var resultViemModel = new PaginationResult<TableParametersViewModel>()
-            {
-                Elements = TableParameters,
-                Page = paginationViewModel.Page,
-                RecordsPage = paginationViewModel.RecordsPage,
-                TotalRecords = TotalParameters,
-                BaseUrl = Url.Action() + "?filterColunm=" + filterColunm + "&filterValue=" + filterValue + "&typeRow=" + typeRow + "&"
-            };
-
-            ViewBag.ApplyFilter = true;
-
-            return View("ParametersFilter", resultViemModel);
+                ViewBag.Success = false;
+                return View("ParametersFilter", null);
+            }
         }
 
         [HttpGet]
         public async Task<ActionResult> Create()
         {
-            List<SelectListItem> ParameterTypeOptionList = await parametersService.GetParameterType();
-            List<SelectListItem> GetListParameterList = await GetParameters();
-
-            ParameterCreateViewModel model = new ParameterCreateViewModel()
+            try
             {
-                ParameterTypeOption = ParameterTypeOptionList,
-                ListParameter = GetListParameterList
-            };
+                List<SelectListItem> ParameterTypeOptionList = await parametersService.GetParameterType();
+                List<SelectListItem> GetListParameterList = await GetParameters();
 
-            return View("Actions/CreateParameter", model);
+                ParameterCreateViewModel model = new ParameterCreateViewModel()
+                {
+                    ParameterTypeOption = ParameterTypeOptionList,
+                    ListParameter = GetListParameterList
+                };
+
+                ViewBag.Success = true;
+                return View("Actions/CreateParameter", model);
+            }
+            catch (Exception)
+            {
+                ViewBag.Success = false;
+                return View("Actions/CreateParameter", null);
+            }
+           
         }
 
         [HttpPost]

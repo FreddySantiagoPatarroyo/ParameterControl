@@ -5,6 +5,7 @@ using Newtonsoft.Json;
 using ParameterControl.Models.Filter;
 using ParameterControl.Models.Pagination;
 using ParameterControl.Models.Policy;
+using ParameterControl.Models.Result;
 using ParameterControl.Services.Authenticated;
 using ParameterControl.Services.Policies;
 using ParameterControl.Services.Rows;
@@ -40,76 +41,104 @@ namespace ParameterControl.Controllers.Policies
         [HttpGet]
         public async Task<ActionResult> Policies(PaginationViewModel paginationViewModel)
         {
-            List<modPolicy.Policy> policies = await policiesServices.GetPoliciesPagination(paginationViewModel);
-            int TotalPolicies = await policiesServices.CountPolicies();
-
-            TablePolicies.Data = await policiesServices.GetPolicesFormat(policies);
-            TablePolicies.Rows = rows.RowsPolicies();
-            TablePolicies.Filter = true;
-            TablePolicies.IsCreate = true;
-            TablePolicies.IsActivate = true;
-            TablePolicies.IsEdit = true;
-            TablePolicies.IsView = true;
-            TablePolicies.IsInactivate = true;
-            ViewBag.ApplyFilter = false;
-
-            var resultViemModel = new PaginationResult<TablePoliciesViewModel>()
+            try
             {
-                Elements = TablePolicies,
-                Page = paginationViewModel.Page,
-                RecordsPage = paginationViewModel.RecordsPage,
-                TotalRecords = TotalPolicies,
-                BaseUrl = Url.Action() + "?"
-            };
+                List<modPolicy.Policy> policies = await policiesServices.GetPoliciesPagination(paginationViewModel);
+                int TotalPolicies = await policiesServices.CountPolicies();
 
-            return View("Policies", resultViemModel);
+                TablePolicies.Data = await policiesServices.GetPolicesFormat(policies);
+                TablePolicies.Rows = rows.RowsPolicies();
+                TablePolicies.Filter = true;
+                TablePolicies.IsCreate = true;
+                TablePolicies.IsActivate = true;
+                TablePolicies.IsEdit = true;
+                TablePolicies.IsView = true;
+                TablePolicies.IsInactivate = true;
+                ViewBag.ApplyFilter = false;
+
+                var resultViemModel = new PaginationResult<TablePoliciesViewModel>()
+                {
+                    Elements = TablePolicies,
+                    Page = paginationViewModel.Page,
+                    RecordsPage = paginationViewModel.RecordsPage,
+                    TotalRecords = TotalPolicies,
+                    BaseUrl = Url.Action() + "?"
+                };
+
+                ViewBag.Success = true;
+                return View("Policies", resultViemModel);
+            }
+            catch (Exception)
+            {
+                ViewBag.Success = false;
+                return View("Policies", null);
+            }
+           
         }
 
         public async Task<ActionResult> PoliciesFilter(PaginationViewModel paginationViewModel, string filterColunm = "", string filterValue = "", string typeRow = "")
         {
-
-            if (filterColunm == null || filterColunm == "" || filterValue == null || filterValue == "")
+            try
             {
-                return RedirectToAction("Policies");
+                if (filterColunm == null || filterColunm == "" || filterValue == null || filterValue == "")
+                {
+                    return RedirectToAction("Policies");
+                }
+
+                FilterViewModel filter = new FilterViewModel()
+                {
+                    ColumValue = filterColunm,
+                    ValueFilter = filterValue,
+                    TypeRow = typeRow
+                };
+
+                List<PolicyViewModel> policiesFilter = await policiesServices.GetFilterPolicies(filter);
+                int TotalPolicies = policiesFilter.Count();
+
+                TablePolicies.Data = policiesServices.GetFilterPagination(policiesFilter, paginationViewModel, TotalPolicies);
+                TablePolicies.Rows = rows.RowsPolicies();
+                TablePolicies.Filter = true;
+                TablePolicies.IsCreate = true;
+                TablePolicies.IsActivate = true;
+                TablePolicies.IsEdit = true;
+                TablePolicies.IsView = true;
+                TablePolicies.IsInactivate = true;
+                ViewBag.ApplyFilter = true;
+
+                var resultViemModel = new PaginationResult<TablePoliciesViewModel>()
+                {
+                    Elements = TablePolicies,
+                    Page = paginationViewModel.Page,
+                    RecordsPage = paginationViewModel.RecordsPage,
+                    TotalRecords = TotalPolicies,
+                    BaseUrl = Url.Action() + "?filterColunm=" + filterColunm + "&filterValue=" + filterValue + "&typeRow=" + typeRow + "&"
+                };
+
+                ViewBag.Success = true;
+                return View("PoliciesFilter", resultViemModel);
             }
-
-            FilterViewModel filter = new FilterViewModel()
+            catch (Exception)
             {
-                ColumValue = filterColunm,
-                ValueFilter = filterValue,
-                TypeRow = typeRow
-            };
-
-            List<PolicyViewModel> policiesFilter = await policiesServices.GetFilterPolicies(filter);
-            int TotalPolicies = policiesFilter.Count();
-
-            TablePolicies.Data = policiesServices.GetFilterPagination(policiesFilter, paginationViewModel, TotalPolicies);
-            TablePolicies.Rows = rows.RowsPolicies();
-            TablePolicies.Filter = true;
-            TablePolicies.IsCreate = true;
-            TablePolicies.IsActivate = true;
-            TablePolicies.IsEdit = true;
-            TablePolicies.IsView = true;
-            TablePolicies.IsInactivate = true;
-            ViewBag.ApplyFilter = true;
-
-            var resultViemModel = new PaginationResult<TablePoliciesViewModel>()
-            {
-                Elements = TablePolicies,
-                Page = paginationViewModel.Page,
-                RecordsPage = paginationViewModel.RecordsPage,
-                TotalRecords = TotalPolicies,
-                BaseUrl = Url.Action() + "?filterColunm=" + filterColunm + "&filterValue=" + filterValue + "&typeRow=" + typeRow + "&"
-            };
-
-            return View("PoliciesFilter", resultViemModel);
+                ViewBag.Success = false;
+                return View("PoliciesFilter", null);
+            }
         }
 
         [HttpGet]
         public async Task<ActionResult> Create()
         {
-            PolicyCreateViewModel model = new PolicyCreateViewModel();
-            return View("Actions/CreatePolicy", model);
+            try
+            {
+                PolicyCreateViewModel model = new PolicyCreateViewModel();
+
+                ViewBag.Success = true;
+                return View("Actions/CreatePolicy", model);
+            }
+            catch (Exception)
+            {
+                ViewBag.Success = false;
+                return View("Actions/CreatePolicy", null);
+            }
         }
 
         [HttpPost]

@@ -11,6 +11,8 @@ using ParameterControl.Models.Pagination;
 using ParameterControl.Services.Policies;
 using ParameterControl.Models.Policy;
 using ParameterControl.User.Entities;
+using ParameterControl.Models.Result;
+using System.Reflection;
 
 
 namespace ParameterControl.Controllers.Users
@@ -39,77 +41,105 @@ namespace ParameterControl.Controllers.Users
         [HttpGet]
         public async Task<ActionResult> Users(PaginationViewModel paginationViewModel)
         {
-            List<modUser.User> Users = await usersServices.GetUsersPagination(paginationViewModel);
-            int TotalUsers = await usersServices.CountUsers();
-
-            TableUsers.Data = await usersServices.GetUsersFormat(Users);
-
-            TableUsers.Rows = rows.RowsUsers();
-
-            TableUsers.IsCreate = true;
-            TableUsers.IsActivate = true;
-            TableUsers.IsEdit = true;
-            TableUsers.IsView = true;
-            TableUsers.IsInactivate = true;
-            ViewBag.ApplyFilter = false;
-
-            var resultViemModel = new PaginationResult<TableUserViewModel>()
+            try
             {
-                Elements = TableUsers,
-                Page = paginationViewModel.Page,
-                RecordsPage = paginationViewModel.RecordsPage,
-                TotalRecords = TotalUsers,
-                BaseUrl = Url.Action() + "?"
-            };
+                List<modUser.User> Users = await usersServices.GetUsersPagination(paginationViewModel);
+                int TotalUsers = await usersServices.CountUsers();
 
-            return View("Users", resultViemModel);
+                TableUsers.Data = await usersServices.GetUsersFormat(Users);
+
+                TableUsers.Rows = rows.RowsUsers();
+
+                TableUsers.IsCreate = true;
+                TableUsers.IsActivate = true;
+                TableUsers.IsEdit = true;
+                TableUsers.IsView = true;
+                TableUsers.IsInactivate = true;
+                ViewBag.ApplyFilter = false;
+
+                var resultViemModel = new PaginationResult<TableUserViewModel>()
+                {
+                    Elements = TableUsers,
+                    Page = paginationViewModel.Page,
+                    RecordsPage = paginationViewModel.RecordsPage,
+                    TotalRecords = TotalUsers,
+                    BaseUrl = Url.Action() + "?"
+                };
+
+                ViewBag.Success = true;
+                return View("Users", resultViemModel);
+            }
+            catch (Exception)
+            {
+                ViewBag.Success = false;
+                return View("Users", null);
+            }
         }
 
 
         [HttpGet]
         public async Task<ActionResult> UsersFilter(PaginationViewModel paginationViewModel, string filterColunm = "", string filterValue = "", string typeRow = "")
         {
-            if (filterColunm == null || filterColunm == "" || filterValue == null || filterValue == "")
+            try
             {
-                return RedirectToAction("Users");
+                if (filterColunm == null || filterColunm == "" || filterValue == null || filterValue == "")
+                {
+                    return RedirectToAction("Users");
+                }
+
+                FilterViewModel filter = new FilterViewModel()
+                {
+                    ColumValue = filterColunm,
+                    ValueFilter = filterValue,
+                    TypeRow = typeRow
+                };
+
+                List<UserViewModel> usersFilter = await usersServices.GetFilterUsers(filter);
+                int TotalUsers = usersFilter.Count();
+
+                TableUsers.Data = usersServices.GetFilterPagination(usersFilter, paginationViewModel, TotalUsers);
+                TableUsers.Rows = rows.RowsUsers();
+                TableUsers.IsCreate = true;
+                TableUsers.IsActivate = true;
+                TableUsers.IsEdit = true;
+                TableUsers.IsView = true;
+                TableUsers.IsInactivate = true;
+                ViewBag.ApplyFilter = true;
+
+                var resultViemModel = new PaginationResult<TableUserViewModel>()
+                {
+                    Elements = TableUsers,
+                    Page = paginationViewModel.Page,
+                    RecordsPage = paginationViewModel.RecordsPage,
+                    TotalRecords = TotalUsers,
+                    BaseUrl = Url.Action() + "?filterColunm=" + filterColunm + "&filterValue=" + filterValue + "&typeRow=" + typeRow + "&"
+                };
+
+                ViewBag.Success = true;
+                return View("UsersFilter", resultViemModel);
             }
-
-            FilterViewModel filter = new FilterViewModel()
+            catch (Exception)
             {
-                ColumValue = filterColunm,
-                ValueFilter = filterValue,
-                TypeRow = typeRow
-            };
-
-            List<UserViewModel> usersFilter = await usersServices.GetFilterUsers(filter);
-            int TotalUsers = usersFilter.Count();
-
-            TableUsers.Data = usersServices.GetFilterPagination(usersFilter, paginationViewModel, TotalUsers);
-            TableUsers.Rows = rows.RowsUsers();
-            TableUsers.IsCreate = true;
-            TableUsers.IsActivate = true;
-            TableUsers.IsEdit = true;
-            TableUsers.IsView = true;
-            TableUsers.IsInactivate = true;
-            ViewBag.ApplyFilter = true;
-
-            var resultViemModel = new PaginationResult<TableUserViewModel>()
-            {
-                Elements = TableUsers,
-                Page = paginationViewModel.Page,
-                RecordsPage = paginationViewModel.RecordsPage,
-                TotalRecords = TotalUsers,
-                BaseUrl = Url.Action() + "?filterColunm=" + filterColunm + "&filterValue=" + filterValue + "&typeRow=" + typeRow + "&"
-            };
-
-            return View("UsersFilter", resultViemModel);
+                ViewBag.Success = false;
+                return View("UsersFilter", null);
+            }
         }
 
         [HttpGet]
         public async Task<ActionResult> Create()
         {
-            UserCreateViewModel model = new UserCreateViewModel();
-            return View("Actions/CreateUser", model);
+            try
+            {
+                UserCreateViewModel model = new UserCreateViewModel();
+
+                ViewBag.Success = true;
+                return View("Actions/CreateUser", model);
+            }
+            catch (Exception)
+            {
+                ViewBag.Success = false;
+                return View("Actions/CreateUser", null);
+            }
         }
 
         [HttpPost]
