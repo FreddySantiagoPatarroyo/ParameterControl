@@ -117,13 +117,15 @@ namespace ParameterControl.Controllers.Conciliations
             List<SelectListItem> RequiredOptionList = await conciliationsServices.GetRequired();
             List<SelectListItem> OperationTypeOptionsList = await conciliationsServices.GetOperationsType();
             List<SelectListItem> EmailsOptionsList = await conciliationsServices.GetEmailUsers();
+            List<SelectListItem> SelectDestinationList = await GetDestination();
 
             ConciliationCreateViewModel model = new ConciliationCreateViewModel()
             {
                 OperationTypeOptions = OperationTypeOptionsList,
                 PoliciesOption = PoliciesOptionsList,
                 RequiredOption = RequiredOptionList,
-                Emails = EmailsOptionsList
+                Emails = EmailsOptionsList,
+                SelectDestination = SelectDestinationList
             };
 
             return View("Actions/CreateConciliation", model);
@@ -169,12 +171,15 @@ namespace ParameterControl.Controllers.Conciliations
                 List<SelectListItem> RequiredOptionsList = await conciliationsServices.GetRequired();
                 List<SelectListItem> OperationTypeOptionsList = await conciliationsServices.GetOperationsType();
                 List<SelectListItem> EmailsOptionsList = await conciliationsServices.GetEmailUsers();
+                List<SelectListItem> SelectDestinationList = await GetDestination();
 
                 ConciliationCreateViewModel model = await conciliationsServices.GetConciliationFormatCreate(conciliation);
                 model.OperationTypeOptions = OperationTypeOptionsList;
                 model.PoliciesOption = PoliciesOptionsList;
                 model.RequiredOption = RequiredOptionsList;
                 model.Emails = EmailsOptionsList;
+                model.SelectDestination = SelectDestinationList;
+
 
                 ViewBag.Success = true;
                 ViewBag.EntyNull = false;
@@ -446,6 +451,12 @@ namespace ParameterControl.Controllers.Conciliations
         {
             List<modPolicy.Policy> policies = await conciliationsServices.GetPolicies();
             return policies.Select(policy => new SelectListItem(policy.Name, policy.Code.ToString())).ToList();
+        }
+        public async Task<List<SelectListItem>> GetDestination()
+        {
+           List<modConciliation.Conciliation> conciliations = await conciliationsServices.GetDestinations();
+            return conciliations.Select(conciliation => new SelectListItem(conciliation.Destination, conciliation.Destination)).ToList();
+            
         }
     }
 }
