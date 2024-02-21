@@ -192,19 +192,36 @@ namespace ParameterControl.Services.Conciliations
             return operationsType;
         }
 
-		public async Task<List<modPolicy.Policy>> GetPolicies()
+        public async Task<List<modPolicy.Policy>> GetPolicies()
         {
             List<modPolicy.Policy> policies = await policiesServices.GetPolicies();
             List<modPolicy.Policy> policiesActives = new List<modPolicy.Policy>();
 
             foreach (var policy in policies)
             {
-                if(policy.State == true) { 
+                if (policy.State == true)
+                {
                     policiesActives.Add(policy);
                 }
             }
 
             return policiesActives;
+        }
+
+        public async Task<List<modConciliation.Conciliation>> GetDestinations()
+        {
+            List<modConciliation.Conciliation> conciliations = await GetConciliations();
+            List<modConciliation.Conciliation> conciliationsDestinationActive = new List<modConciliation.Conciliation>();
+
+            foreach (var conciliation in conciliations)
+            {
+                if(conciliation.Destination != null || conciliation.Destination != string.Empty)
+                {
+                    conciliationsDestinationActive.Add(conciliation);
+                }
+            }
+
+            return conciliationsDestinationActive;
         }
 
         public async Task<List<SelectListItem>> GetRequired()
@@ -345,13 +362,14 @@ namespace ParameterControl.Services.Conciliations
             return Emails;
         }
 
+
         public async Task<string> InsertConciliation(modConciliation.Conciliation request)
         {
             ConciliationModel conciliation = new ConciliationModel
             {
                 ConciliationName = request.Name,
                 Email = request.Email,
-                TargetTable =  request.Destination,
+                TargetTable = request.Destination,
                 AssignmentType = request.ControlType,
                 OperationType = request.OperationType,
                 PolicyId = request.PolicyCode,
