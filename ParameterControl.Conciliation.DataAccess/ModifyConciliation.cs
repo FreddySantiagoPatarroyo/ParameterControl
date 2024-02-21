@@ -35,7 +35,7 @@ namespace ParameterControl.Conciliation.DataAccess
                         command.Parameters.Add(new OracleParameter("PARAM_REQUIERE_APROBACION", entity.RequiredApproval));
                         command.Parameters.Add(new OracleParameter("PARAM_TIPO_OPERACION", entity.OperationType));
                         command.Parameters.Add(new OracleParameter("PARAM_TIPO_ASIGNACION", entity.AssignmentType));
-                        command.Parameters.Add(new OracleParameter("PARAM_DESTINO", entity.Destination));
+                        command.Parameters.Add(new OracleParameter("PARAM_TABLA_DESTINO", entity.TargetTable));
                         command.Parameters.Add(new OracleParameter("PARAM_ESTADO_ACTIVACION", Convert.ToInt32(entity.State)));
                         command.Parameters.Add(new OracleParameter("PARAM_MODIFIELDBY", entity.ModifieldBy));
                         OracleDataReader reader = command.ExecuteReader();

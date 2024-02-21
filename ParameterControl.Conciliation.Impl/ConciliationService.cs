@@ -154,7 +154,7 @@ namespace ParameterControl.Conciliation.Impl
                     ConciliationName = dr["NOMBRE_CONCILIACION"] is DBNull ? string.Empty : dr["NOMBRE_CONCILIACION"].ToString(),
                     Description = dr["DESCRIPCION"] is DBNull ? string.Empty : dr["DESCRIPCION"].ToString(),
                     Email = dr["EMAILS"] is DBNull ? string.Empty : dr["EMAILS"].ToString(),
-                    Destination = dr["DESTINO"] is DBNull ? 0 : Convert.ToInt32(dr["DESTINO"]),
+                    TargetTable = dr["TABLA_DESTINO"] is DBNull ? string.Empty : dr["TABLA_DESTINO"].ToString(),
                     PolicyId = Convert.ToInt32(dr["COD_POLITICA"]),
                     PolicyName = dr["NOMBRE_POLITICA"] is DBNull ? string.Empty : dr["NOMBRE_POLITICA"].ToString(),
                     CreationDate = dr["FECHA_CREACION"] is DBNull ? DateTime.Now : Convert.ToDateTime(dr["FECHA_CREACION"]),

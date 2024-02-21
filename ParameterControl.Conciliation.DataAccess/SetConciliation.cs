@@ -52,7 +52,6 @@ namespace ParameterControl.Conciliation.DataAccess
                         command.Parameters.Add(new OracleParameter("PARAM_OBSERVACIONES", entity.Observation));
                         command.Parameters.Add(new OracleParameter("PARAM_PRUEBA_FECHA", entity.TestDate));
                         command.Parameters.Add(new OracleParameter("PARAM_REQ", entity.Req));
-                        command.Parameters.Add(new OracleParameter("PARAM_DESTINO", entity.Destination));
                         command.Parameters.Add(new OracleParameter("PARAM_ESTADO_ACTIVACION", Convert.ToInt32(entity.State)));
                         command.Parameters.Add(new OracleParameter("PARAM_MODIFIELDBY", entity.ModifieldBy));
                         OracleDataReader reader = command.ExecuteReader();
