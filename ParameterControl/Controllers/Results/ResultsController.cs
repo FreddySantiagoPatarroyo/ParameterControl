@@ -41,10 +41,11 @@ namespace ParameterControl.Controllers.Results
             TableResults.Data = await resultsServices.GetResultsFormat(results);
             TableResults.Rows = rows.RowsResults();
             TableResults.IsCreate = false;
-            TableResults.IsActivate = true;
+            TableResults.IsActivate = false;
             TableResults.IsEdit = false;
             TableResults.IsView = false;
-            TableResults.IsInactivate = true;
+            TableResults.IsInactivate = false;
+            TableResults.Filter = true;
             ViewBag.ApplyFilter = false;
 
             return View("Results", TableResults);
@@ -70,32 +71,16 @@ namespace ParameterControl.Controllers.Results
 
             TableResults.Data = resultsFilter;
             TableResults.Rows = rows.RowsResults();
-            TableResults.IsCreate = true;
-            TableResults.IsActivate = true;
-            TableResults.IsEdit = true;
+            TableResults.IsCreate = false;
+            TableResults.IsActivate = false;
+            TableResults.IsEdit = false;
             TableResults.IsView = false;
-            TableResults.IsInactivate = true;
+            TableResults.IsInactivate = false;
+            TableResults.Filter = true;
             ViewBag.ApplyFilter = true;
 
             return View("ResultsFilter", TableResults);
         }
-
-        //[HttpGet]
-        //public async Task<ActionResult> Create()
-        //{
-
-        //    Result result = new Result();
-
-        //    return View("Actions/CreateResult", result);
-        //}
-
-        //[HttpGet]
-        //public async Task<ActionResult> Edit(string id)
-        //{
-        //    Result result = await resultsServices.GetResultsById(id);
-
-        //    return View("Actions/EditResult", result);
-        //}
 
         [HttpGet]
         public async Task<ActionResult> View(string id)

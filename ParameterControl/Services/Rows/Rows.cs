@@ -284,6 +284,75 @@ namespace ParameterControl.Services.Rows
             return rows;
         }
 
+        public List<Row> RowsApprovedResults()
+        {
+            List<Row> rows = new List<Row>()
+            {
+                 new Row()
+                {
+                    Value = "Conciliation",
+                    Name = "Conciliaciones"
+                },
+                new Row()
+                {
+                    Value = "Scenery",
+                    Name = "Escenario"
+                },
+                new Row()
+                {
+                    Value = "Status",
+                    Name = "Estado"
+                },
+                new Row()
+                {
+                    Value = "StartDateFormat",
+                    Name = "Fecha Inicio"
+                },
+                new Row()
+                {
+                    Value = "EndDateFormat",
+                    Name = "Fecha Fin"
+                },
+                new Row()
+                {
+                    Value = "BeneValue",
+                    Name = "Valor Beneficio"
+                },
+                new Row()
+                {
+                    Value = "IncoValue",
+                    Name = "Valor Inconsistencia"
+                },
+                new Row()
+                {
+                    Value = "PQValue",
+                    Name = "Valor PQR"
+                },
+                new Row()
+                {
+                    Value = "ReinValue",
+                    Name = "Valor Reincidencia"
+                },
+                 new Row()
+                {
+                    Value = "StateFormat",
+                    Name = "Estado Activación"
+                },
+                new Row()
+                {
+                    Value = "CreationDateFormat",
+                    Name = "Fecha Creacion"
+                },
+                 new Row()
+                {
+                    Value = "UpdateDateFormat",
+                    Name = "Fecha Actualizacion"
+                }
+            };
+
+            return rows;
+        }
+
         public List<Row> RowsIndicators()
         {
             List<Row> rows = new List<Row>()
@@ -334,7 +403,7 @@ namespace ParameterControl.Services.Rows
             {
                  new Row()
                 {
-                    Value = "ConciliationCode",
+                    Value = "Conciliation",
                     Name = "Conciliaciones"
                 },
                 new Row()

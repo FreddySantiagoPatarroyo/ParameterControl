@@ -11,6 +11,7 @@ using ParameterControl.Services.Users;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using ParameterControl.Services.ConciliationExecution;
 using ParameterControl.Services.ConciliationExecition;
+using ParameterControl.Services.ApprovedResults;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,6 +26,7 @@ builder.Services.AddTransient<IIndicatorsService, IndicatorsService>();
 builder.Services.AddTransient<IResultsServices, ResultsServices>();
 builder.Services.AddTransient<ICrossConnectionsService, CrossConnectionsService>();
 builder.Services.AddTransient<IConciliationExecutionService, ConciliationExecutionService>();
+builder.Services.AddTransient<IApprovedResultsServices, ApprovedResultsServices>();
 builder.Services.AddTransient<AuthenticatedUser>();
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
