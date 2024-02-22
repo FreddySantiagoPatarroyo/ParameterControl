@@ -154,24 +154,27 @@ namespace ParameterControl.Controllers.Scenarios
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] modScenery.Scenery request)
         {
-            if (!ModelState.IsValid)
+            try
             {
-                return BadRequest(new { message = "Error en la informacion enviada", state = "Error" });
-            }
-            else
-            {
-                try
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(new { message = "Error en la informacion enviada", state = "Error" });
+                }
+                else
                 {
                     var responseIn = await scenariosServices.InsertScenery(request);
                     _logger.LogInformation($"Finaliza método ScenariosController.Create {responseIn}");
                     return Ok(new { message = "Se creo el escenario de manera exitosa", state = "Success" });
+                   
                 }
-                catch (Exception ex)
-                {
-                    _logger.LogError($"Error en el método ScenariosController.Create : {JsonConvert.SerializeObject(ex.Message)}");
-                    return BadRequest(new { message = "Error al crear el escenario", state = "Error" });
-                }
+
             }
+            catch(Exception ex)
+            {
+                   _logger.LogError($"Error en el método ScenariosController.Create : {JsonConvert.SerializeObject(ex.Message)}");
+                   return BadRequest(new { message = "Error al crear el escenario", state = "Error" });
+            }
+           
         }
 
         [HttpGet]
@@ -209,36 +212,39 @@ namespace ParameterControl.Controllers.Scenarios
         [HttpPost]
         public async Task<ActionResult> Edit([FromBody] modScenery.Scenery request)
         {
-            var scenery = await scenariosServices.GetSceneryByCode(request.Code);
+            try
+            {
+                var scenery = await scenariosServices.GetSceneryByCode(request.Code);
 
-            if (scenery.Code == 0)
-            {
-                _logger.LogError($"Error el escenario no existe : {JsonConvert.SerializeObject(request)}");
-                return BadRequest(new { message = "No existe el escenario con el codigo" + scenery.Code, state = "Error" });
-            }
-            else
-            {
-                request.CreationDate = scenery.CreationDate;
-            }
-            if (!ModelState.IsValid)
-            {
-                _logger.LogError($"Error en el modelo : {JsonConvert.SerializeObject(request)}");
-                return BadRequest(new { message = "Error en la informacion enviada", state = "Error" });
-            }
-            else
-            {
-                try
+                if (scenery.Code == 0)
+                {
+                    _logger.LogError($"Error el escenario no existe : {JsonConvert.SerializeObject(request)}");
+                    return BadRequest(new { message = "No existe el escenario con el codigo" + scenery.Code, state = "Error" });
+                }
+                else
+                {
+                    request.CreationDate = scenery.CreationDate;
+                }
+                if (!ModelState.IsValid)
+                {
+                    _logger.LogError($"Error en el modelo : {JsonConvert.SerializeObject(request)}");
+                    return BadRequest(new { message = "Error en la informacion enviada", state = "Error" });
+                }
+                else
                 {
                     var responseIn = await scenariosServices.UpdateScenery(request);
                     _logger.LogInformation($"Finaliza método ScenariosController.Edit {responseIn}");
                     return Ok(new { message = "Se actualizo el escenario de manera exitosa", state = "Success" });
+                   
                 }
-                catch (Exception ex)
-                {
-                    _logger.LogError($"Error en el método ScenariosController.Edit : {JsonConvert.SerializeObject(ex.Message)}");
-                    return BadRequest(new { message = "Error al actualizar el escenario", state = "Error" });
-                }
+
             }
+            catch(Exception ex)
+            {
+                     _logger.LogError($"Error en el método ScenariosController.Edit : {JsonConvert.SerializeObject(ex.Message)}");
+                     return BadRequest(new { message = "Error al actualizar el escenario", state = "Error" });
+            }
+            
         }
 
         [HttpGet]

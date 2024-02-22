@@ -30,7 +30,7 @@ else
                         <div id="input_select" class="input">
                             <input class="input_select" id="input_select_filter" asp-for="ParameterType" placeholder="Seleccione una opción" onclick="showOptions()" readonly />
                             <input asp-for="ParameterType" class="oculte" />
-                            <i class="icon icon_select icon_153"></i>
+                            <i class="icon icon_select icon_153" onclick="showOptions()"></i>
                         </div>
                         <div id="options" class="options">
                             <ul class="options_list">
@@ -55,7 +55,7 @@ else
                         <div id="input_select_list" class="input">
                             <input class="input_select" id="input_select_filter_list" asp-for="List" placeholder="Seleccione una opción" onclick="showOptionsList()" readonly />
                             <input asp-for="List" class="oculte" />
-                            <i class="icon icon_select icon_153"></i>
+                            <i class="icon icon_select icon_153" onclick="showOptionsList()"></i>
                         </div>
                         <div id="options_list" class="options">
                             <ul class="options_list">

@@ -145,26 +145,28 @@ namespace ParameterControl.Controllers.Users
         [HttpPost]
         public async Task<IActionResult> CreateUser([FromBody] modUser.User request)
         {
-            if (!ModelState.IsValid)
+            try
             {
-                _logger.LogError($"Error en el modelo : {JsonConvert.SerializeObject(request)}");
-                return BadRequest(new { message = "Error en la informacion enviada", state = "Error" });
-            }
-            else
-            {
-                try
+                if (!ModelState.IsValid)
+                {
+                    _logger.LogError($"Error en el modelo : {JsonConvert.SerializeObject(request)}");
+                    return BadRequest(new { message = "Error en la informacion enviada", state = "Error" });
+                }
+                else
                 {
                     var responseIn = await usersServices.InsertUser(request);
                     _logger.LogInformation($"Finaliza método UsersController.Create {JsonConvert.SerializeObject(responseIn)}");
 
                     return Ok(new { message = "Se creo el usuario de manera exitosa", state = "Success" });
-                }
-                catch (Exception ex)
-                {
-                    _logger.LogError($"Error en el método UsersController.Create : {JsonConvert.SerializeObject(ex.Message)}");
-                    return BadRequest(new { message = "Error al crear el usuario", state = "Error" });
+                  
                 }
             }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error en el método UsersController.Create : {JsonConvert.SerializeObject(ex.Message)}");
+                return BadRequest(new { message = "Error al crear el usuario", state = "Error" });
+            }
+            
         }
 
         [HttpGet]
@@ -198,36 +200,38 @@ namespace ParameterControl.Controllers.Users
         [HttpPost]
         public async Task<ActionResult> EditUser([FromBody] modUser.User request)
         {
-            var user = await usersServices.GetUsersByCode(request.Code);
+            try
+            {
+                var user = await usersServices.GetUsersByCode(request.Code);
 
-            if (user.Code == 0)
-            {
-                _logger.LogError($"Error el usuario no existe : {JsonConvert.SerializeObject(request)}");
-                return BadRequest(new { message = "No existe un usuario con el codigo" + user.Code, state = "Error" });
-            }
-            else
-            {
-                request.CreationDate = user.CreationDate;
-            }
-            if (!ModelState.IsValid)
-            {
-                _logger.LogError($"Error en el modelo : {JsonConvert.SerializeObject(request)}");
-                return BadRequest(new { message = "Error en la informacion enviada", state = "Error" });
-            }
-            else
-            {
-                try
+                if (user.Code == 0)
+                {
+                    _logger.LogError($"Error el usuario no existe : {JsonConvert.SerializeObject(request)}");
+                    return BadRequest(new { message = "No existe un usuario con el codigo" + user.Code, state = "Error" });
+                }
+                else
+                {
+                    request.CreationDate = user.CreationDate;
+                }
+                if (!ModelState.IsValid)
+                {
+                    _logger.LogError($"Error en el modelo : {JsonConvert.SerializeObject(request)}");
+                    return BadRequest(new { message = "Error en la informacion enviada", state = "Error" });
+                }
+                else
                 {
                     var responseIn = await usersServices.UpdateUser(request);
                     _logger.LogInformation($"Finaliza método UsersController.Edit {JsonConvert.SerializeObject(responseIn)}");
                     return Ok(new { message = "Se actualizo el usuario de manera exitosa", state = "Success" });
-                }
-                catch (Exception ex)
-                {
-                    _logger.LogError($"Error en el método UsersController.Edit : {JsonConvert.SerializeObject(ex.Message)}");
-                    return BadRequest(new { message = "Error al actualizar el usuario", state = "Error" });
+
                 }
             }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error en el método UsersController.Edit : {JsonConvert.SerializeObject(ex.Message)}");
+                return BadRequest(new { message = "Error al actualizar el usuario", state = "Error" });
+            }
+
         }
 
         [HttpGet]

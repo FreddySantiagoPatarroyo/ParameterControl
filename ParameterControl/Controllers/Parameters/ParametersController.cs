@@ -159,25 +159,27 @@ namespace ParameterControl.Controllers.Parameters
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] modParameter.Parameter request)
         {
-            if (!ModelState.IsValid)
+            try
             {
-                _logger.LogError($"Error en el modelo : {JsonConvert.SerializeObject(request)}");
-                return BadRequest(new { message = "Error en la informacion enviada", state = "Error" });
-            }
-            else
-            {
-                try
+                if (!ModelState.IsValid)
+                {
+                    _logger.LogError($"Error en el modelo : {JsonConvert.SerializeObject(request)}");
+                    return BadRequest(new { message = "Error en la informacion enviada", state = "Error" });
+                }
+                else
                 {
                     var responseIn = await parametersService.InsertParameter(request);
                     _logger.LogInformation($"Finaliza método ParametersController.Create {responseIn}");
                     return Ok(new { message = "Se creo el parametro de manera exitosa", state = "Success" });
-                }
-                catch (Exception ex)
-                {
-                    _logger.LogError($"Error en el método ParametersController.Create : {JsonConvert.SerializeObject(ex.Message)}");
-                    return BadRequest(new { message = "Error al crear el parametro", state = "Error" });
+                   
                 }
             }
+            catch (Exception ex)
+            {
+                     _logger.LogError($"Error en el método ParametersController.Create : {JsonConvert.SerializeObject(ex.Message)}");
+                     return BadRequest(new { message = "Error al crear el parametro", state = "Error" });
+            }
+            
         }
 
         [HttpGet]

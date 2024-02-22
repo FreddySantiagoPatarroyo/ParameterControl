@@ -144,26 +144,28 @@ namespace ParameterControl.Controllers.Policies
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] modPolicy.Policy request)
         {
-            if (!ModelState.IsValid)
+            try
             {
-                _logger.LogError($"Error en el modelo : {JsonConvert.SerializeObject(request)}");
-                return BadRequest(new { message = "Error en la informacion enviada", state = "Error" });
-            }
-            else
-            {
-                try
+                if (!ModelState.IsValid)
+                {
+                    _logger.LogError($"Error en el modelo : {JsonConvert.SerializeObject(request)}");
+                    return BadRequest(new { message = "Error en la informacion enviada", state = "Error" });
+                }
+                else
                 {
                     _logger.LogInformation($"Inicia método PoliciesController.Create {JsonConvert.SerializeObject(request)}");
                     var responseIn = await policiesServices.InsertPolicy(request);
                     _logger.LogInformation($"Finaliza método PoliciesController.Create {responseIn}");
                     return Ok(new { message = "Se creo la politica de manera exitosa", state = "Success" });
                 }
-                catch (Exception ex)
-                {
-                    _logger.LogError($"Error en el método PoliciesController.Create : {JsonConvert.SerializeObject(ex.Message)}");
-                    return BadRequest(new { message = "Error al crear la politica", state = "Error" });
-                }
+
             }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error en el método PoliciesController.Create : {JsonConvert.SerializeObject(ex.Message)}");
+                return BadRequest(new { message = "Error al crear la politica", state = "Error" });
+            }
+           
         }
 
         [HttpGet]
@@ -197,37 +199,39 @@ namespace ParameterControl.Controllers.Policies
         [HttpPost]
         public async Task<ActionResult> Edit([FromBody] modPolicy.Policy request)
         {
-            var policy = await policiesServices.GetPolicyByCode(request.Code);
+           
+            try
+            {
+                var policy = await policiesServices.GetPolicyByCode(request.Code);
+                if (policy.Code == 0)
+                {
+                    _logger.LogError($"Error politica no existe : {JsonConvert.SerializeObject(request)}");
+                    return BadRequest(new { message = "No existe una politica con el codigo" + policy.Code, state = "Error" });
+                }
+                else
+                {
+                    request.CreationDate = policy.CreationDate;
+                }
 
-            if(policy.Code == 0)
-            {
-                _logger.LogError($"Error politica no existe : {JsonConvert.SerializeObject(request)}");
-                return BadRequest(new { message = "No existe una politica con el codigo" + policy.Code, state = "Error" });
-            }
-            else
-            {
-                request.CreationDate = policy.CreationDate;
-            }
-
-            if (!ModelState.IsValid)
-            {
-                _logger.LogError($"Error en el modelo : {JsonConvert.SerializeObject(request)}");
-                return BadRequest(new { message = "Error en la informacion enviada", state = "Error" });
-            }
-            else
-            {
-                try
+                if (!ModelState.IsValid)
+                {
+                    _logger.LogError($"Error en el modelo : {JsonConvert.SerializeObject(request)}");
+                    return BadRequest(new { message = "Error en la informacion enviada", state = "Error" });
+                }
+                else
                 {
                     var responseIn = await policiesServices.UpdatePolicy(request);
                     _logger.LogInformation($"Finaliza método PoliciesController.Edit {responseIn}");
                     return Ok(new { message = "Se actualizo la politica de manera exitosa", state = "Success" });
                 }
-                catch (Exception ex)
-                {
-                    _logger.LogError($"Error en el método PoliciesController.Edit : {JsonConvert.SerializeObject(ex.Message)}");
-                    return BadRequest(new { message = "Error al actualizar la politica", state = "Error" });
-                }
+
             }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error en el método PoliciesController.Edit : {JsonConvert.SerializeObject(ex.Message)}");
+                return BadRequest(new { message = "Error al actualizar la politica", state = "Error" });
+            }
+            
         }
 
         [HttpGet]
