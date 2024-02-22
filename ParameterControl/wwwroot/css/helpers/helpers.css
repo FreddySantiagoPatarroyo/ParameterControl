@@ -230,10 +230,10 @@
     cursor: pointer;
 }
 
-.field .input .icon_select{
+.field .input .icon_select {
     position: absolute;
     right: 0;
-    margin-right: 16px;
+    width:10%;
     z-index: -1;
 }
 

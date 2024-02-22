@@ -215,35 +215,35 @@ namespace ParameterControl.Controllers.Parameters
         [HttpPost]
         public async Task<IActionResult> Edit([FromBody] modParameter.Parameter request)
         {
-            var parameter = await parametersService.GetParameterByCode(request.Code);
+            try
+            {
+                var parameter = await parametersService.GetParameterByCode(request.Code);
 
-            if (parameter.Code == 0)
-            {
-                _logger.LogError($"Error el parametro no existe : {JsonConvert.SerializeObject(request)}");
-                return BadRequest(new { message = "No existe un parametro con el codigo" + parameter.Code, state = "Error" });
-            }
-            else
-            {
-                request.CreationDate = parameter.CreationDate;
-            }
-            if (!ModelState.IsValid)
-            {
-                _logger.LogError($"Error en el modelo : {JsonConvert.SerializeObject(request)}");
-                return BadRequest(new { message = "Error en la informacion enviada", state = "Error" });
-            }
-            else
-            {
-                try
+                if (parameter.Code == 0)
+                {
+                    _logger.LogError($"Error el parametro no existe : {JsonConvert.SerializeObject(request)}");
+                    return BadRequest(new { message = "No existe un parametro con el codigo" + parameter.Code, state = "Error" });
+                }
+                else
+                {
+                    request.CreationDate = parameter.CreationDate;
+                }
+                if (!ModelState.IsValid)
+                {
+                    _logger.LogError($"Error en el modelo : {JsonConvert.SerializeObject(request)}");
+                    return BadRequest(new { message = "Error en la informacion enviada", state = "Error" });
+                }
+                else
                 {
                     var responseIn = await parametersService.UpdateParameter(request);
                     _logger.LogInformation($"Finaliza método ParametersController.Edit {responseIn}");
                     return Ok(new { message = "Se actualizo el parametro de manera exitosa", state = "Success" });
                 }
-                catch (Exception ex)
-                {
-                    _logger.LogError($"Error en el método ParametersController.Edit : {JsonConvert.SerializeObject(ex.Message)}");
-                    return BadRequest(new { message = "Error al actualizar el parametro", state = "Error" });
-                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error en el método ParametersController.Edit : {JsonConvert.SerializeObject(ex.Message)}");
+                return BadRequest(new { message = "Error al actualizar el parametro", state = "Error" });
             }
         }
 
