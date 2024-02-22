@@ -483,8 +483,8 @@ namespace ParameterControl.Controllers.Conciliations
         }
         public async Task<List<SelectListItem>> GetDestination()
         {
-           List<modConciliation.Conciliation> conciliations = await conciliationsServices.GetDestinations();
-            return conciliations.Select(conciliation => new SelectListItem(conciliation.Destination, conciliation.Destination)).ToList();
+           List<string> detinations = await conciliationsServices.GetDestinations();
+            return detinations.Select(detination => new SelectListItem(detination, detination)).ToList();
             
         }
     }

@@ -208,20 +208,23 @@ namespace ParameterControl.Services.Conciliations
             return policiesActives;
         }
 
-        public async Task<List<modConciliation.Conciliation>> GetDestinations()
+        public async Task<List<string>> GetDestinations()
         {
-            List<modConciliation.Conciliation> conciliations = await GetConciliations();
-            List<modConciliation.Conciliation> conciliationsDestinationActive = new List<modConciliation.Conciliation>();
+            List<modConciliation.Conciliation> Conciliations = await GetConciliations();
+            List<string> Destinations = Conciliations.Select(conciliation => conciliation.Destination).ToList();
+            List<string> DestinationsActive = new List<string>();
 
-            foreach (var conciliation in conciliations)
+            foreach (var detination in Destinations)
             {
-                if(conciliation.Destination != null && conciliation.Destination != string.Empty)
+                if(detination != null && detination != string.Empty)
                 {
-                    conciliationsDestinationActive.Add(conciliation);
+                    if (!DestinationsActive.Contains(detination))
+                    {
+                        DestinationsActive.Add(detination);
+                    }
                 }
             }
-
-            return conciliationsDestinationActive;
+            return DestinationsActive;
         }
 
         public async Task<List<SelectListItem>> GetRequired()
