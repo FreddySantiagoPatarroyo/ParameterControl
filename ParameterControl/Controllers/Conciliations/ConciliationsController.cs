@@ -7,12 +7,14 @@ using ParameterControl.Models.CrossConnection;
 using ParameterControl.Models.Filter;
 using ParameterControl.Models.Pagination;
 using ParameterControl.Models.Policy;
+using ParameterControl.Models.Result;
 using ParameterControl.Models.Scenery;
 using ParameterControl.Services.Authenticated;
 using ParameterControl.Services.Conciliations;
 using ParameterControl.Services.Policies;
 using ParameterControl.Services.Rows;
 using ParameterControl.Stage.Entities;
+using System.Reflection;
 using modConciliation = ParameterControl.Models.Conciliation;
 using modPolicy = ParameterControl.Models.Policy;
 
@@ -45,90 +47,117 @@ namespace ParameterControl.Controllers.Conciliations
         [HttpGet]
         public async Task<ActionResult> Conciliations(PaginationViewModel paginationViewModel)
         {
-            List<modConciliation.Conciliation> Conciliations = await conciliationsServices.GetConciliationsPagination(paginationViewModel);
-            int TotalConciliations = await conciliationsServices.CountConciliations();
-
-            TableConciliations.Data = await conciliationsServices.GetConciliationsFormat(Conciliations);
-            TableConciliations.Rows = rows.RowsConciliations();
-            TableConciliations.IsCreate = true;
-            TableConciliations.IsActivate = true;
-            TableConciliations.IsEdit = true;
-            TableConciliations.IsView = true;
-            TableConciliations.IsInactivate = true;
-            TableConciliations.Filter = true;
-            ViewBag.ApplyFilter = false;
-
-            var resultViemModel = new PaginationResult<TableConciliationViewModel>()
+            try
             {
-                Elements = TableConciliations,
-                Page = paginationViewModel.Page,
-                RecordsPage = paginationViewModel.RecordsPage,
-                TotalRecords = TotalConciliations,
-                BaseUrl = Url.Action() + "?"
-            };
+                List<modConciliation.Conciliation> Conciliations = await conciliationsServices.GetConciliationsPagination(paginationViewModel);
+                int TotalConciliations = await conciliationsServices.CountConciliations();
 
-            return View("Conciliations", resultViemModel);
+                TableConciliations.Data = await conciliationsServices.GetConciliationsFormat(Conciliations);
+                TableConciliations.Rows = rows.RowsConciliations();
+                TableConciliations.IsCreate = true;
+                TableConciliations.IsActivate = true;
+                TableConciliations.IsEdit = true;
+                TableConciliations.IsView = true;
+                TableConciliations.IsInactivate = true;
+                TableConciliations.Filter = true;
+                ViewBag.ApplyFilter = false;
+
+                var resultViemModel = new PaginationResult<TableConciliationViewModel>()
+                {
+                    Elements = TableConciliations,
+                    Page = paginationViewModel.Page,
+                    RecordsPage = paginationViewModel.RecordsPage,
+                    TotalRecords = TotalConciliations,
+                    BaseUrl = Url.Action() + "?"
+                };
+
+                ViewBag.Success = true;
+                return View("Conciliations", resultViemModel);
+            }
+            catch (Exception)
+            {
+                ViewBag.Success = false;
+                return View("Conciliations", null);
+            }
         }
 
         [HttpGet]
         public async Task<ActionResult> ConciliationsFilter(PaginationViewModel paginationViewModel, string filterColunm = "", string filterValue = "", string typeRow = "")
         {
-            if (filterColunm == null || filterColunm == "" || filterValue == null || filterValue == "")
+            try
             {
-                return RedirectToAction("Conciliations");
+                if (filterColunm == null || filterColunm == "" || filterValue == null || filterValue == "")
+                {
+                    return RedirectToAction("Conciliations");
+                }
+
+                FilterViewModel filter = new FilterViewModel()
+                {
+                    ColumValue = filterColunm,
+                    ValueFilter = filterValue,
+                    TypeRow = typeRow
+                };
+
+                List<ConciliationViewModel> conciliationsFilter = await conciliationsServices.GetFilterConciliations(filter);
+                int TotalConciliations = conciliationsFilter.Count();
+
+                TableConciliations.Data = conciliationsServices.GetFilterPagination(conciliationsFilter, paginationViewModel, TotalConciliations);
+                TableConciliations.Rows = rows.RowsConciliations();
+                TableConciliations.IsCreate = true;
+                TableConciliations.IsActivate = true;
+                TableConciliations.IsEdit = true;
+                TableConciliations.IsView = true;
+                TableConciliations.IsInactivate = true;
+                TableConciliations.Filter = true;
+                ViewBag.ApplyFilter = true;
+
+                var resultViemModel = new PaginationResult<TableConciliationViewModel>()
+                {
+                    Elements = TableConciliations,
+                    Page = paginationViewModel.Page,
+                    RecordsPage = paginationViewModel.RecordsPage,
+                    TotalRecords = TotalConciliations,
+                    BaseUrl = Url.Action() + "?filterColunm=" + filterColunm + "&filterValue=" + filterValue + "&typeRow=" + typeRow + "&"
+                };
+
+                ViewBag.Success = true;
+                return View("ConciliationsFilter", resultViemModel);
             }
-
-            FilterViewModel filter = new FilterViewModel()
+            catch (Exception)
             {
-                ColumValue = filterColunm,
-                ValueFilter = filterValue,
-                TypeRow = typeRow
-            };
-
-            List<ConciliationViewModel> conciliationsFilter = await conciliationsServices.GetFilterConciliations(filter);
-            int TotalConciliations = conciliationsFilter.Count();
-
-            TableConciliations.Data = conciliationsServices.GetFilterPagination(conciliationsFilter, paginationViewModel, TotalConciliations);
-            TableConciliations.Rows = rows.RowsConciliations();
-            TableConciliations.IsCreate = true;
-            TableConciliations.IsActivate = true;
-            TableConciliations.IsEdit = true;
-            TableConciliations.IsView = true;
-            TableConciliations.IsInactivate = true;
-            TableConciliations.Filter = true;
-            ViewBag.ApplyFilter = true;
-
-            var resultViemModel = new PaginationResult<TableConciliationViewModel>()
-            {
-                Elements = TableConciliations,
-                Page = paginationViewModel.Page,
-                RecordsPage = paginationViewModel.RecordsPage,
-                TotalRecords = TotalConciliations,
-                BaseUrl = Url.Action() + "?filterColunm=" + filterColunm + "&filterValue=" + filterValue + "&typeRow=" + typeRow + "&"
-            };
-
-            return View("ConciliationsFilter", resultViemModel);
+                ViewBag.Success = false;
+                return View("ConciliationsFilter", null);
+            }
         }
 
         [HttpGet]
         public async Task<ActionResult> Create()
         {
-            List<SelectListItem> PoliciesOptionsList = await GetPolicies();
-            List<SelectListItem> RequiredOptionList = await conciliationsServices.GetRequired();
-            List<SelectListItem> OperationTypeOptionsList = await conciliationsServices.GetOperationsType();
-            List<SelectListItem> EmailsOptionsList = await conciliationsServices.GetEmailUsers();
-            List<SelectListItem> SelectDestinationList = await GetDestination();
-
-            ConciliationCreateViewModel model = new ConciliationCreateViewModel()
+            try
             {
-                OperationTypeOptions = OperationTypeOptionsList,
-                PoliciesOption = PoliciesOptionsList,
-                RequiredOption = RequiredOptionList,
-                Emails = EmailsOptionsList,
-                SelectDestination = SelectDestinationList
-            };
+                List<SelectListItem> PoliciesOptionsList = await GetPolicies();
+                List<SelectListItem> RequiredOptionList = await conciliationsServices.GetRequired();
+                List<SelectListItem> OperationTypeOptionsList = await conciliationsServices.GetOperationsType();
+                List<SelectListItem> EmailsOptionsList = await conciliationsServices.GetEmailUsers();
+                List<SelectListItem> SelectDestinationList = await GetDestination();
 
-            return View("Actions/CreateConciliation", model);
+                ConciliationCreateViewModel model = new ConciliationCreateViewModel()
+                {
+                    OperationTypeOptions = OperationTypeOptionsList,
+                    PoliciesOption = PoliciesOptionsList,
+                    RequiredOption = RequiredOptionList,
+                    Emails = EmailsOptionsList,
+                    SelectDestination = SelectDestinationList
+                };
+
+                ViewBag.Success = true;
+                return View("Actions/CreateConciliation", model);
+            }
+            catch (Exception)
+            {
+                ViewBag.Success = false;
+                return View("Actions/CreateConciliation", null);
+            }
         }
 
         [HttpPost]

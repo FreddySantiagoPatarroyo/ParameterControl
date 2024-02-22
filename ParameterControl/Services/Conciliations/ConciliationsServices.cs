@@ -215,7 +215,7 @@ namespace ParameterControl.Services.Conciliations
 
             foreach (var conciliation in conciliations)
             {
-                if(conciliation.Destination != null || conciliation.Destination != string.Empty)
+                if(conciliation.Destination != null && conciliation.Destination != string.Empty)
                 {
                     conciliationsDestinationActive.Add(conciliation);
                 }
