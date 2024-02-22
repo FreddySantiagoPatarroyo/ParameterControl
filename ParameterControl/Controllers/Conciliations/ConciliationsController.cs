@@ -163,24 +163,25 @@ namespace ParameterControl.Controllers.Conciliations
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] modConciliation.Conciliation request)
         {
-            if (!ModelState.IsValid)
+            try
             {
-                return BadRequest(new { message = "Error en la informacion enviada", state = "Error" });
-            }
-            else
-            {
-                try 
-                { 
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(new { message = "Error en la informacion enviada", state = "Error" });
+                }
+                else
+                {
                     var responseIn = await conciliationsServices.InsertConciliation(request);
                     _logger.LogInformation($"Finaliza método ConciliationController.Create {responseIn}");
                     return Ok(new { message = "Se creo la conciliación de manera exitosa", state = "Success" });
                 }
-                catch (Exception ex)
-                {
-                    _logger.LogError($"Error en el método ConciliationController.Create : {JsonConvert.SerializeObject(ex.Message)}");
-                    return BadRequest(new { message = "Error al crear la conciliación", state = "Error" });
-                }
             }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error en el método ConciliationController.Create : {JsonConvert.SerializeObject(ex.Message)}");
+                return BadRequest(new { message = "Error al crear la conciliación", state = "Error" });
+            }
+            
         }
 
         [HttpGet]
@@ -226,36 +227,37 @@ namespace ParameterControl.Controllers.Conciliations
         [HttpPost]
         public async Task<ActionResult> Edit([FromBody] modConciliation.Conciliation request)
         {
-            var conciliation = await conciliationsServices.GetConciliationsByCode(request.Code);
+            try
+            {
+                var conciliation = await conciliationsServices.GetConciliationsByCode(request.Code);
 
-            if (conciliation.Code == 0)
-            {
-                _logger.LogError($"Error la conciliacion no existe : {JsonConvert.SerializeObject(request)}");
-                return BadRequest(new { message = "No existe una conciliacion con el codigo" + conciliation.Code, state = "Error" });
-            }
-            else
-            {
-                request.CreationDate = conciliation.CreationDate;
-            }
+                if (conciliation.Code == 0)
+                {
+                    _logger.LogError($"Error la conciliacion no existe : {JsonConvert.SerializeObject(request)}");
+                    return BadRequest(new { message = "No existe una conciliacion con el codigo" + conciliation.Code, state = "Error" });
+                }
+                else
+                {
+                    request.CreationDate = conciliation.CreationDate;
+                }
 
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(new { message = "Error en la informacion enviada", state = "Error" });
-            }
-            else
-            {
-                try
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(new { message = "Error en la informacion enviada", state = "Error" });
+                }
+                else
                 {
                     var responseIn = await conciliationsServices.UpdateConciliation(request);
                     _logger.LogInformation($"Finaliza método ConciliationController.Edit {responseIn}");
                     return Ok(new { message = "Se actualizo la conciliación de manera exitosa", state = "Success" });
                 }
-                catch (Exception ex)
-                {
-                    _logger.LogError($"Error en el método ConciliationsController.Edit : {JsonConvert.SerializeObject(ex.Message)}");
-                    return BadRequest(new { message = "Error al actualizar la conciliación", state = "Error" });
-                }
             }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error en el método ConciliationsController.Edit : {JsonConvert.SerializeObject(ex.Message)}");
+                return BadRequest(new { message = "Error al actualizar la conciliación", state = "Error" });
+            }
+            
         }
 
         [HttpGet]
@@ -384,26 +386,27 @@ namespace ParameterControl.Controllers.Conciliations
         [HttpPost]
         public async Task<ActionResult> DesactiveConciliation([FromBody] int code)
         {
-            if (await conciliationsServices.ValidateScenariosActivos(code))
+            try
             {
-                _logger.LogError($"Error en el método ConciliationController.Desactive");
-                return BadRequest(new { message = "La conciliacion cuenta con esenarios activos, desactive los escenarios para desactivar la conciliacion", state = "Error" });
-            }
-            else
-            {
-                try
+                if (await conciliationsServices.ValidateScenariosActivos(code))
+                {
+                    _logger.LogError($"Error en el método ConciliationController.Desactive");
+                    return BadRequest(new { message = "La conciliacion cuenta con esenarios activos, desactive los escenarios para desactivar la conciliacion", state = "Error" });
+                }
+                else
                 {
                     modConciliation.Conciliation request = await conciliationsServices.GetConciliationsByCode(code);
                     var responseIn = await conciliationsServices.DesactiveConciliation(request);
                     _logger.LogInformation($"Finaliza método ConciliationController.Desactive {responseIn}");
-                    return Ok(new { message = "Se desactivo la conciliación de manera exitosa", state = "Success" });
-                }
-                catch (Exception ex)
-                {
-                    _logger.LogError($"Error en el método ConciliationController.Desactive : {JsonConvert.SerializeObject(ex.Message)}");
-                    return BadRequest(new { message = "Error al desactivar la conciliación", state = "Error" });
+                    return Ok(new { message = "Se desactivo la conciliación de manera exitosa", state = "Success" });  
                 }
             }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error en el método ConciliationController.Desactive : {JsonConvert.SerializeObject(ex.Message)}");
+                return BadRequest(new { message = "Error al desactivar la conciliación", state = "Error" });
+            }
+            
         }
 
         [HttpGet]
