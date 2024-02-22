@@ -74,7 +74,7 @@ else
 
                 <div class="form_group">
                     <div class="field">
-                        <label asp-for="Destination" class="label_form">Tabla Destino*</label>
+                        <label asp-for="Destination" class="label_form">Destino</label>
                         <div id="input_select_destination" class="input">
                             <input class="input_select" id="input_select_filter_destination" name="input_select_filter_destination" asp-for="Destination" placeholder="Seleccione una opción" onclick="showOptionsDestination()" readonly />
                             <input asp-for="Destination" class="oculte" />
@@ -274,27 +274,6 @@ else
                     document.getElementById('select_helper_emails').style.display = 'none';
                 }
             }
-
-            /* ----------- Select de destination ----------- */
-            let viewOptionsDestination = false;
-
-            const showOptionsDestination = () => {
-
-                let widthOptionDestination = document.getElementById("input_select_destination").clientWidth;
-                let optionsDestination = document.getElementById("optionsDestination");
-                optionsDestination.style.width = widthOptionDestination + "px";
-
-                viewOptionsDestination = !viewOptionsDestination;
-
-                if (viewOptionsDestination) {
-                    document.getElementById('optionsDestination').style.display = 'block';
-                    document.getElementById('select_helper_destination').style.display = 'block';
-                } else {
-                    document.getElementById('optionsDestination').style.display = 'none';
-                    document.getElementById('select_helper_destination').style.display = 'none';
-                }
-            }
-
             const selectOptionEmails = (name, value) => {
 
                 if (name == null || value == null || name == '' || value == '') {
@@ -308,6 +287,40 @@ else
                 }
                 showOptionsEmails();
             }
+
+            /* ----------- Select de destination ----------- */
+             let viewOptionsDestination = false;
+
+                const showOptionsDestination = () => {
+
+                    let widthOptionDestination = document.getElementById("input_select_destination").clientWidth;
+                    let optionsDestination = document.getElementById("optionsDestination");
+                    optionsDestination.style.width = widthOptionDestination + "px";
+
+                    viewOptionsDestination = !viewOptionsDestination;
+
+                    if (viewOptionsDestination) {
+                        document.getElementById('optionsDestination').style.display = 'block';
+                        document.getElementById('select_helper_destination').style.display = 'block';
+                    } else {
+                        document.getElementById('optionsDestination').style.display = 'none';
+                         document.getElementById('select_helper_destination').style.display = 'none';
+                    }
+                }
+
+                const selectOptionDestination = (name, value) => {
+
+                    if (name == null || value == null || name == '' || value == '') {
+                        console.log("vacio");
+                        document.getElementById("input_select_filter_destination").value = '';
+                        document.getElementById("Destination").value = '';
+                    } else {
+                        console.log(value);
+                        document.getElementById("input_select_filter_destination").value = name;
+                        document.getElementById("Destination").value = value;
+                    }
+                    showOptionsDestination();
+                }
 
             /* ----------- Select de politicas ----------- */
             let viewOptionsPolicies = false;
