@@ -313,4 +313,8 @@
         color: var(--button_primary_hover);
     }
 
+    .field .input .icon_select:hover {
+        cursor: pointer;
+    }
+
 }

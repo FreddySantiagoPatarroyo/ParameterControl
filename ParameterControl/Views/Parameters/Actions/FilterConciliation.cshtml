@@ -1,0 +1,92 @@
+﻿@using System;
+@using ParameterControl.Models.Filter
+@model FilterConciliacionViewModel
+
+@{
+    ViewData["Title"] = "Filtrar Parametros Por Conciliacion";
+}
+
+<partial name="_Menu" />
+
+<div class="box_filter">
+    <div class="bg__blur"></div>
+    <div class="form__container">
+        <div class="card__container">
+            <div class="header_form">
+                <img src="/images/iconApple.png" />
+                <h1>Filtar Tabla Parametros Por Conciliacion</h1>
+            </div>
+            <form asp-controller="Parameters" asp-action="FilterConciliationParameters">
+                <div class="content_filter flex_box">
+                    <div class="filter_primary">
+                        <div id="field_primary" class="field">
+                            <label asp-for="Conciliation" class="name font_normal" for="select_filter">Conciliacion :</label>
+                            <div id="input_select" class="input">
+                                <input class="input_select" id="input_select_filter" name="input_select_filter" placeholder="Seleccione una opción" onclick="showOptions()" readonly />
+                                <input class="oculte" id="input_select_filter_value" asp-for="Conciliation" />
+                                <i class="icon icon_select icon_153" onclick="showOptions()"></i>
+                            </div>
+                            <div id="options" class="options">
+                                <ul class="options_list">
+                                    <li onclick="selectOption('@null', '@null')" class="option">
+                                        <p class="option_text">Seleccione una opción</p>
+                                    </li>
+                                    @foreach (var Option in Model.Conciliations)
+                                    {
+                                        <li onclick="selectOption('@Option.Text', '@Option.Value')" class="option">
+                                            <p class="option_text">@Option.Text</p>
+                                        </li>
+                                    }
+                                </ul>
+                            </div>
+                            <div id="select_helper" class="select_helper" onclick="showOptions()"></div>
+                        </div>
+                    </div>                </div>
+                <div class="btn_container">
+                    <a class="button button_secondary" asp-controller="Parameters" asp-action="Parameters"><p class="text font_bold">Cancelar</p></a>
+                    <button type="submit" class="button button_primary"><p class="text font_bold">Filtrar</p></button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial.cshtml" />
+    <script>
+        /* ----------- Select de tipo ----------- */
+        let viewOptions = false;
+
+        const showOptions = () => {
+
+            let widthOption = document.getElementById("input_select").clientWidth;
+            let options = document.getElementById("options");
+            options.style.width = widthOption + "px";
+
+            viewOptions = !viewOptions;
+
+            if (viewOptions) {
+                document.getElementById('options').style.display = 'block';
+                document.getElementById('select_helper').style.display = 'block';
+            } else {
+                document.getElementById('options').style.display = 'none';
+                document.getElementById('select_helper').style.display = 'none';
+            }
+        }
+
+        const selectOption = (name, value) => {
+
+            if (name == null || value == null || name == '' || value == '') {
+                console.log("vacio");
+                document.getElementById("input_select_filter").value = '';
+                document.getElementById("input_select_filter_value").value = '';
+            } else {
+                console.log(value);
+                document.getElementById("input_select_filter").value = name;
+                document.getElementById("input_select_filter_value").value = value;
+            }
+
+            showOptions();
+        }
+    </script>
+}

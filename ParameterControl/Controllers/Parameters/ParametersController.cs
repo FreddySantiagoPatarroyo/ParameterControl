@@ -15,6 +15,8 @@ using ParameterControl.Services.Policies;
 using ParameterControl.Services.Rows;
 using System.Reflection;
 using modParameter = ParameterControl.Models.Parameter;
+using modConciliation = ParameterControl.Models.Conciliation;
+using System.Collections.Generic;
 
 
 namespace ParameterControl.Controllers.Parameters
@@ -100,9 +102,7 @@ namespace ParameterControl.Controllers.Parameters
                 int TotalParameters = parametersFilter.Count();
 
                 TableParameters.Data = parametersService.GetFilterPagination(parametersFilter, paginationViewModel, TotalParameters);
-
                 TableParameters.Rows = rows.RowsParameters();
-
                 TableParameters.Filter = true;
                 TableParameters.IsCreate = true;
                 TableParameters.IsActivate = true;
@@ -128,6 +128,50 @@ namespace ParameterControl.Controllers.Parameters
             {
                 ViewBag.Success = false;
                 return View("ParametersFilter", null);
+            }
+        }
+
+        [HttpGet]
+        public async Task<ActionResult> ParametersConciliationFilter(PaginationViewModel paginationViewModel, string conciliation = "")
+        {
+            try
+            {
+                if (conciliation == null)
+                {
+                    return RedirectToAction("Parameters");
+                }
+
+                List<modParameter.Parameter> parametersConciliation = await parametersService.GetParametersByConciliation(conciliation);
+                List <ParameterViewModel> parametersFilter = await parametersService.GetParametersFormat(parametersConciliation);
+                int TotalParameters = parametersFilter.Count();
+
+                TableParameters.Data = parametersService.GetFilterPagination(parametersFilter, paginationViewModel, TotalParameters);
+                TableParameters.Rows = rows.RowsParameters();
+                TableParameters.Filter = true;
+                TableParameters.IsCreate = true;
+                TableParameters.IsActivate = true;
+                TableParameters.IsEdit = true;
+                TableParameters.IsView = true;
+                TableParameters.IsInactivate = true;
+
+                var resultViemModel = new PaginationResult<TableParametersViewModel>()
+                {
+                    Elements = TableParameters,
+                    Page = paginationViewModel.Page,
+                    RecordsPage = paginationViewModel.RecordsPage,
+                    TotalRecords = TotalParameters,
+                    BaseUrl = Url.Action() + "?conciliation=" + conciliation + "&"
+                };
+
+                ViewBag.ApplyFilter = true;
+
+                ViewBag.Success = true;
+                return View("ParametersFilterConciliation", resultViemModel);
+            }
+            catch (Exception)
+            {
+                ViewBag.Success = false;
+                return View("ParametersFilterConciliation", null);
             }
         }
 
@@ -433,10 +477,37 @@ namespace ParameterControl.Controllers.Parameters
             return Ok(filter);
         }
 
+        [HttpGet]
+        public async Task<ActionResult> FilterConciliation()
+        {
+            FilterConciliacionViewModel model = new FilterConciliacionViewModel()
+            {
+                Conciliations = await GetConciliations()
+
+            };
+
+            return View("Actions/FilterConciliation", model);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> FilterConciliationParameters(FilterConciliacionViewModel filter)
+        {
+            return RedirectToAction("ParametersConciliationFilter", new
+            {
+                conciliation = filter.Conciliation,
+            });
+        }
+
         public async Task<List<SelectListItem>> GetParameters()
         {
             List<modParameter.Parameter> parameters = await parametersService.GetListParameter();
             return parameters.Select(parameter => new SelectListItem(parameter.Parameter_, parameter.Code.ToString())).ToList();
+        }
+
+        public async Task<List<SelectListItem>> GetConciliations()
+        {
+            List<modConciliation.Conciliation> conciliations = await parametersService.GetConciliations();
+            return conciliations.Select(conciliation => new SelectListItem(conciliation.Name, conciliation.Name)).ToList();
         }
     }
 }

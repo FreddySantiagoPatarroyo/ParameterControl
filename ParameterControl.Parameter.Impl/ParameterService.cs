@@ -12,6 +12,7 @@ namespace ParameterControl.Parameter.Impl
         private readonly RemoveParameter _removeParameter;
         private readonly ModifyParameter _modifyParameter;
         private readonly GetByIdParameter _getByIdParameter;
+        private readonly GetByConciliationParameters _getByConciliationParameter;
         private readonly GetAllParameter _getAllParameter;
         private readonly GetPaginatorParameter _getPaginatorParameter;
         private readonly CountParameter _countParameter;
@@ -22,6 +23,7 @@ namespace ParameterControl.Parameter.Impl
             _removeParameter = new RemoveParameter(configuration);
             _modifyParameter = new ModifyParameter(configuration);
             _getByIdParameter = new GetByIdParameter(configuration);
+            _getByConciliationParameter = new GetByConciliationParameters(configuration);
             _getAllParameter = new GetAllParameter(configuration);
             _getPaginatorParameter = new GetPaginatorParameter(configuration);
             _countParameter = new CountParameter(configuration);
@@ -88,6 +90,25 @@ namespace ParameterControl.Parameter.Impl
                     {
                         mapper = await MapperToParameter(row);
                     }
+                    return mapper;
+                });
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
+        public async Task<List<ParameterModel>> SelectByConciliationParameter(string entity)
+        {
+            try
+            {
+                List<ParameterModel> mapper = new List<ParameterModel>();
+                return await Task.Run(async () =>
+                {
+                    var response = await _getByConciliationParameter.SelectByConciliationParameters(entity);
+                    mapper = await MapperParameter(response);
+
                     return mapper;
                 });
             }

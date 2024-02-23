@@ -23,5 +23,7 @@ namespace ParameterControl.Services.Parameters
         List<ParameterViewModel> GetFilterPagination(List<ParameterViewModel> inicialParameters, PaginationViewModel paginationViewModel, int totalData);
         Task<string> ActiveParameter(modParameter.Parameter Parameter);
         Task<string> DesactiveParameter(modParameter.Parameter Parameter);
+        Task<List<Models.Conciliation.Conciliation>> GetConciliations();
+        Task<List<modParameter.Parameter>> GetParametersByConciliation(string conciliation);
     }
 }

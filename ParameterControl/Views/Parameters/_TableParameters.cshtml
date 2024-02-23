@@ -33,6 +33,10 @@
                             <p class="text font_bold">Filtrar Tabla</p>
                         </a>
 
+                        <a class="button button_primary" title="Filtrar" asp-controller="Parameters" asp-action="FilterConciliation">
+                            <p class="text font_bold">Filtrar Por Conciliacion</p>
+                        </a>
+
                         @if (ViewBag.ApplyFilter)
                         {
                             <a class="button button_secondary" title="Filtrar" asp-controller="Parameters" asp-action="Parameters">

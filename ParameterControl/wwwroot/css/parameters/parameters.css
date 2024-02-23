@@ -41,7 +41,7 @@
 .content_parameters .card_parameters .list {
     width: 100%;
     height: calc(100% - 64px);
-    max-height: calc(100vh - 296px);
+    max-height: calc(100vh - 220px);
 }
 
 .content_parameters .card_parameters .list .element_table {
@@ -60,6 +60,10 @@
 .content_parameters .card_parameters .list .element_table .content_filter .button {
     width: 100%;
     text-align: center;
+}
+
+.content_parameters .card_parameters .list .element_table .content_filter .button_primary:nth-child(even) {
+    margin-top: 8px;
 }
 
 .content_parameters .card_parameters .list .element_table .content_filter .button_secondary {
@@ -265,7 +269,13 @@
         text-align: center;
     }
 
+        .content_parameters .card_parameters .list .element_table .content_filter .button_primary:nth-child(even) {
+            margin-top: 0px;
+            margin-left: 8px;
+        }
+
     .content_parameters .card_parameters .list .element_table .content_filter .button_secondary {
+        margin-top: 0px;
         margin-left: 8px;
     }
 
