@@ -1,13 +1,10 @@
-﻿using ParameterControl.User.Entities;
-using ParameterControl.User.Impl;
+﻿using ParameterControl.User.Impl;
 using ParameterControl.User.Interfaces;
 using ParameterControl.Models.Filter;
 using ParameterControl.Models.Pagination;
-using ParameterControl.Models.Policy;
 using ParameterControl.Models.User;
-using ParameterControl.Policy.Entities;
 using modUser = ParameterControl.Models.User;
-using ParameterControl.Conciliation.Entities;
+using ParameterControl.User.Entities;
 
 namespace ParameterControl.Services.Users
 {
@@ -378,6 +375,41 @@ namespace ParameterControl.Services.Users
             var response = await MapperUser(collectionUsers);
             var user = response.FirstOrDefault(x => x.User_.Equals(userName) && x.Email.Equals(email));
             return user;
+        }
+
+        public async Task<List<modUser.Role>> GetRoles()
+        {
+            var collectionRoles = await _userService.SelectAllRole();
+            var response = await MapperRole(collectionRoles);
+            return response;
+        }
+
+        private async Task<List<modUser.Role>> MapperRole(List<RoleModel> roleModel)
+        {
+            return await Task.Run(() =>
+            {
+                List<modUser.Role> roles = new List<modUser.Role>();
+                if (roleModel.Count > 0)
+                {
+                    foreach (var role in roleModel)
+                    {
+                        roles.Add(MapperToRole(role).Result);
+                    }
+                }
+                return roles;
+            });
+        }
+
+        private async Task<modUser.Role> MapperToRole(RoleModel User)
+        {
+            return await Task.Run(() =>
+            {
+                modUser.Role model = new modUser.Role
+                {
+                    Code = Convert.ToInt32(User.Code)
+                };
+                return model;
+            });
         }
     }
 }

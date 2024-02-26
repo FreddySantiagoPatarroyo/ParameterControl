@@ -11,5 +11,6 @@ namespace ParameterControl.User.Interfaces
         Task<UserModel> SelectByIdUser(UserModel entity);
         Task<List<UserModel>> SelectPaginatorUser(int page, int row);
         Task<int> SelectCountUser();
+        Task<List<RoleModel>> SelectAllRole();
     }
 }

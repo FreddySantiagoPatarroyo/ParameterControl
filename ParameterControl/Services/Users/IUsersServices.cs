@@ -22,5 +22,6 @@ namespace ParameterControl.Services.Users
         Task<List<modUser.User>> GetUsersFake();
         Task<string> DesactiveUser(modUser.User User);
         Task<string> ActiveUser(modUser.User User);
+        Task<List<modUser.Role>> GetRoles();
     }
 }

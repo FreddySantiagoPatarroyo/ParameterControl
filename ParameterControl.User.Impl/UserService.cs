@@ -15,6 +15,7 @@ namespace ParameterControl.User.Impl
         private readonly GetAllUser _getAllUser;
         private readonly GetPaginatorUser _getPaginatorUser;
         private readonly CountUser _getCountUser;
+        private readonly GetAllRole _getAllRole;
 
         public UserService(IConfiguration configuration)
         {
@@ -25,6 +26,7 @@ namespace ParameterControl.User.Impl
             _getAllUser = new GetAllUser(configuration);
             _getPaginatorUser = new GetPaginatorUser(configuration);
             _getCountUser = new CountUser(configuration);
+            _getAllRole = new GetAllRole(configuration);
         }
 
         public async Task<int> InsertUser(UserModel entity)
@@ -160,7 +162,7 @@ namespace ParameterControl.User.Impl
                     Email = dr["EMAIL"] is DBNull ? string.Empty : dr["EMAIL"].ToString(),
                     UserName = dr["NOMBRE_USUARIO"] is DBNull ? string.Empty : dr["NOMBRE_USUARIO"].ToString(),
                     Password = dr["CONTRASEÑA"] is DBNull ? string.Empty : dr["CONTRASEÑA"].ToString(),
-                    RolId = dr["IDROL"] is DBNull ? 0 : Convert.ToInt32(dr["IDROL"]),
+                    RolId = dr["COD_ROL"] is DBNull ? 0 : Convert.ToInt32(dr["COD_ROL"]),
                     CreationDate = dr["FECHA_CREACION"] is DBNull ? DateTime.Now : Convert.ToDateTime(dr["FECHA_CREACION"]),
                     ModifiedDate = dr["FECHA_ACTUALIZACION"] is DBNull ? DateTime.Now : Convert.ToDateTime(dr["FECHA_ACTUALIZACION"]),
                     ModifiedBy = dr["MODIFICADO_POR"] is DBNull ? string.Empty : dr["MODIFICADO_POR"].ToString(),
@@ -202,6 +204,61 @@ namespace ParameterControl.User.Impl
             {
                 throw;
             }
+        }
+
+        public async Task<List<RoleModel>> SelectAllRole()
+        {
+            try
+            {
+                List<RoleModel> mapper = new List<RoleModel>();
+                return await Task.Run(async () =>
+                {
+                    var response = await _getAllUser.SelectAllUser();
+                    mapper = await MapperRole(response);
+
+                    return mapper;
+                });
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
+        private async Task<List<RoleModel>> MapperRole(DataTable dt)
+        {
+            return await Task.Run(() =>
+            {
+                if (dt.Rows.Count > 0)
+                {
+                    List<RoleModel> roles = new List<RoleModel>();
+                    foreach (DataRow row in dt.Rows)
+                    {
+                        roles.Add(MapperToRole(row).Result);
+                    }
+                    return roles;
+                }
+                else
+                {
+                    return new List<RoleModel>();
+                }
+            });
+        }
+
+        private async Task<RoleModel> MapperToRole(DataRow dr)
+        {
+            return await Task.Run(() =>
+            {
+                RoleModel model = new RoleModel
+                {
+                    Code = Convert.ToInt32(dr["COD_ROL"]),
+                    Name = dr["NOMBRE_ROL"] is DBNull ? string.Empty : dr["NOMBRE_ROL"].ToString(),
+                    CreationDate = dr["FECHA_CREACION"] is DBNull ? DateTime.Now : Convert.ToDateTime(dr["FECHA_CREACION"]),
+                    ModifiedDate = dr["FECHA_ACTUALIZACION"] is DBNull ? DateTime.Now : Convert.ToDateTime(dr["FECHA_ACTUALIZACION"]),
+                    ModifiedBy = dr["MODIFICADO_POR"] is DBNull ? string.Empty : dr["MODIFICADO_POR"].ToString()
+                };
+                return model;
+            });
         }
     }
 }
