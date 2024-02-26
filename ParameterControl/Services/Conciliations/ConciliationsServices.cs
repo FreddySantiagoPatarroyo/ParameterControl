@@ -192,19 +192,39 @@ namespace ParameterControl.Services.Conciliations
             return operationsType;
         }
 
-		public async Task<List<modPolicy.Policy>> GetPolicies()
+        public async Task<List<modPolicy.Policy>> GetPolicies()
         {
             List<modPolicy.Policy> policies = await policiesServices.GetPolicies();
             List<modPolicy.Policy> policiesActives = new List<modPolicy.Policy>();
 
             foreach (var policy in policies)
             {
-                if(policy.State == true) { 
+                if (policy.State == true)
+                {
                     policiesActives.Add(policy);
                 }
             }
 
             return policiesActives;
+        }
+
+        public async Task<List<string>> GetDestinations()
+        {
+            List<modConciliation.Conciliation> Conciliations = await GetConciliations();
+            List<string> Destinations = Conciliations.Select(conciliation => conciliation.Destination).ToList();
+            List<string> DestinationsActive = new List<string>();
+
+            foreach (var detination in Destinations)
+            {
+                if(detination != null && detination != string.Empty)
+                {
+                    if (!DestinationsActive.Contains(detination))
+                    {
+                        DestinationsActive.Add(detination);
+                    }
+                }
+            }
+            return DestinationsActive;
         }
 
         public async Task<List<SelectListItem>> GetRequired()
@@ -345,13 +365,14 @@ namespace ParameterControl.Services.Conciliations
             return Emails;
         }
 
+
         public async Task<string> InsertConciliation(modConciliation.Conciliation request)
         {
             ConciliationModel conciliation = new ConciliationModel
             {
                 ConciliationName = request.Name,
                 Email = request.Email,
-                TargetTable =  request.Destination,
+                TargetTable = request.Destination,
                 AssignmentType = request.ControlType,
                 OperationType = request.OperationType,
                 PolicyId = request.PolicyCode,

@@ -5,6 +5,7 @@ using Newtonsoft.Json;
 using ParameterControl.Models.Filter;
 using ParameterControl.Models.Pagination;
 using ParameterControl.Models.Policy;
+using ParameterControl.Models.Result;
 using ParameterControl.Services.Authenticated;
 using ParameterControl.Services.Policies;
 using ParameterControl.Services.Rows;
@@ -40,101 +41,131 @@ namespace ParameterControl.Controllers.Policies
         [HttpGet]
         public async Task<ActionResult> Policies(PaginationViewModel paginationViewModel)
         {
-            List<modPolicy.Policy> policies = await policiesServices.GetPoliciesPagination(paginationViewModel);
-            int TotalPolicies = await policiesServices.CountPolicies();
-
-            TablePolicies.Data = await policiesServices.GetPolicesFormat(policies);
-            TablePolicies.Rows = rows.RowsPolicies();
-            TablePolicies.Filter = true;
-            TablePolicies.IsCreate = true;
-            TablePolicies.IsActivate = true;
-            TablePolicies.IsEdit = true;
-            TablePolicies.IsView = true;
-            TablePolicies.IsInactivate = true;
-            ViewBag.ApplyFilter = false;
-
-            var resultViemModel = new PaginationResult<TablePoliciesViewModel>()
+            try
             {
-                Elements = TablePolicies,
-                Page = paginationViewModel.Page,
-                RecordsPage = paginationViewModel.RecordsPage,
-                TotalRecords = TotalPolicies,
-                BaseUrl = Url.Action() + "?"
-            };
+                List<modPolicy.Policy> policies = await policiesServices.GetPoliciesPagination(paginationViewModel);
+                int TotalPolicies = await policiesServices.CountPolicies();
 
-            return View("Policies", resultViemModel);
+                TablePolicies.Data = await policiesServices.GetPolicesFormat(policies);
+                TablePolicies.Rows = rows.RowsPolicies();
+                TablePolicies.Filter = true;
+                TablePolicies.IsCreate = true;
+                TablePolicies.IsActivate = true;
+                TablePolicies.IsEdit = true;
+                TablePolicies.IsView = true;
+                TablePolicies.IsInactivate = true;
+                ViewBag.ApplyFilter = false;
+
+                var resultViemModel = new PaginationResult<TablePoliciesViewModel>()
+                {
+                    Elements = TablePolicies,
+                    Page = paginationViewModel.Page,
+                    RecordsPage = paginationViewModel.RecordsPage,
+                    TotalRecords = TotalPolicies,
+                    BaseUrl = Url.Action() + "?"
+                };
+
+                ViewBag.Success = true;
+                return View("Policies", resultViemModel);
+            }
+            catch (Exception)
+            {
+                ViewBag.Success = false;
+                return View("Policies", null);
+            }
+           
         }
 
         public async Task<ActionResult> PoliciesFilter(PaginationViewModel paginationViewModel, string filterColunm = "", string filterValue = "", string typeRow = "")
         {
-
-            if (filterColunm == null || filterColunm == "" || filterValue == null || filterValue == "")
+            try
             {
-                return RedirectToAction("Policies");
+                if (filterColunm == null || filterColunm == "" || filterValue == null || filterValue == "")
+                {
+                    return RedirectToAction("Policies");
+                }
+
+                FilterViewModel filter = new FilterViewModel()
+                {
+                    ColumValue = filterColunm,
+                    ValueFilter = filterValue,
+                    TypeRow = typeRow
+                };
+
+                List<PolicyViewModel> policiesFilter = await policiesServices.GetFilterPolicies(filter);
+                int TotalPolicies = policiesFilter.Count();
+
+                TablePolicies.Data = policiesServices.GetFilterPagination(policiesFilter, paginationViewModel, TotalPolicies);
+                TablePolicies.Rows = rows.RowsPolicies();
+                TablePolicies.Filter = true;
+                TablePolicies.IsCreate = true;
+                TablePolicies.IsActivate = true;
+                TablePolicies.IsEdit = true;
+                TablePolicies.IsView = true;
+                TablePolicies.IsInactivate = true;
+                ViewBag.ApplyFilter = true;
+
+                var resultViemModel = new PaginationResult<TablePoliciesViewModel>()
+                {
+                    Elements = TablePolicies,
+                    Page = paginationViewModel.Page,
+                    RecordsPage = paginationViewModel.RecordsPage,
+                    TotalRecords = TotalPolicies,
+                    BaseUrl = Url.Action() + "?filterColunm=" + filterColunm + "&filterValue=" + filterValue + "&typeRow=" + typeRow + "&"
+                };
+
+                ViewBag.Success = true;
+                return View("PoliciesFilter", resultViemModel);
             }
-
-            FilterViewModel filter = new FilterViewModel()
+            catch (Exception)
             {
-                ColumValue = filterColunm,
-                ValueFilter = filterValue,
-                TypeRow = typeRow
-            };
-
-            List<PolicyViewModel> policiesFilter = await policiesServices.GetFilterPolicies(filter);
-            int TotalPolicies = policiesFilter.Count();
-
-            TablePolicies.Data = policiesServices.GetFilterPagination(policiesFilter, paginationViewModel, TotalPolicies);
-            TablePolicies.Rows = rows.RowsPolicies();
-            TablePolicies.Filter = true;
-            TablePolicies.IsCreate = true;
-            TablePolicies.IsActivate = true;
-            TablePolicies.IsEdit = true;
-            TablePolicies.IsView = true;
-            TablePolicies.IsInactivate = true;
-            ViewBag.ApplyFilter = true;
-
-            var resultViemModel = new PaginationResult<TablePoliciesViewModel>()
-            {
-                Elements = TablePolicies,
-                Page = paginationViewModel.Page,
-                RecordsPage = paginationViewModel.RecordsPage,
-                TotalRecords = TotalPolicies,
-                BaseUrl = Url.Action() + "?filterColunm=" + filterColunm + "&filterValue=" + filterValue + "&typeRow=" + typeRow + "&"
-            };
-
-            return View("PoliciesFilter", resultViemModel);
+                ViewBag.Success = false;
+                return View("PoliciesFilter", null);
+            }
         }
 
         [HttpGet]
         public async Task<ActionResult> Create()
         {
-            PolicyCreateViewModel model = new PolicyCreateViewModel();
-            return View("Actions/CreatePolicy", model);
+            try
+            {
+                PolicyCreateViewModel model = new PolicyCreateViewModel();
+
+                ViewBag.Success = true;
+                return View("Actions/CreatePolicy", model);
+            }
+            catch (Exception)
+            {
+                ViewBag.Success = false;
+                return View("Actions/CreatePolicy", null);
+            }
         }
 
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] modPolicy.Policy request)
         {
-            if (!ModelState.IsValid)
+            try
             {
-                _logger.LogError($"Error en el modelo : {JsonConvert.SerializeObject(request)}");
-                return BadRequest(new { message = "Error en la informacion enviada", state = "Error" });
-            }
-            else
-            {
-                try
+                if (!ModelState.IsValid)
+                {
+                    _logger.LogError($"Error en el modelo : {JsonConvert.SerializeObject(request)}");
+                    return BadRequest(new { message = "Error en la informacion enviada", state = "Error" });
+                }
+                else
                 {
                     _logger.LogInformation($"Inicia método PoliciesController.Create {JsonConvert.SerializeObject(request)}");
                     var responseIn = await policiesServices.InsertPolicy(request);
                     _logger.LogInformation($"Finaliza método PoliciesController.Create {responseIn}");
                     return Ok(new { message = "Se creo la politica de manera exitosa", state = "Success" });
                 }
-                catch (Exception ex)
-                {
-                    _logger.LogError($"Error en el método PoliciesController.Create : {JsonConvert.SerializeObject(ex.Message)}");
-                    return BadRequest(new { message = "Error al crear la politica", state = "Error" });
-                }
+
             }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error en el método PoliciesController.Create : {JsonConvert.SerializeObject(ex.Message)}");
+                return BadRequest(new { message = "Error al crear la politica", state = "Error" });
+            }
+           
         }
 
         [HttpGet]
@@ -168,37 +199,39 @@ namespace ParameterControl.Controllers.Policies
         [HttpPost]
         public async Task<ActionResult> Edit([FromBody] modPolicy.Policy request)
         {
-            var policy = await policiesServices.GetPolicyByCode(request.Code);
+           
+            try
+            {
+                var policy = await policiesServices.GetPolicyByCode(request.Code);
+                if (policy.Code == 0)
+                {
+                    _logger.LogError($"Error politica no existe : {JsonConvert.SerializeObject(request)}");
+                    return BadRequest(new { message = "No existe una politica con el codigo" + policy.Code, state = "Error" });
+                }
+                else
+                {
+                    request.CreationDate = policy.CreationDate;
+                }
 
-            if(policy.Code == 0)
-            {
-                _logger.LogError($"Error politica no existe : {JsonConvert.SerializeObject(request)}");
-                return BadRequest(new { message = "No existe una politica con el codigo" + policy.Code, state = "Error" });
-            }
-            else
-            {
-                request.CreationDate = policy.CreationDate;
-            }
-
-            if (!ModelState.IsValid)
-            {
-                _logger.LogError($"Error en el modelo : {JsonConvert.SerializeObject(request)}");
-                return BadRequest(new { message = "Error en la informacion enviada", state = "Error" });
-            }
-            else
-            {
-                try
+                if (!ModelState.IsValid)
+                {
+                    _logger.LogError($"Error en el modelo : {JsonConvert.SerializeObject(request)}");
+                    return BadRequest(new { message = "Error en la informacion enviada", state = "Error" });
+                }
+                else
                 {
                     var responseIn = await policiesServices.UpdatePolicy(request);
                     _logger.LogInformation($"Finaliza método PoliciesController.Edit {responseIn}");
                     return Ok(new { message = "Se actualizo la politica de manera exitosa", state = "Success" });
                 }
-                catch (Exception ex)
-                {
-                    _logger.LogError($"Error en el método PoliciesController.Edit : {JsonConvert.SerializeObject(ex.Message)}");
-                    return BadRequest(new { message = "Error al actualizar la politica", state = "Error" });
-                }
+
             }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error en el método PoliciesController.Edit : {JsonConvert.SerializeObject(ex.Message)}");
+                return BadRequest(new { message = "Error al actualizar la politica", state = "Error" });
+            }
+            
         }
 
         [HttpGet]

@@ -8,6 +8,8 @@ using ParameterControl.Services.Rows;
 using ParameterControl.Services.Users;
 using modUser = ParameterControl.Models.User;
 using ParameterControl.Models.Pagination;
+using ParameterControl.Models.Result;
+using System.Reflection;
 
 
 namespace ParameterControl.Controllers.Users
@@ -36,102 +38,132 @@ namespace ParameterControl.Controllers.Users
         [HttpGet]
         public async Task<ActionResult> Users(PaginationViewModel paginationViewModel)
         {
-            List<modUser.User> Users = await usersServices.GetUsersPagination(paginationViewModel);
-            int TotalUsers = await usersServices.CountUsers();
-
-            TableUsers.Data = await usersServices.GetUsersFormat(Users);
-
-            TableUsers.Rows = rows.RowsUsers();
-
-            TableUsers.IsCreate = true;
-            TableUsers.IsActivate = true;
-            TableUsers.IsEdit = true;
-            TableUsers.IsView = true;
-            TableUsers.IsInactivate = true;
-            ViewBag.ApplyFilter = false;
-
-            var resultViemModel = new PaginationResult<TableUserViewModel>()
+            try
             {
-                Elements = TableUsers,
-                Page = paginationViewModel.Page,
-                RecordsPage = paginationViewModel.RecordsPage,
-                TotalRecords = TotalUsers,
-                BaseUrl = Url.Action() + "?"
-            };
+                List<modUser.User> Users = await usersServices.GetUsersPagination(paginationViewModel);
+                int TotalUsers = await usersServices.CountUsers();
 
-            return View("Users", resultViemModel);
+                TableUsers.Data = await usersServices.GetUsersFormat(Users);
+
+                TableUsers.Rows = rows.RowsUsers();
+
+                TableUsers.IsCreate = true;
+                TableUsers.IsActivate = true;
+                TableUsers.IsEdit = true;
+                TableUsers.IsView = true;
+                TableUsers.IsInactivate = true;
+                ViewBag.ApplyFilter = false;
+
+                var resultViemModel = new PaginationResult<TableUserViewModel>()
+                {
+                    Elements = TableUsers,
+                    Page = paginationViewModel.Page,
+                    RecordsPage = paginationViewModel.RecordsPage,
+                    TotalRecords = TotalUsers,
+                    BaseUrl = Url.Action() + "?"
+                };
+
+                ViewBag.Success = true;
+                return View("Users", resultViemModel);
+            }
+            catch (Exception)
+            {
+                ViewBag.Success = false;
+                return View("Users", null);
+            }
         }
 
 
         [HttpGet]
         public async Task<ActionResult> UsersFilter(PaginationViewModel paginationViewModel, string filterColunm = "", string filterValue = "", string typeRow = "")
         {
-            if (filterColunm == null || filterColunm == "" || filterValue == null || filterValue == "")
+            try
             {
-                return RedirectToAction("Users");
+                if (filterColunm == null || filterColunm == "" || filterValue == null || filterValue == "")
+                {
+                    return RedirectToAction("Users");
+                }
+
+                FilterViewModel filter = new FilterViewModel()
+                {
+                    ColumValue = filterColunm,
+                    ValueFilter = filterValue,
+                    TypeRow = typeRow
+                };
+
+                List<UserViewModel> usersFilter = await usersServices.GetFilterUsers(filter);
+                int TotalUsers = usersFilter.Count();
+
+                TableUsers.Data = usersServices.GetFilterPagination(usersFilter, paginationViewModel, TotalUsers);
+                TableUsers.Rows = rows.RowsUsers();
+                TableUsers.IsCreate = true;
+                TableUsers.IsActivate = true;
+                TableUsers.IsEdit = true;
+                TableUsers.IsView = true;
+                TableUsers.IsInactivate = true;
+                ViewBag.ApplyFilter = true;
+
+                var resultViemModel = new PaginationResult<TableUserViewModel>()
+                {
+                    Elements = TableUsers,
+                    Page = paginationViewModel.Page,
+                    RecordsPage = paginationViewModel.RecordsPage,
+                    TotalRecords = TotalUsers,
+                    BaseUrl = Url.Action() + "?filterColunm=" + filterColunm + "&filterValue=" + filterValue + "&typeRow=" + typeRow + "&"
+                };
+
+                ViewBag.Success = true;
+                return View("UsersFilter", resultViemModel);
             }
-
-            FilterViewModel filter = new FilterViewModel()
+            catch (Exception)
             {
-                ColumValue = filterColunm,
-                ValueFilter = filterValue,
-                TypeRow = typeRow
-            };
-
-            List<UserViewModel> usersFilter = await usersServices.GetFilterUsers(filter);
-            int TotalUsers = usersFilter.Count();
-
-            TableUsers.Data = usersServices.GetFilterPagination(usersFilter, paginationViewModel, TotalUsers);
-            TableUsers.Rows = rows.RowsUsers();
-            TableUsers.IsCreate = true;
-            TableUsers.IsActivate = true;
-            TableUsers.IsEdit = true;
-            TableUsers.IsView = true;
-            TableUsers.IsInactivate = true;
-            ViewBag.ApplyFilter = true;
-
-            var resultViemModel = new PaginationResult<TableUserViewModel>()
-            {
-                Elements = TableUsers,
-                Page = paginationViewModel.Page,
-                RecordsPage = paginationViewModel.RecordsPage,
-                TotalRecords = TotalUsers,
-                BaseUrl = Url.Action() + "?filterColunm=" + filterColunm + "&filterValue=" + filterValue + "&typeRow=" + typeRow + "&"
-            };
-
-            return View("UsersFilter", resultViemModel);
+                ViewBag.Success = false;
+                return View("UsersFilter", null);
+            }
         }
 
         [HttpGet]
         public async Task<ActionResult> Create()
         {
-            UserCreateViewModel model = new UserCreateViewModel();
-            return View("Actions/CreateUser", model);
+            try
+            {
+                UserCreateViewModel model = new UserCreateViewModel();
+
+                ViewBag.Success = true;
+                return View("Actions/CreateUser", model);
+            }
+            catch (Exception)
+            {
+                ViewBag.Success = false;
+                return View("Actions/CreateUser", null);
+            }
         }
 
         [HttpPost]
         public async Task<IActionResult> CreateUser([FromBody] modUser.User request)
         {
-            if (!ModelState.IsValid)
+            try
             {
-                _logger.LogError($"Error en el modelo : {JsonConvert.SerializeObject(request)}");
-                return BadRequest(new { message = "Error en la informacion enviada", state = "Error" });
-            }
-            else
-            {
-                try
+                if (!ModelState.IsValid)
+                {
+                    _logger.LogError($"Error en el modelo : {JsonConvert.SerializeObject(request)}");
+                    return BadRequest(new { message = "Error en la informacion enviada", state = "Error" });
+                }
+                else
                 {
                     var responseIn = await usersServices.InsertUser(request);
                     _logger.LogInformation($"Finaliza método UsersController.Create {JsonConvert.SerializeObject(responseIn)}");
 
                     return Ok(new { message = "Se creo el usuario de manera exitosa", state = "Success" });
-                }
-                catch (Exception ex)
-                {
-                    _logger.LogError($"Error en el método UsersController.Create : {JsonConvert.SerializeObject(ex.Message)}");
-                    return BadRequest(new { message = "Error al crear el usuario", state = "Error" });
+                  
                 }
             }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error en el método UsersController.Create : {JsonConvert.SerializeObject(ex.Message)}");
+                return BadRequest(new { message = "Error al crear el usuario", state = "Error" });
+            }
+            
         }
 
         [HttpGet]
@@ -165,36 +197,38 @@ namespace ParameterControl.Controllers.Users
         [HttpPost]
         public async Task<ActionResult> EditUser([FromBody] modUser.User request)
         {
-            var user = await usersServices.GetUsersByCode(request.Code);
+            try
+            {
+                var user = await usersServices.GetUsersByCode(request.Code);
 
-            if (user.Code == 0)
-            {
-                _logger.LogError($"Error el usuario no existe : {JsonConvert.SerializeObject(request)}");
-                return BadRequest(new { message = "No existe un usuario con el codigo" + user.Code, state = "Error" });
-            }
-            else
-            {
-                request.CreationDate = user.CreationDate;
-            }
-            if (!ModelState.IsValid)
-            {
-                _logger.LogError($"Error en el modelo : {JsonConvert.SerializeObject(request)}");
-                return BadRequest(new { message = "Error en la informacion enviada", state = "Error" });
-            }
-            else
-            {
-                try
+                if (user.Code == 0)
+                {
+                    _logger.LogError($"Error el usuario no existe : {JsonConvert.SerializeObject(request)}");
+                    return BadRequest(new { message = "No existe un usuario con el codigo" + user.Code, state = "Error" });
+                }
+                else
+                {
+                    request.CreationDate = user.CreationDate;
+                }
+                if (!ModelState.IsValid)
+                {
+                    _logger.LogError($"Error en el modelo : {JsonConvert.SerializeObject(request)}");
+                    return BadRequest(new { message = "Error en la informacion enviada", state = "Error" });
+                }
+                else
                 {
                     var responseIn = await usersServices.UpdateUser(request);
                     _logger.LogInformation($"Finaliza método UsersController.Edit {JsonConvert.SerializeObject(responseIn)}");
                     return Ok(new { message = "Se actualizo el usuario de manera exitosa", state = "Success" });
-                }
-                catch (Exception ex)
-                {
-                    _logger.LogError($"Error en el método UsersController.Edit : {JsonConvert.SerializeObject(ex.Message)}");
-                    return BadRequest(new { message = "Error al actualizar el usuario", state = "Error" });
+
                 }
             }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error en el método UsersController.Edit : {JsonConvert.SerializeObject(ex.Message)}");
+                return BadRequest(new { message = "Error al actualizar el usuario", state = "Error" });
+            }
+
         }
 
         [HttpGet]

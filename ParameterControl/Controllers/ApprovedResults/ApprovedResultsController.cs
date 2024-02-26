@@ -37,50 +37,68 @@ namespace ParameterControl.Controllers.ApprovedResults
         [HttpGet]
         public async Task<ActionResult> ApprovedResults()
         {
-            List<modApprovedResult.ApprovedResult> approvedResults = await approvedResultsServices.GetApprovedResults();
+            try
+            {
+                List<modApprovedResult.ApprovedResult> approvedResults = await approvedResultsServices.GetApprovedResults();
 
-            TableApprovedResults.Data = await approvedResultsServices.GetApprovedResultsFormat(approvedResults);
-            TableApprovedResults.Rows = rows.RowsApprovedResults();
-            TableApprovedResults.IsCreate = false;
-            TableApprovedResults.IsActivate = false;
-            TableApprovedResults.IsEdit = false;
-            TableApprovedResults.IsView = false;
-            TableApprovedResults.IsInactivate = false;
-            TableApprovedResults.Filter = true;
-            ViewBag.ApplyFilter = false;
+                TableApprovedResults.Data = await approvedResultsServices.GetApprovedResultsFormat(approvedResults);
+                TableApprovedResults.Rows = rows.RowsApprovedResults();
+                TableApprovedResults.IsCreate = false;
+                TableApprovedResults.IsActivate = false;
+                TableApprovedResults.IsEdit = false;
+                TableApprovedResults.IsView = false;
+                TableApprovedResults.IsInactivate = false;
+                TableApprovedResults.Filter = true;
+                ViewBag.ApplyFilter = false;
 
-            return View("ApprovedResults", TableApprovedResults);
+                ViewBag.Success = true;
+                return View("ApprovedResults", TableApprovedResults);
+            }
+            catch (Exception)
+            {
+                ViewBag.Success = false;
+                return View("ApprovedResults", null);
+            }
         }
 
 
         [HttpGet]
         public async Task<ActionResult> ApprovedResultsFilter(string filterColunm = "", string filterValue = "", string typeRow = "")
         {
-            if (filterColunm == null || filterColunm == "" || filterValue == null || filterValue == "")
+            try
             {
-                return RedirectToAction("ApprovedResults");
+                if (filterColunm == null || filterColunm == "" || filterValue == null || filterValue == "")
+                {
+                    return RedirectToAction("ApprovedResults");
+                }
+
+                FilterViewModel filter = new FilterViewModel()
+                {
+                    ColumValue = filterColunm,
+                    ValueFilter = filterValue,
+                    TypeRow = typeRow
+                };
+
+                List<ApprovedResultViewModel> approvedResultsFilter = await approvedResultsServices.GetFilterApprovedResults(filter);
+
+                TableApprovedResults.Data = approvedResultsFilter;
+                TableApprovedResults.Rows = rows.RowsApprovedResults();
+                TableApprovedResults.IsCreate = false;
+                TableApprovedResults.IsActivate = false;
+                TableApprovedResults.IsEdit = false;
+                TableApprovedResults.IsView = false;
+                TableApprovedResults.IsInactivate = false;
+                TableApprovedResults.Filter = true;
+                ViewBag.ApplyFilter = true;
+
+                ViewBag.Success = true;
+                return View("ApprovedResultsFilter", TableApprovedResults);
             }
-
-            FilterViewModel filter = new FilterViewModel()
+            catch (Exception)
             {
-                ColumValue = filterColunm,
-                ValueFilter = filterValue,
-                TypeRow = typeRow
-            };
-
-            List<ApprovedResultViewModel> approvedResultsFilter = await approvedResultsServices.GetFilterApprovedResults(filter);
-
-            TableApprovedResults.Data = approvedResultsFilter;
-            TableApprovedResults.Rows = rows.RowsApprovedResults();
-            TableApprovedResults.IsCreate = false;
-            TableApprovedResults.IsActivate = false;
-            TableApprovedResults.IsEdit = false;
-            TableApprovedResults.IsView = false;
-            TableApprovedResults.IsInactivate = false;
-            TableApprovedResults.Filter = true;
-            ViewBag.ApplyFilter = true;
-
-            return View("ApprovedResultsFilter", TableApprovedResults);
+                ViewBag.Success = false;
+                return View("ApprovedResultsFilter", null);
+            }
         }
 
         [HttpGet]

@@ -1,9 +1,9 @@
-﻿@using ParameterControl.Models.User
+﻿@using ParameterControl.Models.Parameter
 @using ParameterControl.Models.Pagination
-@model PaginationResult<TableUserViewModel>
+@model PaginationResult<TableParametersViewModel>
 
 @{
-    ViewData["Title"] = "Usuarios";
+    ViewData["Title"] = "Parametros";
     string ErrorSuccess = "Se genero un problema al obtener la informacion,Home";
 }
 
@@ -15,7 +15,7 @@
 }
 else
 {
-    <partial name="_TableUsers" model="Model" />
+    <partial name="_TableParameters" model="Model" />
 }
 
 @section Scripts {

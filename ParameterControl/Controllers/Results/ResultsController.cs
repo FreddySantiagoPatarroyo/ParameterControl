@@ -36,50 +36,69 @@ namespace ParameterControl.Controllers.Results
         [HttpGet]
         public async Task<ActionResult> Results()
         {
-            List<modResult.Result> results = await resultsServices.GetResults();
+            try
+            {
+                List<modResult.Result> results = await resultsServices.GetResults();
 
-            TableResults.Data = await resultsServices.GetResultsFormat(results);
-            TableResults.Rows = rows.RowsResults();
-            TableResults.IsCreate = false;
-            TableResults.IsActivate = false;
-            TableResults.IsEdit = false;
-            TableResults.IsView = false;
-            TableResults.IsInactivate = false;
-            TableResults.Filter = true;
-            ViewBag.ApplyFilter = false;
+                TableResults.Data = await resultsServices.GetResultsFormat(results);
+                TableResults.Rows = rows.RowsResults();
+                TableResults.IsCreate = false;
+                TableResults.IsActivate = false;
+                TableResults.IsEdit = false;
+                TableResults.IsView = false;
+                TableResults.IsInactivate = false;
+                TableResults.Filter = true;
+                ViewBag.ApplyFilter = false;
 
-            return View("Results", TableResults);
+                ViewBag.Success = true;
+                return View("Results", TableResults);
+            }
+            catch (Exception)
+            {
+                ViewBag.Success = false;
+                return View("Results", null);
+            }
+           
         }
 
 
         [HttpGet]
         public async Task<ActionResult> ResultsFilter(string filterColunm = "", string filterValue = "", string typeRow = "")
         {
-            if (filterColunm == null || filterColunm == "" || filterValue == null || filterValue == "")
+            try
             {
-                return RedirectToAction("Results");
+                if (filterColunm == null || filterColunm == "" || filterValue == null || filterValue == "")
+                {
+                    return RedirectToAction("Results");
+                }
+
+                FilterViewModel filter = new FilterViewModel()
+                {
+                    ColumValue = filterColunm,
+                    ValueFilter = filterValue,
+                    TypeRow = typeRow
+                };
+
+                List<ResultViewModel> resultsFilter = await resultsServices.GetFilterResults(filter);
+
+                TableResults.Data = resultsFilter;
+                TableResults.Rows = rows.RowsResults();
+                TableResults.IsCreate = false;
+                TableResults.IsActivate = false;
+                TableResults.IsEdit = false;
+                TableResults.IsView = false;
+                TableResults.IsInactivate = false;
+                TableResults.Filter = true;
+                ViewBag.ApplyFilter = true;
+
+                ViewBag.Success = true;
+                return View("ResultsFilter", TableResults);
             }
-
-            FilterViewModel filter = new FilterViewModel()
+            catch (Exception)
             {
-                ColumValue = filterColunm,
-                ValueFilter = filterValue,
-                TypeRow = typeRow
-            };
-
-            List<ResultViewModel> resultsFilter = await resultsServices.GetFilterResults(filter);
-
-            TableResults.Data = resultsFilter;
-            TableResults.Rows = rows.RowsResults();
-            TableResults.IsCreate = false;
-            TableResults.IsActivate = false;
-            TableResults.IsEdit = false;
-            TableResults.IsView = false;
-            TableResults.IsInactivate = false;
-            TableResults.Filter = true;
-            ViewBag.ApplyFilter = true;
-
-            return View("ResultsFilter", TableResults);
+                ViewBag.Success = false;
+                return View("ResultsFilter", null);
+            }
         }
 
         [HttpGet]

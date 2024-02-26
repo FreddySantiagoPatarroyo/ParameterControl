@@ -5,12 +5,14 @@ using ParameterControl.Models.Conciliation;
 using ParameterControl.Models.Filter;
 using ParameterControl.Models.Pagination;
 using ParameterControl.Models.Policy;
+using ParameterControl.Models.Result;
 using ParameterControl.Models.Scenery;
 using ParameterControl.Services.Authenticated;
 using ParameterControl.Services.Conciliations;
 using ParameterControl.Services.Policies;
 using ParameterControl.Services.Rows;
 using ParameterControl.Services.Scenarios;
+using System.Reflection;
 using modConciliation = ParameterControl.Models.Conciliation;
 using modScenery = ParameterControl.Models.Scenery;
 
@@ -41,108 +43,138 @@ namespace ParameterControl.Controllers.Scenarios
         [HttpGet]
         public async Task<ActionResult> Scenarios(PaginationViewModel paginationViewModel)
         {
-            List<modScenery.Scenery> Scenarios = await scenariosServices.GetScenariosPagination(paginationViewModel);
-            int TotalScenarios = await scenariosServices.CountScenarios();
-
-            TableScenarios.Data = await scenariosServices.GetScenariosFormat(Scenarios);
-            TableScenarios.Rows = rows.RowsScenarios();
-            TableScenarios.IsCreate = true;
-            TableScenarios.IsActivate = true;
-            TableScenarios.IsEdit = true;
-            TableScenarios.IsView = true;
-            TableScenarios.IsInactivate = true;
-            TableScenarios.Filter = true;
-            ViewBag.ApplyFilter = false;
-
-            var resultViemModel = new PaginationResult<TableScenariosViewModel>()
+            try
             {
-                Elements = TableScenarios,
-                Page = paginationViewModel.Page,
-                RecordsPage = paginationViewModel.RecordsPage,
-                TotalRecords = TotalScenarios,
-                BaseUrl = Url.Action() + "?"
-            };
+                List<modScenery.Scenery> Scenarios = await scenariosServices.GetScenariosPagination(paginationViewModel);
+                int TotalScenarios = await scenariosServices.CountScenarios();
 
-            return View("Scenarios", resultViemModel);
+                TableScenarios.Data = await scenariosServices.GetScenariosFormat(Scenarios);
+                TableScenarios.Rows = rows.RowsScenarios();
+                TableScenarios.IsCreate = true;
+                TableScenarios.IsActivate = true;
+                TableScenarios.IsEdit = true;
+                TableScenarios.IsView = true;
+                TableScenarios.IsInactivate = true;
+                TableScenarios.Filter = true;
+                ViewBag.ApplyFilter = false;
+
+                var resultViemModel = new PaginationResult<TableScenariosViewModel>()
+                {
+                    Elements = TableScenarios,
+                    Page = paginationViewModel.Page,
+                    RecordsPage = paginationViewModel.RecordsPage,
+                    TotalRecords = TotalScenarios,
+                    BaseUrl = Url.Action() + "?"
+                };
+
+                ViewBag.Success = true;
+                return View("Scenarios", resultViemModel);
+            }
+            catch (Exception)
+            {
+                ViewBag.Success = false;
+                return View("Scenarios", null);
+            }
         }
 
         [HttpGet]
         public async Task<ActionResult> ScenariosFilter(PaginationViewModel paginationViewModel, string filterColunm = "", string filterValue = "", string typeRow = "")
         {
-            if (filterColunm == null || filterColunm == "" || filterValue == null || filterValue == "")
+            try
             {
-                return RedirectToAction("Scenarios");
+                if (filterColunm == null || filterColunm == "" || filterValue == null || filterValue == "")
+                {
+                    return RedirectToAction("Scenarios");
+                }
+
+                FilterViewModel filter = new FilterViewModel()
+                {
+                    ColumValue = filterColunm,
+                    ValueFilter = filterValue,
+                    TypeRow = typeRow
+                };
+
+                List<SceneryViewModel> scenariosFilter = await scenariosServices.GetFilterScenarios(filter);
+                int TotalScenarios = scenariosFilter.Count();
+
+                TableScenarios.Data = scenariosServices.GetFilterPagination(scenariosFilter, paginationViewModel, TotalScenarios);
+                TableScenarios.Rows = rows.RowsScenarios();
+                TableScenarios.IsCreate = true;
+                TableScenarios.IsActivate = true;
+                TableScenarios.IsEdit = true;
+                TableScenarios.IsView = true;
+                TableScenarios.IsInactivate = true;
+                TableScenarios.Filter = true;
+                ViewBag.ApplyFilter = true;
+
+                var resultViemModel = new PaginationResult<TableScenariosViewModel>()
+                {
+                    Elements = TableScenarios,
+                    Page = paginationViewModel.Page,
+                    RecordsPage = paginationViewModel.RecordsPage,
+                    TotalRecords = TotalScenarios,
+                    BaseUrl = Url.Action() + "?filterColunm=" + filterColunm + "&filterValue=" + filterValue + "&typeRow=" + typeRow + "&"
+                };
+
+                ViewBag.Success = true;
+                return View("Scenarios", resultViemModel);
             }
-
-            FilterViewModel filter = new FilterViewModel()
+            catch (Exception)
             {
-                ColumValue = filterColunm,
-                ValueFilter = filterValue,
-                TypeRow = typeRow
-            };
-
-            List<SceneryViewModel> scenariosFilter = await scenariosServices.GetFilterScenarios(filter);
-            int TotalScenarios = scenariosFilter.Count();
-
-            TableScenarios.Data = scenariosServices.GetFilterPagination(scenariosFilter, paginationViewModel, TotalScenarios);
-            TableScenarios.Rows = rows.RowsScenarios();
-            TableScenarios.IsCreate = true;
-            TableScenarios.IsActivate = true;
-            TableScenarios.IsEdit = true;
-            TableScenarios.IsView = true;
-            TableScenarios.IsInactivate = true;
-            TableScenarios.Filter = true;
-            ViewBag.ApplyFilter = true;
-
-            var resultViemModel = new PaginationResult<TableScenariosViewModel>()
-            {
-                Elements = TableScenarios,
-                Page = paginationViewModel.Page,
-                RecordsPage = paginationViewModel.RecordsPage,
-                TotalRecords = TotalScenarios,
-                BaseUrl = Url.Action() + "?filterColunm=" + filterColunm + "&filterValue=" + filterValue + "&typeRow=" + typeRow + "&"
-            };
-
-            return View("Scenarios", resultViemModel);
+                ViewBag.Success = false;
+                return View("Scenarios", null);
+            }
         }
 
 
         [HttpGet]
         public async Task<ActionResult> Create()
         {
-            List<SelectListItem> ImpactOptionsList = await scenariosServices.GetImpact();
-            List<SelectListItem> ConciliationOptionsList = await GetConciliation();
-
-            SceneryCreateViewModel model = new SceneryCreateViewModel()
+            try
             {
-                ImpactOptions = ImpactOptionsList,
-                ConciliationOptions = ConciliationOptionsList
-            };
+                List<SelectListItem> ImpactOptionsList = await scenariosServices.GetImpact();
+                List<SelectListItem> ConciliationOptionsList = await GetConciliation();
 
-            return View("Actions/CreateScenery", model);
+                SceneryCreateViewModel model = new SceneryCreateViewModel()
+                {
+                    ImpactOptions = ImpactOptionsList,
+                    ConciliationOptions = ConciliationOptionsList
+                };
+
+                ViewBag.Success = true;
+                return View("Actions/CreateScenery", model);
+            }
+            catch (Exception)
+            {
+                ViewBag.Success = false;
+                return View("Actions/CreateScenery", null);
+            }
         }
 
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] modScenery.Scenery request)
         {
-            if (!ModelState.IsValid)
+            try
             {
-                return BadRequest(new { message = "Error en la informacion enviada", state = "Error" });
-            }
-            else
-            {
-                try
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(new { message = "Error en la informacion enviada", state = "Error" });
+                }
+                else
                 {
                     var responseIn = await scenariosServices.InsertScenery(request);
                     _logger.LogInformation($"Finaliza método ScenariosController.Create {responseIn}");
                     return Ok(new { message = "Se creo el escenario de manera exitosa", state = "Success" });
+                   
                 }
-                catch (Exception ex)
-                {
-                    _logger.LogError($"Error en el método ScenariosController.Create : {JsonConvert.SerializeObject(ex.Message)}");
-                    return BadRequest(new { message = "Error al crear el escenario", state = "Error" });
-                }
+
             }
+            catch(Exception ex)
+            {
+                   _logger.LogError($"Error en el método ScenariosController.Create : {JsonConvert.SerializeObject(ex.Message)}");
+                   return BadRequest(new { message = "Error al crear el escenario", state = "Error" });
+            }
+           
         }
 
         [HttpGet]
@@ -180,36 +212,39 @@ namespace ParameterControl.Controllers.Scenarios
         [HttpPost]
         public async Task<ActionResult> Edit([FromBody] modScenery.Scenery request)
         {
-            var scenery = await scenariosServices.GetSceneryByCode(request.Code);
+            try
+            {
+                var scenery = await scenariosServices.GetSceneryByCode(request.Code);
 
-            if (scenery.Code == 0)
-            {
-                _logger.LogError($"Error el escenario no existe : {JsonConvert.SerializeObject(request)}");
-                return BadRequest(new { message = "No existe el escenario con el codigo" + scenery.Code, state = "Error" });
-            }
-            else
-            {
-                request.CreationDate = scenery.CreationDate;
-            }
-            if (!ModelState.IsValid)
-            {
-                _logger.LogError($"Error en el modelo : {JsonConvert.SerializeObject(request)}");
-                return BadRequest(new { message = "Error en la informacion enviada", state = "Error" });
-            }
-            else
-            {
-                try
+                if (scenery.Code == 0)
+                {
+                    _logger.LogError($"Error el escenario no existe : {JsonConvert.SerializeObject(request)}");
+                    return BadRequest(new { message = "No existe el escenario con el codigo" + scenery.Code, state = "Error" });
+                }
+                else
+                {
+                    request.CreationDate = scenery.CreationDate;
+                }
+                if (!ModelState.IsValid)
+                {
+                    _logger.LogError($"Error en el modelo : {JsonConvert.SerializeObject(request)}");
+                    return BadRequest(new { message = "Error en la informacion enviada", state = "Error" });
+                }
+                else
                 {
                     var responseIn = await scenariosServices.UpdateScenery(request);
                     _logger.LogInformation($"Finaliza método ScenariosController.Edit {responseIn}");
                     return Ok(new { message = "Se actualizo el escenario de manera exitosa", state = "Success" });
+                   
                 }
-                catch (Exception ex)
-                {
-                    _logger.LogError($"Error en el método ScenariosController.Edit : {JsonConvert.SerializeObject(ex.Message)}");
-                    return BadRequest(new { message = "Error al actualizar el escenario", state = "Error" });
-                }
+
             }
+            catch(Exception ex)
+            {
+                     _logger.LogError($"Error en el método ScenariosController.Edit : {JsonConvert.SerializeObject(ex.Message)}");
+                     return BadRequest(new { message = "Error al actualizar el escenario", state = "Error" });
+            }
+            
         }
 
         [HttpGet]

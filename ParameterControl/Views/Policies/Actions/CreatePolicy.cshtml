@@ -3,169 +3,176 @@
 
 @{
     ViewData["Title"] = "Crear Politicas";
-    string MessageError = "Error al crear una politica";
-    string MessageSuccess = "La politica se creo correctamente";
+    string ErrorSuccess = "Se genero un problema al obtener la informacion,Policies";
 }
 
 <partial name="_Menu" />
 
-<div class="box_create">
-    <div class="bg__blur"></div>
+@if (!ViewBag.Success)
+{
+    <partial name="_ModalError" model="ErrorSuccess" />
+}
+else
+{
+    <div class="box_create">
+        <div class="bg__blur"></div>
 
-    <div asp-validation-summary="ModelOnly" class="text_error"></div>
+        <div asp-validation-summary="ModelOnly" class="text_error"></div>
 
-    <form class="form__container">
-        <div class="card__container">
-            <div class="header_form">
-                <img src="/images/iconApple.png" />
-                <h1>Crear Politica</h1>
-            </div>
-
-            @* <div class="form_group">
-                <div class="field">
-                    <label asp-for="Code" class="label_form">Codigo*</label>
-                    <div class="input">
-                        <input asp-for="Code" placeholder="Codigo" autocomplete="off" />
-                    </div>
-                    <span id="CodeError" class="text_error"></span>
+        <form class="form__container">
+            <div class="card__container">
+                <div class="header_form">
+                    <img src="/images/iconApple.png" />
+                    <h1>Crear Politica</h1>
                 </div>
+
+                @* <div class="form_group">
+            <div class="field">
+            <label asp-for="Code" class="label_form">Codigo*</label>
+            <div class="input">
+            <input asp-for="Code" placeholder="Codigo" autocomplete="off" />
+            </div>
+            <span id="CodeError" class="text_error"></span>
+            </div>
             </div> *@
 
-            <div class="form_group">
-                <div class="field">
-                    <label asp-for="Name" class="label_form">Nombre*</label>
-                    <div class="input">
-                        <input asp-for="Name" placeholder="Nombre" autocomplete="off" />
+                <div class="form_group">
+                    <div class="field">
+                        <label asp-for="Name" class="label_form">Nombre*</label>
+                        <div class="input">
+                            <input asp-for="Name" placeholder="Nombre" autocomplete="off" />
+                        </div>
+                        <span id="NameError" class="text_error"></span>
                     </div>
-                    <span id="NameError" class="text_error"></span>
+                </div>
+
+                <div class="form_group">
+                    <div class="field">
+                        <label asp-for="Description" class="label_form">Descripcion*</label>
+                        <div class="textarea">
+                            <textarea asp-for="Description" placeholder="Descripcion"></textarea>
+                        </div>
+                        <span id="DescriptionError" class="text_error"></span>
+                    </div>
+                </div>
+
+                <p class="note_text"><span>Nota: </span>Los campos con (*) son obligatorios</p>
+
+                <div id="btn_container" class="btn_container">
+                    <a class="button button_secondary" asp-controller="Policies" asp-action="Policies"><p class="text font_bold">Cancelar</p></a>
+                    <a href="javascript:void(0)" onclick="sendData()" class="button button_primary"><p class="text font_bold">Crear</p></a>
+                </div>
+                <div id="loading" class="loading">
+                    <span class="loader"></span>
+                </div>
+                <div id="LayoytError" class="layout_content">
+                    <partial name="_MessageError" />
+                </div>
+                <div id="LayoytSuccess" class="layout_content">
+                    <partial name="_MessageSuccess" />
                 </div>
             </div>
+        </form>
+    </div>
 
-            <div class="form_group">
-                <div class="field">
-                    <label asp-for="Description" class="label_form">Descripcion*</label>
-                    <div class="textarea">
-                        <textarea asp-for="Description" placeholder="Descripcion"></textarea>
-                    </div>
-                    <span id="DescriptionError" class="text_error"></span>
-                </div>
-            </div>
-            
-            <p class="note_text"><span>Nota: </span>Los campos con (*) son obligatorios</p>
+    @section Scripts {
+        <partial name="_ValidationScriptsPartial.cshtml" />
+        <script>
+            let viewOptions = false;
 
-            <div id="btn_container" class="btn_container">
-                <a class="button button_secondary" asp-controller="Policies" asp-action="Policies"><p class="text font_bold">Cancelar</p></a>
-                <a href="javascript:void(0)" onclick="sendData()" class="button button_primary"><p class="text font_bold">Crear</p></a>
-            </div>
-            <div id="loading" class="loading">
-                <span class="loader"></span>
-            </div>
-            <div id="LayoytError" class="layout_content">
-                <partial name="_MessageError" model="MessageError" />
-            </div>
-            <div id="LayoytSuccess" class="layout_content">
-                <partial name="_MessageSuccess" model="MessageSuccess" />
-            </div>
-        </div>
-    </form>
-</div>
+            const showOptions = () => {
 
-@section Scripts {
-    <partial name="_ValidationScriptsPartial.cshtml" />
-    <script>
-        let viewOptions = false;
+                let widthOption = document.getElementById("input_select").clientWidth;
+                let options = document.getElementById("options");
+                options.style.width = widthOption + "px";
 
-        const showOptions = () => {
+                viewOptions = !viewOptions;
 
-            let widthOption = document.getElementById("input_select").clientWidth;
-            let options = document.getElementById("options");
-            options.style.width = widthOption + "px";
-
-            viewOptions = !viewOptions;
-
-            if (viewOptions) {
-                document.getElementById('options').style.display = 'block';
-                document.getElementById('select_helper').style.display = 'block';
-            } else {
-                document.getElementById('options').style.display = 'none';
-                document.getElementById('select_helper').style.display = 'none';
-            }
-        }
-
-        const selectOption = (name, value) => {
-
-            if (name == null || value == null || name == '' || value == '') {
-                console.log("vacio");
-                document.getElementById("input_select_filter").value = '';
-                document.getElementById("OperationType").value = '';
-            } else {
-                console.log(value);
-                document.getElementById("input_select_filter").value = name;
-                document.getElementById("OperationType").value = value;
-            }
-            showOptions();
-        }
-    </script>
-
-    <script>
-        const urlPolicy = '@Url.Action("Create")';
-        let data;
-
-        let isValidName = false;
-        let isValidDescription = false;
-
-        const sendData = async () => {
-            isValidName = validateInputEmpty("Name", "El nombre es requerido", "NameError");
-            isValidDescription = validateInputEmpty("Description", "La descripcion es requerido", "DescriptionError");
-
-            if (isValidName && isValidDescription) {
-                document.getElementById('btn_container').style.display = 'none';
-                document.getElementById('loading').style.display = 'flex';
-
-                data = {
-                    Name: $('#Name').val(),
-                    Description: $('#Description').val(),
-                    State: true
+                if (viewOptions) {
+                    document.getElementById('options').style.display = 'block';
+                    document.getElementById('select_helper').style.display = 'block';
+                } else {
+                    document.getElementById('options').style.display = 'none';
+                    document.getElementById('select_helper').style.display = 'none';
                 }
+            }
 
-                console.log(data)
+            const selectOption = (name, value) => {
 
-                const result = await fetch(urlPolicy, {
-                    method: 'POST',
-                    body: JSON.stringify(data),
-                    headers: {
-                        'Content-Type': 'application/json'
+                if (name == null || value == null || name == '' || value == '') {
+                    console.log("vacio");
+                    document.getElementById("input_select_filter").value = '';
+                    document.getElementById("OperationType").value = '';
+                } else {
+                    console.log(value);
+                    document.getElementById("input_select_filter").value = name;
+                    document.getElementById("OperationType").value = value;
+                }
+                showOptions();
+            }
+        </script>
+
+        <script>
+            const urlPolicy = '@Url.Action("Create")';
+            let data;
+
+            let isValidName = false;
+            let isValidDescription = false;
+
+            const sendData = async () => {
+                isValidName = validateInputEmpty("Name", "El nombre es requerido", "NameError");
+                isValidDescription = validateInputEmpty("Description", "La descripcion es requerido", "DescriptionError");
+
+                if (isValidName && isValidDescription) {
+                    document.getElementById('btn_container').style.display = 'none';
+                    document.getElementById('loading').style.display = 'flex';
+
+                    data = {
+                        Name: $('#Name').val(),
+                        Description: $('#Description').val(),
+                        State: true
                     }
-                })
 
-                const json = await result.json();
+                    console.log(data)
 
-                console.log(json);
+                    const result = await fetch(urlPolicy, {
+                        method: 'POST',
+                        body: JSON.stringify(data),
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    })
 
-                if (json.state == "Success") {
-                    document.getElementById('LayoytSuccess').style.display = 'block';
-                    document.getElementById('layout_message_success').innerHTML = json.message;
-                    document.getElementById('loading').style.display = 'none';
-                    setTimeout(()=>{
-                        location.href = '/Policies/Policies';
-                    }, 3000)
-                }else{
-                    document.getElementById('LayoytError').style.display = 'block';
-                    document.getElementById('layout_message_error').innerHTML = json.message;
-                    document.getElementById('loading').style.display = 'none';
+                    const json = await result.json();
+
+                    console.log(json);
+
+                    if (json.state == "Success") {
+                        document.getElementById('LayoytSuccess').style.display = 'block';
+                        document.getElementById('layout_message_success').innerHTML = json.message;
+                        document.getElementById('loading').style.display = 'none';
+                        setTimeout(() => {
+                            location.href = '/Policies/Policies';
+                        }, 3000)
+                    } else {
+                        document.getElementById('LayoytError').style.display = 'block';
+                        document.getElementById('layout_message_error').innerHTML = json.message;
+                        document.getElementById('loading').style.display = 'none';
+                    }
                 }
             }
-        }
 
-        const validateInputEmpty = (idInput, messaje, idError) =>{
-            if ($(`#${idInput}`).val() == "" || $(`#${idInput}`).val() == null) {
-                $(`#${idError}`).text(`${messaje}`);
-                return false;
-            } else {
-                $(`#${idError}`).text("");
-                return true;
+            const validateInputEmpty = (idInput, messaje, idError) => {
+                if ($(`#${idInput}`).val() == "" || $(`#${idInput}`).val() == null) {
+                    $(`#${idError}`).text(`${messaje}`);
+                    return false;
+                } else {
+                    $(`#${idError}`).text("");
+                    return true;
+                }
             }
-        }
-    </script>
+        </script>
+    }
 }
+
 

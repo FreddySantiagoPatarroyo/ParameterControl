@@ -36,48 +36,66 @@ namespace ParameterControl.Controllers.Indicators
         [HttpGet]
         public async Task<ActionResult> Indicators()
         {
-            List<Indicator> indicators = await indicatorsService.GetIndicators();
+            try
+            {
+                List<Indicator> indicators = await indicatorsService.GetIndicators();
 
-            TableIndicators.Data = await indicatorsService.GetindicatorsFormat(indicators);
-            TableIndicators.Rows = rows.RowsIndicators();
-            TableIndicators.IsCreate = true;
-            TableIndicators.IsActivate = true;
-            TableIndicators.IsEdit = true;
-            TableIndicators.IsView = true;
-            TableIndicators.IsInactivate = true;
-            ViewBag.ApplyFilter = false;
+                TableIndicators.Data = await indicatorsService.GetindicatorsFormat(indicators);
+                TableIndicators.Rows = rows.RowsIndicators();
+                TableIndicators.IsCreate = true;
+                TableIndicators.IsActivate = true;
+                TableIndicators.IsEdit = true;
+                TableIndicators.IsView = true;
+                TableIndicators.IsInactivate = true;
+                ViewBag.ApplyFilter = false;
 
-            return View("Indicators", TableIndicators);
+                ViewBag.Success = true;
+                return View("Indicators", TableIndicators);
+            }
+            catch (Exception)
+            {
+                ViewBag.Success = false;
+                return View("Indicators", null);
+            }
         }
 
 
         [HttpGet]
         public async Task<ActionResult> IndicatorsFilter(string filterColunm = "", string filterValue = "", string typeRow = "")
         {
-            if (filterColunm == null || filterColunm == "" || filterValue == null || filterValue == "")
+            try
             {
-                return RedirectToAction("Indicators");
+                if (filterColunm == null || filterColunm == "" || filterValue == null || filterValue == "")
+                {
+                    return RedirectToAction("Indicators");
+                }
+
+                FilterViewModel filter = new FilterViewModel()
+                {
+                    ColumValue = filterColunm,
+                    ValueFilter = filterValue,
+                    TypeRow = typeRow
+                };
+
+                List<IndicatorViewModel> indicatorsFilter = await indicatorsService.GetFilterIndicators(filter);
+
+                TableIndicators.Data = indicatorsFilter;
+                TableIndicators.Rows = rows.RowsIndicators();
+                TableIndicators.IsCreate = true;
+                TableIndicators.IsActivate = true;
+                TableIndicators.IsEdit = true;
+                TableIndicators.IsView = true;
+                TableIndicators.IsInactivate = true;
+                ViewBag.ApplyFilter = true;
+
+                ViewBag.Success = true;
+                return View("IndicatorsFilter", TableIndicators);
             }
-
-            FilterViewModel filter = new FilterViewModel()
+            catch (Exception)
             {
-                ColumValue = filterColunm,
-                ValueFilter = filterValue,
-                TypeRow = typeRow
-            };
-
-            List<IndicatorViewModel> indicatorsFilter = await indicatorsService.GetFilterIndicators(filter);
-
-            TableIndicators.Data = indicatorsFilter;
-            TableIndicators.Rows = rows.RowsIndicators();
-            TableIndicators.IsCreate = true;
-            TableIndicators.IsActivate = true;
-            TableIndicators.IsEdit = true;
-            TableIndicators.IsView = true;
-            TableIndicators.IsInactivate = true;
-            ViewBag.ApplyFilter = true;
-
-            return View("IndicatorsFilter", TableIndicators);
+                ViewBag.Success = false;
+                return View("IndicatorsFilter", null);
+            }
         }
 
         [HttpGet]

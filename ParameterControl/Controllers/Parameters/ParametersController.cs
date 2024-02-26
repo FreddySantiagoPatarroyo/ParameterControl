@@ -7,12 +7,16 @@ using ParameterControl.Models.Filter;
 using ParameterControl.Models.Pagination;
 using ParameterControl.Models.Parameter;
 using ParameterControl.Models.Policy;
+using ParameterControl.Models.Result;
 using ParameterControl.Services.Authenticated;
 using ParameterControl.Services.Conciliations;
 using ParameterControl.Services.Parameters;
 using ParameterControl.Services.Policies;
 using ParameterControl.Services.Rows;
+using System.Reflection;
 using modParameter = ParameterControl.Models.Parameter;
+using modConciliation = ParameterControl.Models.Conciliation;
+using System.Collections.Generic;
 
 
 namespace ParameterControl.Controllers.Parameters
@@ -41,112 +45,185 @@ namespace ParameterControl.Controllers.Parameters
         [HttpGet]
         public async Task<ActionResult> Parameters(PaginationViewModel paginationViewModel)
         {
-            List<modParameter.Parameter> parameters = await parametersService.GetParametersPagination(paginationViewModel);
-            int TotalParameters = await parametersService.CountParameters();
-
-            TableParameters.Data = await parametersService.GetParametersFormat(parameters);
-            TableParameters.Rows = rows.RowsParameters();
-            TableParameters.Filter = true;
-            TableParameters.IsCreate = true;
-            TableParameters.IsActivate = true;
-            TableParameters.IsEdit = true;
-            TableParameters.IsView = true;
-            TableParameters.IsInactivate = true;
-            TableParameters.Filter = true;
-            ViewBag.ApplyFilter = false;
-
-            var resultViemModel = new PaginationResult<TableParametersViewModel>()
+            try
             {
-                Elements = TableParameters,
-                Page = paginationViewModel.Page,
-                RecordsPage = paginationViewModel.RecordsPage,
-                TotalRecords = TotalParameters,
-                BaseUrl = Url.Action() + "?"
-            };
+                List<modParameter.Parameter> parameters = await parametersService.GetParametersPagination(paginationViewModel);
+                int TotalParameters = await parametersService.CountParameters();
 
-            return View("Parameters", resultViemModel);
+                TableParameters.Data = await parametersService.GetParametersFormat(parameters);
+                TableParameters.Rows = rows.RowsParameters();
+                TableParameters.Filter = true;
+                TableParameters.IsCreate = true;
+                TableParameters.IsActivate = true;
+                TableParameters.IsEdit = true;
+                TableParameters.IsView = true;
+                TableParameters.IsInactivate = true;
+                TableParameters.Filter = true;
+                ViewBag.ApplyFilter = false;
+
+                var resultViemModel = new PaginationResult<TableParametersViewModel>()
+                {
+                    Elements = TableParameters,
+                    Page = paginationViewModel.Page,
+                    RecordsPage = paginationViewModel.RecordsPage,
+                    TotalRecords = TotalParameters,
+                    BaseUrl = Url.Action() + "?"
+                };
+
+                ViewBag.Success = true;
+                return View("Parameters", resultViemModel);
+            }
+            catch (Exception)
+            {
+                ViewBag.Success = false;
+                return View("Parameters", null);
+            }
+            
         }
 
         [HttpGet]
         public async Task<ActionResult> ParametersFilter(PaginationViewModel paginationViewModel, string filterColunm = "", string filterValue = "", string typeRow = "")
         {
-            if (filterColunm == null || filterColunm == "" || filterValue == null || filterValue == "")
+            try
             {
-                return RedirectToAction("Parameters");
+                if (filterColunm == null || filterColunm == "" || filterValue == null || filterValue == "")
+                {
+                    return RedirectToAction("Parameters");
+                }
+
+                FilterViewModel filter = new FilterViewModel()
+                {
+                    ColumValue = filterColunm,
+                    ValueFilter = filterValue,
+                    TypeRow = typeRow
+                };
+
+                List<ParameterViewModel> parametersFilter = await parametersService.GetFilterParameters(filter);
+                int TotalParameters = parametersFilter.Count();
+
+                TableParameters.Data = parametersService.GetFilterPagination(parametersFilter, paginationViewModel, TotalParameters);
+                TableParameters.Rows = rows.RowsParameters();
+                TableParameters.Filter = true;
+                TableParameters.IsCreate = true;
+                TableParameters.IsActivate = true;
+                TableParameters.IsEdit = true;
+                TableParameters.IsView = true;
+                TableParameters.IsInactivate = true;
+
+                var resultViemModel = new PaginationResult<TableParametersViewModel>()
+                {
+                    Elements = TableParameters,
+                    Page = paginationViewModel.Page,
+                    RecordsPage = paginationViewModel.RecordsPage,
+                    TotalRecords = TotalParameters,
+                    BaseUrl = Url.Action() + "?filterColunm=" + filterColunm + "&filterValue=" + filterValue + "&typeRow=" + typeRow + "&"
+                };
+
+                ViewBag.ApplyFilter = true;
+
+                ViewBag.Success = true;
+                return View("ParametersFilter", resultViemModel);
             }
-
-            FilterViewModel filter = new FilterViewModel()
+            catch (Exception)
             {
-                ColumValue = filterColunm,
-                ValueFilter = filterValue,
-                TypeRow = typeRow
-            };
+                ViewBag.Success = false;
+                return View("ParametersFilter", null);
+            }
+        }
 
-            List<ParameterViewModel> parametersFilter = await parametersService.GetFilterParameters(filter);
-            int TotalParameters = parametersFilter.Count();
-
-            TableParameters.Data = parametersService.GetFilterPagination(parametersFilter, paginationViewModel, TotalParameters);
-
-            TableParameters.Rows = rows.RowsParameters();
-
-            TableParameters.Filter = true;
-            TableParameters.IsCreate = true;
-            TableParameters.IsActivate = true;
-            TableParameters.IsEdit = true;
-            TableParameters.IsView = true;
-            TableParameters.IsInactivate = true;
-
-            var resultViemModel = new PaginationResult<TableParametersViewModel>()
+        [HttpGet]
+        public async Task<ActionResult> ParametersConciliationFilter(PaginationViewModel paginationViewModel, string conciliation = "")
+        {
+            try
             {
-                Elements = TableParameters,
-                Page = paginationViewModel.Page,
-                RecordsPage = paginationViewModel.RecordsPage,
-                TotalRecords = TotalParameters,
-                BaseUrl = Url.Action() + "?filterColunm=" + filterColunm + "&filterValue=" + filterValue + "&typeRow=" + typeRow + "&"
-            };
+                if (conciliation == null)
+                {
+                    return RedirectToAction("Parameters");
+                }
 
-            ViewBag.ApplyFilter = true;
+                List<modParameter.Parameter> parametersConciliation = await parametersService.GetParametersByConciliation(conciliation);
+                List <ParameterViewModel> parametersFilter = await parametersService.GetParametersFormat(parametersConciliation);
+                int TotalParameters = parametersFilter.Count();
 
-            return View("ParametersFilter", resultViemModel);
+                TableParameters.Data = parametersService.GetFilterPagination(parametersFilter, paginationViewModel, TotalParameters);
+                TableParameters.Rows = rows.RowsParameters();
+                TableParameters.Filter = true;
+                TableParameters.IsCreate = true;
+                TableParameters.IsActivate = true;
+                TableParameters.IsEdit = true;
+                TableParameters.IsView = true;
+                TableParameters.IsInactivate = true;
+
+                var resultViemModel = new PaginationResult<TableParametersViewModel>()
+                {
+                    Elements = TableParameters,
+                    Page = paginationViewModel.Page,
+                    RecordsPage = paginationViewModel.RecordsPage,
+                    TotalRecords = TotalParameters,
+                    BaseUrl = Url.Action() + "?conciliation=" + conciliation + "&"
+                };
+
+                ViewBag.ApplyFilter = true;
+
+                ViewBag.Success = true;
+                return View("ParametersFilterConciliation", resultViemModel);
+            }
+            catch (Exception)
+            {
+                ViewBag.Success = false;
+                return View("ParametersFilterConciliation", null);
+            }
         }
 
         [HttpGet]
         public async Task<ActionResult> Create()
         {
-            List<SelectListItem> ParameterTypeOptionList = await parametersService.GetParameterType();
-            List<SelectListItem> GetListParameterList = await GetParameters();
-
-            ParameterCreateViewModel model = new ParameterCreateViewModel()
+            try
             {
-                ParameterTypeOption = ParameterTypeOptionList,
-                ListParameter = GetListParameterList
-            };
+                List<SelectListItem> ParameterTypeOptionList = await parametersService.GetParameterType();
+                List<SelectListItem> GetListParameterList = await GetParameters();
 
-            return View("Actions/CreateParameter", model);
+                ParameterCreateViewModel model = new ParameterCreateViewModel()
+                {
+                    ParameterTypeOption = ParameterTypeOptionList,
+                    ListParameter = GetListParameterList
+                };
+
+                ViewBag.Success = true;
+                return View("Actions/CreateParameter", model);
+            }
+            catch (Exception)
+            {
+                ViewBag.Success = false;
+                return View("Actions/CreateParameter", null);
+            }
+           
         }
 
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] modParameter.Parameter request)
         {
-            if (!ModelState.IsValid)
+            try
             {
-                _logger.LogError($"Error en el modelo : {JsonConvert.SerializeObject(request)}");
-                return BadRequest(new { message = "Error en la informacion enviada", state = "Error" });
-            }
-            else
-            {
-                try
+                if (!ModelState.IsValid)
+                {
+                    _logger.LogError($"Error en el modelo : {JsonConvert.SerializeObject(request)}");
+                    return BadRequest(new { message = "Error en la informacion enviada", state = "Error" });
+                }
+                else
                 {
                     var responseIn = await parametersService.InsertParameter(request);
                     _logger.LogInformation($"Finaliza método ParametersController.Create {responseIn}");
                     return Ok(new { message = "Se creo el parametro de manera exitosa", state = "Success" });
-                }
-                catch (Exception ex)
-                {
-                    _logger.LogError($"Error en el método ParametersController.Create : {JsonConvert.SerializeObject(ex.Message)}");
-                    return BadRequest(new { message = "Error al crear el parametro", state = "Error" });
+                   
                 }
             }
+            catch (Exception ex)
+            {
+                     _logger.LogError($"Error en el método ParametersController.Create : {JsonConvert.SerializeObject(ex.Message)}");
+                     return BadRequest(new { message = "Error al crear el parametro", state = "Error" });
+            }
+            
         }
 
         [HttpGet]
@@ -184,35 +261,35 @@ namespace ParameterControl.Controllers.Parameters
         [HttpPost]
         public async Task<IActionResult> Edit([FromBody] modParameter.Parameter request)
         {
-            var parameter = await parametersService.GetParameterByCode(request.Code);
+            try
+            {
+                var parameter = await parametersService.GetParameterByCode(request.Code);
 
-            if (parameter.Code == 0)
-            {
-                _logger.LogError($"Error el parametro no existe : {JsonConvert.SerializeObject(request)}");
-                return BadRequest(new { message = "No existe un parametro con el codigo" + parameter.Code, state = "Error" });
-            }
-            else
-            {
-                request.CreationDate = parameter.CreationDate;
-            }
-            if (!ModelState.IsValid)
-            {
-                _logger.LogError($"Error en el modelo : {JsonConvert.SerializeObject(request)}");
-                return BadRequest(new { message = "Error en la informacion enviada", state = "Error" });
-            }
-            else
-            {
-                try
+                if (parameter.Code == 0)
+                {
+                    _logger.LogError($"Error el parametro no existe : {JsonConvert.SerializeObject(request)}");
+                    return BadRequest(new { message = "No existe un parametro con el codigo" + parameter.Code, state = "Error" });
+                }
+                else
+                {
+                    request.CreationDate = parameter.CreationDate;
+                }
+                if (!ModelState.IsValid)
+                {
+                    _logger.LogError($"Error en el modelo : {JsonConvert.SerializeObject(request)}");
+                    return BadRequest(new { message = "Error en la informacion enviada", state = "Error" });
+                }
+                else
                 {
                     var responseIn = await parametersService.UpdateParameter(request);
                     _logger.LogInformation($"Finaliza método ParametersController.Edit {responseIn}");
                     return Ok(new { message = "Se actualizo el parametro de manera exitosa", state = "Success" });
                 }
-                catch (Exception ex)
-                {
-                    _logger.LogError($"Error en el método ParametersController.Edit : {JsonConvert.SerializeObject(ex.Message)}");
-                    return BadRequest(new { message = "Error al actualizar el parametro", state = "Error" });
-                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error en el método ParametersController.Edit : {JsonConvert.SerializeObject(ex.Message)}");
+                return BadRequest(new { message = "Error al actualizar el parametro", state = "Error" });
             }
         }
 
@@ -400,10 +477,37 @@ namespace ParameterControl.Controllers.Parameters
             return Ok(filter);
         }
 
+        [HttpGet]
+        public async Task<ActionResult> FilterConciliation()
+        {
+            FilterConciliacionViewModel model = new FilterConciliacionViewModel()
+            {
+                Conciliations = await GetConciliations()
+
+            };
+
+            return View("Actions/FilterConciliation", model);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> FilterConciliationParameters(FilterConciliacionViewModel filter)
+        {
+            return RedirectToAction("ParametersConciliationFilter", new
+            {
+                conciliation = filter.Conciliation,
+            });
+        }
+
         public async Task<List<SelectListItem>> GetParameters()
         {
             List<modParameter.Parameter> parameters = await parametersService.GetListParameter();
             return parameters.Select(parameter => new SelectListItem(parameter.Parameter_, parameter.Code.ToString())).ToList();
+        }
+
+        public async Task<List<SelectListItem>> GetConciliations()
+        {
+            List<modConciliation.Conciliation> conciliations = await parametersService.GetConciliations();
+            return conciliations.Select(conciliation => new SelectListItem(conciliation.Name, conciliation.Name)).ToList();
         }
     }
 }

@@ -3,13 +3,17 @@ using ParameterControl.Parameter.Entities;
 using ParameterControl.Models.Filter;
 using ParameterControl.Models.Parameter;
 using ParameterControl.Services.Policies;
-using modParameter = ParameterControl.Models.Parameter;
 using ParameterControl.Conciliation.Interfaces;
 using ParameterControl.Parameter.Interfaces;
 using ParameterControl.Parameter.Impl;
 using ParameterControl.Conciliation.Entities;
 using ParameterControl.Models.Conciliation;
 using ParameterControl.Models.Pagination;
+using ParameterControl.Conciliation.Impl;
+
+using modParameter = ParameterControl.Models.Parameter;
+using modConciliation = ParameterControl.Models.Conciliation;
+using ParameterControl.Services.Conciliations;
 
 namespace ParameterControl.Services.Parameters
 {
@@ -17,9 +21,15 @@ namespace ParameterControl.Services.Parameters
     {
         private List<modParameter.Parameter> parameters = new List<modParameter.Parameter>();
         private readonly IParameterService _parameterServices;
-        public ParametersService(IConfiguration configuration)
+        private readonly IConciliationsServices conciliationsServices;
+
+        public ParametersService(
+            IConfiguration configuration,
+            IConciliationsServices conciliationsServices
+        )
         {
             _parameterServices = new ParameterService(configuration);
+            this.conciliationsServices = conciliationsServices;
             parameters = new List<modParameter.Parameter>()
             {
                 new modParameter.Parameter(){
@@ -145,6 +155,13 @@ namespace ParameterControl.Services.Parameters
             return parameter;
         }
 
+        public async Task<List<modParameter.Parameter>> GetParametersByConciliation(string conciliation)
+        {
+            var collectionParameters = await _parameterServices.SelectByConciliationParameter(conciliation);
+            var response = await MapperParameter(collectionParameters);
+            return response;
+        }
+
         public async Task<List<ParameterViewModel>> GetFilterParameters(FilterViewModel filterModel)
         {
             List<modParameter.Parameter> allParameters = await GetParameters();
@@ -228,6 +245,12 @@ namespace ParameterControl.Services.Parameters
             List<modParameter.Parameter> listParameter = await GetParameters();
 
             return listParameter;
+        }
+
+        public async Task<List<modConciliation.Conciliation>> GetConciliations()
+        {
+            List<modConciliation.Conciliation> conciliations = await conciliationsServices.GetConciliations();
+            return conciliations;
         }
 
         private async Task<List<modParameter.Parameter>> MapperParameter(List<ParameterModel> ParameterModel)

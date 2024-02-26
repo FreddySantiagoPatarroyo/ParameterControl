@@ -3,265 +3,271 @@
 
 @{
     ViewData["Title"] = "Crear Parametro";
-    string MessageError = "Error al crear un parametro";
-    string MessageSuccess = "El parametro se creo correctamente";
+    string ErrorSuccess = "Se genero un problema al obtener la informacion,Parameters";
 }
 
 <partial name="_Menu" />
 
-<div class="box_create">
-    <div class="bg__blur"></div>
-    <form class="form__container">
-        <div asp-validation-summary="ModelOnly" class="text_error"></div>
+@if (!ViewBag.Success)
+{
+    <partial name="_ModalError" model="ErrorSuccess" />
+}
+else
+{
+    <div class="box_create">
+        <div class="bg__blur"></div>
+        <form class="form__container">
+            <div asp-validation-summary="ModelOnly" class="text_error"></div>
 
-        <div class="card__container">
-            <div class="header_form">
-                <img src="/images/iconApple.png" />
-                <h1>Crear Parametro</h1>
-            </div>
-            <div class="form_group">
-                <div class="field">
-                    <label asp-for="ParameterType" class="label_form">Tipo*</label>
-                    <div id="input_select" class="input">
-                        <input class="input_select" id="input_select_filter" asp-for="ParameterType" placeholder="Seleccione una opción" onclick="showOptions()" readonly />
-                        <input asp-for="ParameterType" class="oculte" />
-                        <i class="icon icon_select icon_153"></i>
-                    </div>
-                    <div id="options" class="options">
-                        <ul class="options_list">
-                            <li onclick="selectOption('@null', '@null')" class="option">
-                                <p class="option_text">Seleccione una opción</p>
-                            </li>
-                            @foreach (var Option in Model.ParameterTypeOption)
-                            {
-                                <li onclick="selectOption('@Option.Text', '@Option.Value')" class="option">
-                                    <p class="option_text">@Option.Text</p>
+            <div class="card__container">
+                <div class="header_form">
+                    <img src="/images/iconApple.png" />
+                    <h1>Crear Parametro</h1>
+                </div>
+                <div class="form_group">
+                    <div class="field">
+                        <label asp-for="ParameterType" class="label_form">Tipo*</label>
+                        <div id="input_select" class="input">
+                            <input class="input_select" id="input_select_filter" asp-for="ParameterType" placeholder="Seleccione una opción" onclick="showOptions()" readonly />
+                            <input asp-for="ParameterType" class="oculte" />
+                            <i class="icon icon_select icon_153" onclick="showOptions()"></i>
+                        </div>
+                        <div id="options" class="options">
+                            <ul class="options_list">
+                                <li onclick="selectOption('@null', '@null')" class="option">
+                                    <p class="option_text">Seleccione una opción</p>
                                 </li>
-                            }
-                        </ul>
+                                @foreach (var Option in Model.ParameterTypeOption)
+                                {
+                                    <li onclick="selectOption('@Option.Text', '@Option.Value')" class="option">
+                                        <p class="option_text">@Option.Text</p>
+                                    </li>
+                                }
+                            </ul>
+                        </div>
+                        <div id="select_helper" class="select_helper" onclick="showOptions()"></div>
                     </div>
-                    <div id="select_helper" class="select_helper" onclick="showOptions()"></div>
+                    <span id="ParameterTypeError" class="text_error"></span>
                 </div>
-                <span id="ParameterTypeError" class="text_error"></span>
-            </div>
-            <div class="form_group">
-                <div class="field">
-                    <label asp-for="List" class="label_form">Listado*</label>
-                    <div id="input_select_list" class="input">
-                        <input class="input_select" id="input_select_filter_list" asp-for="List" placeholder="Seleccione una opción" onclick="showOptionsList()" readonly />
-                        <input asp-for="List" class="oculte" />
-                        <i class="icon icon_select icon_153"></i>
-                    </div>
-                    <div id="options_list" class="options">
-                        <ul class="options_list">
-                            <li onclick="selectOptionList('@null', '@null')" class="option">
-                                <p class="option_text">Seleccione una opción</p>
-                            </li>
-                            @foreach (var Option in Model.ListParameter)
-                            {
-                                <li onclick="selectOptionList('@Option.Text', '@Option.Value')" class="option">
-                                    <p class="option_text">@Option.Text</p>
+                <div class="form_group">
+                    <div class="field">
+                        <label asp-for="List" class="label_form">Listado*</label>
+                        <div id="input_select_list" class="input">
+                            <input class="input_select" id="input_select_filter_list" asp-for="List" placeholder="Seleccione una opción" onclick="showOptionsList()" readonly />
+                            <input asp-for="List" class="oculte" />
+                            <i class="icon icon_select icon_153" onclick="showOptionsList()"></i>
+                        </div>
+                        <div id="options_list" class="options">
+                            <ul class="options_list">
+                                <li onclick="selectOptionList('@null', '@null')" class="option">
+                                    <p class="option_text">Seleccione una opción</p>
                                 </li>
-                            }
-                        </ul>
+                                @foreach (var Option in Model.ListParameter)
+                                {
+                                    <li onclick="selectOptionList('@Option.Text', '@Option.Value')" class="option">
+                                        <p class="option_text">@Option.Text</p>
+                                    </li>
+                                }
+                            </ul>
+                        </div>
+                        <div id="select_helper_list" class="select_helper" onclick="showOptionsList()"></div>
                     </div>
-                    <div id="select_helper_list" class="select_helper" onclick="showOptionsList()"></div>
+                    <span id="ListError" class="text_error"></span>
                 </div>
-                <span id="ListError" class="text_error"></span>
-            </div>
-            <div class="form_group">
-                <div class="field">
-                    <label asp-for="Parameter_" class="label_form">Parámetro*</label>
-                    <div class="input input_aditional">
-                        <span class="text_aditional_input">V_</span>
-                        <input class="code" asp-for="Parameter_" placeholder="Nombre Parametro" autocomplete="off"  />
+                <div class="form_group">
+                    <div class="field">
+                        <label asp-for="Parameter_" class="label_form">Parámetro*</label>
+                        <div class="input input_aditional">
+                            <span class="text_aditional_input">V_</span>
+                            <input class="code" asp-for="Parameter_" placeholder="Nombre Parametro" autocomplete="off" />
+                        </div>
+                        <span id="ParameterError" class="text_error"></span>
                     </div>
-                    <span id="ParameterError" class="text_error"></span>
                 </div>
-            </div>
 
-            <div class="form_group">
-                <div class="field">
-                    <label asp-for="Value" class="label_form">Valor*</label>
-                    <div class="input">
-                        <input class="description" asp-for="Value" placeholder="Digite el valor del parametro" autocomplete="off" />
+                <div class="form_group">
+                    <div class="field">
+                        <label asp-for="Value" class="label_form">Valor*</label>
+                        <div class="input">
+                            <input class="description" asp-for="Value" placeholder="Digite el valor del parametro" autocomplete="off" />
+                        </div>
+                        <span id="ValueError" class="text_error"></span>
                     </div>
-                    <span id="ValueError" class="text_error"></span>
                 </div>
-            </div>
 
-            <div class="form_group">
-                <div class="field">
-                    <label asp-for="Description" class="label_form">Descripción</label>
-                    <div class="textarea">
-                        <textarea class="objective" asp-for="Description" placeholder="Digite la descripción" autocomplete="off" ></textarea>
+                <div class="form_group">
+                    <div class="field">
+                        <label asp-for="Description" class="label_form">Descripción</label>
+                        <div class="textarea">
+                            <textarea class="objective" asp-for="Description" placeholder="Digite la descripción" autocomplete="off"></textarea>
+                        </div>
+                        <span id="DescriptionError" class="text_error"></span>
                     </div>
-                    <span id="DescriptionError" class="text_error"></span>
+                </div>
+
+                <p class="note_text"><span>Nota: </span>Los campos con (*) son obligatorios</p>
+
+                <div id="btn_container" class="btn_container">
+                    <a class="button button_secondary" asp-controller="Parameters" asp-action="Parameters"><p class="text font_bold">Cancelar</p></a>
+                    <a href="javascript:void(0)" onclick="sendData()" class="button button_primary"><p class="text font_bold">Crear</p></a>
+                </div>
+                <div id="loading" class="loading">
+                    <span class="loader"></span>
+                </div>
+                <div id="LayoytError" class="layout_content">
+                    <partial name="_MessageError" />
+                </div>
+                <div id="LayoytSuccess" class="layout_content">
+                    <partial name="_MessageSuccess" />
                 </div>
             </div>
-
-            <p class="note_text"><span>Nota: </span>Los campos con (*) son obligatorios</p>
-
-            <div id="btn_container" class="btn_container">
-                <a class="button button_secondary" asp-controller="Parameters" asp-action="Parameters"><p class="text font_bold">Cancelar</p></a>
-                <a href="javascript:void(0)" onclick="sendData()" class="button button_primary"><p class="text font_bold">Crear</p></a>
-            </div>
-            <div id="loading" class="loading">
-                <span class="loader"></span>
-            </div>
-            <div id="LayoytError" class="layout_content">
-                <partial name="_MessageError" model="MessageError" />
-            </div>
-            <div id="LayoytSuccess" class="layout_content">
-                <partial name="_MessageSuccess" model="MessageSuccess" />
-            </div>
-        </div>
-    </form>
-</div>
+        </form>
+    </div>
 
 
-@section Scripts {
-    <partial name="_ValidationScriptsPartial.cshtml" />
-    <script>
-        /* ----------- Select de tipo ----------- */
-        let viewOptions = false;
+    @section Scripts {
+        <partial name="_ValidationScriptsPartial.cshtml" />
+        <script>
+            /* ----------- Select de tipo ----------- */
+            let viewOptions = false;
 
-        const showOptions = () => {
+            const showOptions = () => {
 
-            let widthOption = document.getElementById("input_select").clientWidth;
-            let options = document.getElementById("options");
-            options.style.width = widthOption + "px";
+                let widthOption = document.getElementById("input_select").clientWidth;
+                let options = document.getElementById("options");
+                options.style.width = widthOption + "px";
 
-            viewOptions = !viewOptions;
+                viewOptions = !viewOptions;
 
-            if (viewOptions) {
-                document.getElementById('options').style.display = 'block';
-                document.getElementById('select_helper').style.display = 'block';
-            } else {
-                document.getElementById('options').style.display = 'none';
-                document.getElementById('select_helper').style.display = 'none';
-            }
-        }
-
-        const selectOption = (name, value) => {
-
-            if (name == null || value == null || name == '' || value == '') {
-                console.log("vacio");
-                document.getElementById("input_select_filter").value = '';
-                document.getElementById("ParameterType").value = '';
-            } else {
-                console.log(value);
-                document.getElementById("input_select_filter").value = name;
-                document.getElementById("ParameterType").value = value;
-            }
-
-            showOptions();
-        }
-
-        /* ----------- Select de listado ----------- */
-        let viewOptionsList = false;
-
-        const showOptionsList = () => {
-
-            let widthOptionList = document.getElementById("input_select_list").clientWidth;
-            let optionsList = document.getElementById("options_list");
-            optionsList.style.width = widthOptionList + "px";
-
-            viewOptionsList = !viewOptionsList;
-
-            if (viewOptionsList) {
-                document.getElementById('options_list').style.display = 'block';
-                document.getElementById('select_helper_list').style.display = 'block';
-            } else {
-                document.getElementById('options_list').style.display = 'none';
-                document.getElementById('select_helper_list').style.display = 'none';
-            }
-        }
-
-        const selectOptionList = (name, value) => {
-
-            if (name == null || value == null || name == '' || value == '') {
-                console.log("vacio");
-                document.getElementById("input_select_filter_list").value = '';
-                document.getElementById("List").value = '';
-            } else {
-                console.log(value);
-                document.getElementById("input_select_filter_list").value = name;
-                document.getElementById("List").value = value;
-            }
-
-            showOptionsList();
-        }
-    </script>
-
-    <script>
-        const urlParameter = '@Url.Action("Create")';
-        let data;
-
-        let isValidParameterType = false;
-        let isValidList = false;
-        let isValidParameter = false;
-        let isValidValue = false;
-        //let isValidDescription = false;
-
-        const sendData = async () => {
-            isValidParameterType = validateInputEmpty("ParameterType", "El tipo de parametro es requerido", "ParameterTypeError");
-            isValidList = validateInputEmpty("List", "La lista es requerido", "ListError");
-            isValidParameter = validateInputEmpty("Parameter_", "El parametro es requerido", "ParameterError");
-            isValidValue = validateInputEmpty("Value", "El valor es requerido", "ValueError");
-            //isValidDescription = validateInputEmpty("Description", "La descripcion es requerido", "DescriptionError");
-
-
-            if (isValidParameter && isValidValue && isValidParameterType && isValidList) {
-                document.getElementById('btn_container').style.display = 'none';
-                document.getElementById('loading').style.display = 'flex';
-
-                data = {
-                    Parameter_: 'V_' + $('#Parameter_').val(),
-                    Value: $('#Value').val(),
-                    Description: $('#Description').val(),
-                    ParameterType: $('#ParameterType').val(),
-                    List: $('#List').val(),
-                    State: true
-                }
-
-                console.log(data)
-
-                const result = await fetch(urlParameter, {
-                    method: 'POST',
-                    body: JSON.stringify(data),
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                })
-
-                const json = await result.json();
-
-                console.log(json);
-
-                if (json.state == "Success") {
-                    document.getElementById('LayoytSuccess').style.display = 'block';
-                    document.getElementById('layout_message_success').innerHTML = json.message;
-                    document.getElementById('loading').style.display = 'none';
-                    setTimeout(() => {
-                        location.href = '/Parameters/Parameters';
-                    }, 3000)
+                if (viewOptions) {
+                    document.getElementById('options').style.display = 'block';
+                    document.getElementById('select_helper').style.display = 'block';
                 } else {
-                    document.getElementById('LayoytError').style.display = 'block';
-                    document.getElementById('layout_message_error').innerHTML = json.message;
-                    document.getElementById('loading').style.display = 'none';
+                    document.getElementById('options').style.display = 'none';
+                    document.getElementById('select_helper').style.display = 'none';
                 }
             }
-        }
 
-        const validateInputEmpty = (idInput, messaje, idError) => {
-            if ($(`#${idInput}`).val() == "" || $(`#${idInput}`).val() == null) {
-                $(`#${idError}`).text(`${messaje}`);
-                return false;
-            } else {
-                $(`#${idError}`).text("");
-                return true;
+            const selectOption = (name, value) => {
+
+                if (name == null || value == null || name == '' || value == '') {
+                    console.log("vacio");
+                    document.getElementById("input_select_filter").value = '';
+                    document.getElementById("ParameterType").value = '';
+                } else {
+                    console.log(value);
+                    document.getElementById("input_select_filter").value = name;
+                    document.getElementById("ParameterType").value = value;
+                }
+
+                showOptions();
             }
-        }
-    </script>
+
+            /* ----------- Select de listado ----------- */
+            let viewOptionsList = false;
+
+            const showOptionsList = () => {
+
+                let widthOptionList = document.getElementById("input_select_list").clientWidth;
+                let optionsList = document.getElementById("options_list");
+                optionsList.style.width = widthOptionList + "px";
+
+                viewOptionsList = !viewOptionsList;
+
+                if (viewOptionsList) {
+                    document.getElementById('options_list').style.display = 'block';
+                    document.getElementById('select_helper_list').style.display = 'block';
+                } else {
+                    document.getElementById('options_list').style.display = 'none';
+                    document.getElementById('select_helper_list').style.display = 'none';
+                }
+            }
+
+            const selectOptionList = (name, value) => {
+
+                if (name == null || value == null || name == '' || value == '') {
+                    console.log("vacio");
+                    document.getElementById("input_select_filter_list").value = '';
+                    document.getElementById("List").value = '';
+                } else {
+                    console.log(value);
+                    document.getElementById("input_select_filter_list").value = name;
+                    document.getElementById("List").value = value;
+                }
+
+                showOptionsList();
+            }
+        </script>
+
+        <script>
+            const urlParameter = '@Url.Action("Create")';
+            let data;
+
+            let isValidParameterType = false;
+            let isValidList = false;
+            let isValidParameter = false;
+            let isValidValue = false;
+            //let isValidDescription = false;
+
+            const sendData = async () => {
+                isValidParameterType = validateInputEmpty("ParameterType", "El tipo de parametro es requerido", "ParameterTypeError");
+                isValidList = validateInputEmpty("List", "La lista es requerido", "ListError");
+                isValidParameter = validateInputEmpty("Parameter_", "El parametro es requerido", "ParameterError");
+                isValidValue = validateInputEmpty("Value", "El valor es requerido", "ValueError");
+                //isValidDescription = validateInputEmpty("Description", "La descripcion es requerido", "DescriptionError");
+
+
+                if (isValidParameter && isValidValue && isValidParameterType && isValidList) {
+                    document.getElementById('btn_container').style.display = 'none';
+                    document.getElementById('loading').style.display = 'flex';
+
+                    data = {
+                        Parameter_: 'V_' + $('#Parameter_').val(),
+                        Value: $('#Value').val(),
+                        Description: $('#Description').val(),
+                        ParameterType: $('#ParameterType').val(),
+                        List: $('#List').val(),
+                        State: true
+                    }
+
+                    console.log(data)
+
+                    const result = await fetch(urlParameter, {
+                        method: 'POST',
+                        body: JSON.stringify(data),
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    })
+
+                    const json = await result.json();
+
+                    console.log(json);
+
+                    if (json.state == "Success") {
+                        document.getElementById('LayoytSuccess').style.display = 'block';
+                        document.getElementById('layout_message_success').innerHTML = json.message;
+                        document.getElementById('loading').style.display = 'none';
+                        setTimeout(() => {
+                            location.href = '/Parameters/Parameters';
+                        }, 3000)
+                    } else {
+                        document.getElementById('LayoytError').style.display = 'block';
+                        document.getElementById('layout_message_error').innerHTML = json.message;
+                        document.getElementById('loading').style.display = 'none';
+                    }
+                }
+            }
+
+            const validateInputEmpty = (idInput, messaje, idError) => {
+                if ($(`#${idInput}`).val() == "" || $(`#${idInput}`).val() == null) {
+                    $(`#${idError}`).text(`${messaje}`);
+                    return false;
+                } else {
+                    $(`#${idError}`).text("");
+                    return true;
+                }
+            }
+        </script>
+    }
 }

@@ -11,5 +11,6 @@ namespace ParameterControl.Parameter.Interfaces
         Task<ParameterModel> SelectByIdParameter(ParameterModel entity);
         Task<List<ParameterModel>> SelectPaginatorParameter(int page, int row);
         Task<int> SelectCountParameter();
+        Task<List<ParameterModel>> SelectByConciliationParameter(string entity);
     }
 }
