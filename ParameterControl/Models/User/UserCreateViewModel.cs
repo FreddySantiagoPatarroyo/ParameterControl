@@ -5,6 +5,6 @@ namespace ParameterControl.Models.User
     public class UserCreateViewModel : User
     {
         public string CodeFormat { get; set; } = string.Empty;
-        public List<SelectListItem> Rols = new List<SelectListItem>();
+        public List<SelectListItem> Roles = new List<SelectListItem>();
     }
 }

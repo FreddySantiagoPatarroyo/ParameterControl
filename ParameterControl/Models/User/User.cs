@@ -11,10 +11,12 @@ namespace ParameterControl.Models.User
         [Required(ErrorMessage = "El campo email usuario es requerido")]
         [EmailAddress(ErrorMessage = "Este no es un correo valido")]
         public string Email { get; set; } = string.Empty;
-        [Required(ErrorMessage = "El campo nombre de usuario usuario es requerido")]
+        [Required(ErrorMessage = "El campo nombre de usuario es requerido")]
         public string Name { get; set; } = string.Empty;
         public bool FirstAccess { get; set; }
         public string Password { get; set; }
-        public int Rol {  get; set; }
+        [Range(minimum:1, maximum: Int32.MaxValue, ErrorMessage = "El campo rol es requerido")]
+        public int RolCode {  get; set; }
+        public string RolName { get; set; } = string.Empty;
     }
 }

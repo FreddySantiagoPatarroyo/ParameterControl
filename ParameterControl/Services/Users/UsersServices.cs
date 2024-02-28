@@ -41,11 +41,6 @@ namespace ParameterControl.Services.Users
             };
         }
 
-        public async Task<List<modUser.User>> GetUsersFake()
-        {
-            return users;
-        }
-
         public async Task<List<modUser.User>> GetUsers()
         {
             var collectionUsers = await _userService.SelectAllUser();
@@ -74,6 +69,13 @@ namespace ParameterControl.Services.Users
             }
         }
 
+        public async Task<List<modUser.Role>> GetRoles()
+        {
+            var collectionRoles = await _userService.SelectAllRole();
+            var response = await MapperRoles(collectionRoles);
+            return response;
+        }
+
         public async Task<List<UserViewModel>> GetUsersFormat(List<modUser.User> users)
         {
             List<UserViewModel> UsersModel = new List<UserViewModel>();
@@ -87,7 +89,8 @@ namespace ParameterControl.Services.Users
                 userModel.Name = user.Name;
                 userModel.FirstAccess = user.FirstAccess;
                 userModel.Password = user.Password;
-                userModel.Rol = user.Rol;
+                userModel.RolCode = user.RolCode;
+                userModel.RolName = user.RolName;
                 userModel.State = user.State;
                 userModel.CodeFormat = "COD_" + user.Code;
                 userModel.StateFormat = user.State ? "Activo" : "Inactivo";
@@ -111,7 +114,8 @@ namespace ParameterControl.Services.Users
             userModel.Name = user.Name;
             userModel.FirstAccess = user.FirstAccess;
             userModel.Password = user.Password;
-            userModel.Rol = user.Rol;
+            userModel.RolCode = user.RolCode;
+            userModel.RolName = user.RolName;
             userModel.State = user.State;
             userModel.CodeFormat = "COD_" + user.Code;
             userModel.StateFormat = user.State ? "Activo" : "Inactivo";
@@ -132,7 +136,8 @@ namespace ParameterControl.Services.Users
             userModel.Name = user.Name;
             userModel.FirstAccess = user.FirstAccess;
             userModel.Password = user.Password;
-            userModel.Rol = user.Rol;
+            userModel.RolCode = user.RolCode;
+            userModel.RolName = user.RolName;
             userModel.State = user.State;
             userModel.CodeFormat = "COD_" + user.Code;
             userModel.CreationDate = user.CreationDate;
@@ -241,11 +246,44 @@ namespace ParameterControl.Services.Users
                     Name = User.UserName,
                     FirstAccess = User.FirstAccess,
                     Password = User.Password,
-                    Rol = User.RolId,
+                    RolCode = User.RolId,
+                    RolName = User.RolName,
                     CreationDate = User.CreationDate,
                     UpdateDate = User.ModifiedDate,
                     UserOwner = User.ModifiedBy,
                     State = User.State,
+                };
+                return model;
+            });
+        }
+
+        private async Task<List<modUser.Role>> MapperRoles(List<RoleModel> roleModels)
+        {
+            return await Task.Run(() =>
+            {
+                List<modUser.Role> roles = new List<modUser.Role>();
+                if (roleModels.Count > 0)
+                {
+                    foreach (var rol in roleModels)
+                    {
+                        roles.Add(MapperToRoles(rol).Result);
+                    }
+                }
+                return roles;
+            });
+        }
+
+        private async Task<modUser.Role> MapperToRoles(RoleModel Rol)
+        {
+            return await Task.Run(() =>
+            {
+                modUser.Role model = new modUser.Role
+                {
+                    Code = Convert.ToInt32(Rol.Code),
+                    Name = Rol.Name,
+                    CreationDate = Rol.CreationDate,
+                    ModifiedDate = Rol.ModifiedDate,
+                    ModifiedBy = Rol.ModifiedBy
                 };
                 return model;
             });
@@ -260,7 +298,7 @@ namespace ParameterControl.Services.Users
                     User = request.User_,
                     Email = request.Email,
                     UserName = request.Name,
-                    RolId = request.Rol,
+                    RolId = request.RolCode,
                     Password = request.Password,
                     FirstAccess = request.FirstAccess,
                     CreationDate = DateTime.Now,
@@ -313,7 +351,7 @@ namespace ParameterControl.Services.Users
                     User = User.User_,
                     Email = User.Email,
                     UserName = User.Name,
-                    RolId = User.Rol,
+                    RolId = User.RolCode,
                     Password = User.Password,
                     FirstAccess = User.FirstAccess,
                     CreationDate = User.CreationDate,
@@ -335,7 +373,7 @@ namespace ParameterControl.Services.Users
                     User = User.User_,
                     Email = User.Email,
                     UserName = User.Name,
-                    RolId = User.Rol,
+                    RolId = User.RolCode,
                     Password = User.Password,
                     FirstAccess = User.FirstAccess,
                     CreationDate = User.CreationDate,
@@ -357,7 +395,7 @@ namespace ParameterControl.Services.Users
                     User = User.User_,
                     Email = User.Email,
                     UserName = User.Name,
-                    RolId = User.Rol,
+                    RolId = User.RolCode,
                     Password = User.Password,
                     FirstAccess = User.FirstAccess,
                     CreationDate = User.CreationDate,
@@ -375,41 +413,6 @@ namespace ParameterControl.Services.Users
             var response = await MapperUser(collectionUsers);
             var user = response.FirstOrDefault(x => x.User_.Equals(userName) && x.Email.Equals(email));
             return user;
-        }
-
-        public async Task<List<modUser.Role>> GetRoles()
-        {
-            var collectionRoles = await _userService.SelectAllRole();
-            var response = await MapperRole(collectionRoles);
-            return response;
-        }
-
-        private async Task<List<modUser.Role>> MapperRole(List<RoleModel> roleModel)
-        {
-            return await Task.Run(() =>
-            {
-                List<modUser.Role> roles = new List<modUser.Role>();
-                if (roleModel.Count > 0)
-                {
-                    foreach (var role in roleModel)
-                    {
-                        roles.Add(MapperToRole(role).Result);
-                    }
-                }
-                return roles;
-            });
-        }
-
-        private async Task<modUser.Role> MapperToRole(RoleModel User)
-        {
-            return await Task.Run(() =>
-            {
-                modUser.Role model = new modUser.Role
-                {
-                    Code = Convert.ToInt32(User.Code)
-                };
-                return model;
-            });
         }
     }
 }

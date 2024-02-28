@@ -128,6 +128,7 @@ namespace ParameterControl.Controllers.Users
             try
             {
                 UserCreateViewModel model = new UserCreateViewModel();
+                model.Roles = await GetRoles();
 
                 ViewBag.Success = true;
                 return View("Actions/CreateUser", model);
@@ -180,6 +181,7 @@ namespace ParameterControl.Controllers.Users
                     return View("Actions/EditUser", null);
                 }
                 UserCreateViewModel model = await usersServices.GetUserFormatCreate(user);
+                model.Roles = await GetRoles();
 
                 ViewBag.Success = true;
                 ViewBag.EntyNull = false;
@@ -408,6 +410,12 @@ namespace ParameterControl.Controllers.Users
                     break;
             }
             return Ok(filter);
+        }
+
+        private async Task<List<SelectListItem>> GetRoles()
+        {
+            var roles = await usersServices.GetRoles();
+            return roles.Select(rol => new SelectListItem(rol.Name, rol.Code.ToString())).ToList();
         }
     }
 }

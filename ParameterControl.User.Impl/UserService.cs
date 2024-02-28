@@ -161,6 +161,7 @@ namespace ParameterControl.User.Impl
                     User = dr["USUARIO"] is DBNull ? string.Empty : dr["USUARIO"].ToString(),
                     Email = dr["EMAIL"] is DBNull ? string.Empty : dr["EMAIL"].ToString(),
                     UserName = dr["NOMBRE_USUARIO"] is DBNull ? string.Empty : dr["NOMBRE_USUARIO"].ToString(),
+                    RolName = dr["NOMBRE_ROL"] is DBNull ? string.Empty : dr["NOMBRE_ROL"].ToString(),
                     Password = dr["CONTRASEÑA"] is DBNull ? string.Empty : dr["CONTRASEÑA"].ToString(),
                     RolId = dr["COD_ROL"] is DBNull ? 0 : Convert.ToInt32(dr["COD_ROL"]),
                     CreationDate = dr["FECHA_CREACION"] is DBNull ? DateTime.Now : Convert.ToDateTime(dr["FECHA_CREACION"]),
@@ -213,7 +214,7 @@ namespace ParameterControl.User.Impl
                 List<RoleModel> mapper = new List<RoleModel>();
                 return await Task.Run(async () =>
                 {
-                    var response = await _getAllUser.SelectAllUser();
+                    var response = await _getAllRole.SelectAllRole();
                     mapper = await MapperRole(response);
 
                     return mapper;
@@ -251,7 +252,7 @@ namespace ParameterControl.User.Impl
             {
                 RoleModel model = new RoleModel
                 {
-                    Code = Convert.ToInt32(dr["COD_ROL"]),
+                    Code = dr["COD_ROL"] is DBNull ? 0 : Convert.ToInt32(dr["COD_ROL"]),
                     Name = dr["NOMBRE_ROL"] is DBNull ? string.Empty : dr["NOMBRE_ROL"].ToString(),
                     CreationDate = dr["FECHA_CREACION"] is DBNull ? DateTime.Now : Convert.ToDateTime(dr["FECHA_CREACION"]),
                     ModifiedDate = dr["FECHA_ACTUALIZACION"] is DBNull ? DateTime.Now : Convert.ToDateTime(dr["FECHA_ACTUALIZACION"]),
