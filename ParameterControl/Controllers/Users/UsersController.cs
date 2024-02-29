@@ -418,7 +418,6 @@ namespace ParameterControl.Controllers.Users
         public async Task<IActionResult> ValidateDataRepeatCreate([FromBody] string value)
         {
             var data = value.Split(",");
-            var property = typeof(modUser.User)?.GetProperty(data[0]);
             List<modUser.User> Users = await usersServices.GetUsers();
             var validate = await GetDataRepeat(Users, data);
 

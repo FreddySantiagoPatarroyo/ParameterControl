@@ -175,9 +175,9 @@ else
 
             const sendData = async () => {
                 // isValidCode = validateInput("Code", "El codigo de usuario es requerido", "CodeError");
-                isValidUser_ = validateInput("User_", "El usuario es requerido", "User_Error");
+                isValidUser_ = await validateUser("User_", "El usuario es requerido", "Este usuario ya se ecuentra registrado", "User_Error");
                 isValidEmail = await validateEmail("Email", "El Email es requerido", "Digite un email válido", "Este email ya se ecuentra registrado", "EmailError");
-                isValidName = await validateUserName("Name", "El nombre de usuario es requerido", "Este nombre de usuario ya se ecuentra registrado", "NameError");
+                isValidName = validateInput("Name", "El nombre de usuario es requerido", "NameError");
                 isValidRol = validateInput("input_select_filter", "El rol es requerido", "RolError");
                 isValidPassword = validateInput("Password", "La contraseña es requerida", "PasswordError");
 
@@ -292,13 +292,13 @@ else
                 }
             }
 
-            const validateUserName = async (idInput, requiredMessage, repeatError, idError) => {
+            const validateUser = async (idInput, requiredMessage, repeatError, idError) => {
                 const userName = $(`#${idInput}`).val();
                 const isEmpty = validateEmpty(idInput);
                 let isRepeat = false;
 
                 if (!isEmpty) {
-                    isRepeat = await validateDataRepeat(idInput, "Name");
+                    isRepeat = await validateDataRepeat(idInput, "User_");
                 }
 
                 if (isEmpty) {

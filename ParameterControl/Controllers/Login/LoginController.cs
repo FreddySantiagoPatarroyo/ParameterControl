@@ -35,7 +35,7 @@ namespace ParameterControl.Controllers.Login
                     return BadRequest(new { message = "Error en la informacion enviada", state = "Error" });
                 }
                 var users = await _usersServices.GetUsers();
-                var user = users.FirstOrDefault(x => x.Name.Equals(request.User) && x.Password.Equals(request.Password));
+                var user = users.FirstOrDefault(x => x.User_.Equals(request.User) && x.Password.Equals(request.Password));
 
                 if (user != null)
                 {
