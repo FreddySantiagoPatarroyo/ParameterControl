@@ -26,35 +26,42 @@ namespace ParameterControl.Controllers.Login
         }
 
         [HttpPost]
-        public async Task<IActionResult> Login(LoginViewModel request)
+        public async Task<IActionResult> LoginUser([FromBody] LoginViewModel request)
         {
-            if (!ModelState.IsValid)
+            try
             {
-                return View(request);
-            }
-            var users = await _usersServices.GetUsers();
-            var user = users.FirstOrDefault(x => x.Name.Equals(request.user) && x.Password.Equals(request.password));
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(new { message = "Error en la informacion enviada", state = "Error" });
+                }
+                var users = await _usersServices.GetUsers();
+                var user = users.FirstOrDefault(x => x.Name.Equals(request.User) && x.Password.Equals(request.Password));
 
-            if (user != null)
-            {
-                var claims = new List<Claim>
+                if (user != null)
+                {
+                    var claims = new List<Claim>
                 {
                     new Claim(ClaimTypes.Name,user.User_),
                     new Claim("Correo",user.Email)
                 };
 
-                claims.Add(new Claim(ClaimTypes.Role, "A")); //A=Administrador
+                    claims.Add(new Claim(ClaimTypes.Role, "A")); //A=Administrador
 
-                var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                    var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
 
-                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new System.Security.Claims.ClaimsPrincipal(claimsIdentity));
+                    await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new System.Security.Claims.ClaimsPrincipal(claimsIdentity));
 
-                return RedirectToAction("Index", "Home");
+                    return Ok(new { message = "Se creo el usuario de manera exitosa", state = "Success" });
+                }
+                else
+                {
+                    return BadRequest(new { message = "El usuario o la contraseña son incorrectos", state = "Error" });
+                }
             }
-            else
+            catch (Exception)
             {
-                return RedirectToAction("Error", "Home");
-            }            
+                return BadRequest(new { message = "Error al ingresar", state = "Error" });
+            } 
         }
 
         public async Task<IActionResult> LogOut()
