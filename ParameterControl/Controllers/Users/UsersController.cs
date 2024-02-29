@@ -52,6 +52,7 @@ namespace ParameterControl.Controllers.Users
                 TableUsers.IsEdit = true;
                 TableUsers.IsView = true;
                 TableUsers.IsInactivate = true;
+                TableUsers.Filter = true;
                 ViewBag.ApplyFilter = false;
 
                 var resultViemModel = new PaginationResult<TableUserViewModel>()
@@ -101,6 +102,7 @@ namespace ParameterControl.Controllers.Users
                 TableUsers.IsEdit = true;
                 TableUsers.IsView = true;
                 TableUsers.IsInactivate = true;
+                TableUsers.Filter = true;
                 ViewBag.ApplyFilter = true;
 
                 var resultViemModel = new PaginationResult<TableUserViewModel>()
@@ -410,6 +412,54 @@ namespace ParameterControl.Controllers.Users
                     break;
             }
             return Ok(filter);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ValidateDataRepeatCreate([FromBody] string value)
+        {
+            var data = value.Split(",");
+            var property = typeof(modUser.User)?.GetProperty(data[0]);
+            List<modUser.User> Users = await usersServices.GetUsers();
+            var validate = await GetDataRepeat(Users, data);
+
+            return validate == false ? Ok(validate) : BadRequest(validate);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ValidateDataRepeatEdit([FromBody] string value)
+        {
+            var data = value.Split(",");
+            List<modUser.User> Users = await usersServices.GetUsers();
+            List<modUser.User> UsersEdit = new List<modUser.User>();
+
+            foreach (var user in Users)
+            {
+                if (user.Code.ToString() != data[2].ToUpper())
+                {
+                    UsersEdit.Add(user);
+                }
+            }
+
+            var validate = await GetDataRepeat(UsersEdit, data);
+            return validate == false ? Ok(validate) : BadRequest(validate);
+        }
+
+        private async Task<bool> GetDataRepeat(List<modUser.User> Users, string[] data)
+        {
+            bool validate = false;
+            var property = typeof(modUser.User)?.GetProperty(data[0]);
+
+            foreach (var user in Users)
+            {
+                if (property?.GetValue(user).ToString().ToUpper() == data[1].ToUpper())
+                {
+                    validate = true;
+                    break;
+                }
+                validate = false;
+            }
+
+            return validate;
         }
 
         private async Task<List<SelectListItem>> GetRoles()

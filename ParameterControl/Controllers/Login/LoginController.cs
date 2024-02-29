@@ -33,7 +33,7 @@ namespace ParameterControl.Controllers.Login
                 return View(request);
             }
             var users = await _usersServices.GetUsers();
-            var user = users.FirstOrDefault(x => x.User_.Equals(request.user) && x.Email.Equals(request.password));
+            var user = users.FirstOrDefault(x => x.Name.Equals(request.user) && x.Password.Equals(request.password));
 
             if (user != null)
             {

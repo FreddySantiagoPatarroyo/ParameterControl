@@ -186,12 +186,12 @@ else
                 let isValidPassword = false;
 
                 const sendData = async () => {
-                    isValidCode = validateInputEmpty("Code", "El codigo de usuario es requerido", "CodeError");
-                    isValidUser_ = validateInputEmpty("User_", "El usuario es requerido", "User_Error");
-                    isValidEmail = validateEmail("Email", "El Email es requerido", "Digite un email válido", "EmailError");
-                    isValidName = validateInputEmpty("Name", "El nombre de usuario es requerido", "NameError");
-                    isValidRol = validateInputEmpty("input_select_filter", "El rol es requerido", "RolError");
-                    isValidPassword = validateInputEmpty("Password", "La contraseña es requerida", "PasswordError");
+                    isValidCode = validateInput("Code", "El codigo de usuario es requerido", "CodeError");
+                    isValidUser_ = validateInput("User_", "El usuario es requerido", "User_Error");
+                    isValidEmail = await validateEmail("Email", "El Email es requerido", "Digite un email válido", "Este email ya se ecuentra registrado", "EmailError");
+                    isValidName = await validateUserName("Name", "El nombre de usuario es requerido", "Este nombre de usuario ya se ecuentra registrado", "NameError");
+                    isValidRol = validateInput("input_select_filter", "El rol es requerido", "RolError");
+                    isValidPassword = validateInput("Password", "La contraseña es requerida", "PasswordError");
 
                     if (isValidCode && isValidUser_ && isValidEmail && isValidName && isValidRol && isValidPassword) {
                         document.getElementById('btn_container').style.display = 'none';
@@ -240,9 +240,36 @@ else
                     }
                 }
 
-                const validateInputEmpty = (idInput, messaje, idError) => {
+                const validateEmpty = (idInput) => {
                     if ($(`#${idInput}`).val() == "" || $(`#${idInput}`).val() == null) {
-                        $(`#${idError}`).text(`${messaje}`);
+                        return true;
+                    } else {
+                        return false;
+                    }
+                }
+
+                const validateDataRepeat = async (idInput, typeData, code) => {
+                    const value = $(`#${idInput}`).val();
+                    const urlValidateRepeat = '@Url.Action("ValidateDataRepeatEdit")';
+
+                    const data = `${typeData},${value},${code}`
+
+                    const result = await fetch(urlValidateRepeat, {
+                        method: 'POST',
+                        body: JSON.stringify(data),
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    })
+
+                    const json = await result.json();
+                    return json;
+                }
+
+                const validateInput = (idInput, requiredMessage, idError) => {
+                    const isEmpty = validateEmpty(idInput);
+                    if (isEmpty) {
+                        $(`#${idError}`).text(requiredMessage);
                         return false;
                     } else {
                         $(`#${idError}`).text("");
@@ -250,17 +277,52 @@ else
                     }
                 }
 
-                const validateEmail = (idInput, requiredMessage, formatMessage, idError) => {
+                const validateEmail = async (idInput, requiredMessage, formatMessage, repeatError, idError) => {
                     const email = $(`#${idInput}`).val();
+                    const Code = $('#Code').val();
                     const emailFormat = /^[a-zA-Z0-9._-]+@@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+                    const isEmpty = validateEmpty(idInput);
+                    let isRepeat = false;
 
-                    if (!email) {
+                    if (!isEmpty) {
+                        isRepeat = await validateDataRepeat(idInput, "Email", Code);
+                    }
+
+                    if (isEmpty) {
                         $(`#${idError}`).text(requiredMessage);
                         return false;
                     } else if (!emailFormat.test(email)) {
                         $(`#${idError}`).text(formatMessage);
                         return false;
-                    } else {
+                    } else if (isRepeat) {
+                        $(`#${idError}`).text(repeatError);
+                        return false;
+                    }
+                    else {
+                        console.log("es valido");
+                        $(`#${idError}`).text("");
+                        return true;
+                    }
+                }
+
+                const validateUserName = async (idInput, requiredMessage, repeatError, idError) => {
+                    const userName = $(`#${idInput}`).val();
+                    const Code = $('#Code').val();
+                    const isEmpty = validateEmpty(idInput);
+                    let isRepeat = false;
+
+                    if (!isEmpty) {
+                        isRepeat = await validateDataRepeat(idInput, "Name", Code);
+                    }
+
+                    if (isEmpty) {
+                        $(`#${idError}`).text(requiredMessage);
+                        return false;
+                    } else if (isRepeat) {
+                        $(`#${idError}`).text(repeatError);
+                        return false;
+                    }
+                    else {
                         $(`#${idError}`).text("");
                         return true;
                     }
