@@ -45,6 +45,7 @@ else
                             <span id="CodeError" class="text_error"></span>
                         </div>
                     </div>
+
                     <div class="form_group">
                         <div class="field">
                             <label asp-for="User_" class="label_form">Usuario*</label>
@@ -54,6 +55,7 @@ else
                             <span id="User_Error" class="text_error"></span>
                         </div>
                     </div>
+
                     <div class="form_group">
                         <div class="field">
                             <label asp-for="Email" class="label_form">Email*</label>
@@ -63,6 +65,7 @@ else
                             <span id="EmailError" class="text_error"></span>
                         </div>
                     </div>
+
                     <div class="form_group">
                         <div class="field">
                             <label asp-for="Name" class="label_form">Nombre de usuario*</label>
@@ -72,15 +75,34 @@ else
                             <span id="NameError" class="text_error"></span>
                         </div>
                     </div>
+
                     <div class="form_group">
                         <div class="field">
-                            <label asp-for="Rol" class="label_form">Rol*</label>
-                            <div class="input">
-                                <input asp-for="Rol" placeholder="Rol de usuario" autocomplete="off" />
+                            <label asp-for="RolCode" class="label_form">Rol*</label>
+                            <div id="input_select" class="input">
+                                <input class="input_select" id="input_select_filter" asp-for="RolName" name="input_select_filter" placeholder="Seleccione una opción" onclick="showOptions()" readonly />
+                                <input asp-for="RolCode" class="oculte" />
+                                <i class="icon icon_select icon_153" onclick="showOptions()"></i>
                             </div>
-                            <span id="RolError" class="text_error"></span>
+                            <div id="options" class="options">
+                                <ul class="options_list">
+                                    <li onclick="selectOption('@null', '@null')" class="option">
+                                        <p class="option_text">Seleccione una opción</p>
+                                    </li>
+                                    @foreach (var Option in Model.Roles)
+                                    {
+                                        <li onclick="selectOption('@Option.Text', '@Option.Value')" class="option">
+                                            <p class="option_text">@Option.Text</p>
+                                        </li>
+                                    }
+                                </ul>
+                            </div>
+                            <div id="select_helper" class="select_helper" onclick="showOptions()"></div>
                         </div>
+
+                        <span id="RolError" class="text_error"></span>
                     </div>
+
                     <div class="form_group">
                         <div class="field">
                             <label asp-for="Password" class="label_form">Contraseña*</label>
@@ -113,6 +135,47 @@ else
 
         @section Scripts {
             <script>
+                let password = document.getElementById("Password");
+                password.type = "password";
+            </script>
+
+            <script>
+                /* ----------- Select de roles ----------- */
+                let viewOptions = false;
+
+                const showOptions = () => {
+
+                    let widthOption = document.getElementById("input_select").clientWidth;
+                    let options = document.getElementById("options");
+                    options.style.width = widthOption + "px";
+
+                    viewOptions = !viewOptions;
+
+                    if (viewOptions) {
+                        document.getElementById('options').style.display = 'block';
+                        document.getElementById('select_helper').style.display = 'block';
+                    } else {
+                        document.getElementById('options').style.display = 'none';
+                        document.getElementById('select_helper').style.display = 'none';
+                    }
+                }
+
+                const selectOption = (name, value) => {
+
+                    if (name == null || value == null || name == '' || value == '') {
+                        console.log("vacio");
+                        document.getElementById("input_select_filter").value = '';
+                    document.getElementById("RolCode").value = '';
+                    } else {
+                        console.log(value);
+                        document.getElementById("input_select_filter").value = name;
+                    document.getElementById("RolCode").value = value;
+                    }
+                    showOptions();
+                }
+            </script>
+
+            <script>
                 const urlUser = '@Url.Action("EditUser")';
                 let data;
                 let isValidCode = false;
@@ -123,12 +186,12 @@ else
                 let isValidPassword = false;
 
                 const sendData = async () => {
-                    isValidCode = validateInputEmpty("Code", "El codigo de usuario es requerido", "CodeError");
-                    isValidUser_ = validateInputEmpty("User_", "El usuario es requerido", "User_Error");
-                    isValidEmail = validateInputEmpty("Email", "El email es requerido", "EmailError");
-                    isValidName = validateInputEmpty("Name", "El nombre de usuario es requerido", "NameError");
-                    isValidRol = validateInputEmpty("Rol", "El rol es requerido", "RolError");
-                    isValidPassword = validateInputEmpty("Password", "La contraseña es requerida", "PasswordError");
+                    isValidCode = validateInput("Code", "El codigo de usuario es requerido", "CodeError");
+                    isValidUser_ = await validateUser("User_", "El usuario es requerido", "Este usuario ya se ecuentra registrado", "User_Error");
+                    isValidEmail = await validateEmail("Email", "El Email es requerido", "Digite un email válido", "Este email ya se ecuentra registrado", "EmailError");
+                    isValidName = validateUser("Name", "El nombre de usuario es requerido", "NameError");
+                    isValidRol = validateInput("input_select_filter", "El rol es requerido", "RolError");
+                    isValidPassword = validateInput("Password", "La contraseña es requerida", "PasswordError");
 
                     if (isValidCode && isValidUser_ && isValidEmail && isValidName && isValidRol && isValidPassword) {
                         document.getElementById('btn_container').style.display = 'none';
@@ -141,7 +204,7 @@ else
                             User_: $('#User_').val(),
                             Email: $('#Email').val(),
                             Name: $('#Name').val(),
-                            Rol: $('#Rol').val(),
+                            RolCode: $('#RolCode').val(),
                             Password: $('#Password').val(),
                             FirstAccess: JSON.parse($('#FirstAccess').val().toLowerCase()),
                             State: true,
@@ -177,15 +240,94 @@ else
                     }
                 }
 
-                const validateInputEmpty = (idInput, messaje, idError) => {
+                const validateEmpty = (idInput) => {
                     if ($(`#${idInput}`).val() == "" || $(`#${idInput}`).val() == null) {
-                        $(`#${idError}`).text(`${messaje}`);
+                        return true;
+                    } else {
+                        return false;
+                    }
+                }
+
+                const validateDataRepeat = async (idInput, typeData, code) => {
+                    const value = $(`#${idInput}`).val();
+                    const urlValidateRepeat = '@Url.Action("ValidateDataRepeatEdit")';
+
+                    const data = `${typeData},${value},${code}`
+
+                    const result = await fetch(urlValidateRepeat, {
+                        method: 'POST',
+                        body: JSON.stringify(data),
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    })
+
+                    const json = await result.json();
+                    return json;
+                }
+
+                const validateInput = (idInput, requiredMessage, idError) => {
+                    const isEmpty = validateEmpty(idInput);
+                    if (isEmpty) {
+                        $(`#${idError}`).text(requiredMessage);
                         return false;
                     } else {
                         $(`#${idError}`).text("");
                         return true;
                     }
                 }
+
+                const validateEmail = async (idInput, requiredMessage, formatMessage, repeatError, idError) => {
+                    const email = $(`#${idInput}`).val();
+                    const Code = $('#Code').val();
+                    const emailFormat = /^[a-zA-Z0-9._-]+@@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+                    const isEmpty = validateEmpty(idInput);
+                    let isRepeat = false;
+
+                    if (!isEmpty) {
+                        isRepeat = await validateDataRepeat(idInput, "Email", Code);
+                    }
+
+                    if (isEmpty) {
+                        $(`#${idError}`).text(requiredMessage);
+                        return false;
+                    } else if (!emailFormat.test(email)) {
+                        $(`#${idError}`).text(formatMessage);
+                        return false;
+                    } else if (isRepeat) {
+                        $(`#${idError}`).text(repeatError);
+                        return false;
+                    }
+                    else {
+                        console.log("es valido");
+                        $(`#${idError}`).text("");
+                        return true;
+                    }
+                }
+
+                const validateUser = async (idInput, requiredMessage, repeatError, idError) => {
+                    const userName = $(`#${idInput}`).val();
+                    const Code = $('#Code').val();
+                    const isEmpty = validateEmpty(idInput);
+                    let isRepeat = false;
+
+                    if (!isEmpty) {
+                        isRepeat = await validateDataRepeat(idInput, "User_", Code);
+                    }
+
+                    if (isEmpty) {
+                        $(`#${idError}`).text(requiredMessage);
+                        return false;
+                    } else if (isRepeat) {
+                        $(`#${idError}`).text(repeatError);
+                        return false;
+                    }
+                    else {
+                        $(`#${idError}`).text("");
+                        return true;
+                    }
+                }
+
                 // const FormatDate = (date) => {
 
                 //     const validateAm = date.toString().includes("a. m.");
