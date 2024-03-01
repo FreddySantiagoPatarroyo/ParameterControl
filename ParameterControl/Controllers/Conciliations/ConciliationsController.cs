@@ -9,12 +9,14 @@ using ParameterControl.Models.Pagination;
 using ParameterControl.Models.Policy;
 using ParameterControl.Models.Result;
 using ParameterControl.Models.Scenery;
+using ParameterControl.Models.User;
 using ParameterControl.Services.Authenticated;
 using ParameterControl.Services.Conciliations;
 using ParameterControl.Services.Policies;
 using ParameterControl.Services.Rows;
 using ParameterControl.Stage.Entities;
 using System.Reflection;
+using System.Security.Claims;
 using modConciliation = ParameterControl.Models.Conciliation;
 using modPolicy = ParameterControl.Models.Policy;
 
@@ -28,13 +30,15 @@ namespace ParameterControl.Controllers.Conciliations
         private readonly Rows rows;
         private readonly IPoliciesServices policiesServices;
         private readonly AuthenticatedUser authenticatedUser;
+        private readonly IConfiguration _configuration;
 
         public ConciliationsController(
             ILogger<HomeController> logger,
             IConciliationsServices conciliationsServices,
             Rows rows,
             IPoliciesServices policiesServices,
-            AuthenticatedUser authenticatedUser
+            AuthenticatedUser authenticatedUser,
+            IConfiguration configuration
         )
         {
             this._logger = logger;
@@ -42,6 +46,7 @@ namespace ParameterControl.Controllers.Conciliations
             this.rows = rows;
             this.policiesServices = policiesServices;
             this.authenticatedUser = authenticatedUser;
+            _configuration = configuration;
         }
 
         [HttpGet]
@@ -49,16 +54,19 @@ namespace ParameterControl.Controllers.Conciliations
         {
             try
             {
+                ClaimsPrincipal principal = HttpContext.User as ClaimsPrincipal;
+                var data = principal.FindFirst(ClaimTypes.Role).Value;
+
+                var items = _configuration.GetSection($"Permisos:{data}:Conciliacion").GetChildren();
                 List<modConciliation.Conciliation> Conciliations = await conciliationsServices.GetConciliationsPagination(paginationViewModel);
                 int TotalConciliations = await conciliationsServices.CountConciliations();
-
                 TableConciliations.Data = await conciliationsServices.GetConciliationsFormat(Conciliations);
                 TableConciliations.Rows = rows.RowsConciliations();
-                TableConciliations.IsCreate = true;
-                TableConciliations.IsActivate = true;
-                TableConciliations.IsEdit = true;
-                TableConciliations.IsView = true;
-                TableConciliations.IsInactivate = true;
+                TableConciliations.IsCreate = Convert.ToBoolean(items.Where(x => x.Key.Equals("btnCreate")).FirstOrDefault().Value);
+                TableConciliations.IsActivate = Convert.ToBoolean(items.Where(x => x.Key.Equals("btnActivate")).FirstOrDefault().Value);
+                TableConciliations.IsEdit = Convert.ToBoolean(items.Where(x => x.Key.Equals("btnEdit")).FirstOrDefault().Value);
+                TableConciliations.IsView = Convert.ToBoolean(items.Where(x => x.Key.Equals("btnDetail")).FirstOrDefault().Value);
+                TableConciliations.IsInactivate = Convert.ToBoolean(items.Where(x => x.Key.Equals("btnInactive")).FirstOrDefault().Value);
                 TableConciliations.Filter = true;
                 ViewBag.ApplyFilter = false;
 
@@ -74,7 +82,7 @@ namespace ParameterControl.Controllers.Conciliations
                 ViewBag.Success = true;
                 return View("Conciliations", resultViemModel);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 ViewBag.Success = false;
                 return View("Conciliations", null);
