@@ -13,11 +13,9 @@ namespace ParameterControl.Controllers.ConciliationExecution
         private readonly IConciliationExecutionService conciliationExecutionService;
         private readonly IConfiguration _configuration;
         private readonly ClaimsPrincipal _principal;
-        private readonly bool _isCreate;
-        private readonly bool _isActivate;
-        private readonly bool _isEdit;
-        private readonly bool _isView;
-        private readonly bool _isInactive;
+        private readonly bool _isExecute;
+        private readonly bool _isProgram;
+        private readonly bool _isAbort;
 
         public ConciliationExecutionController(
             IConciliationExecutionService conciliationExecutionService,
@@ -29,13 +27,10 @@ namespace ParameterControl.Controllers.ConciliationExecution
             var context = httpContextAccesor.HttpContext;
             _principal = context.User as ClaimsPrincipal;
             var data = _principal.FindFirst(ClaimTypes.Role).Value;
-            var section = _configuration.GetSection($"Permisos:{data}:Conciliacion").GetChildren();
-            _isCreate = Convert.ToBoolean(section.Where(x => x.Key.Equals("btnCreate")).FirstOrDefault().Value);
-            _isActivate = Convert.ToBoolean(section.Where(x => x.Key.Equals("btnActivate")).FirstOrDefault().Value);
-            _isEdit = Convert.ToBoolean(section.Where(x => x.Key.Equals("btnEdit")).FirstOrDefault().Value);
-            _isView = Convert.ToBoolean(section.Where(x => x.Key.Equals("btnDetail")).FirstOrDefault().Value);
-            _isInactive = Convert.ToBoolean(section.Where(x => x.Key.Equals("btnInactive")).FirstOrDefault().Value);
-
+            var section = _configuration.GetSection($"Permisos:{data}:ExecuteConciliation").GetChildren();
+            _isExecute = Convert.ToBoolean(section.Where(x => x.Key.Equals("btnExecute")).FirstOrDefault().Value);
+            _isProgram = Convert.ToBoolean(section.Where(x => x.Key.Equals("btnProgram")).FirstOrDefault().Value);
+            _isAbort = Convert.ToBoolean(section.Where(x => x.Key.Equals("btnAbort")).FirstOrDefault().Value);
         }
 
         public async Task<ActionResult> ConciliationExecution()
