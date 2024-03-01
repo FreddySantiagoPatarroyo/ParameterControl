@@ -512,7 +512,7 @@ else
                     const emailFormat = /^[a-zA-Z0-9._-]+@@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
                     const isEmpty = validateEmpty(idInput);
 
-                    if (!email) {
+                    if (isEmpty) {
                         $(`#${idError}`).text(requiredMessage);
                         return false;
                     } else if (!emailFormat.test(email)) {
