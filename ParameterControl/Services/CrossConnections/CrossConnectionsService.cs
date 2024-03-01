@@ -1,22 +1,21 @@
-﻿using ParameterControl.Models.CrossConnection;
-using ParameterControl.Models.Filter;
-using ParameterControl.LoadControl.Interfaces;
-using modCrossConnection = ParameterControl.Models.CrossConnection;
+﻿using ParameterControl.LoadControl.Entities;
 using ParameterControl.LoadControl.Impl;
-using ParameterControl.LoadControl.Entities;
+using ParameterControl.LoadControl.Interfaces;
+using ParameterControl.Models.CrossConnection;
+using ParameterControl.Models.Filter;
 using ParameterControl.Models.Pagination;
-using ParameterControl.Models.Conciliation;
-using ParameterControl.Conciliation.Entities;
+using modCrossConnection = ParameterControl.Models.CrossConnection;
 
 namespace ParameterControl.Services.CrossConnections
 {
-    public class CrossConnectionsService:ICrossConnectionsService
+    public class CrossConnectionsService : ICrossConnectionsService
     {
         private List<modCrossConnection.CrossConnection> crossConnections = new List<modCrossConnection.CrossConnection>();
         private ILoadControlService _loadControlService;
         public CrossConnectionsService(
             IConfiguration configuration
-        ) {
+        )
+        {
             _loadControlService = new LoadControlService(configuration);
             crossConnections = new List<modCrossConnection.CrossConnection>()
             {
@@ -223,8 +222,8 @@ namespace ParameterControl.Services.CrossConnections
             });
         }
 
-        public async Task<string> ActiveCrossConnection(modCrossConnection.CrossConnection crossConnection) 
-        { 
+        public async Task<string> ActiveCrossConnection(modCrossConnection.CrossConnection crossConnection)
+        {
             var mapping = await MapperActiveCrossConnection(crossConnection);
             var response = await _loadControlService.UpdateLoadControl(mapping);
 

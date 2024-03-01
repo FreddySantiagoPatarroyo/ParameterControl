@@ -2,7 +2,7 @@
 
 namespace ParameterControl.Models.ConciliationExecution
 {
-    public class ConciliationExecutionViewModel:ConciiliationExecution
+    public class ConciliationExecutionViewModel : ConciiliationExecution
     {
         public List<SelectListItem> Conciliations = new List<SelectListItem>();
     }

@@ -1,6 +1,6 @@
 
-﻿using ParameterControl.Models.Indicator;
 using ParameterControl.Models.Filter;
+using ParameterControl.Models.Indicator;
 using modIndicator = ParameterControl.Models.Indicator;
 
 namespace ParameterControl.Services.Indicators

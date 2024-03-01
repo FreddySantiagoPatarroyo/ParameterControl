@@ -1,6 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
-using ParameterControl.Conciliation.Entities;
-using ParameterControl.Models.Conciliation;
 using ParameterControl.Models.Filter;
 using ParameterControl.Models.Pagination;
 using ParameterControl.Models.Scenery;
@@ -233,7 +231,7 @@ namespace ParameterControl.Services.Scenarios
 
             foreach (var conciliation in conciliations)
             {
-                if(conciliation.State == true)
+                if (conciliation.State == true)
                 {
                     conciliationActives.Add(conciliation);
                 }

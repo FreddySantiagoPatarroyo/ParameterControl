@@ -4,8 +4,6 @@ using ParameterControl.Models.Policy;
 using ParameterControl.Policy.Entities;
 using ParameterControl.Policy.Impl;
 using ParameterControl.Policy.Interfaces;
-using System.Data;
-using System.Runtime.CompilerServices;
 using modPolicy = ParameterControl.Models.Policy;
 
 namespace ParameterControl.Services.Policies
@@ -66,7 +64,7 @@ namespace ParameterControl.Services.Policies
                 var response = await _policyService.SelectPaginatorPolicy(pagination.Page, pagination.RecordsPage);
                 var result = await MapperPolicy(response);
 
-                return result; 
+                return result;
             }
             catch (Exception ex)
             {
@@ -141,7 +139,7 @@ namespace ParameterControl.Services.Policies
             List<modPolicy.Policy> allPolicies = await GetPolicies();
             List<PolicyViewModel> policiesFilter = await GetPolicesFormat(allPolicies);
 
-            if(filterModel.ColumValue == null || filterModel.ColumValue == "" || filterModel.ValueFilter == null || filterModel.ValueFilter == "")
+            if (filterModel.ColumValue == null || filterModel.ColumValue == "" || filterModel.ValueFilter == null || filterModel.ValueFilter == "")
             {
                 return policiesFilter;
             }
@@ -158,7 +156,8 @@ namespace ParameterControl.Services.Policies
             var property = typeof(PolicyViewModel).GetProperty(filterModel.ColumValue);
 
             List<PolicyViewModel> policiesFilter = new List<PolicyViewModel>();
-            if (filterModel.TypeRow == "Select") {
+            if (filterModel.TypeRow == "Select")
+            {
                 foreach (PolicyViewModel policy in allPolicies)
                 {
                     if (property.GetValue(policy).ToString().ToUpper() == filterModel.ValueFilter.ToUpper())
@@ -177,7 +176,7 @@ namespace ParameterControl.Services.Policies
                     }
                 }
             }
-           
+
             return policiesFilter;
         }
 
@@ -207,7 +206,7 @@ namespace ParameterControl.Services.Policies
             {
                 List<modPolicy.Policy> policies = new List<modPolicy.Policy>();
                 if (policyModel.Count > 0)
-                {                    
+                {
                     foreach (var policy in policyModel)
                     {
                         policies.Add(MapperToPolicy(policy).Result);

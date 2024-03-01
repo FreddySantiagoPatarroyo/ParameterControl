@@ -1,17 +1,18 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
 using ParameterControl.Models.Filter;
 using ParameterControl.Models.Indicator;
 using ParameterControl.Services.Authenticated;
 using ParameterControl.Services.Indicators;
 using ParameterControl.Services.Rows;
+using System.Security.Claims;
 using modIndicator = ParameterControl.Models.Indicator;
-using Microsoft.AspNetCore.Mvc.Rendering;
-
-
 
 namespace ParameterControl.Controllers.Indicators
 {
+    [Authorize(Roles = "ADMINISTRADOR,EJECUTOR,CONSULTOR")]
     public class IndicatorsController : Controller
     {
         public TableIndicatorViewModel TableIndicators = new TableIndicatorViewModel();
@@ -19,18 +20,37 @@ namespace ParameterControl.Controllers.Indicators
         private readonly IIndicatorsService indicatorsService;
         private readonly Rows rows;
         private readonly AuthenticatedUser authenticatedUser;
+        private readonly IConfiguration _configuration;
+        private readonly ClaimsPrincipal _principal;
+        private readonly bool _isCreate;
+        private readonly bool _isActivate;
+        private readonly bool _isEdit;
+        private readonly bool _isView;
+        private readonly bool _isInactive;
 
         public IndicatorsController(
             ILogger<HomeController> logger,
             IIndicatorsService indicatorsService,
             Rows rows,
-            AuthenticatedUser authenticatedUser
+            AuthenticatedUser authenticatedUser,
+            IConfiguration configuration,
+            IHttpContextAccessor httpContextAccesor
         )
         {
             this._logger = logger;
             this.indicatorsService = indicatorsService;
             this.rows = rows;
             this.authenticatedUser = authenticatedUser;
+            _configuration = configuration;
+            var context = httpContextAccesor.HttpContext;
+            _principal = context.User as ClaimsPrincipal;
+            var data = _principal.FindFirst(ClaimTypes.Role).Value;
+            var section = _configuration.GetSection($"Permisos:{data}:Conciliacion").GetChildren();
+            _isCreate = Convert.ToBoolean(section.Where(x => x.Key.Equals("btnCreate")).FirstOrDefault().Value);
+            _isActivate = Convert.ToBoolean(section.Where(x => x.Key.Equals("btnActivate")).FirstOrDefault().Value);
+            _isEdit = Convert.ToBoolean(section.Where(x => x.Key.Equals("btnEdit")).FirstOrDefault().Value);
+            _isView = Convert.ToBoolean(section.Where(x => x.Key.Equals("btnDetail")).FirstOrDefault().Value);
+            _isInactive = Convert.ToBoolean(section.Where(x => x.Key.Equals("btnInactive")).FirstOrDefault().Value);
         }
 
         [HttpGet]
@@ -42,11 +62,11 @@ namespace ParameterControl.Controllers.Indicators
 
                 TableIndicators.Data = await indicatorsService.GetindicatorsFormat(indicators);
                 TableIndicators.Rows = rows.RowsIndicators();
-                TableIndicators.IsCreate = true;
-                TableIndicators.IsActivate = true;
-                TableIndicators.IsEdit = true;
-                TableIndicators.IsView = true;
-                TableIndicators.IsInactivate = true;
+                TableIndicators.IsCreate = _isCreate;
+                TableIndicators.IsActivate = _isActivate;
+                TableIndicators.IsEdit = _isEdit;
+                TableIndicators.IsView = _isView;
+                TableIndicators.IsInactivate = _isInactive;
                 ViewBag.ApplyFilter = false;
 
                 ViewBag.Success = true;
@@ -81,11 +101,11 @@ namespace ParameterControl.Controllers.Indicators
 
                 TableIndicators.Data = indicatorsFilter;
                 TableIndicators.Rows = rows.RowsIndicators();
-                TableIndicators.IsCreate = true;
-                TableIndicators.IsActivate = true;
-                TableIndicators.IsEdit = true;
-                TableIndicators.IsView = true;
-                TableIndicators.IsInactivate = true;
+                TableIndicators.IsCreate = _isCreate;
+                TableIndicators.IsActivate = _isActivate;
+                TableIndicators.IsEdit = _isEdit;
+                TableIndicators.IsView = _isView;
+                TableIndicators.IsInactivate = _isInactive;
                 ViewBag.ApplyFilter = true;
 
                 ViewBag.Success = true;

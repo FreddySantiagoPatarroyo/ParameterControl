@@ -1,22 +1,19 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
-using ParameterControl.Conciliation.Impl;
-using ParameterControl.Models.Conciliation;
 using ParameterControl.Models.CrossConnection;
 using ParameterControl.Models.Filter;
 using ParameterControl.Models.Pagination;
-using ParameterControl.Models.Policy;
-using ParameterControl.Models.Result;
 using ParameterControl.Services.Authenticated;
-using ParameterControl.Services.Conciliations;
 using ParameterControl.Services.CrossConnections;
 using ParameterControl.Services.Rows;
-
+using System.Security.Claims;
 using modCrossConnection = ParameterControl.Models.CrossConnection;
 
 namespace ParameterControl.Controllers.CrossConnections
 {
+    [Authorize(Roles = "ADMINISTRADOR,EJECUTOR,CONSULTOR")]
     public class CrossConnectionsController : Controller
     {
         public TableCrossConnectionViewModel TableCrossConnections = new TableCrossConnectionViewModel();
@@ -24,17 +21,37 @@ namespace ParameterControl.Controllers.CrossConnections
         private readonly ICrossConnectionsService crossConnectionsService;
         private readonly ILogger<HomeController> _logger;
         private readonly AuthenticatedUser authenticatedUser;
+        private readonly IConfiguration _configuration;
+        private readonly ClaimsPrincipal _principal;
+        private readonly bool _isCreate;
+        private readonly bool _isActivate;
+        private readonly bool _isEdit;
+        private readonly bool _isView;
+        private readonly bool _isInactive;
 
         public CrossConnectionsController(
             ILogger<HomeController> logger,
             Rows rows,
             ICrossConnectionsService crossConnectionsService,
-            AuthenticatedUser authenticatedUser
-        ) {
+            AuthenticatedUser authenticatedUser,
+            IConfiguration configuration,
+            IHttpContextAccessor httpContextAccesor
+        )
+        {
             this._logger = logger;
             this.rows = rows;
             this.crossConnectionsService = crossConnectionsService;
             this.authenticatedUser = authenticatedUser;
+            _configuration = configuration;
+            var context = httpContextAccesor.HttpContext;
+            _principal = context.User as ClaimsPrincipal;
+            var data = _principal.FindFirst(ClaimTypes.Role).Value;
+            var section = _configuration.GetSection($"Permisos:{data}:Conciliacion").GetChildren();
+            _isCreate = Convert.ToBoolean(section.Where(x => x.Key.Equals("btnCreate")).FirstOrDefault().Value);
+            _isActivate = Convert.ToBoolean(section.Where(x => x.Key.Equals("btnActivate")).FirstOrDefault().Value);
+            _isEdit = Convert.ToBoolean(section.Where(x => x.Key.Equals("btnEdit")).FirstOrDefault().Value);
+            _isView = Convert.ToBoolean(section.Where(x => x.Key.Equals("btnDetail")).FirstOrDefault().Value);
+            _isInactive = Convert.ToBoolean(section.Where(x => x.Key.Equals("btnInactive")).FirstOrDefault().Value);
         }
 
         [HttpGet]
@@ -48,11 +65,11 @@ namespace ParameterControl.Controllers.CrossConnections
                 TableCrossConnections.Data = await crossConnectionsService.GetCrossConnectionsFormat(crossConnections);
                 TableCrossConnections.Rows = rows.RowsCrossConnection();
                 TableCrossConnections.Filter = true;
-                TableCrossConnections.IsCreate = false;
-                TableCrossConnections.IsActivate = true;
-                TableCrossConnections.IsEdit = false;
-                TableCrossConnections.IsView = true;
-                TableCrossConnections.IsInactivate = true;
+                TableCrossConnections.IsCreate = _isCreate;
+                TableCrossConnections.IsActivate = _isActivate;
+                TableCrossConnections.IsEdit = _isEdit;
+                TableCrossConnections.IsView = _isView;
+                TableCrossConnections.IsInactivate = _isInactive;
                 ViewBag.ApplyFilter = false;
 
                 var resultViemModel = new PaginationResult<TableCrossConnectionViewModel>()
@@ -96,11 +113,11 @@ namespace ParameterControl.Controllers.CrossConnections
                 TableCrossConnections.Data = crossConnectionsService.GetFilterPagination(crossConnectionsFilter, paginationViewModel, TotalCrossConnections);
                 TableCrossConnections.Rows = rows.RowsCrossConnection();
                 TableCrossConnections.Filter = true;
-                TableCrossConnections.IsCreate = false;
-                TableCrossConnections.IsActivate = true;
-                TableCrossConnections.IsEdit = false;
-                TableCrossConnections.IsView = true;
-                TableCrossConnections.IsInactivate = true;
+                TableCrossConnections.IsCreate = _isCreate;
+                TableCrossConnections.IsActivate = _isActivate;
+                TableCrossConnections.IsEdit = _isEdit;
+                TableCrossConnections.IsView = _isView;
+                TableCrossConnections.IsInactivate = _isInactive;
                 ViewBag.ApplyFilter = true;
 
                 var resultViemModel = new PaginationResult<TableCrossConnectionViewModel>()
@@ -120,7 +137,7 @@ namespace ParameterControl.Controllers.CrossConnections
                 ViewBag.Success = false;
                 return View("CrossConnectionsFilter", null);
             }
-            
+
         }
 
         [HttpGet]

@@ -1,10 +1,10 @@
-﻿using ParameterControl.User.Impl;
-using ParameterControl.User.Interfaces;
-using ParameterControl.Models.Filter;
+﻿using ParameterControl.Models.Filter;
 using ParameterControl.Models.Pagination;
 using ParameterControl.Models.User;
-using modUser = ParameterControl.Models.User;
 using ParameterControl.User.Entities;
+using ParameterControl.User.Impl;
+using ParameterControl.User.Interfaces;
+using modUser = ParameterControl.Models.User;
 
 namespace ParameterControl.Services.Users
 {
@@ -198,7 +198,7 @@ namespace ParameterControl.Services.Users
             return usersFilter;
         }
 
-        public List<UserViewModel>GetFilterPagination(List<UserViewModel> inicialUsers, PaginationViewModel paginationViewModel, int totalData)
+        public List<UserViewModel> GetFilterPagination(List<UserViewModel> inicialUsers, PaginationViewModel paginationViewModel, int totalData)
         {
             var limit = paginationViewModel.Page * paginationViewModel.RecordsPage;
             var index = limit - paginationViewModel.RecordsPage;

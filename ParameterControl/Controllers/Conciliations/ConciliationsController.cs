@@ -1,25 +1,23 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
-using ParameterControl.LoadControl.Entities;
 using ParameterControl.Models.Conciliation;
-using ParameterControl.Models.CrossConnection;
 using ParameterControl.Models.Filter;
 using ParameterControl.Models.Pagination;
 using ParameterControl.Models.Policy;
-using ParameterControl.Models.Result;
-using ParameterControl.Models.Scenery;
 using ParameterControl.Services.Authenticated;
 using ParameterControl.Services.Conciliations;
 using ParameterControl.Services.Policies;
 using ParameterControl.Services.Rows;
-using ParameterControl.Stage.Entities;
-using System.Reflection;
+using System.Data;
+using System.Security.Claims;
 using modConciliation = ParameterControl.Models.Conciliation;
 using modPolicy = ParameterControl.Models.Policy;
 
 namespace ParameterControl.Controllers.Conciliations
 {
+    [Authorize(Roles = "ADMINISTRADOR,EJECUTOR,CONSULTOR")]
     public class ConciliationsController : Controller
     {
         public TableConciliationViewModel TableConciliations = new TableConciliationViewModel();
@@ -28,13 +26,22 @@ namespace ParameterControl.Controllers.Conciliations
         private readonly Rows rows;
         private readonly IPoliciesServices policiesServices;
         private readonly AuthenticatedUser authenticatedUser;
+        private readonly IConfiguration _configuration;
+        private readonly ClaimsPrincipal _principal;
+        private readonly bool _isCreate;
+        private readonly bool _isActivate;
+        private readonly bool _isEdit;
+        private readonly bool _isView;
+        private readonly bool _isInactive;
 
         public ConciliationsController(
             ILogger<HomeController> logger,
             IConciliationsServices conciliationsServices,
             Rows rows,
             IPoliciesServices policiesServices,
-            AuthenticatedUser authenticatedUser
+            AuthenticatedUser authenticatedUser,
+            IConfiguration configuration,
+            IHttpContextAccessor httpContextAccesor
         )
         {
             this._logger = logger;
@@ -42,6 +49,16 @@ namespace ParameterControl.Controllers.Conciliations
             this.rows = rows;
             this.policiesServices = policiesServices;
             this.authenticatedUser = authenticatedUser;
+            _configuration = configuration;
+            var context = httpContextAccesor.HttpContext;
+            _principal = context.User as ClaimsPrincipal;
+            var data = _principal.FindFirst(ClaimTypes.Role).Value;
+            var section = _configuration.GetSection($"Permisos:{data}:Conciliacion").GetChildren();
+            _isCreate = Convert.ToBoolean(section.Where(x => x.Key.Equals("btnCreate")).FirstOrDefault().Value);
+            _isActivate = Convert.ToBoolean(section.Where(x => x.Key.Equals("btnActivate")).FirstOrDefault().Value);
+            _isEdit = Convert.ToBoolean(section.Where(x => x.Key.Equals("btnEdit")).FirstOrDefault().Value);
+            _isView = Convert.ToBoolean(section.Where(x => x.Key.Equals("btnDetail")).FirstOrDefault().Value);
+            _isInactive = Convert.ToBoolean(section.Where(x => x.Key.Equals("btnInactive")).FirstOrDefault().Value);
         }
 
         [HttpGet]
@@ -51,14 +68,13 @@ namespace ParameterControl.Controllers.Conciliations
             {
                 List<modConciliation.Conciliation> Conciliations = await conciliationsServices.GetConciliationsPagination(paginationViewModel);
                 int TotalConciliations = await conciliationsServices.CountConciliations();
-
                 TableConciliations.Data = await conciliationsServices.GetConciliationsFormat(Conciliations);
                 TableConciliations.Rows = rows.RowsConciliations();
-                TableConciliations.IsCreate = true;
-                TableConciliations.IsActivate = true;
-                TableConciliations.IsEdit = true;
-                TableConciliations.IsView = true;
-                TableConciliations.IsInactivate = true;
+                TableConciliations.IsCreate = _isCreate;
+                TableConciliations.IsActivate = _isActivate;
+                TableConciliations.IsEdit = _isEdit;
+                TableConciliations.IsView = _isView;
+                TableConciliations.IsInactivate = _isInactive;
                 TableConciliations.Filter = true;
                 ViewBag.ApplyFilter = false;
 
@@ -74,7 +90,7 @@ namespace ParameterControl.Controllers.Conciliations
                 ViewBag.Success = true;
                 return View("Conciliations", resultViemModel);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 ViewBag.Success = false;
                 return View("Conciliations", null);
@@ -103,11 +119,11 @@ namespace ParameterControl.Controllers.Conciliations
 
                 TableConciliations.Data = conciliationsServices.GetFilterPagination(conciliationsFilter, paginationViewModel, TotalConciliations);
                 TableConciliations.Rows = rows.RowsConciliations();
-                TableConciliations.IsCreate = true;
-                TableConciliations.IsActivate = true;
-                TableConciliations.IsEdit = true;
-                TableConciliations.IsView = true;
-                TableConciliations.IsInactivate = true;
+                TableConciliations.IsCreate = _isCreate;
+                TableConciliations.IsActivate = _isActivate;
+                TableConciliations.IsEdit = _isEdit;
+                TableConciliations.IsView = _isView;
+                TableConciliations.IsInactivate = _isInactive;
                 TableConciliations.Filter = true;
                 ViewBag.ApplyFilter = true;
 
@@ -181,7 +197,7 @@ namespace ParameterControl.Controllers.Conciliations
                 _logger.LogError($"Error en el método ConciliationController.Create : {JsonConvert.SerializeObject(ex.Message)}");
                 return BadRequest(new { message = "Error al crear la conciliación", state = "Error" });
             }
-            
+
         }
 
         [HttpGet]
@@ -257,7 +273,7 @@ namespace ParameterControl.Controllers.Conciliations
                 _logger.LogError($"Error en el método ConciliationsController.Edit : {JsonConvert.SerializeObject(ex.Message)}");
                 return BadRequest(new { message = "Error al actualizar la conciliación", state = "Error" });
             }
-            
+
         }
 
         [HttpGet]
@@ -284,7 +300,7 @@ namespace ParameterControl.Controllers.Conciliations
                 ViewBag.Success = false;
                 ViewBag.EntyNull = false;
                 return View("Actions/ViewConciliation", null);
-            } 
+            }
         }
 
         [HttpGet]
@@ -398,7 +414,7 @@ namespace ParameterControl.Controllers.Conciliations
                     modConciliation.Conciliation request = await conciliationsServices.GetConciliationsByCode(code);
                     var responseIn = await conciliationsServices.DesactiveConciliation(request);
                     _logger.LogInformation($"Finaliza método ConciliationController.Desactive {responseIn}");
-                    return Ok(new { message = "Se desactivo la conciliación de manera exitosa", state = "Success" });  
+                    return Ok(new { message = "Se desactivo la conciliación de manera exitosa", state = "Success" });
                 }
             }
             catch (Exception ex)
@@ -406,7 +422,7 @@ namespace ParameterControl.Controllers.Conciliations
                 _logger.LogError($"Error en el método ConciliationController.Desactive : {JsonConvert.SerializeObject(ex.Message)}");
                 return BadRequest(new { message = "Error al desactivar la conciliación", state = "Error" });
             }
-            
+
         }
 
         [HttpGet]
@@ -486,9 +502,9 @@ namespace ParameterControl.Controllers.Conciliations
         }
         public async Task<List<SelectListItem>> GetDestination()
         {
-           List<string> detinations = await conciliationsServices.GetDestinations();
+            List<string> detinations = await conciliationsServices.GetDestinations();
             return detinations.Select(detination => new SelectListItem(detination, detination)).ToList();
-            
+
         }
     }
 }

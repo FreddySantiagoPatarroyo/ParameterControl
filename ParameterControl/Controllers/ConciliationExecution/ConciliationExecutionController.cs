@@ -1,21 +1,41 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using ParameterControl.Conciliation.DataAccess;
-using ParameterControl.Models.Conciliation;
 using ParameterControl.Models.ConciliationExecution;
 using ParameterControl.Services.ConciliationExecution;
-using System.Reflection;
-
+using System.Security.Claims;
 
 namespace ParameterControl.Controllers.ConciliationExecution
 {
+    [Authorize(Roles = "ADMINISTRADOR,EJECUTOR,CONSULTOR")]
     public class ConciliationExecutionController : Controller
     {
         private readonly IConciliationExecutionService conciliationExecutionService;
+        private readonly IConfiguration _configuration;
+        private readonly ClaimsPrincipal _principal;
+        private readonly bool _isCreate;
+        private readonly bool _isActivate;
+        private readonly bool _isEdit;
+        private readonly bool _isView;
+        private readonly bool _isInactive;
 
-        public ConciliationExecutionController(IConciliationExecutionService conciliationExecutionService) 
+        public ConciliationExecutionController(
+            IConciliationExecutionService conciliationExecutionService,
+            IConfiguration configuration,
+            IHttpContextAccessor httpContextAccesor)
         {
             this.conciliationExecutionService = conciliationExecutionService;
+            _configuration = configuration;
+            var context = httpContextAccesor.HttpContext;
+            _principal = context.User as ClaimsPrincipal;
+            var data = _principal.FindFirst(ClaimTypes.Role).Value;
+            var section = _configuration.GetSection($"Permisos:{data}:Conciliacion").GetChildren();
+            _isCreate = Convert.ToBoolean(section.Where(x => x.Key.Equals("btnCreate")).FirstOrDefault().Value);
+            _isActivate = Convert.ToBoolean(section.Where(x => x.Key.Equals("btnActivate")).FirstOrDefault().Value);
+            _isEdit = Convert.ToBoolean(section.Where(x => x.Key.Equals("btnEdit")).FirstOrDefault().Value);
+            _isView = Convert.ToBoolean(section.Where(x => x.Key.Equals("btnDetail")).FirstOrDefault().Value);
+            _isInactive = Convert.ToBoolean(section.Where(x => x.Key.Equals("btnInactive")).FirstOrDefault().Value);
+
         }
 
         public async Task<ActionResult> ConciliationExecution()
@@ -33,7 +53,7 @@ namespace ParameterControl.Controllers.ConciliationExecution
                 ViewBag.Success = false;
                 return View("ConciliationExecution", null);
             }
-            
+
         }
 
         public async Task<ActionResult> RunProcess(int code)
@@ -42,7 +62,7 @@ namespace ParameterControl.Controllers.ConciliationExecution
             {
                 ViewBag.CodeSend = code;
                 var conciliation = await conciliationExecutionService.GetConciliationByCode(code);
-                if(conciliation.Code == 0)
+                if (conciliation.Code == 0)
                 {
                     ViewBag.Success = true;
                     ViewBag.EntyNull = true;

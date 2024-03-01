@@ -1,8 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Oracle.ManagedDataAccess.Client;
-using ParameterControl.Parameter.Entities;
 using System.Data;
-using System.Reflection.PortableExecutable;
 
 namespace ParameterControl.Parameter.DataAccess
 {
@@ -11,7 +9,7 @@ namespace ParameterControl.Parameter.DataAccess
         private readonly IConfiguration _configuration;
         DataTable _dataTable = new DataTable();
 
-        public GetByConciliationParameters (IConfiguration configuration)
+        public GetByConciliationParameters(IConfiguration configuration)
         {
             _configuration = configuration;
         }

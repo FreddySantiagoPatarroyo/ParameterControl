@@ -25,6 +25,6 @@
         public string FlagDep { get; set; } = string.Empty;
         public int DaysDep { get; set; }
         public string ModifieldBy { get; set; } = string.Empty;
-        public bool State {  get; set; } = false;
+        public bool State { get; set; } = false;
     }
 }

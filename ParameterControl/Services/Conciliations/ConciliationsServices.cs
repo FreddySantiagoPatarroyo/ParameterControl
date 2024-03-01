@@ -216,7 +216,7 @@ namespace ParameterControl.Services.Conciliations
 
             foreach (var detination in Destinations)
             {
-                if(detination != null && detination != string.Empty)
+                if (detination != null && detination != string.Empty)
                 {
                     if (!DestinationsActive.Contains(detination))
                     {

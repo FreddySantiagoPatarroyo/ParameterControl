@@ -1,19 +1,20 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
 using ParameterControl.Models.Filter;
+using ParameterControl.Models.Pagination;
 using ParameterControl.Models.User;
 using ParameterControl.Services.Authenticated;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using ParameterControl.Services.Rows;
 using ParameterControl.Services.Users;
+using System.Data;
+using System.Security.Claims;
 using modUser = ParameterControl.Models.User;
-using ParameterControl.Models.Pagination;
-using ParameterControl.Models.Result;
-using System.Reflection;
-
 
 namespace ParameterControl.Controllers.Users
 {
+    [Authorize(Roles = "ADMINISTRADOR,EJECUTOR,CONSULTOR")]
     public class UsersController : Controller
     {
         public TableUserViewModel TableUsers = new TableUserViewModel();
@@ -21,18 +22,38 @@ namespace ParameterControl.Controllers.Users
         private readonly IUsersServices usersServices;
         private readonly Rows rows;
         private readonly AuthenticatedUser authenticatedUser;
+        private readonly IConfiguration _configuration;
+        private readonly ClaimsPrincipal _principal;
+        private readonly bool _isCreate;
+        private readonly bool _isActivate;
+        private readonly bool _isEdit;
+        private readonly bool _isView;
+        private readonly bool _isInactive;
 
         public UsersController(
             ILogger<HomeController> logger,
             IUsersServices usersServices,
             Rows rows,
-            AuthenticatedUser authenticatedUser
+            AuthenticatedUser authenticatedUser,
+            IConfiguration configuration,
+            IHttpContextAccessor httpContextAccesor
         )
         {
             this._logger = logger;
             this.usersServices = usersServices;
             this.rows = rows;
             this.authenticatedUser = authenticatedUser;
+            _configuration = configuration;
+            var context = httpContextAccesor.HttpContext;
+            _principal = context.User as ClaimsPrincipal;
+            var data = _principal.FindFirst(ClaimTypes.Role).Value;
+            var section = _configuration.GetSection($"Permisos:{data}:Conciliacion").GetChildren();
+            _isCreate = Convert.ToBoolean(section.Where(x => x.Key.Equals("btnCreate")).FirstOrDefault().Value);
+            _isActivate = Convert.ToBoolean(section.Where(x => x.Key.Equals("btnActivate")).FirstOrDefault().Value);
+            _isEdit = Convert.ToBoolean(section.Where(x => x.Key.Equals("btnEdit")).FirstOrDefault().Value);
+            _isView = Convert.ToBoolean(section.Where(x => x.Key.Equals("btnDetail")).FirstOrDefault().Value);
+            _isInactive = Convert.ToBoolean(section.Where(x => x.Key.Equals("btnInactive")).FirstOrDefault().Value);
+
         }
 
         [HttpGet]
@@ -47,11 +68,11 @@ namespace ParameterControl.Controllers.Users
 
                 TableUsers.Rows = rows.RowsUsers();
 
-                TableUsers.IsCreate = true;
-                TableUsers.IsActivate = true;
-                TableUsers.IsEdit = true;
-                TableUsers.IsView = true;
-                TableUsers.IsInactivate = true;
+                TableUsers.IsCreate = _isCreate;
+                TableUsers.IsActivate = _isActivate;
+                TableUsers.IsEdit = _isEdit;
+                TableUsers.IsView = _isView;
+                TableUsers.IsInactivate = _isInactive;
                 TableUsers.Filter = true;
                 ViewBag.ApplyFilter = false;
 
@@ -97,11 +118,11 @@ namespace ParameterControl.Controllers.Users
 
                 TableUsers.Data = usersServices.GetFilterPagination(usersFilter, paginationViewModel, TotalUsers);
                 TableUsers.Rows = rows.RowsUsers();
-                TableUsers.IsCreate = true;
-                TableUsers.IsActivate = true;
-                TableUsers.IsEdit = true;
-                TableUsers.IsView = true;
-                TableUsers.IsInactivate = true;
+                TableUsers.IsCreate = _isCreate;
+                TableUsers.IsActivate = _isActivate;
+                TableUsers.IsEdit = _isEdit;
+                TableUsers.IsView = _isView;
+                TableUsers.IsInactivate = _isInactive;
                 TableUsers.Filter = true;
                 ViewBag.ApplyFilter = true;
 
@@ -158,7 +179,7 @@ namespace ParameterControl.Controllers.Users
                     _logger.LogInformation($"Finaliza método UsersController.Create {JsonConvert.SerializeObject(responseIn)}");
 
                     return Ok(new { message = "Se creo el usuario de manera exitosa", state = "Success" });
-                  
+
                 }
             }
             catch (Exception ex)
@@ -166,7 +187,7 @@ namespace ParameterControl.Controllers.Users
                 _logger.LogError($"Error en el método UsersController.Create : {JsonConvert.SerializeObject(ex.Message)}");
                 return BadRequest(new { message = "Error al crear el usuario", state = "Error" });
             }
-            
+
         }
 
         [HttpGet]
@@ -195,7 +216,7 @@ namespace ParameterControl.Controllers.Users
                 ViewBag.Success = false;
                 ViewBag.EntyNull = false;
                 return View("Actions/EditUser", null);
-            } 
+            }
         }
 
         [HttpPost]
@@ -418,7 +439,6 @@ namespace ParameterControl.Controllers.Users
         public async Task<IActionResult> ValidateDataRepeatCreate([FromBody] string value)
         {
             var data = value.Split(",");
-            var property = typeof(modUser.User)?.GetProperty(data[0]);
             List<modUser.User> Users = await usersServices.GetUsers();
             var validate = await GetDataRepeat(Users, data);
 

@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
-using NuGet.Protocol.Plugins;
 using ParameterControl.Models.Login;
 using ParameterControl.Services.Authenticated;
 using ParameterControl.Services.Users;
@@ -35,7 +34,7 @@ namespace ParameterControl.Controllers.Login
                     return BadRequest(new { message = "Error en la informacion enviada", state = "Error" });
                 }
                 var users = await _usersServices.GetUsers();
-                var user = users.FirstOrDefault(x => x.Name.Equals(request.User) && x.Password.Equals(request.Password));
+                var user = users.FirstOrDefault(x => x.User_.Equals(request.User) && x.Password.Equals(request.Password));
 
                 if (user != null)
                 {
@@ -45,7 +44,7 @@ namespace ParameterControl.Controllers.Login
                     new Claim("Correo",user.Email)
                 };
 
-                    claims.Add(new Claim(ClaimTypes.Role, "A")); //A=Administrador
+                    claims.Add(new Claim(ClaimTypes.Role, user.RolName));
 
                     var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
 
@@ -61,7 +60,7 @@ namespace ParameterControl.Controllers.Login
             catch (Exception)
             {
                 return BadRequest(new { message = "Error al ingresar", state = "Error" });
-            } 
+            }
         }
 
         public async Task<IActionResult> LogOut()

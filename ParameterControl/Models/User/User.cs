@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace ParameterControl.Models.User
 {
@@ -15,8 +14,8 @@ namespace ParameterControl.Models.User
         public string Name { get; set; } = string.Empty;
         public bool FirstAccess { get; set; }
         public string Password { get; set; }
-        [Range(minimum:1, maximum: Int32.MaxValue, ErrorMessage = "El campo rol es requerido")]
-        public int RolCode {  get; set; }
+        [Range(minimum: 1, maximum: Int32.MaxValue, ErrorMessage = "El campo rol es requerido")]
+        public int RolCode { get; set; }
         public string RolName { get; set; } = string.Empty;
     }
 }

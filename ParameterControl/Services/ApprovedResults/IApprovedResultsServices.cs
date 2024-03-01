@@ -1,6 +1,5 @@
 ﻿using ParameterControl.Models.ApprovedResult;
 using ParameterControl.Models.Filter;
-using ParameterControl.Models.Result;
 
 namespace ParameterControl.Services.ApprovedResults
 {
