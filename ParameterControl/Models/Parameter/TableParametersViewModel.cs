@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc.Rendering;
-using ParameterControl.Models.Rows;
+﻿using ParameterControl.Models.Rows;
 
 namespace ParameterControl.Models.Parameter
 {

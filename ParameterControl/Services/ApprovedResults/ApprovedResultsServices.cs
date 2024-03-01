@@ -1,15 +1,14 @@
 ﻿using ParameterControl.Models.ApprovedResult;
 using ParameterControl.Models.Filter;
-using ParameterControl.Models.Result;
 using modApprovedResult = ParameterControl.Models.ApprovedResult;
 
 namespace ParameterControl.Services.ApprovedResults
 {
-    public class ApprovedResultsServices: IApprovedResultsServices
+    public class ApprovedResultsServices : IApprovedResultsServices
     {
         private List<ApprovedResult> ApprovedResults = new List<ApprovedResult>();
 
-        public ApprovedResultsServices() 
+        public ApprovedResultsServices()
         {
             ApprovedResults = new List<ApprovedResult>()
             {

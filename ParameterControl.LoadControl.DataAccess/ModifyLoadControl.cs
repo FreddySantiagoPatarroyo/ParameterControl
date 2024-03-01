@@ -20,7 +20,7 @@ namespace ParameterControl.LoadControl.DataAccess
 
             try
             {
-                return await Task.Run(() => 
+                return await Task.Run(() =>
                 {
                     using (OracleConnection connection = new OracleConnection(_configuration.GetConnectionString("conn-db")))
                     {

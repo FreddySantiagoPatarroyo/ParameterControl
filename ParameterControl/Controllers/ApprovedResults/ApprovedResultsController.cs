@@ -1,18 +1,17 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Newtonsoft.Json;
-using ParameterControl.Models.Filter;
 using ParameterControl.Models.ApprovedResult;
+using ParameterControl.Models.Filter;
 using ParameterControl.Services.ApprovedResults;
 using ParameterControl.Services.Authenticated;
-using ParameterControl.Services.ApprovedResults;
 using ParameterControl.Services.Rows;
-
+using System.Security.Claims;
 using modApprovedResult = ParameterControl.Models.ApprovedResult;
-using ParameterControl.Models.ApprovedResult;
 
 namespace ParameterControl.Controllers.ApprovedResults
 {
+    [Authorize(Roles = "ADMINISTRADOR,EJECUTOR,CONSULTOR")]
     public class ApprovedResultsController : Controller
     {
         public TableApprovedResultViewModel TableApprovedResults = new TableApprovedResultViewModel();
@@ -20,18 +19,37 @@ namespace ParameterControl.Controllers.ApprovedResults
         private readonly IApprovedResultsServices approvedResultsServices;
         private readonly Rows rows;
         private readonly AuthenticatedUser authenticatedUser;
+        private readonly IConfiguration _configuration;
+        private readonly ClaimsPrincipal _principal;
+        private readonly bool _isCreate;
+        private readonly bool _isActivate;
+        private readonly bool _isEdit;
+        private readonly bool _isView;
+        private readonly bool _isInactive;
 
         public ApprovedResultsController(
             ILogger<HomeController> logger,
             IApprovedResultsServices approvedResultsServices,
             Rows rows,
-            AuthenticatedUser authenticatedUser
-        ) 
+            AuthenticatedUser authenticatedUser,
+            IConfiguration configuration,
+            IHttpContextAccessor httpContextAccesor
+        )
         {
             this._logger = logger;
             this.approvedResultsServices = approvedResultsServices;
             this.rows = rows;
             this.authenticatedUser = authenticatedUser;
+            _configuration = configuration;
+            var context = httpContextAccesor.HttpContext;
+            _principal = context.User as ClaimsPrincipal;
+            var data = _principal.FindFirst(ClaimTypes.Role).Value;
+            var section = _configuration.GetSection($"Permisos:{data}:Conciliacion").GetChildren();
+            _isCreate = Convert.ToBoolean(section.Where(x => x.Key.Equals("btnCreate")).FirstOrDefault().Value);
+            _isActivate = Convert.ToBoolean(section.Where(x => x.Key.Equals("btnActivate")).FirstOrDefault().Value);
+            _isEdit = Convert.ToBoolean(section.Where(x => x.Key.Equals("btnEdit")).FirstOrDefault().Value);
+            _isView = Convert.ToBoolean(section.Where(x => x.Key.Equals("btnDetail")).FirstOrDefault().Value);
+            _isInactive = Convert.ToBoolean(section.Where(x => x.Key.Equals("btnInactive")).FirstOrDefault().Value);
         }
 
         [HttpGet]
@@ -43,11 +61,11 @@ namespace ParameterControl.Controllers.ApprovedResults
 
                 TableApprovedResults.Data = await approvedResultsServices.GetApprovedResultsFormat(approvedResults);
                 TableApprovedResults.Rows = rows.RowsApprovedResults();
-                TableApprovedResults.IsCreate = false;
-                TableApprovedResults.IsActivate = false;
-                TableApprovedResults.IsEdit = false;
-                TableApprovedResults.IsView = false;
-                TableApprovedResults.IsInactivate = false;
+                TableApprovedResults.IsCreate = _isCreate;
+                TableApprovedResults.IsActivate = _isActivate;
+                TableApprovedResults.IsEdit = _isEdit;
+                TableApprovedResults.IsView = _isView;
+                TableApprovedResults.IsInactivate = _isInactive;
                 TableApprovedResults.Filter = true;
                 ViewBag.ApplyFilter = false;
 
@@ -83,11 +101,11 @@ namespace ParameterControl.Controllers.ApprovedResults
 
                 TableApprovedResults.Data = approvedResultsFilter;
                 TableApprovedResults.Rows = rows.RowsApprovedResults();
-                TableApprovedResults.IsCreate = false;
-                TableApprovedResults.IsActivate = false;
-                TableApprovedResults.IsEdit = false;
-                TableApprovedResults.IsView = false;
-                TableApprovedResults.IsInactivate = false;
+                TableApprovedResults.IsCreate = _isCreate;
+                TableApprovedResults.IsActivate = _isActivate;
+                TableApprovedResults.IsEdit = _isEdit;
+                TableApprovedResults.IsView = _isView;
+                TableApprovedResults.IsInactivate = _isInactive;
                 TableApprovedResults.Filter = true;
                 ViewBag.ApplyFilter = true;
 

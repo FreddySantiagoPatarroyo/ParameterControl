@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using ParameterControl.Models;
 using System.Diagnostics;
 
 namespace ParameterControl.Controllers
 {
+    [Authorize(Roles = "ADMINISTRADOR,EJECUTOR,CONSULTOR")]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;

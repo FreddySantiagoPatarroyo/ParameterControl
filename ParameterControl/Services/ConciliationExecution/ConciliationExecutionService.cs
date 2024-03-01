@@ -1,11 +1,10 @@
-﻿using ParameterControl.Conciliation.Interfaces;
-using ParameterControl.Services.ConciliationExecution;
+﻿using ParameterControl.Services.ConciliationExecution;
 using ParameterControl.Services.Conciliations;
 using modConciliation = ParameterControl.Models.Conciliation;
 
 namespace ParameterControl.Services.ConciliationExecition
 {
-    public class ConciliationExecutionService: IConciliationExecutionService
+    public class ConciliationExecutionService : IConciliationExecutionService
     {
         private readonly IConciliationsServices conciliationsService;
 
@@ -24,7 +23,7 @@ namespace ParameterControl.Services.ConciliationExecition
 
             foreach (var conciliation in collectionConciliations)
             {
-                if(conciliation.State == true)
+                if (conciliation.State == true)
                 {
                     response.Add(conciliation);
                 }

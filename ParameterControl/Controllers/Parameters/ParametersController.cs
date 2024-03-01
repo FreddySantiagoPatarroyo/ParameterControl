@@ -1,26 +1,20 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
-using ParameterControl.Conciliation.Impl;
-using ParameterControl.Models.Conciliation;
 using ParameterControl.Models.Filter;
 using ParameterControl.Models.Pagination;
 using ParameterControl.Models.Parameter;
-using ParameterControl.Models.Policy;
-using ParameterControl.Models.Result;
 using ParameterControl.Services.Authenticated;
-using ParameterControl.Services.Conciliations;
 using ParameterControl.Services.Parameters;
-using ParameterControl.Services.Policies;
 using ParameterControl.Services.Rows;
-using System.Reflection;
-using modParameter = ParameterControl.Models.Parameter;
+using System.Security.Claims;
 using modConciliation = ParameterControl.Models.Conciliation;
-using System.Collections.Generic;
-
+using modParameter = ParameterControl.Models.Parameter;
 
 namespace ParameterControl.Controllers.Parameters
 {
+    [Authorize(Roles = "ADMINISTRADOR,EJECUTOR,CONSULTOR")]
     public class ParametersController : Controller
     {
         public TableParametersViewModel TableParameters = new TableParametersViewModel();
@@ -28,18 +22,37 @@ namespace ParameterControl.Controllers.Parameters
         private readonly IParametersService parametersService;
         private readonly Rows rows;
         private readonly AuthenticatedUser authenticatedUser;
+        private readonly IConfiguration _configuration;
+        private readonly ClaimsPrincipal _principal;
+        private readonly bool _isCreate;
+        private readonly bool _isActivate;
+        private readonly bool _isEdit;
+        private readonly bool _isView;
+        private readonly bool _isInactive;
 
         public ParametersController(
             ILogger<HomeController> logger,
             IParametersService parametersService,
             Rows rows,
-            AuthenticatedUser authenticatedUser
+            AuthenticatedUser authenticatedUser,
+            IConfiguration configuration,
+            IHttpContextAccessor httpContextAccesor
         )
         {
             this._logger = logger;
             this.parametersService = parametersService;
             this.rows = rows;
             this.authenticatedUser = authenticatedUser;
+            _configuration = configuration;
+            var context = httpContextAccesor.HttpContext;
+            _principal = context.User as ClaimsPrincipal;
+            var data = _principal.FindFirst(ClaimTypes.Role).Value;
+            var section = _configuration.GetSection($"Permisos:{data}:Conciliacion").GetChildren();
+            _isCreate = Convert.ToBoolean(section.Where(x => x.Key.Equals("btnCreate")).FirstOrDefault().Value);
+            _isActivate = Convert.ToBoolean(section.Where(x => x.Key.Equals("btnActivate")).FirstOrDefault().Value);
+            _isEdit = Convert.ToBoolean(section.Where(x => x.Key.Equals("btnEdit")).FirstOrDefault().Value);
+            _isView = Convert.ToBoolean(section.Where(x => x.Key.Equals("btnDetail")).FirstOrDefault().Value);
+            _isInactive = Convert.ToBoolean(section.Where(x => x.Key.Equals("btnInactive")).FirstOrDefault().Value);
         }
 
         [HttpGet]
@@ -53,11 +66,11 @@ namespace ParameterControl.Controllers.Parameters
                 TableParameters.Data = await parametersService.GetParametersFormat(parameters);
                 TableParameters.Rows = rows.RowsParameters();
                 TableParameters.Filter = true;
-                TableParameters.IsCreate = true;
-                TableParameters.IsActivate = true;
-                TableParameters.IsEdit = true;
-                TableParameters.IsView = true;
-                TableParameters.IsInactivate = true;
+                TableParameters.IsCreate = _isCreate;
+                TableParameters.IsActivate = _isActivate;
+                TableParameters.IsEdit = _isEdit;
+                TableParameters.IsView = _isView;
+                TableParameters.IsInactivate = _isInactive;
                 TableParameters.Filter = true;
                 ViewBag.ApplyFilter = false;
 
@@ -78,7 +91,7 @@ namespace ParameterControl.Controllers.Parameters
                 ViewBag.Success = false;
                 return View("Parameters", null);
             }
-            
+
         }
 
         [HttpGet]
@@ -104,11 +117,11 @@ namespace ParameterControl.Controllers.Parameters
                 TableParameters.Data = parametersService.GetFilterPagination(parametersFilter, paginationViewModel, TotalParameters);
                 TableParameters.Rows = rows.RowsParameters();
                 TableParameters.Filter = true;
-                TableParameters.IsCreate = true;
-                TableParameters.IsActivate = true;
-                TableParameters.IsEdit = true;
-                TableParameters.IsView = true;
-                TableParameters.IsInactivate = true;
+                TableParameters.IsCreate = _isCreate;
+                TableParameters.IsActivate = _isActivate;
+                TableParameters.IsEdit = _isEdit;
+                TableParameters.IsView = _isView;
+                TableParameters.IsInactivate = _isInactive;
 
                 var resultViemModel = new PaginationResult<TableParametersViewModel>()
                 {
@@ -142,17 +155,17 @@ namespace ParameterControl.Controllers.Parameters
                 }
 
                 List<modParameter.Parameter> parametersConciliation = await parametersService.GetParametersByConciliation(conciliation);
-                List <ParameterViewModel> parametersFilter = await parametersService.GetParametersFormat(parametersConciliation);
+                List<ParameterViewModel> parametersFilter = await parametersService.GetParametersFormat(parametersConciliation);
                 int TotalParameters = parametersFilter.Count();
 
                 TableParameters.Data = parametersService.GetFilterPagination(parametersFilter, paginationViewModel, TotalParameters);
                 TableParameters.Rows = rows.RowsParameters();
                 TableParameters.Filter = true;
-                TableParameters.IsCreate = true;
-                TableParameters.IsActivate = true;
-                TableParameters.IsEdit = true;
-                TableParameters.IsView = true;
-                TableParameters.IsInactivate = true;
+                TableParameters.IsCreate = _isCreate;
+                TableParameters.IsActivate = _isActivate;
+                TableParameters.IsEdit = _isEdit;
+                TableParameters.IsView = _isView;
+                TableParameters.IsInactivate = _isInactive;
 
                 var resultViemModel = new PaginationResult<TableParametersViewModel>()
                 {
@@ -197,7 +210,7 @@ namespace ParameterControl.Controllers.Parameters
                 ViewBag.Success = false;
                 return View("Actions/CreateParameter", null);
             }
-           
+
         }
 
         [HttpPost]
@@ -215,15 +228,15 @@ namespace ParameterControl.Controllers.Parameters
                     var responseIn = await parametersService.InsertParameter(request);
                     _logger.LogInformation($"Finaliza método ParametersController.Create {responseIn}");
                     return Ok(new { message = "Se creo el parametro de manera exitosa", state = "Success" });
-                   
+
                 }
             }
             catch (Exception ex)
             {
-                     _logger.LogError($"Error en el método ParametersController.Create : {JsonConvert.SerializeObject(ex.Message)}");
-                     return BadRequest(new { message = "Error al crear el parametro", state = "Error" });
+                _logger.LogError($"Error en el método ParametersController.Create : {JsonConvert.SerializeObject(ex.Message)}");
+                return BadRequest(new { message = "Error al crear el parametro", state = "Error" });
             }
-            
+
         }
 
         [HttpGet]

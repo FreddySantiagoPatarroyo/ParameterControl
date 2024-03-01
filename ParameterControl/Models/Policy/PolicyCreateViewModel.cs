@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc.Rendering;
-
-namespace ParameterControl.Models.Policy
+﻿namespace ParameterControl.Models.Policy
 {
     public class PolicyCreateViewModel : Policy
     {

@@ -1,6 +1,5 @@
-using ParameterControl.Models.Result;
 using ParameterControl.Models.Filter;
-
+using ParameterControl.Models.Result;
 using modResult = ParameterControl.Models.Result;
 
 namespace ParameterControl.Services.Results

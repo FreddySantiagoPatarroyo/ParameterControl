@@ -1,6 +1,6 @@
 ﻿namespace ParameterControl.Models.ApprovedResult
 {
-    public class ApprovedResultViewModel:ApprovedResult
+    public class ApprovedResultViewModel : ApprovedResult
     {
         public string StateFormat { get; set; } = string.Empty;
         public string CreationDateFormat { get; set; } = string.Empty;

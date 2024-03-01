@@ -5,18 +5,16 @@ using Newtonsoft.Json;
 using ParameterControl.Models.Filter;
 using ParameterControl.Models.Pagination;
 using ParameterControl.Models.Policy;
-using ParameterControl.Models.Result;
 using ParameterControl.Services.Authenticated;
 using ParameterControl.Services.Policies;
 using ParameterControl.Services.Rows;
-using System.Collections.Generic;
-using System.Reflection;
+using System.Security.Claims;
 using modPolicy = ParameterControl.Models.Policy;
 
 
 namespace ParameterControl.Controllers.Policies
 {
-    [Authorize(Roles = "A")]
+    [Authorize(Roles = "ADMINISTRADOR,EJECUTOR,CONSULTOR")]
     public class PoliciesController : Controller
     {
         public TablePoliciesViewModel TablePolicies = new TablePoliciesViewModel();
@@ -24,18 +22,37 @@ namespace ParameterControl.Controllers.Policies
         private readonly IPoliciesServices policiesServices;
         private readonly Rows rows;
         private readonly AuthenticatedUser authenticatedUser;
+        private readonly IConfiguration _configuration;
+        private readonly ClaimsPrincipal _principal;
+        private readonly bool _isCreate;
+        private readonly bool _isActivate;
+        private readonly bool _isEdit;
+        private readonly bool _isView;
+        private readonly bool _isInactive;
 
         public PoliciesController(
             ILogger<HomeController> logger,
             IPoliciesServices policiesServices,
             Rows rows,
-            AuthenticatedUser authenticatedUser
+            AuthenticatedUser authenticatedUser,
+            IConfiguration configuration,
+            IHttpContextAccessor httpContextAccesor
         )
         {
             this._logger = logger;
             this.policiesServices = policiesServices;
             this.rows = rows;
             this.authenticatedUser = authenticatedUser;
+            _configuration = configuration;
+            var context = httpContextAccesor.HttpContext;
+            _principal = context.User as ClaimsPrincipal;
+            var data = _principal.FindFirst(ClaimTypes.Role).Value;
+            var section = _configuration.GetSection($"Permisos:{data}:Conciliacion").GetChildren();
+            _isCreate = Convert.ToBoolean(section.Where(x => x.Key.Equals("btnCreate")).FirstOrDefault().Value);
+            _isActivate = Convert.ToBoolean(section.Where(x => x.Key.Equals("btnActivate")).FirstOrDefault().Value);
+            _isEdit = Convert.ToBoolean(section.Where(x => x.Key.Equals("btnEdit")).FirstOrDefault().Value);
+            _isView = Convert.ToBoolean(section.Where(x => x.Key.Equals("btnDetail")).FirstOrDefault().Value);
+            _isInactive = Convert.ToBoolean(section.Where(x => x.Key.Equals("btnInactive")).FirstOrDefault().Value);
         }
 
         [HttpGet]
@@ -49,11 +66,11 @@ namespace ParameterControl.Controllers.Policies
                 TablePolicies.Data = await policiesServices.GetPolicesFormat(policies);
                 TablePolicies.Rows = rows.RowsPolicies();
                 TablePolicies.Filter = true;
-                TablePolicies.IsCreate = true;
-                TablePolicies.IsActivate = true;
-                TablePolicies.IsEdit = true;
-                TablePolicies.IsView = true;
-                TablePolicies.IsInactivate = true;
+                TablePolicies.IsCreate = _isCreate;
+                TablePolicies.IsActivate = _isActivate;
+                TablePolicies.IsEdit = _isEdit;
+                TablePolicies.IsView = _isView;
+                TablePolicies.IsInactivate = _isInactive;
                 ViewBag.ApplyFilter = false;
 
                 var resultViemModel = new PaginationResult<TablePoliciesViewModel>()
@@ -73,7 +90,7 @@ namespace ParameterControl.Controllers.Policies
                 ViewBag.Success = false;
                 return View("Policies", null);
             }
-           
+
         }
 
         public async Task<ActionResult> PoliciesFilter(PaginationViewModel paginationViewModel, string filterColunm = "", string filterValue = "", string typeRow = "")
@@ -98,11 +115,11 @@ namespace ParameterControl.Controllers.Policies
                 TablePolicies.Data = policiesServices.GetFilterPagination(policiesFilter, paginationViewModel, TotalPolicies);
                 TablePolicies.Rows = rows.RowsPolicies();
                 TablePolicies.Filter = true;
-                TablePolicies.IsCreate = true;
-                TablePolicies.IsActivate = true;
-                TablePolicies.IsEdit = true;
-                TablePolicies.IsView = true;
-                TablePolicies.IsInactivate = true;
+                TablePolicies.IsCreate = _isCreate;
+                TablePolicies.IsActivate = _isActivate;
+                TablePolicies.IsEdit = _isEdit;
+                TablePolicies.IsView = _isView;
+                TablePolicies.IsInactivate = _isInactive;
                 ViewBag.ApplyFilter = true;
 
                 var resultViemModel = new PaginationResult<TablePoliciesViewModel>()
@@ -165,7 +182,7 @@ namespace ParameterControl.Controllers.Policies
                 _logger.LogError($"Error en el método PoliciesController.Create : {JsonConvert.SerializeObject(ex.Message)}");
                 return BadRequest(new { message = "Error al crear la politica", state = "Error" });
             }
-           
+
         }
 
         [HttpGet]
@@ -193,13 +210,13 @@ namespace ParameterControl.Controllers.Policies
                 ViewBag.EntyNull = false;
                 return View("Actions/EditPolicy", null);
             }
-            
+
         }
 
         [HttpPost]
         public async Task<ActionResult> Edit([FromBody] modPolicy.Policy request)
         {
-           
+
             try
             {
                 var policy = await policiesServices.GetPolicyByCode(request.Code);
@@ -231,7 +248,7 @@ namespace ParameterControl.Controllers.Policies
                 _logger.LogError($"Error en el método PoliciesController.Edit : {JsonConvert.SerializeObject(ex.Message)}");
                 return BadRequest(new { message = "Error al actualizar la politica", state = "Error" });
             }
-            
+
         }
 
         [HttpGet]
@@ -258,7 +275,7 @@ namespace ParameterControl.Controllers.Policies
                 ViewBag.Success = false;
                 ViewBag.EntyNull = false;
                 return View("Actions/ViewPolicy", null);
-            }   
+            }
         }
 
         [HttpGet]
@@ -360,10 +377,11 @@ namespace ParameterControl.Controllers.Policies
         [HttpPost]
         public async Task<ActionResult> FilterPolicies(FilterViewModel filter)
         {
-            if(filter.TypeRow == "Select")
+            if (filter.TypeRow == "Select")
             {
                 filter.ValueFilter = filter.ValueFilterOptions;
-            }else if(filter.TypeRow == "Date")
+            }
+            else if (filter.TypeRow == "Date")
             {
                 filter.ValueFilter = filter.ValueFilterDate.ToString("dd/MM/yyyy");
             }

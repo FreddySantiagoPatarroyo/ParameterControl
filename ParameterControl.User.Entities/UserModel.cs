@@ -13,7 +13,7 @@
         public string ModifiedBy { get; set; } = string.Empty;
         public bool FirstAccess { get; set; }
         public string Password { get; set; } = string.Empty;
-        public bool State {  get; set; }
+        public bool State { get; set; }
         public string RolName { get; set; } = string.Empty;
 
     }

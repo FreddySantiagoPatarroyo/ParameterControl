@@ -1,4 +1,8 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
+using ParameterControl.Services.ApprovedResults;
 using ParameterControl.Services.Authenticated;
+using ParameterControl.Services.ConciliationExecition;
+using ParameterControl.Services.ConciliationExecution;
 using ParameterControl.Services.Conciliations;
 using ParameterControl.Services.CrossConnections;
 using ParameterControl.Services.Indicators;
@@ -8,10 +12,6 @@ using ParameterControl.Services.Results;
 using ParameterControl.Services.Rows;
 using ParameterControl.Services.Scenarios;
 using ParameterControl.Services.Users;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using ParameterControl.Services.ConciliationExecution;
-using ParameterControl.Services.ConciliationExecition;
-using ParameterControl.Services.ApprovedResults;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -40,6 +40,8 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
         option.ExpireTimeSpan = TimeSpan.FromMinutes(5);
         option.AccessDeniedPath = "/Home/Error";
     });
+
+builder.Services.AddHttpContextAccessor();
 
 var app = builder.Build();
 

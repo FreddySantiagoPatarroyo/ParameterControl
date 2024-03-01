@@ -1,17 +1,18 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
 using ParameterControl.Models.Filter;
 using ParameterControl.Models.Result;
 using ParameterControl.Services.Authenticated;
 using ParameterControl.Services.Results;
 using ParameterControl.Services.Rows;
+using System.Security.Claims;
 using modResult = ParameterControl.Models.Result;
-using Microsoft.AspNetCore.Mvc.Rendering;
-
-
 
 namespace ParameterControl.Controllers.Results
 {
+    [Authorize(Roles = "ADMINISTRADOR,EJECUTOR,CONSULTOR")]
     public class ResultsController : Controller
     {
         public TableResultViewModel TableResults = new TableResultViewModel();
@@ -19,18 +20,37 @@ namespace ParameterControl.Controllers.Results
         private readonly IResultsServices resultsServices;
         private readonly Rows rows;
         private readonly AuthenticatedUser authenticatedUser;
+        private readonly IConfiguration _configuration;
+        private readonly ClaimsPrincipal _principal;
+        private readonly bool _isCreate;
+        private readonly bool _isActivate;
+        private readonly bool _isEdit;
+        private readonly bool _isView;
+        private readonly bool _isInactive;
 
         public ResultsController(
             ILogger<HomeController> logger,
             IResultsServices resultsServices,
             Rows rows,
-            AuthenticatedUser authenticatedUser
+            AuthenticatedUser authenticatedUser,
+            IConfiguration configuration,
+            IHttpContextAccessor httpContextAccesor
         )
         {
             this._logger = logger;
             this.resultsServices = resultsServices;
             this.rows = rows;
             this.authenticatedUser = authenticatedUser;
+            _configuration = configuration;
+            var context = httpContextAccesor.HttpContext;
+            _principal = context.User as ClaimsPrincipal;
+            var data = _principal.FindFirst(ClaimTypes.Role).Value;
+            var section = _configuration.GetSection($"Permisos:{data}:Conciliacion").GetChildren();
+            _isCreate = Convert.ToBoolean(section.Where(x => x.Key.Equals("btnCreate")).FirstOrDefault().Value);
+            _isActivate = Convert.ToBoolean(section.Where(x => x.Key.Equals("btnActivate")).FirstOrDefault().Value);
+            _isEdit = Convert.ToBoolean(section.Where(x => x.Key.Equals("btnEdit")).FirstOrDefault().Value);
+            _isView = Convert.ToBoolean(section.Where(x => x.Key.Equals("btnDetail")).FirstOrDefault().Value);
+            _isInactive = Convert.ToBoolean(section.Where(x => x.Key.Equals("btnInactive")).FirstOrDefault().Value);
         }
 
         [HttpGet]
@@ -42,11 +62,11 @@ namespace ParameterControl.Controllers.Results
 
                 TableResults.Data = await resultsServices.GetResultsFormat(results);
                 TableResults.Rows = rows.RowsResults();
-                TableResults.IsCreate = false;
-                TableResults.IsActivate = false;
-                TableResults.IsEdit = false;
-                TableResults.IsView = false;
-                TableResults.IsInactivate = false;
+                TableResults.IsCreate = _isCreate;
+                TableResults.IsActivate = _isActivate;
+                TableResults.IsEdit = _isEdit;
+                TableResults.IsView = _isView;
+                TableResults.IsInactivate = _isInactive;
                 TableResults.Filter = true;
                 ViewBag.ApplyFilter = false;
 
@@ -58,7 +78,7 @@ namespace ParameterControl.Controllers.Results
                 ViewBag.Success = false;
                 return View("Results", null);
             }
-           
+
         }
 
 
@@ -83,11 +103,11 @@ namespace ParameterControl.Controllers.Results
 
                 TableResults.Data = resultsFilter;
                 TableResults.Rows = rows.RowsResults();
-                TableResults.IsCreate = false;
-                TableResults.IsActivate = false;
-                TableResults.IsEdit = false;
-                TableResults.IsView = false;
-                TableResults.IsInactivate = false;
+                TableResults.IsCreate = _isCreate;
+                TableResults.IsActivate = _isActivate;
+                TableResults.IsEdit = _isEdit;
+                TableResults.IsView = _isView;
+                TableResults.IsInactivate = _isInactive;
                 TableResults.Filter = true;
                 ViewBag.ApplyFilter = true;
 
