@@ -50,7 +50,7 @@ namespace ParameterControl.Controllers.Login
 
                     await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new System.Security.Claims.ClaimsPrincipal(claimsIdentity));
 
-                    return Ok(new { message = "Se creo el usuario de manera exitosa", state = "Success" });
+                    return Ok(new { message = "Datos ingresados correctamente", state = "Success" });
                 }
                 else
                 {

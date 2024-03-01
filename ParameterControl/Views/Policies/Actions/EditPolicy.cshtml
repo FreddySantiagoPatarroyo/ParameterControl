@@ -96,9 +96,9 @@ else
                 let isValidDescription = false;
 
                 const sendData = async () => {
-                    isValidCode = validateInputEmpty("Code", "El codigo es requerido", "CodeError");
-                    isValidName = validateInputEmpty("Name", "El nombre es requerido", "NameError");
-                    isValidDescription = validateInputEmpty("Description", "La descripcion es requerido", "DescriptionError");
+                    isValidCode = validateInput("Code", "El codigo es requerido", "CodeError");
+                    isValidName = validateInput("Name", "El nombre es requerido", "NameError");
+                    isValidDescription = validateInput("Description", "La descripcion es requerido", "DescriptionError");
 
                     if (isValidCode && isValidName && isValidDescription) {
                         document.getElementById('btn_container').style.display = 'none';
@@ -142,16 +142,25 @@ else
                         }
                     }
                 }
-
-                const validateInputEmpty = (idInput, messaje, idError) => {
+                const validateEmpty = (idInput) => {
                     if ($(`#${idInput}`).val() == "" || $(`#${idInput}`).val() == null) {
-                        $(`#${idError}`).text(`${messaje}`);
+                        return true;
+                    } else {
+                        return false;
+                    }
+                }
+
+                const validateInput = (idInput, requiredMessage, idError) => {
+                    const isEmpty = validateEmpty(idInput);
+                    if (isEmpty) {
+                        $(`#${idError}`).text(requiredMessage);
                         return false;
                     } else {
                         $(`#${idError}`).text("");
                         return true;
                     }
                 }
+                
 
                 const FormatDate = (date) => {
 

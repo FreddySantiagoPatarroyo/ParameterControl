@@ -218,11 +218,11 @@ else
                 let isValidList = false;
 
                 const sendData = async () => {
-                    isValidPatameter = validateInputEmpty("Parameter_", "El parametro es requerido", "ParameterError");
-                    isValidValue = validateInputEmpty("Value", "El valor es requerido", "ValueError");
+                    isValidPatameter = validateInput("Parameter_", "El parametro es requerido", "ParameterError");
+                    isValidValue = validateInput("Value", "El valor es requerido", "ValueError");
                     //isValidDescription = validateInputEmpty("Description", "La descripcion es requerido", "DescriptionError");
-                    isValidParameterType = validateInputEmpty("ParameterType", "El tipo de parametro es requerido", "ParameterTypeError");
-                    isValidList = validateInputEmpty("List", "La lista es requerido", "ListError");
+                    isValidParameterType = validateInput("ParameterType", "El tipo de parametro es requerido", "ParameterTypeError");
+                    isValidList = validateInput("List", "La lista es requerido", "ListError");
 
                     if (isValidPatameter && isValidValue && isValidParameterType && isValidList) {
                         document.getElementById('btn_container').style.display = 'none';
@@ -270,9 +270,18 @@ else
                     }
                 }
 
-                const validateInputEmpty = (idInput, messaje, idError) => {
+                const validateEmpty = (idInput) => {
                     if ($(`#${idInput}`).val() == "" || $(`#${idInput}`).val() == null) {
-                        $(`#${idError}`).text(`${messaje}`);
+                        return true;
+                    } else {
+                        return false;
+                    }
+                }
+
+                const validateInput = (idInput, requiredMessage, idError) => {
+                    const isEmpty = validateEmpty(idInput);
+                    if (isEmpty) {
+                        $(`#${idError}`).text(requiredMessage);
                         return false;
                     } else {
                         $(`#${idError}`).text("");
