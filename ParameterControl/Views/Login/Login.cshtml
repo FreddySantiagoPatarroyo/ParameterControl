@@ -25,14 +25,13 @@
                     <input asp-for="Password" type="password" class="input_login" placeholder="Contraseña" autocomplete="off"/>
                     <span id="PasswordError" class="text_error"></span>
                 </div>
-            </form>
-            <div id="btn_container" class="btn_container">
-                <a href="javascript:void(0)" onclick="sendData()" class="button button_primary"><p class="text font_bold">Acceder</p></a>
-            </div>
-            <div id="loading" class="loading">
-                <span class="loader"></span>
-            </div>
-
+                <div id="btn_container" class="btn_container">
+                    <a href="javascript:void(0)" onclick="sendData()" class="button button_primary"><p class="text font_bold">Acceder</p></a>
+                </div>
+                <div id="loading" class="loading">
+                    <span class="loader loader_login"></span>
+                </div>
+             </form>
             <div id="LayoytError" class="layout_content">
                 <partial name="_MessageError" />
             </div>
@@ -40,6 +39,7 @@
             <div id="LayoytSuccess" class="layout_content">
                 <partial name="_MessageSuccess" />
             </div>
+            
         </div>
     </div>
         

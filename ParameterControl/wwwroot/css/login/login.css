@@ -41,6 +41,9 @@
 .content {
     max-width: 100%;
     margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 .logo {
     height: 40px;
