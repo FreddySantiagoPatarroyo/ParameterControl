@@ -164,7 +164,7 @@ namespace ParameterControl.Conciliation.Impl
                     AssignmentType = dr["TIPO_ASIGNACION"] is DBNull ? string.Empty : dr["TIPO_ASIGNACION"].ToString(),
                     ModifieldBy = dr["MODIFICADO_POR"] is DBNull ? string.Empty : dr["MODIFICADO_POR"].ToString(),
                     State = dr["ESTADO_ACTIVACION"] is DBNull ? false : Convert.ToBoolean(dr["ESTADO_ACTIVACION"]),
-                    //StatePolicy = dr["ESTADO_ACTIVACION_POLITICA"] is DBNull ? false : Convert.ToBoolean(dr["ESTADO_ACTIVACION_POLITICA"]),
+                    //StatePolicy = dr["ESTADO_POLITICA"] is DBNull ? false : Convert.ToBoolean(dr["ESTADO_POLITICA"]),
                 };
                 return model;
             });

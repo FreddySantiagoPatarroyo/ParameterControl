@@ -80,19 +80,19 @@
                                             <div class="row_table flex_box actions">
                                                 @if (Model.Elements.IsView)
                                                 {
-                                                    <a class="button_icon button_primary" title="Ver" asp-controller="CrossConnections" asp-action="View" asp-route-code="@CrossConnection.Code">
+                                                    <a class="button_icon button_primary" title="Ver" asp-controller="CrossConnections" asp-action="View" asp-route-package="@CrossConnection.Package">
                                                         <i class="icon icon_041"></i>
                                                     </a>
                                                 }
                                                 @if (Model.Elements.IsEdit)
                                                 {
-                                                    <a class="button_icon button_primary" title="Editar" asp-controller="CrossConnections" asp-action="Edit" asp-route-code="@CrossConnection.Code">
+                                                    <a class="button_icon button_primary" title="Editar" asp-controller="CrossConnections" asp-action="Edit" asp-route-package="@CrossConnection.Package">
                                                         <i class="icon icon_106"></i>
                                                     </a>
                                                 }
                                                 @if (Model.Elements.IsInactivate)
                                                 {
-                                                    <a class="button_icon button_primary" title="Inactivar" asp-controller="CrossConnections" asp-action="Desactive" asp-route-code="@CrossConnection.Code">
+                                                    <a class="button_icon button_primary" title="Inactivar" asp-controller="CrossConnections" asp-action="Desactive" asp-route-package="@CrossConnection.Package">
                                                         <i class="icon icon_196"></i>
                                                     </a>
                                                 }
@@ -126,7 +126,7 @@
                                                 }
                                                 @if (Model.Elements.IsActivate)
                                                 {
-                                                    <a class="button_icon button_primary" title="Activar" asp-controller="CrossConnections" asp-action="Active" asp-route-code="@CrossConnection.Code">
+                                                    <a class="button_icon button_primary" title="Activar" asp-controller="CrossConnections" asp-action="Active" asp-route-package="@CrossConnection.Package">
                                                         <i class="icon icon_199"></i>
                                                     </a>
                                                 }

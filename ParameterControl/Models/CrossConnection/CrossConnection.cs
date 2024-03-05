@@ -4,8 +4,6 @@ namespace ParameterControl.Models.CrossConnection
 {
     public class CrossConnection
     {
-        public int Code { get; set; }
-
         [Required(ErrorMessage = "El paquete es requerido")]
         public string Package { get; set; } = string.Empty;
 

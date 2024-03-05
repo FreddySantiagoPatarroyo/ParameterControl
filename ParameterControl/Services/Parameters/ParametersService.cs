@@ -275,7 +275,6 @@ namespace ParameterControl.Services.Parameters
                     ParameterType = Parameter.ParameterType,
                     CreationDate = Parameter.CreationDate,
                     UpdateDate = Parameter.ModifieldDate,
-                    UserOwner = Parameter.ModifieldBy,
                     State = Parameter.State,
 
                 };
@@ -293,7 +292,6 @@ namespace ParameterControl.Services.Parameters
                 Description = request.Description,
                 CreationDate = DateTime.Now,
                 ModifieldDate = DateTime.Now,
-                ModifieldBy = "CreateToUserDev",
                 State = request.State,
 
             };
@@ -339,7 +337,6 @@ namespace ParameterControl.Services.Parameters
                     Description = Parameter.Description,
                     CreationDate = Parameter.CreationDate,
                     ModifieldDate = DateTime.Now,
-                    ModifieldBy = "CreateToUserDev",
                     State = Parameter.State,
                 };
                 return model;
@@ -359,7 +356,6 @@ namespace ParameterControl.Services.Parameters
                     Description = Parameter.Description,
                     CreationDate = Parameter.CreationDate,
                     ModifieldDate = DateTime.Now,
-                    ModifieldBy = "CreateToUserDev",
                     State = true,
                 };
                 return model;
@@ -379,7 +375,6 @@ namespace ParameterControl.Services.Parameters
                     Description = Parameter.Description,
                     CreationDate = Parameter.CreationDate,
                     ModifieldDate = DateTime.Now,
-                    ModifieldBy = "CreateToUserDev",
                     State = false,
                 };
                 return model;

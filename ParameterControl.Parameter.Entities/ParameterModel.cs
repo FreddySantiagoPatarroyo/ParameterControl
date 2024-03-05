@@ -11,8 +11,6 @@
         public string ParameterType { get; set; } = string.Empty;
         public int FatherId { get; set; }
         public string Value1 { get; set; } = string.Empty;
-        public string ModifieldBy { get; set; } = string.Empty;
-
         public bool State { get; set; } = false;
     }
 }

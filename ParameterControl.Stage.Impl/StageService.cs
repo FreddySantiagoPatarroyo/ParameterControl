@@ -157,8 +157,7 @@ namespace ParameterControl.Stage.Impl
                     Conciliation = Convert.ToInt32(dr["COD_CONCILIACION"]),
                     CreationDate = dr["FECHA_CREACION"] is DBNull ? DateTime.Now : Convert.ToDateTime(dr["FECHA_CREACION"]),
                     ModifieldDate = dr["FECHA_ACTUALIZACION"] is DBNull ? DateTime.Now : Convert.ToDateTime(dr["FECHA_ACTUALIZACION"]),
-                    ModifieldBy = dr["MODIFICADO_POR"] is DBNull ? string.Empty : dr["MODIFICADO_POR"].ToString(),
-                    State = dr["ESTADO_ACTIVACION"] is DBNull ? false : Convert.ToBoolean(dr["ESTADO_ACTIVACION"]),
+                    State = dr["ESTADO_ESCENARIO"] is DBNull ? false : Convert.ToBoolean(Convert.ToInt32(dr["ESTADO_ESCENARIO"])),
                     ConciliationName = dr["NOMBRE_CONCILIACION"] is DBNull ? string.Empty : dr["NOMBRE_CONCILIACION"].ToString(),
                     StateConciliation = dr["ESTADO_ACTIVACION_CONCILIACION"] is DBNull ? false : Convert.ToBoolean(dr["ESTADO_ACTIVACION_CONCILIACION"])
                 };

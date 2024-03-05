@@ -34,8 +34,7 @@ namespace ParameterControl.Parameter.DataAccess
                             command.Parameters.Add(new OracleParameter("PARAM_VALOR", entity.Value));
                             command.Parameters.Add(new OracleParameter("PARAM_DESCRIPCION", entity.Description));
                             command.Parameters.Add(new OracleParameter("PARAM_TIPO", entity.ParameterType));
-                            command.Parameters.Add(new OracleParameter("PARAM_MODIFICADO_POR", entity.ModifieldBy));
-                            command.Parameters.Add(new OracleParameter("PARAM_ESTADO_ACTIVACION", Convert.ToInt32(entity.State)));
+                            command.Parameters.Add(new OracleParameter("PARAM_ESTADO_PARAMETRO", Convert.ToInt32(entity.State).ToString()));
                             OracleDataReader reader = command.ExecuteReader();
                             return response = 1;
                         }

@@ -228,7 +228,6 @@ namespace ParameterControl.Services.Policies
                     Objetive = policy.Objetive,
                     CreationDate = policy.CreationDate,
                     UpdateDate = policy.ModifieldDate,
-                    UserOwner = policy.ModifieldBy,
                     State = policy.State,
                 };
                 return model;
@@ -246,7 +245,7 @@ namespace ParameterControl.Services.Policies
                     Objetive = request.Objetive,
                     CreationDate = DateTime.Now,
                     ModifieldDate = DateTime.Now,
-                    ModifieldBy = "CreateToUserDev",
+                    //ModifieldBy = "CreateToUserDev",
                     State = request.State,
                 };
 
@@ -296,7 +295,7 @@ namespace ParameterControl.Services.Policies
                     Objetive = policy.Objetive,
                     CreationDate = policy.CreationDate,
                     ModifieldDate = DateTime.Now,
-                    ModifieldBy = "CreateToUserDev",
+                    //ModifieldBy = "CreateToUserDev",
                     State = policy.State
                 };
                 return model;
@@ -315,7 +314,7 @@ namespace ParameterControl.Services.Policies
                     Objetive = policy.Objetive,
                     CreationDate = policy.CreationDate,
                     ModifieldDate = DateTime.Now,
-                    ModifieldBy = "CreateToUserDev",
+                    //ModifieldBy = "CreateToUserDev",
                     State = true
                 };
                 return model;
@@ -334,7 +333,7 @@ namespace ParameterControl.Services.Policies
                     Objetive = policy.Objetive,
                     CreationDate = policy.CreationDate,
                     ModifieldDate = DateTime.Now,
-                    ModifieldBy = "CreateToUserDev",
+                    //ModifieldBy = "CreateToUserDev",
                     State = false
                 };
                 return model;

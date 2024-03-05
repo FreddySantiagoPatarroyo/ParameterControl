@@ -29,7 +29,6 @@ namespace ParameterControl.LoadControl.DataAccess
                         using (OracleCommand command = new OracleCommand("UPDATE_LOAD_CONTROL", connection))
                         {
                             command.CommandType = CommandType.StoredProcedure;
-                            command.Parameters.Add(new OracleParameter("PARAM_CODE", entity.Code));
                             command.Parameters.Add(new OracleParameter("PARAM_PACKAGE", entity.Package));
                             command.Parameters.Add(new OracleParameter("PARAM_TABLA", entity.Table));
                             command.Parameters.Add(new OracleParameter("PARAM_PERIODICIDAD", entity.Periodicity));

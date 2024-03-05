@@ -167,7 +167,7 @@ namespace ParameterControl.Services.Rows
                 },
                 new Row()
                 {
-                    Value = "ConciliationCode",
+                    Value = "Conciliation",
                     Name = "Conciliacion"
                 },
                  new Row()

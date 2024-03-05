@@ -28,7 +28,7 @@ namespace ParameterControl.LoadControl.DataAccess
                         using (OracleCommand command = new OracleCommand("SELECT_BY_ID_LOAD_CONTROL", connection))
                         {
                             command.CommandType = CommandType.StoredProcedure;
-                            command.Parameters.Add(new OracleParameter("PARAM_CODE", entity.Code));
+                            command.Parameters.Add(new OracleParameter("PARAM_PACKAGE", entity.Package));
                             OracleDataReader reader = command.ExecuteReader();
                             _dataTable.Load(reader);
                             return _dataTable;

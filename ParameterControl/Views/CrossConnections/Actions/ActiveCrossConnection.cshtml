@@ -3,7 +3,7 @@
 
 @{
     ViewData["Title"] = "Activar Tomas Transversales";
-    string ErrorEntyNull = "No existe una toma transversal con el codigo " + ViewBag.CodeSend + ",CrossConnections";
+    string ErrorEntyNull = "No existe una toma transversal con el codigo " + ViewBag.PackageSend + ",CrossConnections";
     string ErrorSuccess = "Se genero un problema al obtener la informacion,CrossConnections";
 }
 
@@ -32,7 +32,7 @@ else
                         <h2 class="text_break">¿Está seguro de activar la toma transversal @Model.Table?</h2>
                     </div>
 
-                    <input type="hidden" asp-for="Code" />
+                    <input type="hidden" asp-for="Package" />
 
                     <div id="btn_container" class="btn_container">
                         <a class="button button_secondary" asp-controller="CrossConnections" asp-action="CrossConnections"><p class="text font_bold">Cancelar</p></a>
@@ -61,7 +61,7 @@ else
                     document.getElementById('btn_container').style.display = 'none';
                     document.getElementById('loading').style.display = 'flex';
 
-                    data = $('#Code').val();
+                    data = $('#Package').val();
 
                     console.log(data)
 

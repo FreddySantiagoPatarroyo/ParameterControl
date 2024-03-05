@@ -178,8 +178,7 @@ namespace ParameterControl.Parameter.Impl
                     ParameterType = dr["TIPO"] is DBNull ? string.Empty : dr["TIPO"].ToString(),
                     CreationDate = dr["FECHA_CREACION"] is DBNull ? DateTime.Now : Convert.ToDateTime(dr["FECHA_CREACION"]),
                     ModifieldDate = dr["FECHA_ACTUALIZACION"] is DBNull ? DateTime.Now : Convert.ToDateTime(dr["FECHA_ACTUALIZACION"]),
-                    ModifieldBy = dr["MODIFICADO_POR"] is DBNull ? string.Empty : dr["MODIFICADO_POR"].ToString(),
-                    State = dr["ESTADO_ACTIVACION"] is DBNull ? false : Convert.ToBoolean(dr["ESTADO_ACTIVACION"]),
+                    State = dr["ESTADO_PARAMETRO"] is DBNull ? false : Convert.ToBoolean(Convert.ToInt32(dr["ESTADO_PARAMETRO"])),
                 };
                 return model;
             });

@@ -141,13 +141,13 @@ namespace ParameterControl.Controllers.CrossConnections
         }
 
         [HttpGet]
-        public async Task<ActionResult> View(int code)
+        public async Task<ActionResult> View(string package)
         {
             try
             {
-                ViewBag.CodeSend = code;
-                modCrossConnection.CrossConnection crossConnection = await crossConnectionsService.GetCrossConnectionByCode(code);
-                if (crossConnection.Code == 0)
+                ViewBag.PackageSend = package;
+                modCrossConnection.CrossConnection crossConnection = await crossConnectionsService.GetCrossConnectionByPackage(package);
+                if (crossConnection.Package == string.Empty)
                 {
                     ViewBag.Success = true;
                     ViewBag.EntyNull = true;
@@ -168,91 +168,91 @@ namespace ParameterControl.Controllers.CrossConnections
             }
         }
 
-        [HttpGet]
-        public async Task<ActionResult> Active(int code)
-        {
-            try
-            {
-                ViewBag.CodeSend = code;
-                modCrossConnection.CrossConnection crossConnection = await crossConnectionsService.GetCrossConnectionByCode(code);
-                if (crossConnection.Code == 0)
-                {
-                    ViewBag.Success = true;
-                    ViewBag.EntyNull = true;
-                    return View("Actions/ActiveCrossConnection", null);
-                }
+        //[HttpGet]
+        //public async Task<ActionResult> Active(string package)
+        //{
+        //    try
+        //    {
+        //        ViewBag.PackageSend = package;
+        //        modCrossConnection.CrossConnection crossConnection = await crossConnectionsService.GetCrossConnectionByPackage(package);
+        //        if (crossConnection.Package == string.Empty)
+        //        {
+        //            ViewBag.Success = true;
+        //            ViewBag.EntyNull = true;
+        //            return View("Actions/ActiveCrossConnection", null);
+        //        }
 
-                ViewBag.Success = true;
-                ViewBag.EntyNull = false;
-                return View("Actions/ActiveCrossConnection", crossConnection);
-            }
-            catch (Exception)
-            {
-                ViewBag.Success = false;
-                ViewBag.EntyNull = false;
-                return View("Actions/ActiveCrossConnection", null);
-            }
-        }
+        //        ViewBag.Success = true;
+        //        ViewBag.EntyNull = false;
+        //        return View("Actions/ActiveCrossConnection", crossConnection);
+        //    }
+        //    catch (Exception)
+        //    {
+        //        ViewBag.Success = false;
+        //        ViewBag.EntyNull = false;
+        //        return View("Actions/ActiveCrossConnection", null);
+        //    }
+        //}
 
-        [HttpPost]
-        public async Task<ActionResult> ActiveCrossConnection([FromBody] int code)
-        {
-            try
-            {
-                modCrossConnection.CrossConnection request = await crossConnectionsService.GetCrossConnectionByCode(code);
-                var responseIn = await crossConnectionsService.ActiveCrossConnection(request);
-                _logger.LogInformation($"Finaliza método CrossConnectionsController.Active {responseIn}");
-                return Ok(new { message = "Se activo la toma transversal de manera exitosa", state = "Success" });
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Error en el método CrossConnectionsController.Active : {JsonConvert.SerializeObject(ex.Message)}");
-                return BadRequest(new { message = "Error al activar la toma transversal", state = "Error" });
-            }
-        }
+        //[HttpPost]
+        //public async Task<ActionResult> ActiveCrossConnection([FromBody] string package)
+        //{
+        //    try
+        //    {
+        //        modCrossConnection.CrossConnection request = await crossConnectionsService.GetCrossConnectionByPackage(package);
+        //        var responseIn = await crossConnectionsService.ActiveCrossConnection(request);
+        //        _logger.LogInformation($"Finaliza método CrossConnectionsController.Active {responseIn}");
+        //        return Ok(new { message = "Se activo la toma transversal de manera exitosa", state = "Success" });
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        _logger.LogError($"Error en el método CrossConnectionsController.Active : {JsonConvert.SerializeObject(ex.Message)}");
+        //        return BadRequest(new { message = "Error al activar la toma transversal", state = "Error" });
+        //    }
+        //}
 
-        [HttpGet]
-        public async Task<ActionResult> Desactive(int code)
-        {
-            try
-            {
-                ViewBag.CodeSend = code;
-                modCrossConnection.CrossConnection crossConnection = await crossConnectionsService.GetCrossConnectionByCode(code);
-                if (crossConnection.Code == 0)
-                {
-                    ViewBag.Success = true;
-                    ViewBag.EntyNull = true;
-                    return View("Actions/DesactiveCrossConnection", null);
-                }
+        //[HttpGet]
+        //public async Task<ActionResult> Desactive(string package)
+        //{
+        //    try
+        //    {
+        //        ViewBag.PackageSend = package;
+        //        modCrossConnection.CrossConnection crossConnection = await crossConnectionsService.GetCrossConnectionByPackage(package);
+        //        if (crossConnection.Package == string.Empty)
+        //        {
+        //            ViewBag.Success = true;
+        //            ViewBag.EntyNull = true;
+        //            return View("Actions/DesactiveCrossConnection", null);
+        //        }
 
-                ViewBag.Success = true;
-                ViewBag.EntyNull = false;
-                return View("Actions/DesactiveCrossConnection", crossConnection);
-            }
-            catch (Exception)
-            {
-                ViewBag.Success = false;
-                ViewBag.EntyNull = false;
-                return View("Actions/DesactiveCrossConnection", null);
-            }
-        }
+        //        ViewBag.Success = true;
+        //        ViewBag.EntyNull = false;
+        //        return View("Actions/DesactiveCrossConnection", crossConnection);
+        //    }
+        //    catch (Exception)
+        //    {
+        //        ViewBag.Success = false;
+        //        ViewBag.EntyNull = false;
+        //        return View("Actions/DesactiveCrossConnection", null);
+        //    }
+        //}
 
-        [HttpPost]
-        public async Task<ActionResult> DesactiveCrossConnection([FromBody] int code)
-        {
-            try
-            {
-                var request = await crossConnectionsService.GetCrossConnectionByCode(code);
-                var responseIn = await crossConnectionsService.DesactiveCrossConnection(request);
-                _logger.LogInformation($"Finaliza método CrossConnectionsController.Desactive {responseIn}");
-                return Ok(new { message = "Se desactivo la toma transversal de manera exitosa", state = "Success" });
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Error en el método CrossConnectionsController.Desactive : {JsonConvert.SerializeObject(ex.Message)}");
-                return BadRequest(new { message = "Error al desactivar la toma transversal", state = "Error" });
-            }
-        }
+        //[HttpPost]
+        //public async Task<ActionResult> DesactiveCrossConnection([FromBody] string package)
+        //{
+        //    try
+        //    {
+        //        var request = await crossConnectionsService.GetCrossConnectionByPackage(package);
+        //        var responseIn = await crossConnectionsService.DesactiveCrossConnection(request);
+        //        _logger.LogInformation($"Finaliza método CrossConnectionsController.Desactive {responseIn}");
+        //        return Ok(new { message = "Se desactivo la toma transversal de manera exitosa", state = "Success" });
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        _logger.LogError($"Error en el método CrossConnectionsController.Desactive : {JsonConvert.SerializeObject(ex.Message)}");
+        //        return BadRequest(new { message = "Error al desactivar la toma transversal", state = "Error" });
+        //    }
+        //}
 
         [HttpGet]
         public ActionResult Filter()

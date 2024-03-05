@@ -250,7 +250,6 @@ namespace ParameterControl.Services.Users
                     RolName = User.RolName,
                     CreationDate = User.CreationDate,
                     UpdateDate = User.ModifiedDate,
-                    UserOwner = User.ModifiedBy,
                     State = User.State,
                 };
                 return model;
@@ -303,7 +302,6 @@ namespace ParameterControl.Services.Users
                     FirstAccess = request.FirstAccess,
                     CreationDate = DateTime.Now,
                     ModifiedDate = DateTime.Now,
-                    ModifiedBy = "CreateToUserDev",
                     State = request.State,
                 };
 
@@ -356,7 +354,6 @@ namespace ParameterControl.Services.Users
                     FirstAccess = User.FirstAccess,
                     CreationDate = User.CreationDate,
                     ModifiedDate = DateTime.Now,
-                    ModifiedBy = "CreateToUserDev",
                     State = User.State,
                 };
                 return model;
@@ -378,7 +375,6 @@ namespace ParameterControl.Services.Users
                     FirstAccess = User.FirstAccess,
                     CreationDate = User.CreationDate,
                     ModifiedDate = DateTime.Now,
-                    ModifiedBy = "CreateToUserDev",
                     State = false,
                 };
                 return model;
@@ -400,7 +396,6 @@ namespace ParameterControl.Services.Users
                     FirstAccess = User.FirstAccess,
                     CreationDate = User.CreationDate,
                     ModifiedDate = DateTime.Now,
-                    ModifiedBy = "CreateToUserDev",
                     State = true,
                 };
                 return model;
