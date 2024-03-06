@@ -120,6 +120,12 @@ namespace ParameterControl.Controllers.Results
                 return View("ResultsFilter", null);
             }
         }
+        [HttpGet]
+        public async Task<ActionResult> Edit(string id)
+        {
+            Result result = await resultsServices.GetResultsById(id);
+            return View("Actions/EditResult", result);
+        }
 
         [HttpGet]
         public async Task<ActionResult> View(string id)

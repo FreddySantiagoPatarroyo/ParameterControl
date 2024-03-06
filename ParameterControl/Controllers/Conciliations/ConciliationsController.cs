@@ -61,6 +61,7 @@ namespace ParameterControl.Controllers.Conciliations
             _isInactive = Convert.ToBoolean(section.Where(x => x.Key.Equals("btnInactive")).FirstOrDefault().Value);
         }
 
+        [Authorize(Roles = "ADMINISTRADOR,EJECUTOR,CONSULTOR")]
         [HttpGet]
         public async Task<ActionResult> Conciliations(PaginationViewModel paginationViewModel)
         {
@@ -97,6 +98,7 @@ namespace ParameterControl.Controllers.Conciliations
             }
         }
 
+        [Authorize(Roles = "ADMINISTRADOR,EJECUTOR,CONSULTOR")]
         [HttpGet]
         public async Task<ActionResult> ConciliationsFilter(PaginationViewModel paginationViewModel, string filterColunm = "", string filterValue = "", string typeRow = "")
         {
@@ -146,6 +148,7 @@ namespace ParameterControl.Controllers.Conciliations
             }
         }
 
+        [Authorize(Roles = "ADMINISTRADOR")]
         [HttpGet]
         public async Task<ActionResult> Create()
         {
@@ -176,6 +179,7 @@ namespace ParameterControl.Controllers.Conciliations
             }
         }
 
+        [Authorize(Roles = "ADMINISTRADOR")]
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] modConciliation.Conciliation request)
         {
@@ -200,6 +204,7 @@ namespace ParameterControl.Controllers.Conciliations
 
         }
 
+        [Authorize(Roles = "ADMINISTRADOR")]
         [HttpGet]
         public async Task<ActionResult> Edit(int code)
         {
@@ -239,7 +244,7 @@ namespace ParameterControl.Controllers.Conciliations
             }
         }
 
-
+        [Authorize(Roles = "ADMINISTRADOR")]
         [HttpPost]
         public async Task<ActionResult> Edit([FromBody] modConciliation.Conciliation request)
         {
@@ -276,6 +281,7 @@ namespace ParameterControl.Controllers.Conciliations
 
         }
 
+        [Authorize(Roles = "ADMINISTRADOR,EJECUTOR,CONSULTOR")]
         [HttpGet]
         public async Task<ActionResult> View(int code)
         {
@@ -303,6 +309,7 @@ namespace ParameterControl.Controllers.Conciliations
             }
         }
 
+        [Authorize(Roles = "ADMINISTRADOR,EJECUTOR,CONSULTOR")]
         [HttpGet]
         public async Task<ActionResult> ViewPolicy(int code)
         {
@@ -330,6 +337,7 @@ namespace ParameterControl.Controllers.Conciliations
             }
         }
 
+        [Authorize(Roles = "ADMINISTRADOR")]
         [HttpGet]
         public async Task<ActionResult> Active(int code)
         {
@@ -356,6 +364,7 @@ namespace ParameterControl.Controllers.Conciliations
             }
         }
 
+        [Authorize(Roles = "ADMINISTRADOR")]
         [HttpPost]
         public async Task<ActionResult> ActiveConciliation([FromBody] int code)
         {
@@ -373,6 +382,7 @@ namespace ParameterControl.Controllers.Conciliations
             }
         }
 
+        [Authorize(Roles = "ADMINISTRADOR")]
         [HttpGet]
         public async Task<ActionResult> Desactive(int code)
         {
@@ -399,6 +409,7 @@ namespace ParameterControl.Controllers.Conciliations
             }
         }
 
+        [Authorize(Roles = "ADMINISTRADOR")]
         [HttpPost]
         public async Task<ActionResult> DesactiveConciliation([FromBody] int code)
         {
@@ -425,6 +436,7 @@ namespace ParameterControl.Controllers.Conciliations
 
         }
 
+        [Authorize(Roles = "ADMINISTRADOR,EJECUTOR,CONSULTOR")]
         [HttpGet]
         public ActionResult Filter()
         {
@@ -436,6 +448,7 @@ namespace ParameterControl.Controllers.Conciliations
             return View("Actions/Filter", model);
         }
 
+        [Authorize(Roles = "ADMINISTRADOR,EJECUTOR,CONSULTOR")]
         [HttpPost]
         public async Task<ActionResult> FilterConciliations(FilterViewModel filter)
         {
@@ -456,6 +469,7 @@ namespace ParameterControl.Controllers.Conciliations
             });
         }
 
+        [Authorize(Roles = "ADMINISTRADOR,EJECUTOR,CONSULTOR")]
         [HttpPost]
         public async Task<IActionResult> GetSecondaryFilter([FromBody] string ColumValue)
         {

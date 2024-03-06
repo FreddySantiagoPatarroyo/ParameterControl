@@ -1,0 +1,145 @@
+﻿@using ParameterControl.Models.Result;
+@model Result;
+
+@{
+    ViewData["Title"] = "Resultado";
+}
+
+<partial name="_Menu" />
+
+
+        <div class="box_edit">
+            <div class="bg__blur"></div>
+
+            <div asp-validation-summary="ModelOnly" class="text_error"></div>
+
+            <form class="form__container">
+                <div class="card__container">
+                    <div class="header_form">
+                        <img src="/images/iconApple.png" />
+                        <h1>Resultado</h1>
+                    </div>
+
+
+                    <div class="form_group">
+                        <div class="field">
+                            <label asp-for="NumberRecovered" class="label_form">Cantidad de Recuperadas*</label>
+                            <div class="input">
+                                <input placeholder="Cantidad de recuperadas"  />
+                            </div>
+                            <span id="NumberRecoveredError" class="text_error"></span>
+                        </div>
+                    </div>
+
+                    <div class="form_group">
+                        <div class="field">
+                            <label asp-for="Value" class="label_form">Valor*</label>
+                            <div class="input">
+                                <input  placeholder="Valor"  />
+                            </div>
+                            <span id="ValueError" class="text_error"></span>
+                        </div>
+                    </div>
+
+                   <p class="note_text"><span>Nota: </span>Los campos con (*) son obligatorios</p>
+
+                    <div id="btn_container" class="btn_container">
+                        <a class="button button_secondary" asp-controller="Results" asp-action="Results"><p class="text font_bold">Cancelar</p></a>
+                        <a href="javascript:void(0)" onclick="sendData()" class="button button_primary"><p class="text font_bold">Actualizar</p></a>
+                    </div>
+                    <div id="loading" class="loading">
+                        <span class="loader"></span>
+                    </div>
+                    <div id="LayoytError" class="layout_content">
+                        <partial name="_MessageError" />
+                    </div>
+                    <div id="LayoytSuccess" class="layout_content">
+                        <partial name="_MessageSuccess" />
+                    </div>
+                </div>
+            </form>
+        </div>
+
+     @section Scripts {
+    <partial name="_ValidationScriptsPartial.cshtml" />
+
+    <script>
+        const urlRsult = '@Url.Action("Edit")';
+                let data;
+                let isValidNumberRecovered = false;
+                let isValidValue = false;
+
+                const sendData = async () => {
+                isValidNumberRecovered = validateInput("NumberRecovered", "La cantidad de recuperadas es requerida", "NumberRecoveredError");
+                isValidValue = validateInput("Value", "El valor es requerido", "ValueError");
+
+                if (isValidNumberRecovered && isValidValue) {
+                        document.getElementById('btn_container').style.display = 'none';
+                        document.getElementById('loading').style.display = 'flex';
+
+
+                        data = {
+                            NumberRecovered: $('#NumberRecovered').val(),
+                            Value: $('#Value').val(),
+                            State: true,
+                        }
+
+                        console.log(data)
+
+                        const result = await fetch(urlResult, {
+                            method: 'POST',
+                            body: JSON.stringify(data),
+                            headers: {
+                                'Content-Type': 'application/json'
+                            }
+                        })
+
+                        const json = await result.json();
+
+                        console.log(json);
+
+                        if (json.state == "Success") {
+                            document.getElementById('LayoytSuccess').style.display = 'block';
+                            document.getElementById('layout_message_success').innerHTML = json.message;
+                            document.getElementById('loading').style.display = 'none';
+                            setTimeout(() => {
+                                location.href = '/Results/Rsults';
+                            }, 3000)
+                        } else {
+                            document.getElementById('LayoytError').style.display = 'block';
+                            document.getElementById('layout_message_error').innerHTML = json.message;
+                            document.getElementById('loading').style.display = 'none';
+                        }
+                    }
+                }
+                const validateEmpty = (idInput) => {
+                    if ($(`#${idInput}`).val() == "" || $(`#${idInput}`).val() == null) {
+                        return true;
+                    } else {
+                        return false;
+                    }
+                }
+
+                const validateInput = (idInput, requiredMessage, idError) => {
+                    const isEmpty = validateEmpty(idInput);
+                    if (isEmpty) {
+                        $(`#${idError}`).text(requiredMessage);
+                        return false;
+                    } else {
+                        $(`#${idError}`).text("");
+                        return true;
+                    }
+                }
+                const FormatDate = (date) => {
+
+                    const validateAm = date.toString().includes("a. m.");
+                    const validatePm = date.toString().includes("p. m.");
+
+                    if (validatePm) {
+                        date = date.replace("p. m.", "PM")
+                    }
+
+                    return date;
+                }
+            </script>
+        }

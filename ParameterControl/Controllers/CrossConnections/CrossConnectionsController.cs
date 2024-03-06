@@ -54,6 +54,7 @@ namespace ParameterControl.Controllers.CrossConnections
             _isInactive = Convert.ToBoolean(section.Where(x => x.Key.Equals("btnInactive")).FirstOrDefault().Value);
         }
 
+        [Authorize(Roles = "ADMINISTRADOR,EJECUTOR,CONSULTOR")]
         [HttpGet]
         public async Task<ActionResult> CrossConnections(PaginationViewModel paginationViewModel)
         {
@@ -91,6 +92,7 @@ namespace ParameterControl.Controllers.CrossConnections
             }
         }
 
+        [Authorize(Roles = "ADMINISTRADOR,EJECUTOR,CONSULTOR")]
         public async Task<ActionResult> CrossConnectionsFilter(PaginationViewModel paginationViewModel, string filterColunm = "", string filterValue = "", string typeRow = "")
         {
             try
@@ -140,6 +142,7 @@ namespace ParameterControl.Controllers.CrossConnections
 
         }
 
+        [Authorize(Roles = "ADMINISTRADOR,EJECUTOR,CONSULTOR")]
         [HttpGet]
         public async Task<ActionResult> View(string package)
         {
@@ -254,6 +257,7 @@ namespace ParameterControl.Controllers.CrossConnections
         //    }
         //}
 
+        [Authorize(Roles = "ADMINISTRADOR,EJECUTOR,CONSULTOR")]
         [HttpGet]
         public ActionResult Filter()
         {
@@ -266,6 +270,7 @@ namespace ParameterControl.Controllers.CrossConnections
             return View("Actions/Filter", model);
         }
 
+        [Authorize(Roles = "ADMINISTRADOR,EJECUTOR,CONSULTOR")]
         [HttpPost]
         public async Task<ActionResult> FilterCrossConnections(FilterViewModel filter)
         {
@@ -286,6 +291,7 @@ namespace ParameterControl.Controllers.CrossConnections
             });
         }
 
+        [Authorize(Roles = "ADMINISTRADOR,EJECUTOR,CONSULTOR")]
         [HttpPost]
         public async Task<IActionResult> GetSecondaryFilter([FromBody] string ColumValue)
         {

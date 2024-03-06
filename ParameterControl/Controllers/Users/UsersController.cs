@@ -13,8 +13,7 @@ using System.Security.Claims;
 using modUser = ParameterControl.Models.User;
 
 namespace ParameterControl.Controllers.Users
-{
-    [Authorize(Roles = "ADMINISTRADOR,EJECUTOR,CONSULTOR")]
+{    
     public class UsersController : Controller
     {
         public TableUserViewModel TableUsers = new TableUserViewModel();
@@ -56,6 +55,7 @@ namespace ParameterControl.Controllers.Users
 
         }
 
+        [Authorize(Roles = "ADMINISTRADOR,EJECUTOR,CONSULTOR")]
         [HttpGet]
         public async Task<ActionResult> Users(PaginationViewModel paginationViewModel)
         {
@@ -95,7 +95,7 @@ namespace ParameterControl.Controllers.Users
             }
         }
 
-
+        [Authorize(Roles = "ADMINISTRADOR,EJECUTOR,CONSULTOR")]
         [HttpGet]
         public async Task<ActionResult> UsersFilter(PaginationViewModel paginationViewModel, string filterColunm = "", string filterValue = "", string typeRow = "")
         {
@@ -145,6 +145,7 @@ namespace ParameterControl.Controllers.Users
             }
         }
 
+        [Authorize(Roles = "ADMINISTRADOR")]
         [HttpGet]
         public async Task<ActionResult> Create()
         {
@@ -163,6 +164,7 @@ namespace ParameterControl.Controllers.Users
             }
         }
 
+        [Authorize(Roles = "ADMINISTRADOR")]
         [HttpPost]
         public async Task<IActionResult> CreateUser([FromBody] modUser.User request)
         {
@@ -190,6 +192,7 @@ namespace ParameterControl.Controllers.Users
 
         }
 
+        [Authorize(Roles = "ADMINISTRADOR")]
         [HttpGet]
         public async Task<ActionResult> Edit(int code)
         {
@@ -219,6 +222,7 @@ namespace ParameterControl.Controllers.Users
             }
         }
 
+        [Authorize(Roles = "ADMINISTRADOR")]
         [HttpPost]
         public async Task<ActionResult> EditUser([FromBody] modUser.User request)
         {
@@ -256,6 +260,7 @@ namespace ParameterControl.Controllers.Users
 
         }
 
+        [Authorize(Roles = "ADMINISTRADOR,EJECUTOR,CONSULTOR")]
         [HttpGet]
         public async Task<ActionResult> View(int code)
         {
@@ -283,6 +288,7 @@ namespace ParameterControl.Controllers.Users
             }
         }
 
+        [Authorize(Roles = "ADMINISTRADOR")]
         [HttpGet]
         public async Task<ActionResult> Active(int code)
         {
@@ -309,6 +315,7 @@ namespace ParameterControl.Controllers.Users
             }
         }
 
+        [Authorize(Roles = "ADMINISTRADOR")]
         [HttpPost]
         public async Task<ActionResult> ActiveUser([FromBody] int code)
         {
@@ -326,6 +333,7 @@ namespace ParameterControl.Controllers.Users
             }
         }
 
+        [Authorize(Roles = "ADMINISTRADOR")]
         [HttpGet]
         public async Task<ActionResult> Desactive(int code)
         {
@@ -352,6 +360,7 @@ namespace ParameterControl.Controllers.Users
             }
         }
 
+        [Authorize(Roles = "ADMINISTRADOR")]
         [HttpPost]
         public async Task<ActionResult> DesactiveUser([FromBody] int code)
         {
@@ -369,6 +378,7 @@ namespace ParameterControl.Controllers.Users
             }
         }
 
+        [Authorize(Roles = "ADMINISTRADOR,EJECUTOR,CONSULTOR")]
         [HttpGet]
         public ActionResult Filter()
         {
@@ -381,6 +391,7 @@ namespace ParameterControl.Controllers.Users
             return View("Actions/Filter", model);
         }
 
+        [Authorize(Roles = "ADMINISTRADOR,EJECUTOR,CONSULTOR")]
         [HttpPost]
         public async Task<ActionResult> FilterUsers(FilterViewModel filter)
         {
@@ -401,6 +412,7 @@ namespace ParameterControl.Controllers.Users
             });
         }
 
+        [Authorize(Roles = "ADMINISTRADOR,EJECUTOR,CONSULTOR")]
         [HttpPost]
         public async Task<IActionResult> GetSecondaryFilter([FromBody] string ColumValue)
         {
@@ -435,6 +447,7 @@ namespace ParameterControl.Controllers.Users
             return Ok(filter);
         }
 
+        [Authorize(Roles = "ADMINISTRADOR")]
         [HttpPost]
         public async Task<IActionResult> ValidateDataRepeatCreate([FromBody] string value)
         {
@@ -445,6 +458,7 @@ namespace ParameterControl.Controllers.Users
             return validate == false ? Ok(validate) : BadRequest(validate);
         }
 
+        [Authorize(Roles = "ADMINISTRADOR")]
         [HttpPost]
         public async Task<IActionResult> ValidateDataRepeatEdit([FromBody] string value)
         {

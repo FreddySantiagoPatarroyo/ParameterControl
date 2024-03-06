@@ -12,5 +12,8 @@
         public string IncoValue { get; set; } = string.Empty;
         public string PQValue { get; set; } = string.Empty;
         public string ReinValue { get; set; } = string.Empty;
+        public int NumberRecovered { get; set; }
+        public int Value { get; set; }
+
     }
 }

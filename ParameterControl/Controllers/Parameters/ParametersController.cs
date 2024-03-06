@@ -14,7 +14,7 @@ using modParameter = ParameterControl.Models.Parameter;
 
 namespace ParameterControl.Controllers.Parameters
 {
-    [Authorize(Roles = "ADMINISTRADOR,EJECUTOR,CONSULTOR")]
+   
     public class ParametersController : Controller
     {
         public TableParametersViewModel TableParameters = new TableParametersViewModel();
@@ -55,6 +55,7 @@ namespace ParameterControl.Controllers.Parameters
             _isInactive = Convert.ToBoolean(section.Where(x => x.Key.Equals("btnInactive")).FirstOrDefault().Value);
         }
 
+        [Authorize(Roles = "ADMINISTRADOR,EJECUTOR,CONSULTOR")]
         [HttpGet]
         public async Task<ActionResult> Parameters(PaginationViewModel paginationViewModel)
         {
@@ -94,6 +95,7 @@ namespace ParameterControl.Controllers.Parameters
 
         }
 
+        [Authorize(Roles = "ADMINISTRADOR,EJECUTOR,CONSULTOR")]
         [HttpGet]
         public async Task<ActionResult> ParametersFilter(PaginationViewModel paginationViewModel, string filterColunm = "", string filterValue = "", string typeRow = "")
         {
@@ -144,6 +146,7 @@ namespace ParameterControl.Controllers.Parameters
             }
         }
 
+        [Authorize(Roles = "ADMINISTRADOR,EJECUTOR,CONSULTOR")]
         [HttpGet]
         public async Task<ActionResult> ParametersConciliationFilter(PaginationViewModel paginationViewModel, string conciliation = "")
         {
@@ -188,6 +191,7 @@ namespace ParameterControl.Controllers.Parameters
             }
         }
 
+        [Authorize(Roles = "ADMINISTRADOR")]
         [HttpGet]
         public async Task<ActionResult> Create()
         {
@@ -213,6 +217,7 @@ namespace ParameterControl.Controllers.Parameters
 
         }
 
+        [Authorize(Roles = "ADMINISTRADOR")]
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] modParameter.Parameter request)
         {
@@ -239,6 +244,7 @@ namespace ParameterControl.Controllers.Parameters
 
         }
 
+        [Authorize(Roles = "ADMINISTRADOR")]
         [HttpGet]
         public async Task<ActionResult> Edit(int code)
         {
@@ -271,6 +277,7 @@ namespace ParameterControl.Controllers.Parameters
             }
         }
 
+        [Authorize(Roles = "ADMINISTRADOR")]
         [HttpPost]
         public async Task<IActionResult> Edit([FromBody] modParameter.Parameter request)
         {
@@ -306,6 +313,7 @@ namespace ParameterControl.Controllers.Parameters
             }
         }
 
+        [Authorize(Roles = "ADMINISTRADOR,EJECUTOR,CONSULTOR")]
         [HttpGet]
         public async Task<ActionResult> View(int code)
         {
@@ -333,6 +341,7 @@ namespace ParameterControl.Controllers.Parameters
             }
         }
 
+        [Authorize(Roles = "ADMINISTRADOR")]
         [HttpGet]
         public async Task<ActionResult> Active(int code)
         {
@@ -359,6 +368,7 @@ namespace ParameterControl.Controllers.Parameters
             }
         }
 
+        [Authorize(Roles = "ADMINISTRADOR")]
         [HttpPost]
         public async Task<ActionResult> ActiveParameter([FromBody] int code)
         {
@@ -376,6 +386,7 @@ namespace ParameterControl.Controllers.Parameters
             }
         }
 
+        [Authorize(Roles = "ADMINISTRADOR")]
         [HttpGet]
         public async Task<ActionResult> Desactive(int code)
         {
@@ -402,6 +413,7 @@ namespace ParameterControl.Controllers.Parameters
             }
         }
 
+        [Authorize(Roles = "ADMINISTRADOR")]
         [HttpPost]
         public async Task<ActionResult> DesactiveParameter([FromBody] int code)
         {
@@ -419,6 +431,7 @@ namespace ParameterControl.Controllers.Parameters
             }
         }
 
+        [Authorize(Roles = "ADMINISTRADOR,EJECUTOR,CONSULTOR")]
         [HttpGet]
         public ActionResult Filter()
         {
@@ -431,6 +444,7 @@ namespace ParameterControl.Controllers.Parameters
             return View("Actions/Filter", model);
         }
 
+        [Authorize(Roles = "ADMINISTRADOR,EJECUTOR,CONSULTOR")]
         [HttpPost]
         public async Task<ActionResult> FilterParameters(FilterViewModel filter)
         {
@@ -451,6 +465,7 @@ namespace ParameterControl.Controllers.Parameters
             });
         }
 
+        [Authorize(Roles = "ADMINISTRADOR,EJECUTOR,CONSULTOR")]
         [HttpPost]
         public async Task<IActionResult> GetSecondaryFilter([FromBody] string ColumValue)
         {

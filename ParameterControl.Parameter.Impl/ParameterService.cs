@@ -171,7 +171,7 @@ namespace ParameterControl.Parameter.Impl
             {
                 ParameterModel model = new ParameterModel
                 {
-                    Code = Convert.ToInt32(dr["COD_PARAMETRO"]),
+                    Code = dr["COD_PARAMETRO"] is DBNull ? 0 : Convert.ToInt32(dr["COD_PARAMETRO"]),
                     Parameter = dr["PARAMETRO"] is DBNull ? string.Empty : dr["PARAMETRO"].ToString(),
                     Value = dr["VALOR"] is DBNull ? string.Empty : dr["VALOR"].ToString(),
                     Description = dr["DESCRIPCION"] is DBNull ? string.Empty : dr["DESCRIPCION"].ToString(),
