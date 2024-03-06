@@ -25,8 +25,7 @@ namespace ParameterControl.Services.Users
                    Name = "name1",
                    CreationDate = DateTime.Parse("2024-01-10"),
                    UpdateDate = DateTime.Parse("2023-11-09"),
-                   State = true,
-                    UserOwner = "User1"
+                   State = true
                 },
                  new modUser.User(){
                    Code = 2,
@@ -35,8 +34,7 @@ namespace ParameterControl.Services.Users
                    Name = "name2",
                    CreationDate = DateTime.Parse("2024-01-10"),
                    UpdateDate = DateTime.Parse("2023-11-09"),
-                   State = true,
-                    UserOwner = "User1"
+                   State = true
                 }
             };
         }

@@ -6,7 +6,6 @@
         public string ConciliationName { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
         public string TargetTable { get; set; } = string.Empty;
-        public string Status { get; set; } = string.Empty;
         public string Approval { get; set; } = string.Empty;
         public string FieldTargetTable { get; set; } = string.Empty;
         public string AssignedUser { get; set; } = string.Empty;
@@ -32,7 +31,6 @@
         public string Req { get; set; } = string.Empty;
         public string PolicyName { get; set; } = string.Empty;
         public bool State { get; set; } = false;
-        public string ModifieldBy { get; set; } = string.Empty;
         public bool StatePolicy { get; set; } = false;
 
     }

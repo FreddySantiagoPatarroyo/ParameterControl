@@ -159,7 +159,7 @@ namespace ParameterControl.Stage.Impl
                     ModifieldDate = dr["FECHA_ACTUALIZACION"] is DBNull ? DateTime.Now : Convert.ToDateTime(dr["FECHA_ACTUALIZACION"]),
                     State = dr["ESTADO_ESCENARIO"] is DBNull ? false : Convert.ToBoolean(Convert.ToInt32(dr["ESTADO_ESCENARIO"])),
                     ConciliationName = dr["NOMBRE_CONCILIACION"] is DBNull ? string.Empty : dr["NOMBRE_CONCILIACION"].ToString(),
-                    StateConciliation = dr["ESTADO_ACTIVACION_CONCILIACION"] is DBNull ? false : Convert.ToBoolean(dr["ESTADO_ACTIVACION_CONCILIACION"])
+                    StateConciliation = dr["ESTADO_CONCILIACION"] is DBNull ? false : Convert.ToBoolean(Convert.ToInt32(dr["ESTADO_CONCILIACION"]))
                 };
                 return model;
             });

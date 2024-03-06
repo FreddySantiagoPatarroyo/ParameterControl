@@ -14,7 +14,6 @@ using modPolicy = ParameterControl.Models.Policy;
 
 namespace ParameterControl.Controllers.Policies
 {
-    [Authorize(Roles = "ADMINISTRADOR,EJECUTOR,CONSULTOR")]
     public class PoliciesController : Controller
     {
         public TablePoliciesViewModel TablePolicies = new TablePoliciesViewModel();
@@ -55,6 +54,7 @@ namespace ParameterControl.Controllers.Policies
             _isInactive = Convert.ToBoolean(section.Where(x => x.Key.Equals("btnInactive")).FirstOrDefault().Value);
         }
 
+        [Authorize(Roles = "ADMINISTRADOR,EJECUTOR,CONSULTOR")]
         [HttpGet]
         public async Task<ActionResult> Policies(PaginationViewModel paginationViewModel)
         {
@@ -93,6 +93,7 @@ namespace ParameterControl.Controllers.Policies
 
         }
 
+        [Authorize(Roles = "ADMINISTRADOR,EJECUTOR,CONSULTOR")]
         public async Task<ActionResult> PoliciesFilter(PaginationViewModel paginationViewModel, string filterColunm = "", string filterValue = "", string typeRow = "")
         {
             try
@@ -141,6 +142,7 @@ namespace ParameterControl.Controllers.Policies
             }
         }
 
+        [Authorize(Roles = "ADMINISTRADOR")]
         [HttpGet]
         public async Task<ActionResult> Create()
         {
@@ -158,6 +160,7 @@ namespace ParameterControl.Controllers.Policies
             }
         }
 
+        [Authorize(Roles = "ADMINISTRADOR")]
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] modPolicy.Policy request)
         {
@@ -185,6 +188,7 @@ namespace ParameterControl.Controllers.Policies
 
         }
 
+        [Authorize(Roles = "ADMINISTRADOR")]
         [HttpGet]
         public async Task<ActionResult> Edit(int code)
         {
@@ -213,6 +217,7 @@ namespace ParameterControl.Controllers.Policies
 
         }
 
+        [Authorize(Roles = "ADMINISTRADOR")]
         [HttpPost]
         public async Task<ActionResult> Edit([FromBody] modPolicy.Policy request)
         {
@@ -251,6 +256,7 @@ namespace ParameterControl.Controllers.Policies
 
         }
 
+        [Authorize(Roles = "ADMINISTRADOR,EJECUTOR,CONSULTOR")]
         [HttpGet]
         public async Task<ActionResult> View(int code)
         {
@@ -278,6 +284,7 @@ namespace ParameterControl.Controllers.Policies
             }
         }
 
+        [Authorize(Roles = "ADMINISTRADOR")]
         [HttpGet]
         public async Task<ActionResult> Active(int code)
         {
@@ -303,6 +310,7 @@ namespace ParameterControl.Controllers.Policies
             }
         }
 
+        [Authorize(Roles = "ADMINISTRADOR")]
         [HttpPost]
         public async Task<ActionResult> ActivePolicy([FromBody] int code)
         {
@@ -320,6 +328,7 @@ namespace ParameterControl.Controllers.Policies
             }
         }
 
+        [Authorize(Roles = "ADMINISTRADOR")]
         [HttpGet]
         public async Task<ActionResult> Desactive(int code)
         {
@@ -345,6 +354,7 @@ namespace ParameterControl.Controllers.Policies
             }
         }
 
+        [Authorize(Roles = "ADMINISTRADOR")]
         [HttpPost]
         public async Task<ActionResult> DesactivePolicy([FromBody] int code)
         {
@@ -362,6 +372,7 @@ namespace ParameterControl.Controllers.Policies
             }
         }
 
+        [Authorize(Roles = "ADMINISTRADOR,EJECUTOR,CONSULTOR")]
         [HttpGet]
         public ActionResult Filter()
         {
@@ -374,6 +385,7 @@ namespace ParameterControl.Controllers.Policies
             return View("Actions/Filter", model);
         }
 
+        [Authorize(Roles = "ADMINISTRADOR,EJECUTOR,CONSULTOR")]
         [HttpPost]
         public async Task<ActionResult> FilterPolicies(FilterViewModel filter)
         {
@@ -394,6 +406,7 @@ namespace ParameterControl.Controllers.Policies
             });
         }
 
+        [Authorize(Roles = "ADMINISTRADOR,EJECUTOR,CONSULTOR")]
         [HttpPost]
         public async Task<IActionResult> GetSecondaryFilter([FromBody] string ColumValue)
         {

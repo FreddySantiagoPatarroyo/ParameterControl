@@ -24,8 +24,7 @@ namespace ParameterControl.Services.Policies
                     Description = "Descripcion ejemplo asdasdasdasdasdasdasdasdasdadasdasdasdasdads",
                     State = true,
                     CreationDate = DateTime.Parse("2024-01-10"),
-                    UpdateDate = DateTime.Parse("2023-11-09"),
-                    UserOwner = "User1"
+                    UpdateDate = DateTime.Parse("2023-11-09")
                 },
                 new modPolicy.Policy(){
                     Code = 2,
@@ -33,8 +32,7 @@ namespace ParameterControl.Services.Policies
                     Description = "Description",
                     State = false,
                     CreationDate = DateTime.Parse("2024-01-10"),
-                    UpdateDate = DateTime.Parse("2023-11-09"),
-                    UserOwner = "User1"
+                    UpdateDate = DateTime.Parse("2023-11-09")
                 }
             };
         }

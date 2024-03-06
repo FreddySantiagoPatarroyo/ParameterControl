@@ -23,7 +23,7 @@ namespace ParameterControl.Services.ConciliationExecition
 
             foreach (var conciliation in collectionConciliations)
             {
-                if (conciliation.State == true)
+                if (conciliation.State == true && conciliation.StatePolicy == true)
                 {
                     response.Add(conciliation);
                 }

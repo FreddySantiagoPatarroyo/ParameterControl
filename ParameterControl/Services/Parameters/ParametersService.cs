@@ -35,8 +35,7 @@ namespace ParameterControl.Services.Parameters
                     Description = "Descripcion ejemplo",
                     State = true,
                     CreationDate = DateTime.Parse("2024-01-10"),
-                    UpdateDate = DateTime.Parse("2023-11-09"),
-                    UserOwner = "User1"
+                    UpdateDate = DateTime.Parse("2023-11-09")
                 },
                 new modParameter.Parameter(){
                     Code = 2,
@@ -47,8 +46,7 @@ namespace ParameterControl.Services.Parameters
                     Description = "Descripcion ejemplo",
                     State = false,
                     CreationDate = DateTime.Parse("2024-01-10"),
-                    UpdateDate = DateTime.Parse("2023-11-09"),
-                    UserOwner = "User1"
+                    UpdateDate = DateTime.Parse("2023-11-09")
                 }
             };
         }
