@@ -89,6 +89,7 @@ namespace ParameterControl.Controllers.Conciliations
                 };
 
                 ViewBag.Success = true;
+                ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
                 return View("Conciliations", resultViemModel);
             }
             catch (Exception ex)
@@ -139,6 +140,7 @@ namespace ParameterControl.Controllers.Conciliations
                 };
 
                 ViewBag.Success = true;
+                ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
                 return View("ConciliationsFilter", resultViemModel);
             }
             catch (Exception)
@@ -170,6 +172,7 @@ namespace ParameterControl.Controllers.Conciliations
                 };
 
                 ViewBag.Success = true;
+                ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
                 return View("Actions/CreateConciliation", model);
             }
             catch (Exception)
@@ -234,6 +237,7 @@ namespace ParameterControl.Controllers.Conciliations
 
                 ViewBag.Success = true;
                 ViewBag.EntyNull = false;
+                ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
                 return View("Actions/EditConciliation", model);
             }
             catch (Exception)
@@ -299,6 +303,7 @@ namespace ParameterControl.Controllers.Conciliations
 
                 ViewBag.Success = true;
                 ViewBag.EntyNull = false;
+                ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
                 return View("Actions/ViewConciliation", model);
             }
             catch (Exception)
@@ -327,6 +332,7 @@ namespace ParameterControl.Controllers.Conciliations
 
                 ViewBag.Success = true;
                 ViewBag.EntyNull = false;
+                ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
                 return View("Actions/ViewPolicyConciliations", model);
             }
             catch (Exception)
@@ -354,6 +360,7 @@ namespace ParameterControl.Controllers.Conciliations
 
                 ViewBag.Success = true;
                 ViewBag.EntyNull = false;
+                ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
                 return View("Actions/ActiveConciliation", conciliation);
             }
             catch (Exception)
@@ -399,6 +406,7 @@ namespace ParameterControl.Controllers.Conciliations
 
                 ViewBag.Success = true;
                 ViewBag.EntyNull = false;
+                ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
                 return View("Actions/DesactiveConciliation", conciliation);
             }
             catch (Exception)
@@ -444,7 +452,7 @@ namespace ParameterControl.Controllers.Conciliations
             {
                 Rows = rows.RowsConciliations()
             };
-
+            ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
             return View("Actions/Filter", model);
         }
 
