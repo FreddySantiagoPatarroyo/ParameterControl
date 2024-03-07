@@ -59,6 +59,7 @@ namespace ParameterControl.Controllers.Parameters
         [HttpGet]
         public async Task<ActionResult> Parameters(PaginationViewModel paginationViewModel)
         {
+            ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
             try
             {
                 List<modParameter.Parameter> parameters = await parametersService.GetParametersPagination(paginationViewModel);
@@ -85,7 +86,6 @@ namespace ParameterControl.Controllers.Parameters
                 };
 
                 ViewBag.Success = true;
-                ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
                 return View("Parameters", resultViemModel);
             }
             catch (Exception)
@@ -100,6 +100,7 @@ namespace ParameterControl.Controllers.Parameters
         [HttpGet]
         public async Task<ActionResult> ParametersFilter(PaginationViewModel paginationViewModel, string filterColunm = "", string filterValue = "", string typeRow = "")
         {
+            ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
             try
             {
                 if (filterColunm == null || filterColunm == "" || filterValue == null || filterValue == "")
@@ -137,7 +138,6 @@ namespace ParameterControl.Controllers.Parameters
 
                 ViewBag.ApplyFilter = true;
                 ViewBag.Success = true;
-                ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
                 return View("ParametersFilter", resultViemModel);
             }
             catch (Exception)
@@ -151,6 +151,7 @@ namespace ParameterControl.Controllers.Parameters
         [HttpGet]
         public async Task<ActionResult> ParametersConciliationFilter(PaginationViewModel paginationViewModel, string conciliation = "")
         {
+            ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
             try
             {
                 if (conciliation == null)
@@ -182,7 +183,6 @@ namespace ParameterControl.Controllers.Parameters
 
                 ViewBag.ApplyFilter = true;
                 ViewBag.Success = true;
-                ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
                 return View("ParametersFilterConciliation", resultViemModel);
             }
             catch (Exception)
@@ -196,6 +196,7 @@ namespace ParameterControl.Controllers.Parameters
         [HttpGet]
         public async Task<ActionResult> Create()
         {
+            ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
             try
             {
                 List<SelectListItem> ParameterTypeOptionList = await parametersService.GetParameterType();
@@ -208,7 +209,6 @@ namespace ParameterControl.Controllers.Parameters
                 };
 
                 ViewBag.Success = true;
-                ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
                 return View("Actions/CreateParameter", model);
             }
             catch (Exception)
@@ -250,6 +250,7 @@ namespace ParameterControl.Controllers.Parameters
         [HttpGet]
         public async Task<ActionResult> Edit(int code)
         {
+            ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
             try
             {
                 ViewBag.CodeSend = code;
@@ -269,7 +270,6 @@ namespace ParameterControl.Controllers.Parameters
 
                 ViewBag.Success = true;
                 ViewBag.EntyNull = false;
-                ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
                 return View("Actions/EditParameter", model);
             }
             catch (Exception)
@@ -320,6 +320,7 @@ namespace ParameterControl.Controllers.Parameters
         [HttpGet]
         public async Task<ActionResult> View(int code)
         {
+            ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
             try
             {
                 ViewBag.CodeSend = code;
@@ -334,7 +335,6 @@ namespace ParameterControl.Controllers.Parameters
 
                 ViewBag.Success = true;
                 ViewBag.EntyNull = false;
-                ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
                 return View("Actions/ViewParameter", model);
             }
             catch (Exception)
@@ -349,6 +349,7 @@ namespace ParameterControl.Controllers.Parameters
         [HttpGet]
         public async Task<ActionResult> Active(int code)
         {
+            ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
             try
             {
                 ViewBag.CodeSend = code;
@@ -362,7 +363,6 @@ namespace ParameterControl.Controllers.Parameters
 
                 ViewBag.Success = true;
                 ViewBag.EntyNull = false;
-                ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
                 return View("Actions/ActiveParameter", parameter);
             }
             catch (Exception)
@@ -395,6 +395,7 @@ namespace ParameterControl.Controllers.Parameters
         [HttpGet]
         public async Task<ActionResult> Desactive(int code)
         {
+            ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
             try
             {
                 ViewBag.CodeSend = code;
@@ -408,7 +409,6 @@ namespace ParameterControl.Controllers.Parameters
 
                 ViewBag.Success = true;
                 ViewBag.EntyNull = false;
-                ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
                 return View("Actions/DesactiveParameter", parameter);
             }
             catch (Exception)

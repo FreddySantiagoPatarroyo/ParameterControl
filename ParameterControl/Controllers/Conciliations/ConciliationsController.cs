@@ -65,6 +65,7 @@ namespace ParameterControl.Controllers.Conciliations
         [HttpGet]
         public async Task<ActionResult> Conciliations(PaginationViewModel paginationViewModel)
         {
+            ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
             try
             {
                 List<modConciliation.Conciliation> Conciliations = await conciliationsServices.GetConciliationsPagination(paginationViewModel);
@@ -89,7 +90,6 @@ namespace ParameterControl.Controllers.Conciliations
                 };
 
                 ViewBag.Success = true;
-                ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
                 return View("Conciliations", resultViemModel);
             }
             catch (Exception ex)
@@ -104,6 +104,7 @@ namespace ParameterControl.Controllers.Conciliations
         [HttpGet]
         public async Task<ActionResult> ConciliationsFilter(PaginationViewModel paginationViewModel, string filterColunm = "", string filterValue = "", string typeRow = "")
         {
+            ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
             try
             {
                 if (filterColunm == null || filterColunm == "" || filterValue == null || filterValue == "")
@@ -141,7 +142,6 @@ namespace ParameterControl.Controllers.Conciliations
                 };
 
                 ViewBag.Success = true;
-                ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
                 return View("ConciliationsFilter", resultViemModel);
             }
             catch (Exception)
@@ -155,6 +155,7 @@ namespace ParameterControl.Controllers.Conciliations
         [HttpGet]
         public async Task<ActionResult> Create()
         {
+            ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
             try
             {
                 List<SelectListItem> PoliciesOptionsList = await GetPolicies();
@@ -173,7 +174,6 @@ namespace ParameterControl.Controllers.Conciliations
                 };
 
                 ViewBag.Success = true;
-                ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
                 return View("Actions/CreateConciliation", model);
             }
             catch (Exception)
@@ -214,6 +214,7 @@ namespace ParameterControl.Controllers.Conciliations
         {
             try
             {
+                ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
                 ViewBag.CodeSend = code;
                 modConciliation.Conciliation conciliation = await conciliationsServices.GetConciliationsByCode(code);
                 if (conciliation.Code == 0)
@@ -238,7 +239,6 @@ namespace ParameterControl.Controllers.Conciliations
 
                 ViewBag.Success = true;
                 ViewBag.EntyNull = false;
-                ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
                 return View("Actions/EditConciliation", model);
             }
             catch (Exception)
@@ -290,6 +290,7 @@ namespace ParameterControl.Controllers.Conciliations
         [HttpGet]
         public async Task<ActionResult> View(int code)
         {
+            ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
             try
             {
                 ViewBag.CodeSend = code;
@@ -304,7 +305,6 @@ namespace ParameterControl.Controllers.Conciliations
 
                 ViewBag.Success = true;
                 ViewBag.EntyNull = false;
-                ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
                 return View("Actions/ViewConciliation", model);
             }
             catch (Exception)
@@ -319,6 +319,7 @@ namespace ParameterControl.Controllers.Conciliations
         [HttpGet]
         public async Task<ActionResult> ViewPolicy(int code)
         {
+            ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
             try
             {
                 ViewBag.CodeSend = code;
@@ -333,7 +334,6 @@ namespace ParameterControl.Controllers.Conciliations
 
                 ViewBag.Success = true;
                 ViewBag.EntyNull = false;
-                ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
                 return View("Actions/ViewPolicyConciliations", model);
             }
             catch (Exception)
@@ -348,6 +348,7 @@ namespace ParameterControl.Controllers.Conciliations
         [HttpGet]
         public async Task<ActionResult> Active(int code)
         {
+            ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
             try
             {
                 ViewBag.CodeSend = code;
@@ -361,7 +362,6 @@ namespace ParameterControl.Controllers.Conciliations
 
                 ViewBag.Success = true;
                 ViewBag.EntyNull = false;
-                ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
                 return View("Actions/ActiveConciliation", conciliation);
             }
             catch (Exception)
@@ -394,6 +394,7 @@ namespace ParameterControl.Controllers.Conciliations
         [HttpGet]
         public async Task<ActionResult> Desactive(int code)
         {
+            ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
             try
             {
                 ViewBag.CodeSend = code;
@@ -407,7 +408,6 @@ namespace ParameterControl.Controllers.Conciliations
 
                 ViewBag.Success = true;
                 ViewBag.EntyNull = false;
-                ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
                 return View("Actions/DesactiveConciliation", conciliation);
             }
             catch (Exception)

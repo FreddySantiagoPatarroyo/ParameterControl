@@ -56,6 +56,7 @@ namespace ParameterControl.Controllers.Results
         [HttpGet]
         public async Task<ActionResult> Results()
         {
+            ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
             try
             {
                 List<modResult.Result> results = await resultsServices.GetResults();
@@ -71,7 +72,6 @@ namespace ParameterControl.Controllers.Results
                 ViewBag.ApplyFilter = false;
 
                 ViewBag.Success = true;
-                ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
                 return View("Results", TableResults);
             }
             catch (Exception)
@@ -86,6 +86,7 @@ namespace ParameterControl.Controllers.Results
         [HttpGet]
         public async Task<ActionResult> ResultsFilter(string filterColunm = "", string filterValue = "", string typeRow = "")
         {
+            ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
             try
             {
                 if (filterColunm == null || filterColunm == "" || filterValue == null || filterValue == "")
@@ -113,7 +114,6 @@ namespace ParameterControl.Controllers.Results
                 ViewBag.ApplyFilter = true;
 
                 ViewBag.Success = true;
-                ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
                 return View("ResultsFilter", TableResults);
             }
             catch (Exception)

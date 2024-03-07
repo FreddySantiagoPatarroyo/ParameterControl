@@ -59,6 +59,7 @@ namespace ParameterControl.Controllers.Users
         [HttpGet]
         public async Task<ActionResult> Users(PaginationViewModel paginationViewModel)
         {
+            ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
             try
             {
                 List<modUser.User> Users = await usersServices.GetUsersPagination(paginationViewModel);
@@ -86,7 +87,6 @@ namespace ParameterControl.Controllers.Users
                 };
 
                 ViewBag.Success = true;
-                ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
                 return View("Users", resultViemModel);
             }
             catch (Exception)
@@ -100,6 +100,7 @@ namespace ParameterControl.Controllers.Users
         [HttpGet]
         public async Task<ActionResult> UsersFilter(PaginationViewModel paginationViewModel, string filterColunm = "", string filterValue = "", string typeRow = "")
         {
+            ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
             try
             {
                 if (filterColunm == null || filterColunm == "" || filterValue == null || filterValue == "")
@@ -137,7 +138,6 @@ namespace ParameterControl.Controllers.Users
                 };
 
                 ViewBag.Success = true;
-                ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
                 return View("UsersFilter", resultViemModel);
             }
             catch (Exception)
@@ -151,13 +151,13 @@ namespace ParameterControl.Controllers.Users
         [HttpGet]
         public async Task<ActionResult> Create()
         {
+            ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
             try
             {
                 UserCreateViewModel model = new UserCreateViewModel();
                 model.Roles = await GetRoles();
 
                 ViewBag.Success = true;
-                ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
                 return View("Actions/CreateUser", model);
             }
             catch (Exception)
@@ -199,6 +199,7 @@ namespace ParameterControl.Controllers.Users
         [HttpGet]
         public async Task<ActionResult> Edit(int code)
         {
+            ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
             try
             {
                 ViewBag.CodeSend = code;
@@ -214,7 +215,6 @@ namespace ParameterControl.Controllers.Users
 
                 ViewBag.Success = true;
                 ViewBag.EntyNull = false;
-                ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
                 return View("Actions/EditUser", model);
 
             }
@@ -268,6 +268,7 @@ namespace ParameterControl.Controllers.Users
         [HttpGet]
         public async Task<ActionResult> View(int code)
         {
+            ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
             try
             {
                 ViewBag.CodeSend = code;
@@ -282,7 +283,6 @@ namespace ParameterControl.Controllers.Users
 
                 ViewBag.Success = true;
                 ViewBag.EntyNull = false;
-                ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
                 return View("Actions/ViewUser", model);
             }
             catch (Exception)
@@ -297,6 +297,7 @@ namespace ParameterControl.Controllers.Users
         [HttpGet]
         public async Task<ActionResult> Active(int code)
         {
+            ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
             try
             {
                 ViewBag.CodeSend = code;
@@ -310,7 +311,6 @@ namespace ParameterControl.Controllers.Users
 
                 ViewBag.Success = true;
                 ViewBag.EntyNull = false;
-                ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
                 return View("Actions/ActiveUser", user);
             }
             catch (Exception)
@@ -343,6 +343,7 @@ namespace ParameterControl.Controllers.Users
         [HttpGet]
         public async Task<ActionResult> Desactive(int code)
         {
+            ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
             try
             {
                 ViewBag.CodeSend = code;
@@ -351,7 +352,6 @@ namespace ParameterControl.Controllers.Users
                 {
                     ViewBag.Success = true;
                     ViewBag.EntyNull = true;
-                    ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
                     return View("Actions/DesactiveUser", null);
                 }
 

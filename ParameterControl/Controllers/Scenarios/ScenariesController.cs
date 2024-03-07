@@ -60,6 +60,7 @@ namespace ParameterControl.Controllers.Scenarios
         [HttpGet]
         public async Task<ActionResult> Scenarios(PaginationViewModel paginationViewModel)
         {
+            ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
             try
             {
                 List<modScenery.Scenery> Scenarios = await scenariosServices.GetScenariosPagination(paginationViewModel);
@@ -85,7 +86,6 @@ namespace ParameterControl.Controllers.Scenarios
                 };
 
                 ViewBag.Success = true;
-                ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
                 return View("Scenarios", resultViemModel);
             }
             catch (Exception)
@@ -99,6 +99,7 @@ namespace ParameterControl.Controllers.Scenarios
         [HttpGet]
         public async Task<ActionResult> ScenariosFilter(PaginationViewModel paginationViewModel, string filterColunm = "", string filterValue = "", string typeRow = "")
         {
+            ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
             try
             {
                 if (filterColunm == null || filterColunm == "" || filterValue == null || filterValue == "")
@@ -136,7 +137,6 @@ namespace ParameterControl.Controllers.Scenarios
                 };
 
                 ViewBag.Success = true;
-                ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
                 return View("Scenarios", resultViemModel);
             }
             catch (Exception)
@@ -150,6 +150,7 @@ namespace ParameterControl.Controllers.Scenarios
         [HttpGet]
         public async Task<ActionResult> Create()
         {
+            ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
             try
             {
                 List<SelectListItem> ImpactOptionsList = await scenariosServices.GetImpact();
@@ -162,7 +163,6 @@ namespace ParameterControl.Controllers.Scenarios
                 };
 
                 ViewBag.Success = true;
-                ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
                 return View("Actions/CreateScenery", model);
             }
             catch (Exception)
@@ -203,6 +203,7 @@ namespace ParameterControl.Controllers.Scenarios
         [HttpGet]
         public async Task<ActionResult> Edit(int code)
         {
+            ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
             try
             {
                 ViewBag.CodeSend = code;
@@ -222,7 +223,6 @@ namespace ParameterControl.Controllers.Scenarios
 
                 ViewBag.Success = true;
                 ViewBag.EntyNull = false;
-                ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
                 return View("Actions/EditScenary", model);
             }
             catch (Exception)
@@ -276,6 +276,7 @@ namespace ParameterControl.Controllers.Scenarios
         [HttpGet]
         public async Task<ActionResult> View(int code)
         {
+            ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
             try
             {
                 ViewBag.CodeSend = code;
@@ -290,7 +291,6 @@ namespace ParameterControl.Controllers.Scenarios
 
                 ViewBag.Success = true;
                 ViewBag.EntyNull = false;
-                ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
                 return View("Actions/ViewScenery", model);
             }
             catch (Exception)
@@ -306,6 +306,7 @@ namespace ParameterControl.Controllers.Scenarios
         [HttpGet]
         public async Task<ActionResult> Active(int code)
         {
+            ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
             try
             {
                 ViewBag.CodeSend = code;
@@ -318,7 +319,6 @@ namespace ParameterControl.Controllers.Scenarios
                 }
                 ViewBag.Success = true;
                 ViewBag.EntyNull = false;
-                ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
                 return View("Actions/ActiveScenery", scenery);
             }
             catch (Exception)
@@ -353,6 +353,7 @@ namespace ParameterControl.Controllers.Scenarios
         [HttpGet]
         public async Task<ActionResult> Desactive(int code)
         {
+            ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
             try
             {
                 ViewBag.CodeSend = code;
@@ -365,7 +366,6 @@ namespace ParameterControl.Controllers.Scenarios
                 }
                 ViewBag.Success = true;
                 ViewBag.EntyNull = false;
-                ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
                 return View("Actions/DesactiveScenery", scenery);
             }
             catch (Exception)

@@ -58,6 +58,7 @@ namespace ParameterControl.Controllers.CrossConnections
         [HttpGet]
         public async Task<ActionResult> CrossConnections(PaginationViewModel paginationViewModel)
         {
+            ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
             try
             {
                 List<modCrossConnection.CrossConnection> crossConnections = await crossConnectionsService.GetCrossConnectionsPagination(paginationViewModel);
@@ -83,7 +84,6 @@ namespace ParameterControl.Controllers.CrossConnections
                 };
 
                 ViewBag.Success = true;
-                ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
                 return View("CrossConnections", resultViemModel);
             }
             catch (Exception)
@@ -96,6 +96,7 @@ namespace ParameterControl.Controllers.CrossConnections
         [Authorize(Roles = "ADMINISTRADOR,EJECUTOR,CONSULTOR")]
         public async Task<ActionResult> CrossConnectionsFilter(PaginationViewModel paginationViewModel, string filterColunm = "", string filterValue = "", string typeRow = "")
         {
+            ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
             try
             {
                 if (filterColunm == null || filterColunm == "" || filterValue == null || filterValue == "")
@@ -133,7 +134,6 @@ namespace ParameterControl.Controllers.CrossConnections
                 };
 
                 ViewBag.Success = true;
-                ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
                 return View("CrossConnectionsFilter", resultViemModel);
             }
             catch (Exception)
@@ -148,6 +148,7 @@ namespace ParameterControl.Controllers.CrossConnections
         [HttpGet]
         public async Task<ActionResult> View(string package)
         {
+            ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
             try
             {
                 ViewBag.PackageSend = package;
@@ -163,7 +164,6 @@ namespace ParameterControl.Controllers.CrossConnections
 
                 ViewBag.Success = true;
                 ViewBag.EntyNull = false;
-                ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
                 return View("Actions/ViewCrossConnection", model);
             }
             catch (Exception)
