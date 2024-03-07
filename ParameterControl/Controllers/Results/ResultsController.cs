@@ -147,9 +147,6 @@ namespace ParameterControl.Controllers.Results
             try
             {
                 modResult.Result request = await resultsServices.GetResultsById(id);
-                request.UserOwner = authenticatedUser.GetUserOwnerId();
-                request.UpdateDate = DateTime.Now;
-                request.State = true;
                 _logger.LogInformation($"Inicia método ResultController.Active {JsonConvert.SerializeObject(request)}");
                 return Ok(new { message = "Se activo el resultado de manera exitosa", state = "Success" });
             }
@@ -173,9 +170,6 @@ namespace ParameterControl.Controllers.Results
             try
             {
                 modResult.Result request = await resultsServices.GetResultsById(id);
-                request.UserOwner = authenticatedUser.GetUserOwnerId();
-                request.UpdateDate = DateTime.Now;
-                request.State = false;
                 _logger.LogInformation($"Inicia método ResultController.Active {JsonConvert.SerializeObject(request)}");
                 return Ok(new { message = "Se desactivo el resultado de manera exitosa", state = "Success" });
             }

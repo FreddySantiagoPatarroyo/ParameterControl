@@ -83,6 +83,8 @@ namespace ParameterControl.Controllers.Policies
                 };
 
                 ViewBag.Success = true;
+
+                ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
                 return View("Policies", resultViemModel);
             }
             catch (Exception)
@@ -133,6 +135,8 @@ namespace ParameterControl.Controllers.Policies
                 };
 
                 ViewBag.Success = true;
+
+                ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
                 return View("PoliciesFilter", resultViemModel);
             }
             catch (Exception)
@@ -151,6 +155,8 @@ namespace ParameterControl.Controllers.Policies
                 PolicyCreateViewModel model = new PolicyCreateViewModel();
 
                 ViewBag.Success = true;
+
+                ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
                 return View("Actions/CreatePolicy", model);
             }
             catch (Exception)
@@ -206,6 +212,8 @@ namespace ParameterControl.Controllers.Policies
 
                 ViewBag.Success = true;
                 ViewBag.EntyNull = false;
+
+                ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
                 return View("Actions/EditPolicy", model);
             }
             catch (Exception)
@@ -221,7 +229,6 @@ namespace ParameterControl.Controllers.Policies
         [HttpPost]
         public async Task<ActionResult> Edit([FromBody] modPolicy.Policy request)
         {
-
             try
             {
                 var policy = await policiesServices.GetPolicyByCode(request.Code);
@@ -253,7 +260,6 @@ namespace ParameterControl.Controllers.Policies
                 _logger.LogError($"Error en el método PoliciesController.Edit : {JsonConvert.SerializeObject(ex.Message)}");
                 return BadRequest(new { message = "Error al actualizar la politica", state = "Error" });
             }
-
         }
 
         [Authorize(Roles = "ADMINISTRADOR,EJECUTOR,CONSULTOR")]
@@ -274,6 +280,8 @@ namespace ParameterControl.Controllers.Policies
 
                 ViewBag.Success = true;
                 ViewBag.EntyNull = false;
+
+                ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
                 return View("Actions/ViewPolicy", model);
             }
             catch (Exception)
@@ -300,6 +308,8 @@ namespace ParameterControl.Controllers.Policies
                 }
                 ViewBag.Success = true;
                 ViewBag.EntyNull = false;
+
+                ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
                 return View("Actions/ActivePolicy", policy);
             }
             catch (Exception)
@@ -344,6 +354,8 @@ namespace ParameterControl.Controllers.Policies
                 }
                 ViewBag.Success = true;
                 ViewBag.EntyNull = false;
+
+                ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
                 return View("Actions/DesactivePolicy", policy);
             }
             catch (Exception)
@@ -382,6 +394,7 @@ namespace ParameterControl.Controllers.Policies
 
             };
 
+            ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
             return View("Actions/Filter", model);
         }
 
@@ -441,36 +454,5 @@ namespace ParameterControl.Controllers.Policies
 
             return Ok(filter);
         }
-
-        //[HttpGet]
-        //public async Task<ActionResult> Index()
-        //{
-        //    return View();
-        //}
-
-        //[HttpPost]
-        //public async Task<IActionResult> Index([FromBody] PaginationViewModel pagination)
-        //{
-        //    if (!ModelState.IsValid)
-        //    {
-        //        _logger.LogError($"Error en el modelo : {JsonConvert.SerializeObject(pagination)}");
-        //        return BadRequest(new { message = "Error en la consulta enviada", state = "Error" });
-        //    }
-        //    else
-        //    {
-        //        try
-        //        {
-        //            _logger.LogInformation($"Inicia método PoliciesController.Index {JsonConvert.SerializeObject(pagination)}");
-        //            var responseIn = await policiesServices.GetPoliciesPagination(pagination);
-        //            _logger.LogInformation($"Finaliza método PoliciesController.Index {responseIn}");
-        //            return Ok(new { message = "Se creo la politica de manera exitosa", state = "Success" });
-        //        }
-        //        catch (Exception ex)
-        //        {
-        //            _logger.LogError($"Error en el método PoliciesController.Index : {JsonConvert.SerializeObject(ex.Message)}");
-        //            return BadRequest(new { message = "Error al crear la politica", state = "Error" });
-        //        }
-        //    }
-        //}
     }
 }

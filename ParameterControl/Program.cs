@@ -17,6 +17,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddHttpContextAccessor();
 builder.Services.AddTransient<IPoliciesServices, PoliciesServices>();
 builder.Services.AddTransient<IConciliationsServices, ConciliationsServices>();
 builder.Services.AddTransient<IParametersService, ParametersService>();

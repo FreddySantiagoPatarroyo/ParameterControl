@@ -6,7 +6,7 @@
     string ErrorSuccess = "Se genero un problema al obtener la informacion,Policies";
 }
 
-<partial name="_Menu" />
+<partial name="_Menu" model="@ViewBag.InfoUser" />
 
 @if (!ViewBag.Success)
 {

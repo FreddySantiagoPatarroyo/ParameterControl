@@ -39,10 +39,11 @@ namespace ParameterControl.Controllers.Login
                 if (user != null)
                 {
                     var claims = new List<Claim>
-                {
-                    new Claim(ClaimTypes.Name,user.User_),
-                    new Claim("Correo",user.Email)
-                };
+                    {
+                        new Claim(ClaimTypes.Name,user.User_),
+                        new Claim("Correo",user.Email),
+                        new Claim(ClaimTypes.NameIdentifier, user.Code.ToString())
+                    };
 
                     claims.Add(new Claim(ClaimTypes.Role, user.RolName));
 

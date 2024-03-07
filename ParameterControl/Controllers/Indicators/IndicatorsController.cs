@@ -138,9 +138,6 @@ namespace ParameterControl.Controllers.Indicators
             {
                 try
                 {
-                    request.UserOwner = authenticatedUser.GetUserOwnerId();
-                    request.CreationDate = DateTime.Now;
-                    request.UpdateDate = DateTime.Now;
                     _logger.LogInformation($"Inicia método IndicatorsController.Create {JsonConvert.SerializeObject(request)}");
                     return Ok(new { message = "Se creo el indicador de manera exitosa", state = "Success" });
                 }
@@ -184,8 +181,6 @@ namespace ParameterControl.Controllers.Indicators
             {
                 try
                 {
-                    request.UserOwner = authenticatedUser.GetUserOwnerId();
-                    request.UpdateDate = DateTime.Now;
                     _logger.LogInformation($"Inicia método IndicatorsController.Edit {JsonConvert.SerializeObject(request)}");
                     return Ok(new { message = "Se actualizo el indicador de manera exitosa", state = "Success" });
                 }
@@ -216,11 +211,7 @@ namespace ParameterControl.Controllers.Indicators
         {
             try
             {
-                modIndicator.Indicator request = await indicatorsService.GetIndicatorsById(id);
-                request.UserOwner = authenticatedUser.GetUserOwnerId();
-                request.UpdateDate = DateTime.Now;
-                request.State = true;
-                _logger.LogInformation($"Inicia método IndicatorsController.Active {JsonConvert.SerializeObject(request)}");
+                //_logger.LogInformation($"Inicia método IndicatorsController.Active {JsonConvert.SerializeObject(request)}");
                 return Ok(new { message = "Se activo el indicador de manera exitosa", state = "Success" });
             }
             catch (Exception ex)
@@ -242,11 +233,7 @@ namespace ParameterControl.Controllers.Indicators
         {
             try
             {
-                modIndicator.Indicator request = await indicatorsService.GetIndicatorsById(id);
-                request.UserOwner = authenticatedUser.GetUserOwnerId();
-                request.UpdateDate = DateTime.Now;
-                request.State = false;
-                _logger.LogInformation($"Inicia método IndicatorsController.Desactive {JsonConvert.SerializeObject(request)}");
+                //_logger.LogInformation($"Inicia método IndicatorsController.Desactive {JsonConvert.SerializeObject(request)}");
                 return Ok(new { message = "Se desactivo el indicador de manera exitosa", state = "Success" });
             }
             catch (Exception ex)
