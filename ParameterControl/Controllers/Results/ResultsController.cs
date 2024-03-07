@@ -71,6 +71,7 @@ namespace ParameterControl.Controllers.Results
                 ViewBag.ApplyFilter = false;
 
                 ViewBag.Success = true;
+                ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
                 return View("Results", TableResults);
             }
             catch (Exception)
@@ -112,6 +113,7 @@ namespace ParameterControl.Controllers.Results
                 ViewBag.ApplyFilter = true;
 
                 ViewBag.Success = true;
+                ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
                 return View("ResultsFilter", TableResults);
             }
             catch (Exception)
@@ -124,6 +126,7 @@ namespace ParameterControl.Controllers.Results
         public async Task<ActionResult> Edit(string id)
         {
             Result result = await resultsServices.GetResultsById(id);
+            ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
             return View("Actions/EditResult", result);
         }
 
@@ -131,6 +134,7 @@ namespace ParameterControl.Controllers.Results
         public async Task<ActionResult> View(string id)
         {
             Result result = await resultsServices.GetResultsById(id);
+            ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
             return View("Actions/ViewResult", result);
         }
 
@@ -138,6 +142,7 @@ namespace ParameterControl.Controllers.Results
         public async Task<ActionResult> Active(string id)
         {
             modResult.Result result = await resultsServices.GetResultsById(id);
+            ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
             return View("Actions/ActiveResult", result);
         }
 
@@ -161,6 +166,7 @@ namespace ParameterControl.Controllers.Results
         public async Task<ActionResult> Desactive(string id)
         {
             Result result = await resultsServices.GetResultsById(id);
+            ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
             return View("Actions/DesactiveResult", result);
         }
 
@@ -188,7 +194,7 @@ namespace ParameterControl.Controllers.Results
                 Rows = rows.RowsResults()
 
             };
-
+            ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
             return View("Actions/Filter", model);
         }
 
