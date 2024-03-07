@@ -39,12 +39,12 @@ namespace ParameterControl.Controllers.ConciliationExecution
 
         public async Task<ActionResult> ConciliationExecution()
         {
+            ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
             try
             {
                 ConciliationExecutionViewModel model = new ConciliationExecutionViewModel();
                 model.Conciliations = await GetAllConciliation();
                 ViewBag.Success = true;
-                ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
                 return View("ConciliationExecution", model);
             }
             catch (Exception)
@@ -57,6 +57,7 @@ namespace ParameterControl.Controllers.ConciliationExecution
 
         public async Task<ActionResult> RunProcess(int code)
         {
+            ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
             try
             {
                 ViewBag.CodeSend = code;
@@ -73,7 +74,6 @@ namespace ParameterControl.Controllers.ConciliationExecution
 
                 ViewBag.Success = true;
                 ViewBag.EntyNull = false;
-                ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
                 return View("Actions/RunProcess", model);
             }
             catch (Exception)
@@ -86,6 +86,7 @@ namespace ParameterControl.Controllers.ConciliationExecution
 
         public async Task<ActionResult> ProgramExecution(int code)
         {
+            ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
             try
             {
                 ViewBag.CodeSend = code;
@@ -102,7 +103,6 @@ namespace ParameterControl.Controllers.ConciliationExecution
 
                 ViewBag.Success = true;
                 ViewBag.EntyNull = false;
-                ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
                 return View("Actions/ProgramExecution", model);
             }
             catch (Exception)
@@ -115,6 +115,7 @@ namespace ParameterControl.Controllers.ConciliationExecution
 
         public async Task<ActionResult> SuccesfulTransaction(int code)
         {
+            ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
             try
             {
                 ViewBag.CodeSend = code;
@@ -131,7 +132,6 @@ namespace ParameterControl.Controllers.ConciliationExecution
 
                 ViewBag.Success = true;
                 ViewBag.EntyNull = false;
-                ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
                 return View("Actions/SuccesfulTransaction", model);
             }
             catch (Exception)
@@ -144,6 +144,7 @@ namespace ParameterControl.Controllers.ConciliationExecution
 
         public async Task<ActionResult> AbortConciliation(int code)
         {
+            ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
             try
             {
                 ViewBag.CodeSend = code;
@@ -160,7 +161,6 @@ namespace ParameterControl.Controllers.ConciliationExecution
 
                 ViewBag.Success = true;
                 ViewBag.EntyNull = false;
-                ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
                 return View("Actions/AbortConciliation", model);
             }
             catch (Exception)
