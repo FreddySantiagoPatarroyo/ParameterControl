@@ -58,6 +58,7 @@ namespace ParameterControl.Controllers.Policies
         [HttpGet]
         public async Task<ActionResult> Policies(PaginationViewModel paginationViewModel)
         {
+            ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
             try
             {
                 List<modPolicy.Policy> policies = await policiesServices.GetPoliciesPagination(paginationViewModel);
@@ -84,7 +85,6 @@ namespace ParameterControl.Controllers.Policies
 
                 ViewBag.Success = true;
 
-                ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
                 return View("Policies", resultViemModel);
             }
             catch (Exception)
@@ -96,8 +96,11 @@ namespace ParameterControl.Controllers.Policies
         }
 
         [Authorize(Roles = "ADMINISTRADOR,EJECUTOR,CONSULTOR")]
+        [HttpGet]
         public async Task<ActionResult> PoliciesFilter(PaginationViewModel paginationViewModel, string filterColunm = "", string filterValue = "", string typeRow = "")
         {
+            ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
+
             try
             {
                 if (filterColunm == null || filterColunm == "" || filterValue == null || filterValue == "")
@@ -136,7 +139,6 @@ namespace ParameterControl.Controllers.Policies
 
                 ViewBag.Success = true;
 
-                ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
                 return View("PoliciesFilter", resultViemModel);
             }
             catch (Exception)
@@ -150,13 +152,12 @@ namespace ParameterControl.Controllers.Policies
         [HttpGet]
         public async Task<ActionResult> Create()
         {
+            ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
             try
             {
                 PolicyCreateViewModel model = new PolicyCreateViewModel();
 
                 ViewBag.Success = true;
-
-                ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
                 return View("Actions/CreatePolicy", model);
             }
             catch (Exception)
@@ -198,6 +199,7 @@ namespace ParameterControl.Controllers.Policies
         [HttpGet]
         public async Task<ActionResult> Edit(int code)
         {
+            ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
             try
             {
                 ViewBag.CodeSend = code;
@@ -206,6 +208,7 @@ namespace ParameterControl.Controllers.Policies
                 {
                     ViewBag.Success = true;
                     ViewBag.EntyNull = true;
+                    
                     return View("Actions/EditPolicy", null);
                 }
                 PolicyCreateViewModel model = await policiesServices.GetPolicyFormatCreate(policy);
@@ -213,7 +216,7 @@ namespace ParameterControl.Controllers.Policies
                 ViewBag.Success = true;
                 ViewBag.EntyNull = false;
 
-                ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
+
                 return View("Actions/EditPolicy", model);
             }
             catch (Exception)
@@ -266,6 +269,7 @@ namespace ParameterControl.Controllers.Policies
         [HttpGet]
         public async Task<ActionResult> View(int code)
         {
+            ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
             try
             {
                 ViewBag.CodeSend = code;
@@ -281,7 +285,6 @@ namespace ParameterControl.Controllers.Policies
                 ViewBag.Success = true;
                 ViewBag.EntyNull = false;
 
-                ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
                 return View("Actions/ViewPolicy", model);
             }
             catch (Exception)
@@ -342,6 +345,7 @@ namespace ParameterControl.Controllers.Policies
         [HttpGet]
         public async Task<ActionResult> Desactive(int code)
         {
+            ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
             try
             {
                 ViewBag.CodeSend = code;
@@ -355,7 +359,6 @@ namespace ParameterControl.Controllers.Policies
                 ViewBag.Success = true;
                 ViewBag.EntyNull = false;
 
-                ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
                 return View("Actions/DesactivePolicy", policy);
             }
             catch (Exception)
