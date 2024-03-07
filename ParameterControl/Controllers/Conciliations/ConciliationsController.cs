@@ -95,6 +95,7 @@ namespace ParameterControl.Controllers.Conciliations
             catch (Exception ex)
             {
                 ViewBag.Success = false;
+                ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
                 return View("Conciliations", null);
             }
         }

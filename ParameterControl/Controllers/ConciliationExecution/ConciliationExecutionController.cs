@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using ParameterControl.Models.ConciliationExecution;
+using ParameterControl.Services.Authenticated;
 using ParameterControl.Services.ConciliationExecution;
 using System.Security.Claims;
 
@@ -13,6 +14,7 @@ namespace ParameterControl.Controllers.ConciliationExecution
         private readonly IConciliationExecutionService conciliationExecutionService;
         private readonly IConfiguration _configuration;
         private readonly ClaimsPrincipal _principal;
+        private readonly AuthenticatedUser authenticatedUser;
         private readonly bool _isExecute;
         private readonly bool _isProgram;
         private readonly bool _isAbort;
@@ -20,12 +22,14 @@ namespace ParameterControl.Controllers.ConciliationExecution
         public ConciliationExecutionController(
             IConciliationExecutionService conciliationExecutionService,
             IConfiguration configuration,
-            IHttpContextAccessor httpContextAccesor)
+            IHttpContextAccessor httpContextAccesor,
+             AuthenticatedUser authenticatedUser)
         {
             this.conciliationExecutionService = conciliationExecutionService;
             _configuration = configuration;
             var context = httpContextAccesor.HttpContext;
             _principal = context.User as ClaimsPrincipal;
+            this.authenticatedUser = authenticatedUser;
             var data = _principal.FindFirst(ClaimTypes.Role).Value;
             var section = _configuration.GetSection($"Permisos:{data}:ExecuteConciliation").GetChildren();
             _isExecute = Convert.ToBoolean(section.Where(x => x.Key.Equals("btnExecute")).FirstOrDefault().Value);
@@ -40,7 +44,7 @@ namespace ParameterControl.Controllers.ConciliationExecution
                 ConciliationExecutionViewModel model = new ConciliationExecutionViewModel();
                 model.Conciliations = await GetAllConciliation();
                 ViewBag.Success = true;
-
+                ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
                 return View("ConciliationExecution", model);
             }
             catch (Exception)
@@ -69,6 +73,7 @@ namespace ParameterControl.Controllers.ConciliationExecution
 
                 ViewBag.Success = true;
                 ViewBag.EntyNull = false;
+                ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
                 return View("Actions/RunProcess", model);
             }
             catch (Exception)
@@ -97,6 +102,7 @@ namespace ParameterControl.Controllers.ConciliationExecution
 
                 ViewBag.Success = true;
                 ViewBag.EntyNull = false;
+                ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
                 return View("Actions/ProgramExecution", model);
             }
             catch (Exception)
@@ -125,6 +131,7 @@ namespace ParameterControl.Controllers.ConciliationExecution
 
                 ViewBag.Success = true;
                 ViewBag.EntyNull = false;
+                ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
                 return View("Actions/SuccesfulTransaction", model);
             }
             catch (Exception)
@@ -153,6 +160,7 @@ namespace ParameterControl.Controllers.ConciliationExecution
 
                 ViewBag.Success = true;
                 ViewBag.EntyNull = false;
+                ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
                 return View("Actions/AbortConciliation", model);
             }
             catch (Exception)

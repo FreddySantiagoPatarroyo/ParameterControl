@@ -70,6 +70,7 @@ namespace ParameterControl.Controllers.Indicators
                 ViewBag.ApplyFilter = false;
 
                 ViewBag.Success = true;
+                ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
                 return View("Indicators", TableIndicators);
             }
             catch (Exception)
@@ -114,6 +115,7 @@ namespace ParameterControl.Controllers.Indicators
             catch (Exception)
             {
                 ViewBag.Success = false;
+                ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
                 return View("IndicatorsFilter", null);
             }
         }
@@ -165,7 +167,7 @@ namespace ParameterControl.Controllers.Indicators
                 State = indicator.State,
                 CreationDate = indicator.CreationDate
             };
-
+            ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
             return View("Actions/EditIndicators", model);
         }
 
@@ -196,6 +198,7 @@ namespace ParameterControl.Controllers.Indicators
         public async Task<ActionResult> View(string id)
         {
             Indicator indicator = await indicatorsService.GetIndicatorsById(id);
+            ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
             return View("Actions/ViewIndicators", indicator);
         }
 
@@ -203,6 +206,7 @@ namespace ParameterControl.Controllers.Indicators
         public async Task<ActionResult> Active(string id)
         {
             modIndicator.Indicator indicator = await indicatorsService.GetIndicatorsById(id);
+            ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
             return View("Actions/ActiveIndicators", indicator);
         }
 
@@ -225,6 +229,7 @@ namespace ParameterControl.Controllers.Indicators
         public async Task<ActionResult> Desactive(string id)
         {
             Indicator indicator = await indicatorsService.GetIndicatorsById(id);
+            ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
             return View("Actions/DesactiveIndicators", indicator);
         }
 
@@ -251,7 +256,7 @@ namespace ParameterControl.Controllers.Indicators
                 Rows = rows.RowsIndicators()
 
             };
-
+            ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
             return View("Actions/Filter", model);
         }
 

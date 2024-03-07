@@ -83,6 +83,7 @@ namespace ParameterControl.Controllers.CrossConnections
                 };
 
                 ViewBag.Success = true;
+                ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
                 return View("CrossConnections", resultViemModel);
             }
             catch (Exception)
@@ -132,6 +133,7 @@ namespace ParameterControl.Controllers.CrossConnections
                 };
 
                 ViewBag.Success = true;
+                ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
                 return View("CrossConnectionsFilter", resultViemModel);
             }
             catch (Exception)
@@ -161,6 +163,7 @@ namespace ParameterControl.Controllers.CrossConnections
 
                 ViewBag.Success = true;
                 ViewBag.EntyNull = false;
+                ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
                 return View("Actions/ViewCrossConnection", model);
             }
             catch (Exception)
@@ -266,7 +269,7 @@ namespace ParameterControl.Controllers.CrossConnections
                 Rows = rows.RowsCrossConnection()
 
             };
-
+            ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
             return View("Actions/Filter", model);
         }
 

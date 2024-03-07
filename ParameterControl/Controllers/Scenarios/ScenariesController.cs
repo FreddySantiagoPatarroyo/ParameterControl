@@ -85,6 +85,7 @@ namespace ParameterControl.Controllers.Scenarios
                 };
 
                 ViewBag.Success = true;
+                ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
                 return View("Scenarios", resultViemModel);
             }
             catch (Exception)
@@ -135,6 +136,7 @@ namespace ParameterControl.Controllers.Scenarios
                 };
 
                 ViewBag.Success = true;
+                ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
                 return View("Scenarios", resultViemModel);
             }
             catch (Exception)
@@ -160,6 +162,7 @@ namespace ParameterControl.Controllers.Scenarios
                 };
 
                 ViewBag.Success = true;
+                ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
                 return View("Actions/CreateScenery", model);
             }
             catch (Exception)
@@ -219,6 +222,7 @@ namespace ParameterControl.Controllers.Scenarios
 
                 ViewBag.Success = true;
                 ViewBag.EntyNull = false;
+                ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
                 return View("Actions/EditScenary", model);
             }
             catch (Exception)
@@ -286,6 +290,7 @@ namespace ParameterControl.Controllers.Scenarios
 
                 ViewBag.Success = true;
                 ViewBag.EntyNull = false;
+                ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
                 return View("Actions/ViewScenery", model);
             }
             catch (Exception)
@@ -313,6 +318,7 @@ namespace ParameterControl.Controllers.Scenarios
                 }
                 ViewBag.Success = true;
                 ViewBag.EntyNull = false;
+                ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
                 return View("Actions/ActiveScenery", scenery);
             }
             catch (Exception)
@@ -359,6 +365,7 @@ namespace ParameterControl.Controllers.Scenarios
                 }
                 ViewBag.Success = true;
                 ViewBag.EntyNull = false;
+                ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
                 return View("Actions/DesactiveScenery", scenery);
             }
             catch (Exception)
@@ -397,7 +404,7 @@ namespace ParameterControl.Controllers.Scenarios
                 Rows = rows.RowsScenarios()
 
             };
-
+            ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
             return View("Actions/Filter", model);
         }
 

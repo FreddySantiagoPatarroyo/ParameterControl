@@ -85,6 +85,7 @@ namespace ParameterControl.Controllers.Parameters
                 };
 
                 ViewBag.Success = true;
+                ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
                 return View("Parameters", resultViemModel);
             }
             catch (Exception)
@@ -135,8 +136,8 @@ namespace ParameterControl.Controllers.Parameters
                 };
 
                 ViewBag.ApplyFilter = true;
-
                 ViewBag.Success = true;
+                ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
                 return View("ParametersFilter", resultViemModel);
             }
             catch (Exception)
@@ -180,8 +181,8 @@ namespace ParameterControl.Controllers.Parameters
                 };
 
                 ViewBag.ApplyFilter = true;
-
                 ViewBag.Success = true;
+                ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
                 return View("ParametersFilterConciliation", resultViemModel);
             }
             catch (Exception)
@@ -207,6 +208,7 @@ namespace ParameterControl.Controllers.Parameters
                 };
 
                 ViewBag.Success = true;
+                ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
                 return View("Actions/CreateParameter", model);
             }
             catch (Exception)
@@ -267,6 +269,7 @@ namespace ParameterControl.Controllers.Parameters
 
                 ViewBag.Success = true;
                 ViewBag.EntyNull = false;
+                ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
                 return View("Actions/EditParameter", model);
             }
             catch (Exception)
@@ -331,6 +334,7 @@ namespace ParameterControl.Controllers.Parameters
 
                 ViewBag.Success = true;
                 ViewBag.EntyNull = false;
+                ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
                 return View("Actions/ViewParameter", model);
             }
             catch (Exception)
@@ -358,6 +362,7 @@ namespace ParameterControl.Controllers.Parameters
 
                 ViewBag.Success = true;
                 ViewBag.EntyNull = false;
+                ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
                 return View("Actions/ActiveParameter", parameter);
             }
             catch (Exception)
@@ -403,6 +408,7 @@ namespace ParameterControl.Controllers.Parameters
 
                 ViewBag.Success = true;
                 ViewBag.EntyNull = false;
+                ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
                 return View("Actions/DesactiveParameter", parameter);
             }
             catch (Exception)
@@ -440,7 +446,7 @@ namespace ParameterControl.Controllers.Parameters
                 Rows = rows.RowsParameters()
 
             };
-
+            ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
             return View("Actions/Filter", model);
         }
 
@@ -513,7 +519,7 @@ namespace ParameterControl.Controllers.Parameters
                 Conciliations = await GetConciliations()
 
             };
-
+            ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
             return View("Actions/FilterConciliation", model);
         }
 

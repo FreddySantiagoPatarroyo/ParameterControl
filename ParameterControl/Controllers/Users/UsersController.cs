@@ -86,6 +86,7 @@ namespace ParameterControl.Controllers.Users
                 };
 
                 ViewBag.Success = true;
+                ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
                 return View("Users", resultViemModel);
             }
             catch (Exception)
@@ -136,6 +137,7 @@ namespace ParameterControl.Controllers.Users
                 };
 
                 ViewBag.Success = true;
+                ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
                 return View("UsersFilter", resultViemModel);
             }
             catch (Exception)
@@ -155,6 +157,7 @@ namespace ParameterControl.Controllers.Users
                 model.Roles = await GetRoles();
 
                 ViewBag.Success = true;
+                ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
                 return View("Actions/CreateUser", model);
             }
             catch (Exception)
@@ -211,6 +214,7 @@ namespace ParameterControl.Controllers.Users
 
                 ViewBag.Success = true;
                 ViewBag.EntyNull = false;
+                ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
                 return View("Actions/EditUser", model);
 
             }
@@ -278,6 +282,7 @@ namespace ParameterControl.Controllers.Users
 
                 ViewBag.Success = true;
                 ViewBag.EntyNull = false;
+                ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
                 return View("Actions/ViewUser", model);
             }
             catch (Exception)
@@ -305,6 +310,7 @@ namespace ParameterControl.Controllers.Users
 
                 ViewBag.Success = true;
                 ViewBag.EntyNull = false;
+                ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
                 return View("Actions/ActiveUser", user);
             }
             catch (Exception)
@@ -345,6 +351,7 @@ namespace ParameterControl.Controllers.Users
                 {
                     ViewBag.Success = true;
                     ViewBag.EntyNull = true;
+                    ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
                     return View("Actions/DesactiveUser", null);
                 }
 
@@ -387,7 +394,7 @@ namespace ParameterControl.Controllers.Users
                 Rows = rows.RowsUsers()
 
             };
-
+            ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
             return View("Actions/Filter", model);
         }
 
