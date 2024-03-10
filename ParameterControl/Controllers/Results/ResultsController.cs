@@ -45,7 +45,7 @@ namespace ParameterControl.Controllers.Results
             var context = httpContextAccesor.HttpContext;
             _principal = context.User as ClaimsPrincipal;
             var data = _principal.FindFirst(ClaimTypes.Role).Value;
-            var section = _configuration.GetSection($"Permisos:{data}:Conciliacion").GetChildren();
+            var section = _configuration.GetSection($"Permisos:{data}:Results").GetChildren();
             _isCreate = Convert.ToBoolean(section.Where(x => x.Key.Equals("btnCreate")).FirstOrDefault().Value);
             _isActivate = Convert.ToBoolean(section.Where(x => x.Key.Equals("btnActivate")).FirstOrDefault().Value);
             _isEdit = Convert.ToBoolean(section.Where(x => x.Key.Equals("btnEdit")).FirstOrDefault().Value);
@@ -56,6 +56,7 @@ namespace ParameterControl.Controllers.Results
         [HttpGet]
         public async Task<ActionResult> Results()
         {
+            ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
             try
             {
                 List<modResult.Result> results = await resultsServices.GetResults();
@@ -85,6 +86,7 @@ namespace ParameterControl.Controllers.Results
         [HttpGet]
         public async Task<ActionResult> ResultsFilter(string filterColunm = "", string filterValue = "", string typeRow = "")
         {
+            ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
             try
             {
                 if (filterColunm == null || filterColunm == "" || filterValue == null || filterValue == "")
@@ -120,11 +122,19 @@ namespace ParameterControl.Controllers.Results
                 return View("ResultsFilter", null);
             }
         }
+        [HttpGet]
+        public async Task<ActionResult> Edit(string id)
+        {
+            Result result = await resultsServices.GetResultsById(id);
+            ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
+            return View("Actions/EditResult", result);
+        }
 
         [HttpGet]
         public async Task<ActionResult> View(string id)
         {
             Result result = await resultsServices.GetResultsById(id);
+            ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
             return View("Actions/ViewResult", result);
         }
 
@@ -132,6 +142,7 @@ namespace ParameterControl.Controllers.Results
         public async Task<ActionResult> Active(string id)
         {
             modResult.Result result = await resultsServices.GetResultsById(id);
+            ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
             return View("Actions/ActiveResult", result);
         }
 
@@ -141,9 +152,6 @@ namespace ParameterControl.Controllers.Results
             try
             {
                 modResult.Result request = await resultsServices.GetResultsById(id);
-                request.UserOwner = authenticatedUser.GetUserOwnerId();
-                request.UpdateDate = DateTime.Now;
-                request.State = true;
                 _logger.LogInformation($"Inicia método ResultController.Active {JsonConvert.SerializeObject(request)}");
                 return Ok(new { message = "Se activo el resultado de manera exitosa", state = "Success" });
             }
@@ -158,6 +166,7 @@ namespace ParameterControl.Controllers.Results
         public async Task<ActionResult> Desactive(string id)
         {
             Result result = await resultsServices.GetResultsById(id);
+            ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
             return View("Actions/DesactiveResult", result);
         }
 
@@ -167,9 +176,6 @@ namespace ParameterControl.Controllers.Results
             try
             {
                 modResult.Result request = await resultsServices.GetResultsById(id);
-                request.UserOwner = authenticatedUser.GetUserOwnerId();
-                request.UpdateDate = DateTime.Now;
-                request.State = false;
                 _logger.LogInformation($"Inicia método ResultController.Active {JsonConvert.SerializeObject(request)}");
                 return Ok(new { message = "Se desactivo el resultado de manera exitosa", state = "Success" });
             }
@@ -188,7 +194,7 @@ namespace ParameterControl.Controllers.Results
                 Rows = rows.RowsResults()
 
             };
-
+            ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
             return View("Actions/Filter", model);
         }
 

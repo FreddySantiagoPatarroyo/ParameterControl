@@ -162,9 +162,8 @@ namespace ParameterControl.Conciliation.Impl
                     RequiredApproval = dr["REQUIERE_APROBACION"] is DBNull ? string.Empty : dr["REQUIERE_APROBACION"].ToString(),
                     OperationType = dr["TIPO_OPERACION"] is DBNull ? string.Empty : dr["TIPO_OPERACION"].ToString(),
                     AssignmentType = dr["TIPO_ASIGNACION"] is DBNull ? string.Empty : dr["TIPO_ASIGNACION"].ToString(),
-                    ModifieldBy = dr["MODIFICADO_POR"] is DBNull ? string.Empty : dr["MODIFICADO_POR"].ToString(),
-                    State = dr["ESTADO_ACTIVACION"] is DBNull ? false : Convert.ToBoolean(dr["ESTADO_ACTIVACION"]),
-                    //StatePolicy = dr["ESTADO_ACTIVACION_POLITICA"] is DBNull ? false : Convert.ToBoolean(dr["ESTADO_ACTIVACION_POLITICA"]),
+                    State = dr["ESTADO"] is DBNull ? false : Convert.ToBoolean(Convert.ToInt32(dr["ESTADO"])),
+                    StatePolicy = dr["ESTADO_POLITICA"] is DBNull ? false : Convert.ToBoolean(Convert.ToInt32(dr["ESTADO_POLITICA"])),
                 };
                 return model;
             });

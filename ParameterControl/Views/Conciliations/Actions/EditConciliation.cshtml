@@ -7,7 +7,7 @@
     string ErrorSuccess = "Se genero un problema al obtener la informacion,Conciliations";
 }
 
-<partial name="_Menu" />
+<partial name="_Menu" model="@ViewBag.InfoUser" />
 
 @if (!ViewBag.Success)
 {
@@ -415,13 +415,13 @@ else
                 let isValidOperationType = false;
 
                 const sendData = async () => {
-                    isValidCode = validateInputEmpty("Code", "El código es requerido", "CodeError");
-                    isValidName = validateInputEmpty("Name", "El nombre es requerido", "NameError");
+                    isValidCode = validateInput("Code", "El código es requerido", "CodeError");
+                    isValidName = validateInput("Name", "El nombre es requerido", "NameError");
                     isValidEmail = validateEmail("Email", "El Email es requerido", "Digite un email válido", "EmailError");
-                    isValidPolicies = validateInputEmpty("input_select_filter_policies", "La política es requerida", "PoliciesError");
-                    isValidRequired = validateInputEmpty("input_select_filter_required", "Este campo es requerido", "RequiredError");
-                    isValidControlType = validateInputEmpty("ControlType", "El tipo de control es requerido", "ControlTypeError");
-                    isValidOperationType = validateInputEmpty("OperationType", "El tipo de operacion es requerido", "OperationTypeError");
+                    isValidPolicies = validateInput("input_select_filter_policies", "La política es requerida", "PoliciesError");
+                    isValidRequired = validateInput("input_select_filter_required", "Este campo es requerido", "RequiredError");
+                    isValidControlType = validateInput("ControlType", "El tipo de control es requerido", "ControlTypeError");
+                    isValidOperationType = validateInput("OperationType", "El tipo de operacion es requerido", "OperationTypeError");
 
                     if (isValidCode && isValidName && isValidEmail && isValidPolicies && isValidRequired && isValidControlType && isValidOperationType) {
                         document.getElementById('btn_container').style.display = 'none';
@@ -472,9 +472,35 @@ else
                     }
                 }
 
-                const validateInputEmpty = (idInput, mensaje, idError) => {
+                const validateEmpty = (idInput) => {
                     if ($(`#${idInput}`).val() == "" || $(`#${idInput}`).val() == null) {
-                        $(`#${idError}`).text(`${mensaje}`);
+                        return true;
+                    } else {
+                        return false;
+                    }
+                }
+
+                const validateInput = (idInput, requiredMessage, idError) => {
+                    const isEmpty = validateEmpty(idInput);
+                    if (isEmpty) {
+                        $(`#${idError}`).text(requiredMessage);
+                        return false;
+                    } else {
+                        $(`#${idError}`).text("");
+                        return true;
+                    }
+                }
+
+                const validateEmail = (idInput, requiredMessage, formatMessage, idError) => {
+                    const email = $(`#${idInput}`).val();
+                    const emailFormat = /^[a-zA-Z0-9._-]+@@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+                    const isEmpty = validateEmpty(idInput);
+
+                    if (isEmpty) {
+                        $(`#${idError}`).text(requiredMessage);
+                        return false;
+                    } else if (!emailFormat.test(email)) {
+                        $(`#${idError}`).text(formatMessage);
                         return false;
                     } else {
                         $(`#${idError}`).text("");
@@ -497,22 +523,6 @@ else
 
                 //     return date;
                 // }
-
-                const validateEmail = (idInput, requiredMessage, formatMessage, idError) => {
-                    const email = $(`#${idInput}`).val();
-                    const emailFormat = /^[a-zA-Z0-9._-]+@@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
-
-                    if (!email) {
-                        $(`#${idError}`).text(requiredMessage);
-                        return false;
-                    } else if (!emailFormat.test(email)) {
-                        $(`#${idError}`).text(formatMessage);
-                        return false;
-                    } else {
-                        $(`#${idError}`).text("");
-                        return true;
-                    }
-                }
             </script>
         }
     }

@@ -3,11 +3,11 @@
 
 @{
     ViewData["Title"] = "Ver toma transversal";
-    string ErrorEntyNull = "No existe una toma transversal con el codigo " + ViewBag.CodeSend + ",CrossConnections";
+    string ErrorEntyNull = "No existe una toma transversal con el paquete " + ViewBag.PackageSend + ",CrossConnections";
     string ErrorSuccess = "Se genero un problema al obtener la informacion,CrossConnections";
 }
 
-<partial name="_Menu" />
+<partial name="_Menu" model="@ViewBag.InfoUser" />
 
 @if (!ViewBag.Success)
 {

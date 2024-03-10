@@ -14,7 +14,6 @@ using modPolicy = ParameterControl.Models.Policy;
 
 namespace ParameterControl.Controllers.Policies
 {
-    [Authorize(Roles = "ADMINISTRADOR,EJECUTOR,CONSULTOR")]
     public class PoliciesController : Controller
     {
         public TablePoliciesViewModel TablePolicies = new TablePoliciesViewModel();
@@ -47,7 +46,7 @@ namespace ParameterControl.Controllers.Policies
             var context = httpContextAccesor.HttpContext;
             _principal = context.User as ClaimsPrincipal;
             var data = _principal.FindFirst(ClaimTypes.Role).Value;
-            var section = _configuration.GetSection($"Permisos:{data}:Conciliacion").GetChildren();
+            var section = _configuration.GetSection($"Permisos:{data}:Policies").GetChildren();
             _isCreate = Convert.ToBoolean(section.Where(x => x.Key.Equals("btnCreate")).FirstOrDefault().Value);
             _isActivate = Convert.ToBoolean(section.Where(x => x.Key.Equals("btnActivate")).FirstOrDefault().Value);
             _isEdit = Convert.ToBoolean(section.Where(x => x.Key.Equals("btnEdit")).FirstOrDefault().Value);
@@ -55,9 +54,11 @@ namespace ParameterControl.Controllers.Policies
             _isInactive = Convert.ToBoolean(section.Where(x => x.Key.Equals("btnInactive")).FirstOrDefault().Value);
         }
 
+        [Authorize(Roles = "ADMINISTRADOR,EJECUTOR,CONSULTOR")]
         [HttpGet]
         public async Task<ActionResult> Policies(PaginationViewModel paginationViewModel)
         {
+            ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
             try
             {
                 List<modPolicy.Policy> policies = await policiesServices.GetPoliciesPagination(paginationViewModel);
@@ -83,6 +84,7 @@ namespace ParameterControl.Controllers.Policies
                 };
 
                 ViewBag.Success = true;
+
                 return View("Policies", resultViemModel);
             }
             catch (Exception)
@@ -93,8 +95,12 @@ namespace ParameterControl.Controllers.Policies
 
         }
 
+        [Authorize(Roles = "ADMINISTRADOR,EJECUTOR,CONSULTOR")]
+        [HttpGet]
         public async Task<ActionResult> PoliciesFilter(PaginationViewModel paginationViewModel, string filterColunm = "", string filterValue = "", string typeRow = "")
         {
+            ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
+
             try
             {
                 if (filterColunm == null || filterColunm == "" || filterValue == null || filterValue == "")
@@ -132,6 +138,7 @@ namespace ParameterControl.Controllers.Policies
                 };
 
                 ViewBag.Success = true;
+
                 return View("PoliciesFilter", resultViemModel);
             }
             catch (Exception)
@@ -141,9 +148,11 @@ namespace ParameterControl.Controllers.Policies
             }
         }
 
+        [Authorize(Roles = "ADMINISTRADOR")]
         [HttpGet]
         public async Task<ActionResult> Create()
         {
+            ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
             try
             {
                 PolicyCreateViewModel model = new PolicyCreateViewModel();
@@ -158,6 +167,7 @@ namespace ParameterControl.Controllers.Policies
             }
         }
 
+        [Authorize(Roles = "ADMINISTRADOR")]
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] modPolicy.Policy request)
         {
@@ -185,9 +195,11 @@ namespace ParameterControl.Controllers.Policies
 
         }
 
+        [Authorize(Roles = "ADMINISTRADOR")]
         [HttpGet]
         public async Task<ActionResult> Edit(int code)
         {
+            ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
             try
             {
                 ViewBag.CodeSend = code;
@@ -196,12 +208,15 @@ namespace ParameterControl.Controllers.Policies
                 {
                     ViewBag.Success = true;
                     ViewBag.EntyNull = true;
+                    
                     return View("Actions/EditPolicy", null);
                 }
                 PolicyCreateViewModel model = await policiesServices.GetPolicyFormatCreate(policy);
 
                 ViewBag.Success = true;
                 ViewBag.EntyNull = false;
+
+
                 return View("Actions/EditPolicy", model);
             }
             catch (Exception)
@@ -213,10 +228,10 @@ namespace ParameterControl.Controllers.Policies
 
         }
 
+        [Authorize(Roles = "ADMINISTRADOR")]
         [HttpPost]
         public async Task<ActionResult> Edit([FromBody] modPolicy.Policy request)
         {
-
             try
             {
                 var policy = await policiesServices.GetPolicyByCode(request.Code);
@@ -248,12 +263,13 @@ namespace ParameterControl.Controllers.Policies
                 _logger.LogError($"Error en el método PoliciesController.Edit : {JsonConvert.SerializeObject(ex.Message)}");
                 return BadRequest(new { message = "Error al actualizar la politica", state = "Error" });
             }
-
         }
 
+        [Authorize(Roles = "ADMINISTRADOR,EJECUTOR,CONSULTOR")]
         [HttpGet]
         public async Task<ActionResult> View(int code)
         {
+            ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
             try
             {
                 ViewBag.CodeSend = code;
@@ -268,6 +284,7 @@ namespace ParameterControl.Controllers.Policies
 
                 ViewBag.Success = true;
                 ViewBag.EntyNull = false;
+
                 return View("Actions/ViewPolicy", model);
             }
             catch (Exception)
@@ -278,6 +295,7 @@ namespace ParameterControl.Controllers.Policies
             }
         }
 
+        [Authorize(Roles = "ADMINISTRADOR")]
         [HttpGet]
         public async Task<ActionResult> Active(int code)
         {
@@ -293,6 +311,8 @@ namespace ParameterControl.Controllers.Policies
                 }
                 ViewBag.Success = true;
                 ViewBag.EntyNull = false;
+
+                ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
                 return View("Actions/ActivePolicy", policy);
             }
             catch (Exception)
@@ -303,6 +323,7 @@ namespace ParameterControl.Controllers.Policies
             }
         }
 
+        [Authorize(Roles = "ADMINISTRADOR")]
         [HttpPost]
         public async Task<ActionResult> ActivePolicy([FromBody] int code)
         {
@@ -320,9 +341,11 @@ namespace ParameterControl.Controllers.Policies
             }
         }
 
+        [Authorize(Roles = "ADMINISTRADOR")]
         [HttpGet]
         public async Task<ActionResult> Desactive(int code)
         {
+            ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
             try
             {
                 ViewBag.CodeSend = code;
@@ -335,6 +358,7 @@ namespace ParameterControl.Controllers.Policies
                 }
                 ViewBag.Success = true;
                 ViewBag.EntyNull = false;
+
                 return View("Actions/DesactivePolicy", policy);
             }
             catch (Exception)
@@ -345,6 +369,7 @@ namespace ParameterControl.Controllers.Policies
             }
         }
 
+        [Authorize(Roles = "ADMINISTRADOR")]
         [HttpPost]
         public async Task<ActionResult> DesactivePolicy([FromBody] int code)
         {
@@ -362,6 +387,7 @@ namespace ParameterControl.Controllers.Policies
             }
         }
 
+        [Authorize(Roles = "ADMINISTRADOR,EJECUTOR,CONSULTOR")]
         [HttpGet]
         public ActionResult Filter()
         {
@@ -371,9 +397,11 @@ namespace ParameterControl.Controllers.Policies
 
             };
 
+            ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
             return View("Actions/Filter", model);
         }
 
+        [Authorize(Roles = "ADMINISTRADOR,EJECUTOR,CONSULTOR")]
         [HttpPost]
         public async Task<ActionResult> FilterPolicies(FilterViewModel filter)
         {
@@ -394,6 +422,7 @@ namespace ParameterControl.Controllers.Policies
             });
         }
 
+        [Authorize(Roles = "ADMINISTRADOR,EJECUTOR,CONSULTOR")]
         [HttpPost]
         public async Task<IActionResult> GetSecondaryFilter([FromBody] string ColumValue)
         {
@@ -428,36 +457,5 @@ namespace ParameterControl.Controllers.Policies
 
             return Ok(filter);
         }
-
-        //[HttpGet]
-        //public async Task<ActionResult> Index()
-        //{
-        //    return View();
-        //}
-
-        //[HttpPost]
-        //public async Task<IActionResult> Index([FromBody] PaginationViewModel pagination)
-        //{
-        //    if (!ModelState.IsValid)
-        //    {
-        //        _logger.LogError($"Error en el modelo : {JsonConvert.SerializeObject(pagination)}");
-        //        return BadRequest(new { message = "Error en la consulta enviada", state = "Error" });
-        //    }
-        //    else
-        //    {
-        //        try
-        //        {
-        //            _logger.LogInformation($"Inicia método PoliciesController.Index {JsonConvert.SerializeObject(pagination)}");
-        //            var responseIn = await policiesServices.GetPoliciesPagination(pagination);
-        //            _logger.LogInformation($"Finaliza método PoliciesController.Index {responseIn}");
-        //            return Ok(new { message = "Se creo la politica de manera exitosa", state = "Success" });
-        //        }
-        //        catch (Exception ex)
-        //        {
-        //            _logger.LogError($"Error en el método PoliciesController.Index : {JsonConvert.SerializeObject(ex.Message)}");
-        //            return BadRequest(new { message = "Error al crear la politica", state = "Error" });
-        //        }
-        //    }
-        //}
     }
 }

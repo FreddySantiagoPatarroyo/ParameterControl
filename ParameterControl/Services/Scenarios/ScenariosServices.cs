@@ -32,8 +32,7 @@ namespace ParameterControl.Services.Scenarios
                     Conciliation = "Conciliacion1",
                     State = true,
                     CreationDate = DateTime.Parse("2024-01-10"),
-                    UpdateDate = DateTime.Parse("2023-11-09"),
-                    UserOwner = "User1"
+                    UpdateDate = DateTime.Parse("2023-11-09")
                 },
                 new Scenery(){
                     Code = 2,
@@ -42,8 +41,7 @@ namespace ParameterControl.Services.Scenarios
                     Conciliation = "Conciliacion1",
                     State = false,
                     CreationDate = DateTime.Parse("2024-01-10"),
-                    UpdateDate = DateTime.Parse("2023-11-09"),
-                    UserOwner = "User1"
+                    UpdateDate = DateTime.Parse("2023-11-09")
                 }
             };
             this.conciliationsServices = conciliationsServices;
@@ -268,7 +266,6 @@ namespace ParameterControl.Services.Scenarios
                     CodeConciliation = stage.Conciliation,
                     CreationDate = stage.CreationDate,
                     UpdateDate = stage.ModifieldDate,
-                    UserOwner = stage.ModifieldBy,
                     State = stage.State,
                     StateConciliation = stage.StateConciliation,
                 };
@@ -285,7 +282,6 @@ namespace ParameterControl.Services.Scenarios
                 Conciliation = request.CodeConciliation,
                 CreationDate = DateTime.Now,
                 ModifieldDate = DateTime.Now,
-                ModifieldBy = "CreateToUserDev",
                 State = request.State,
             };
 
@@ -330,7 +326,6 @@ namespace ParameterControl.Services.Scenarios
                     Conciliation = scenery.CodeConciliation,
                     CreationDate = scenery.CreationDate,
                     ModifieldDate = DateTime.Now,
-                    ModifieldBy = "CreateToUserDev",
                     State = scenery.State,
                 };
                 return model;
@@ -349,7 +344,6 @@ namespace ParameterControl.Services.Scenarios
                     Conciliation = scenery.CodeConciliation,
                     CreationDate = scenery.CreationDate,
                     ModifieldDate = DateTime.Now,
-                    ModifieldBy = "CreateToUserDev",
                     State = true,
                 };
                 return model;
@@ -368,7 +362,6 @@ namespace ParameterControl.Services.Scenarios
                     Conciliation = scenery.CodeConciliation,
                     CreationDate = scenery.CreationDate,
                     ModifieldDate = DateTime.Now,
-                    ModifieldBy = "CreateToUserDev",
                     State = false,
                 };
                 return model;

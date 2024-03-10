@@ -35,8 +35,7 @@ namespace ParameterControl.Services.Parameters
                     Description = "Descripcion ejemplo",
                     State = true,
                     CreationDate = DateTime.Parse("2024-01-10"),
-                    UpdateDate = DateTime.Parse("2023-11-09"),
-                    UserOwner = "User1"
+                    UpdateDate = DateTime.Parse("2023-11-09")
                 },
                 new modParameter.Parameter(){
                     Code = 2,
@@ -47,8 +46,7 @@ namespace ParameterControl.Services.Parameters
                     Description = "Descripcion ejemplo",
                     State = false,
                     CreationDate = DateTime.Parse("2024-01-10"),
-                    UpdateDate = DateTime.Parse("2023-11-09"),
-                    UserOwner = "User1"
+                    UpdateDate = DateTime.Parse("2023-11-09")
                 }
             };
         }
@@ -225,7 +223,6 @@ namespace ParameterControl.Services.Parameters
         public async Task<List<SelectListItem>> GetParameterType()
         {
             List<SelectListItem> parameterType = new List<SelectListItem>().ToList();
-            parameterType.Add(new SelectListItem("GENERAL", "GENERAL"));
             parameterType.Add(new SelectListItem("ESCENARIO", "ESCENARIO"));
             parameterType.Add(new SelectListItem("PARÁMETROS SEGURIDAD", "PARÁMETROS SEGURIDAD"));
             parameterType.Add(new SelectListItem("PARÁMETROS SISTEMA", "PARÁMETROS SISTEMA"));
@@ -276,7 +273,6 @@ namespace ParameterControl.Services.Parameters
                     ParameterType = Parameter.ParameterType,
                     CreationDate = Parameter.CreationDate,
                     UpdateDate = Parameter.ModifieldDate,
-                    UserOwner = Parameter.ModifieldBy,
                     State = Parameter.State,
 
                 };
@@ -294,7 +290,6 @@ namespace ParameterControl.Services.Parameters
                 Description = request.Description,
                 CreationDate = DateTime.Now,
                 ModifieldDate = DateTime.Now,
-                ModifieldBy = "CreateToUserDev",
                 State = request.State,
 
             };
@@ -340,7 +335,6 @@ namespace ParameterControl.Services.Parameters
                     Description = Parameter.Description,
                     CreationDate = Parameter.CreationDate,
                     ModifieldDate = DateTime.Now,
-                    ModifieldBy = "CreateToUserDev",
                     State = Parameter.State,
                 };
                 return model;
@@ -360,7 +354,6 @@ namespace ParameterControl.Services.Parameters
                     Description = Parameter.Description,
                     CreationDate = Parameter.CreationDate,
                     ModifieldDate = DateTime.Now,
-                    ModifieldBy = "CreateToUserDev",
                     State = true,
                 };
                 return model;
@@ -380,7 +373,6 @@ namespace ParameterControl.Services.Parameters
                     Description = Parameter.Description,
                     CreationDate = Parameter.CreationDate,
                     ModifieldDate = DateTime.Now,
-                    ModifieldBy = "CreateToUserDev",
                     State = false,
                 };
                 return model;

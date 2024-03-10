@@ -53,7 +53,7 @@ namespace ParameterControl.Controllers.Conciliations
             var context = httpContextAccesor.HttpContext;
             _principal = context.User as ClaimsPrincipal;
             var data = _principal.FindFirst(ClaimTypes.Role).Value;
-            var section = _configuration.GetSection($"Permisos:{data}:Conciliacion").GetChildren();
+            var section = _configuration.GetSection($"Permisos:{data}:Conciliations").GetChildren();
             _isCreate = Convert.ToBoolean(section.Where(x => x.Key.Equals("btnCreate")).FirstOrDefault().Value);
             _isActivate = Convert.ToBoolean(section.Where(x => x.Key.Equals("btnActivate")).FirstOrDefault().Value);
             _isEdit = Convert.ToBoolean(section.Where(x => x.Key.Equals("btnEdit")).FirstOrDefault().Value);
@@ -61,9 +61,11 @@ namespace ParameterControl.Controllers.Conciliations
             _isInactive = Convert.ToBoolean(section.Where(x => x.Key.Equals("btnInactive")).FirstOrDefault().Value);
         }
 
+        [Authorize(Roles = "ADMINISTRADOR,EJECUTOR,CONSULTOR")]
         [HttpGet]
         public async Task<ActionResult> Conciliations(PaginationViewModel paginationViewModel)
         {
+            ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
             try
             {
                 List<modConciliation.Conciliation> Conciliations = await conciliationsServices.GetConciliationsPagination(paginationViewModel);
@@ -93,13 +95,16 @@ namespace ParameterControl.Controllers.Conciliations
             catch (Exception ex)
             {
                 ViewBag.Success = false;
+                ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
                 return View("Conciliations", null);
             }
         }
 
+        [Authorize(Roles = "ADMINISTRADOR,EJECUTOR,CONSULTOR")]
         [HttpGet]
         public async Task<ActionResult> ConciliationsFilter(PaginationViewModel paginationViewModel, string filterColunm = "", string filterValue = "", string typeRow = "")
         {
+            ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
             try
             {
                 if (filterColunm == null || filterColunm == "" || filterValue == null || filterValue == "")
@@ -146,9 +151,11 @@ namespace ParameterControl.Controllers.Conciliations
             }
         }
 
+        [Authorize(Roles = "ADMINISTRADOR")]
         [HttpGet]
         public async Task<ActionResult> Create()
         {
+            ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
             try
             {
                 List<SelectListItem> PoliciesOptionsList = await GetPolicies();
@@ -176,6 +183,7 @@ namespace ParameterControl.Controllers.Conciliations
             }
         }
 
+        [Authorize(Roles = "ADMINISTRADOR")]
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] modConciliation.Conciliation request)
         {
@@ -200,11 +208,13 @@ namespace ParameterControl.Controllers.Conciliations
 
         }
 
+        [Authorize(Roles = "ADMINISTRADOR")]
         [HttpGet]
         public async Task<ActionResult> Edit(int code)
         {
             try
             {
+                ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
                 ViewBag.CodeSend = code;
                 modConciliation.Conciliation conciliation = await conciliationsServices.GetConciliationsByCode(code);
                 if (conciliation.Code == 0)
@@ -239,7 +249,7 @@ namespace ParameterControl.Controllers.Conciliations
             }
         }
 
-
+        [Authorize(Roles = "ADMINISTRADOR")]
         [HttpPost]
         public async Task<ActionResult> Edit([FromBody] modConciliation.Conciliation request)
         {
@@ -276,9 +286,11 @@ namespace ParameterControl.Controllers.Conciliations
 
         }
 
+        [Authorize(Roles = "ADMINISTRADOR,EJECUTOR,CONSULTOR")]
         [HttpGet]
         public async Task<ActionResult> View(int code)
         {
+            ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
             try
             {
                 ViewBag.CodeSend = code;
@@ -303,9 +315,11 @@ namespace ParameterControl.Controllers.Conciliations
             }
         }
 
+        [Authorize(Roles = "ADMINISTRADOR,EJECUTOR,CONSULTOR")]
         [HttpGet]
         public async Task<ActionResult> ViewPolicy(int code)
         {
+            ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
             try
             {
                 ViewBag.CodeSend = code;
@@ -330,9 +344,11 @@ namespace ParameterControl.Controllers.Conciliations
             }
         }
 
+        [Authorize(Roles = "ADMINISTRADOR")]
         [HttpGet]
         public async Task<ActionResult> Active(int code)
         {
+            ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
             try
             {
                 ViewBag.CodeSend = code;
@@ -356,6 +372,7 @@ namespace ParameterControl.Controllers.Conciliations
             }
         }
 
+        [Authorize(Roles = "ADMINISTRADOR")]
         [HttpPost]
         public async Task<ActionResult> ActiveConciliation([FromBody] int code)
         {
@@ -373,9 +390,11 @@ namespace ParameterControl.Controllers.Conciliations
             }
         }
 
+        [Authorize(Roles = "ADMINISTRADOR")]
         [HttpGet]
         public async Task<ActionResult> Desactive(int code)
         {
+            ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
             try
             {
                 ViewBag.CodeSend = code;
@@ -399,6 +418,7 @@ namespace ParameterControl.Controllers.Conciliations
             }
         }
 
+        [Authorize(Roles = "ADMINISTRADOR")]
         [HttpPost]
         public async Task<ActionResult> DesactiveConciliation([FromBody] int code)
         {
@@ -425,6 +445,7 @@ namespace ParameterControl.Controllers.Conciliations
 
         }
 
+        [Authorize(Roles = "ADMINISTRADOR,EJECUTOR,CONSULTOR")]
         [HttpGet]
         public ActionResult Filter()
         {
@@ -432,10 +453,11 @@ namespace ParameterControl.Controllers.Conciliations
             {
                 Rows = rows.RowsConciliations()
             };
-
+            ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
             return View("Actions/Filter", model);
         }
 
+        [Authorize(Roles = "ADMINISTRADOR,EJECUTOR,CONSULTOR")]
         [HttpPost]
         public async Task<ActionResult> FilterConciliations(FilterViewModel filter)
         {
@@ -456,6 +478,7 @@ namespace ParameterControl.Controllers.Conciliations
             });
         }
 
+        [Authorize(Roles = "ADMINISTRADOR,EJECUTOR,CONSULTOR")]
         [HttpPost]
         public async Task<IActionResult> GetSecondaryFilter([FromBody] string ColumValue)
         {

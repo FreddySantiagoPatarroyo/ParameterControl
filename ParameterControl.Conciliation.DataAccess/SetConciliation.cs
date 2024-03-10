@@ -30,7 +30,6 @@ namespace ParameterControl.Conciliation.DataAccess
                         command.Parameters.Add(new OracleParameter("PARAM_NOMBRE_CONCILIACION", entity.ConciliationName));
                         command.Parameters.Add(new OracleParameter("PARAM_DESCRIPCION", entity.Description));
                         command.Parameters.Add(new OracleParameter("PARAM_TABLA_DESTINO", entity.TargetTable));
-                        command.Parameters.Add(new OracleParameter("PARAM_ESTADO", entity.Status));
                         command.Parameters.Add(new OracleParameter("PARAM_APROBACION", entity.Approval));
                         command.Parameters.Add(new OracleParameter("PARAM_CAMPOS_TABLA_DESTINO", entity.FieldTargetTable));
                         command.Parameters.Add(new OracleParameter("PARAM_USUARIO_ASIGNADO", entity.AssignedUser));
@@ -52,8 +51,7 @@ namespace ParameterControl.Conciliation.DataAccess
                         command.Parameters.Add(new OracleParameter("PARAM_OBSERVACIONES", entity.Observation));
                         command.Parameters.Add(new OracleParameter("PARAM_PRUEBA_FECHA", entity.TestDate));
                         command.Parameters.Add(new OracleParameter("PARAM_REQ", entity.Req));
-                        command.Parameters.Add(new OracleParameter("PARAM_ESTADO_ACTIVACION", Convert.ToInt32(entity.State)));
-                        command.Parameters.Add(new OracleParameter("PARAM_MODIFIELDBY", entity.ModifieldBy));
+                        command.Parameters.Add(new OracleParameter("PARAM_ESTADO", Convert.ToInt32(entity.State).ToString()));
                         OracleDataReader reader = command.ExecuteReader();
                         response = 1;
                     }

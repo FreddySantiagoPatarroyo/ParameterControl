@@ -42,7 +42,8 @@ namespace ParameterControl.Controllers.Login
                     var claims = new List<Claim>
                     {
                         new Claim(ClaimTypes.Name,user.User_),
-                        new Claim("Correo",user.Email)
+                        new Claim("Correo",user.Email),
+                        new Claim(ClaimTypes.NameIdentifier, user.Code.ToString())
                     };
 
                     claims.Add(new Claim(ClaimTypes.Role, user.RolName));
@@ -51,7 +52,7 @@ namespace ParameterControl.Controllers.Login
 
                     await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new System.Security.Claims.ClaimsPrincipal(claimsIdentity));
 
-                    return Ok(new { message = "Se creo el usuario de manera exitosa", state = "Success" });
+                    return Ok(new { message = "Datos ingresados correctamente", state = "Success" });
                 }
                 else
                 {

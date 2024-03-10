@@ -114,7 +114,6 @@ namespace ParameterControl.LoadControl.Impl
             {
                 LoadControlModel model = new LoadControlModel
                 {
-                    Code = Convert.ToInt32(dr["COD_CARGA"]),
                     Package = dr["PAQUETE"] is DBNull ? string.Empty : dr["PAQUETE"].ToString(),
                     Table = dr["TABLA"] is DBNull ? string.Empty : dr["TABLA"].ToString(),
                     Periodicity = dr["PERIODICIDAD"] is DBNull ? string.Empty : dr["PERIODICIDAD"].ToString(),
@@ -136,7 +135,7 @@ namespace ParameterControl.LoadControl.Impl
                     FlagStatistics = dr["FLAG_ESTADISTICAS"] is DBNull ? string.Empty : dr["FLAG_ESTADISTICAS"].ToString(),
                     FlagDep = dr["FLAG_DEP"] is DBNull ? string.Empty : dr["FLAG_DEP"].ToString(),
                     DaysDep = dr["DIAS_DEP"] is DBNull ? 0 : Convert.ToInt32(dr["DIAS_DEP"]),
-                    State = dr["ESTADO_ACTIVACION"] is DBNull ? false : Convert.ToBoolean(dr["ESTADO_ACTIVACION"]),
+                    State = dr["PERIODICIDAD"] is DBNull ? false : dr["PERIODICIDAD"].ToString() != "X",
                 };
                 return model;
             });

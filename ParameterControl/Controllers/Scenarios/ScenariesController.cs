@@ -48,7 +48,7 @@ namespace ParameterControl.Controllers.Scenarios
             var context = httpContextAccesor.HttpContext;
             _principal = context.User as ClaimsPrincipal;
             var data = _principal.FindFirst(ClaimTypes.Role).Value;
-            var section = _configuration.GetSection($"Permisos:{data}:Conciliacion").GetChildren();
+            var section = _configuration.GetSection($"Permisos:{data}:Scenarios").GetChildren();
             _isCreate = Convert.ToBoolean(section.Where(x => x.Key.Equals("btnCreate")).FirstOrDefault().Value);
             _isActivate = Convert.ToBoolean(section.Where(x => x.Key.Equals("btnActivate")).FirstOrDefault().Value);
             _isEdit = Convert.ToBoolean(section.Where(x => x.Key.Equals("btnEdit")).FirstOrDefault().Value);
@@ -56,9 +56,11 @@ namespace ParameterControl.Controllers.Scenarios
             _isInactive = Convert.ToBoolean(section.Where(x => x.Key.Equals("btnInactive")).FirstOrDefault().Value);
         }
 
+        [Authorize(Roles = "ADMINISTRADOR,EJECUTOR,CONSULTOR")]
         [HttpGet]
         public async Task<ActionResult> Scenarios(PaginationViewModel paginationViewModel)
         {
+            ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
             try
             {
                 List<modScenery.Scenery> Scenarios = await scenariosServices.GetScenariosPagination(paginationViewModel);
@@ -93,9 +95,11 @@ namespace ParameterControl.Controllers.Scenarios
             }
         }
 
+        [Authorize(Roles = "ADMINISTRADOR,EJECUTOR,CONSULTOR")]
         [HttpGet]
         public async Task<ActionResult> ScenariosFilter(PaginationViewModel paginationViewModel, string filterColunm = "", string filterValue = "", string typeRow = "")
         {
+            ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
             try
             {
                 if (filterColunm == null || filterColunm == "" || filterValue == null || filterValue == "")
@@ -142,10 +146,11 @@ namespace ParameterControl.Controllers.Scenarios
             }
         }
 
-
+        [Authorize(Roles = "ADMINISTRADOR")]
         [HttpGet]
         public async Task<ActionResult> Create()
         {
+            ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
             try
             {
                 List<SelectListItem> ImpactOptionsList = await scenariosServices.GetImpact();
@@ -167,6 +172,7 @@ namespace ParameterControl.Controllers.Scenarios
             }
         }
 
+        [Authorize(Roles = "ADMINISTRADOR")]
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] modScenery.Scenery request)
         {
@@ -193,9 +199,11 @@ namespace ParameterControl.Controllers.Scenarios
 
         }
 
+        [Authorize(Roles = "ADMINISTRADOR")]
         [HttpGet]
         public async Task<ActionResult> Edit(int code)
         {
+            ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
             try
             {
                 ViewBag.CodeSend = code;
@@ -225,6 +233,7 @@ namespace ParameterControl.Controllers.Scenarios
             }
         }
 
+        [Authorize(Roles = "ADMINISTRADOR")]
         [HttpPost]
         public async Task<ActionResult> Edit([FromBody] modScenery.Scenery request)
         {
@@ -263,9 +272,11 @@ namespace ParameterControl.Controllers.Scenarios
 
         }
 
+        [Authorize(Roles = "ADMINISTRADOR,EJECUTOR,CONSULTOR")]
         [HttpGet]
         public async Task<ActionResult> View(int code)
         {
+            ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
             try
             {
                 ViewBag.CodeSend = code;
@@ -291,9 +302,11 @@ namespace ParameterControl.Controllers.Scenarios
 
         }
 
+        [Authorize(Roles = "ADMINISTRADOR")]
         [HttpGet]
         public async Task<ActionResult> Active(int code)
         {
+            ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
             try
             {
                 ViewBag.CodeSend = code;
@@ -318,6 +331,7 @@ namespace ParameterControl.Controllers.Scenarios
 
         }
 
+        [Authorize(Roles = "ADMINISTRADOR")]
         [HttpPost]
         public async Task<ActionResult> ActiveScenery([FromBody] int code)
         {
@@ -335,9 +349,11 @@ namespace ParameterControl.Controllers.Scenarios
             }
         }
 
+        [Authorize(Roles = "ADMINISTRADOR")]
         [HttpGet]
         public async Task<ActionResult> Desactive(int code)
         {
+            ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
             try
             {
                 ViewBag.CodeSend = code;
@@ -361,6 +377,7 @@ namespace ParameterControl.Controllers.Scenarios
 
         }
 
+        [Authorize(Roles = "ADMINISTRADOR")]
         [HttpPost]
         public async Task<ActionResult> DesactiveScenery([FromBody] int code)
         {
@@ -378,6 +395,7 @@ namespace ParameterControl.Controllers.Scenarios
             }
         }
 
+        [Authorize(Roles = "ADMINISTRADOR,EJECUTOR,CONSULTOR")]
         [HttpGet]
         public ActionResult Filter()
         {
@@ -386,10 +404,11 @@ namespace ParameterControl.Controllers.Scenarios
                 Rows = rows.RowsScenarios()
 
             };
-
+            ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
             return View("Actions/Filter", model);
         }
 
+        [Authorize(Roles = "ADMINISTRADOR,EJECUTOR,CONSULTOR")]
         [HttpPost]
         public async Task<ActionResult> FilterScenarios(FilterViewModel filter)
         {
@@ -410,6 +429,7 @@ namespace ParameterControl.Controllers.Scenarios
             });
         }
 
+        [Authorize(Roles = "ADMINISTRADOR,EJECUTOR,CONSULTOR")]
         [HttpPost]
         public async Task<IActionResult> GetSecondaryFilter([FromBody] string ColumValue)
         {

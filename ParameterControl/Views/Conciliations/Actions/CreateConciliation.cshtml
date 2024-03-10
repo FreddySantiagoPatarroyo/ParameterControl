@@ -5,7 +5,7 @@
     string ErrorSuccess = "Se genero un problema al obtener la informacion,Conciliations";
 }
 
-<partial name="_Menu" />
+<partial name="_Menu" model="@ViewBag.InfoUser" />
 
 @if (!ViewBag.Success)
 {
@@ -406,16 +406,16 @@ else
             let isValidOperationType = false;
 
             const sendData = async () => {
-                isValidName = validateInputEmpty("Name", "El nombre es requerido", "NameError");
+                isValidName = validateInput("Name", "El nombre es requerido", "NameError");
                 isValidEmail = validateEmail("Email", "El Email es requerido", "Digite un email válido", "EmailError");
                 // isValidDestination = validateInputEmpty("Destination", "El destino es requerido", "DestinationError");
-                isValidPolicy = validateInputEmpty("input_select_filter_policies", "La politica es requerida", "PolicyError");
-                isValidRequired = validateInputEmpty("input_select_filter_required", "Este campo es requerido", "RequiredError");
-                isValidControlType = validateInputEmpty("ControlType", "El tipo de control es requerido", "ControlTypeError");
-                isValidOperationType = validateInputEmpty("OperationType", "El tipo de operacion es requerido", "OperationTypeError");
+                isValidPolicy = validateInput("input_select_filter_policies", "La politica es requerida", "PolicyError");
+                isValidRequired = validateInput("input_select_filter_required", "Este campo es requerido", "RequiredError");
+                isValidControlType = validateInput("ControlType", "El tipo de control es requerido", "ControlTypeError");
+                isValidOperationType = validateInput("OperationType", "El tipo de operacion es requerido", "OperationTypeError");
 
 
-                if (isValidName && isValidEmail && isValidPolicy && isValidRequired && validateInputEmpty && isValidOperationType) {
+                if (isValidName && isValidEmail && isValidPolicy && isValidRequired && isValidControlType && isValidOperationType) {
                     document.getElementById('btn_container').style.display = 'none';
                     document.getElementById('loading').style.display = 'flex';
 
@@ -460,9 +460,18 @@ else
                 }
             }
 
-            const validateInputEmpty = (idInput, messaje, idError) => {
+            const validateEmpty = (idInput) => {
                 if ($(`#${idInput}`).val() == "" || $(`#${idInput}`).val() == null) {
-                    $(`#${idError}`).text(`${messaje}`);
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+
+            const validateInput = (idInput, requiredMessage, idError) => {
+                const isEmpty = validateEmpty(idInput);
+                if (isEmpty) {
+                    $(`#${idError}`).text(requiredMessage);
                     return false;
                 } else {
                     $(`#${idError}`).text("");
@@ -473,8 +482,9 @@ else
             const validateEmail = (idInput, requiredMessage, formatMessage, idError) => {
                 const email = $(`#${idInput}`).val();
                 const emailFormat = /^[a-zA-Z0-9._-]+@@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+                const isEmpty = validateEmpty(idInput);
 
-                if (!email) {
+                if (isEmpty) {
                     $(`#${idError}`).text(requiredMessage);
                     return false;
                 } else if (!emailFormat.test(email)) {

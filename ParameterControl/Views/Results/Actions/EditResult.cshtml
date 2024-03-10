@@ -1,26 +1,13 @@
-﻿
-@using ParameterControl.Models.Policy;
-@model PolicyCreateViewModel;
+﻿@using ParameterControl.Models.Result;
+@model Result;
 
 @{
-    ViewData["Title"] = "Editar Politicas";
-    string ErrorEntyNull = "No existe una politica con el codigo " + ViewBag.CodeSend + ",Policies";
-    string ErrorSuccess = "Se genero un problema al obtener la informacion,Policies";
+    ViewData["Title"] = "Resultado";
 }
 
 <partial name="_Menu" model="@ViewBag.InfoUser" />
 
-@if(!ViewBag.Success){
-    <partial name="_ModalError" model="ErrorSuccess" />
-}
-else
-{
-    @if (ViewBag.EntyNull)
-    {
-        <partial name="_ModalError" model="ErrorEntyNull" />
-    }
-    else
-    {
+
         <div class="box_edit">
             <div class="bg__blur"></div>
 
@@ -30,46 +17,34 @@ else
                 <div class="card__container">
                     <div class="header_form">
                         <img src="/images/iconApple.png" />
-                        <h1>Editar Politica</h1>
+                        <h1>Resultado</h1>
                     </div>
 
-                    <input type="hidden" asp-for="Code" />
-                    @* <input type="hidden" asp-for="CreationDate" /> *@
 
                     <div class="form_group">
                         <div class="field">
-                            <label asp-for="CodeFormat" class="label_form">Código*</label>
+                            <label asp-for="NumberRecovered" class="label_form">Cantidad de Recuperadas*</label>
                             <div class="input">
-                                <input asp-for="CodeFormat" placeholder="Codigo" readonly />
+                                <input placeholder="Cantidad de recuperadas"  />
                             </div>
-                            <span id="CodeError" class="text_error"></span>
+                            <span id="NumberRecoveredError" class="text_error"></span>
                         </div>
                     </div>
 
                     <div class="form_group">
                         <div class="field">
-                            <label asp-for="Name" class="label_form">Nombre*</label>
+                            <label asp-for="Value" class="label_form">Valor*</label>
                             <div class="input">
-                                <input asp-for="Name" placeholder="Nombre" readonly />
+                                <input  placeholder="Valor"  />
                             </div>
-                            <span id="NameError" class="text_error"></span>
+                            <span id="ValueError" class="text_error"></span>
                         </div>
                     </div>
 
-                    <div class="form_group">
-                        <div class="field">
-                            <label asp-for="Description" class="label_form">Descripcion*</label>
-                            <div class="textarea">
-                                <textarea asp-for="Description" placeholder="Descripcion"></textarea>
-                            </div>
-                            <span id="DescriptionError" class="text_error"></span>
-                        </div>
-                    </div>
-
-                    <p class="note_text"><span>Nota: </span>Los campos con (*) son obligatorios</p>
+                   <p class="note_text"><span>Nota: </span>Los campos con (*) son obligatorios</p>
 
                     <div id="btn_container" class="btn_container">
-                        <a class="button button_secondary" asp-controller="Policies" asp-action="Policies"><p class="text font_bold">Cancelar</p></a>
+                        <a class="button button_secondary" asp-controller="Results" asp-action="Results"><p class="text font_bold">Cancelar</p></a>
                         <a href="javascript:void(0)" onclick="sendData()" class="button button_primary"><p class="text font_bold">Actualizar</p></a>
                     </div>
                     <div id="loading" class="loading">
@@ -85,38 +60,33 @@ else
             </form>
         </div>
 
-        @section Scripts {
-            <partial name="_ValidationScriptsPartial.cshtml" />
+     @section Scripts {
+    <partial name="_ValidationScriptsPartial.cshtml" />
 
-            <script>
-                const urlPolicy = '@Url.Action("Edit")';
+    <script>
+        const urlRsult = '@Url.Action("Edit")';
                 let data;
-                let isValidCode = false;
-                let isValidName = false;
-                let isValidDescription = false;
+                let isValidNumberRecovered = false;
+                let isValidValue = false;
 
                 const sendData = async () => {
-                    isValidCode = validateInput("Code", "El codigo es requerido", "CodeError");
-                    isValidName = validateInput("Name", "El nombre es requerido", "NameError");
-                    isValidDescription = validateInput("Description", "La descripcion es requerido", "DescriptionError");
+                isValidNumberRecovered = validateInput("NumberRecovered", "La cantidad de recuperadas es requerida", "NumberRecoveredError");
+                isValidValue = validateInput("Value", "El valor es requerido", "ValueError");
 
-                    if (isValidCode && isValidName && isValidDescription) {
+                if (isValidNumberRecovered && isValidValue) {
                         document.getElementById('btn_container').style.display = 'none';
                         document.getElementById('loading').style.display = 'flex';
 
-                        //const CreationDateFormat = FormatDate($('#CreationDate').val());
 
                         data = {
-                            Code: $('#Code').val(),
-                            Name: $('#Name').val(),
-                            Description: $('#Description').val(),
+                            NumberRecovered: $('#NumberRecovered').val(),
+                            Value: $('#Value').val(),
                             State: true,
-                            //CreationDate: new Date(CreationDateFormat)
                         }
 
                         console.log(data)
 
-                        const result = await fetch(urlPolicy, {
+                        const result = await fetch(urlResult, {
                             method: 'POST',
                             body: JSON.stringify(data),
                             headers: {
@@ -133,7 +103,7 @@ else
                             document.getElementById('layout_message_success').innerHTML = json.message;
                             document.getElementById('loading').style.display = 'none';
                             setTimeout(() => {
-                                location.href = '/Policies/Policies';
+                                location.href = '/Results/Rsults';
                             }, 3000)
                         } else {
                             document.getElementById('LayoytError').style.display = 'block';
@@ -160,16 +130,10 @@ else
                         return true;
                     }
                 }
-                
-
                 const FormatDate = (date) => {
 
                     const validateAm = date.toString().includes("a. m.");
                     const validatePm = date.toString().includes("p. m.");
-
-               //      if (validateAm) {
-               //          date = date.replace("a. m.", "AM")
-               //      }
 
                     if (validatePm) {
                         date = date.replace("p. m.", "PM")
@@ -179,5 +143,3 @@ else
                 }
             </script>
         }
-    }
-}

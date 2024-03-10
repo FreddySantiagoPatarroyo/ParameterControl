@@ -46,7 +46,6 @@ namespace ParameterControl.Services.Conciliations
                     State = true,
                     CreationDate = DateTime.Parse("2024-01-10"),
                     UpdateDate = DateTime.Parse("2023-11-09"),
-                    UserOwner = "User1"
                 },
                 new modConciliation.Conciliation(){
                     Code = 2,
@@ -61,7 +60,6 @@ namespace ParameterControl.Services.Conciliations
                     State = true,
                     CreationDate = DateTime.Parse("2024-01-10"),
                     UpdateDate = DateTime.Parse("2023-11-09"),
-                    UserOwner = "User1"
                 }
             };
             this.policiesServices = policiesServices;
@@ -335,7 +333,6 @@ namespace ParameterControl.Services.Conciliations
                     OperationType = conciliation.OperationType,
                     CreationDate = conciliation.CreationDate,
                     UpdateDate = conciliation.ModifieldDate,
-                    UserOwner = conciliation.ModifieldBy,
                     State = conciliation.State,
                     StatePolicy = conciliation.StatePolicy
                 };
@@ -379,7 +376,6 @@ namespace ParameterControl.Services.Conciliations
                 RequiredApproval = request.Required,
                 CreationDate = DateTime.Now,
                 ModifieldDate = DateTime.Now,
-                ModifieldBy = "CreateToUserDev",
                 State = request.State,
             };
 
@@ -428,7 +424,6 @@ namespace ParameterControl.Services.Conciliations
                     RequiredApproval = conciliation.Required,
                     CreationDate = conciliation.CreationDate,
                     ModifieldDate = DateTime.Now,
-                    ModifieldBy = "CreateToUserDev",
                     State = conciliation.State,
                 };
                 return model;
@@ -451,7 +446,6 @@ namespace ParameterControl.Services.Conciliations
                     RequiredApproval = conciliation.Required,
                     CreationDate = conciliation.CreationDate,
                     ModifieldDate = DateTime.Now,
-                    ModifieldBy = "CreateToUserDev",
                     State = true,
                 };
                 return model;
@@ -474,7 +468,6 @@ namespace ParameterControl.Services.Conciliations
                     RequiredApproval = conciliation.Required,
                     CreationDate = conciliation.CreationDate,
                     ModifieldDate = DateTime.Now,
-                    ModifieldBy = "CreateToUserDev",
                     State = false,
                 };
                 return model;

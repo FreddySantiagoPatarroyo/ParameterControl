@@ -21,8 +21,7 @@ namespace ParameterControl.Services.Indicators
                     Parameter = "ParametroEjemplo",
                     State = false,
                     CreationDate = DateTime.Parse("2024-01-10"),
-                    UpdateDate = DateTime.Parse("2023-11-09"),
-                    UserOwner = "User1"
+                    UpdateDate = DateTime.Parse("2023-11-09")
                 },
                 new Indicator(){
                     Id = "2",
@@ -33,8 +32,7 @@ namespace ParameterControl.Services.Indicators
                     Parameter = "ParametroEjemplo",
                     State = true,
                     CreationDate = DateTime.Parse("2024-01-10"),
-                    UpdateDate = DateTime.Parse("2023-11-09"),
-                    UserOwner = "User1"
+                    UpdateDate = DateTime.Parse("2023-11-09")
                 },
                 new Indicator(){
                     Id = "3",
@@ -45,8 +43,7 @@ namespace ParameterControl.Services.Indicators
                     Parameter = "ParametroEjemplo",
                     State = true,
                     CreationDate = DateTime.Parse("2024-01-10"),
-                    UpdateDate = DateTime.Parse("2023-11-09"),
-                    UserOwner = "User1"
+                    UpdateDate = DateTime.Parse("2023-11-09")
                 },
                 new Indicator(){
                     Id = "4",
@@ -57,8 +54,7 @@ namespace ParameterControl.Services.Indicators
                     Parameter = "ParametroEjemplo",
                     State = false,
                     CreationDate = DateTime.Parse("2024-01-10"),
-                    UpdateDate = DateTime.Parse("2023-11-09"),
-                    UserOwner = "User1"
+                    UpdateDate = DateTime.Parse("2023-11-09")
                 },
                 new Indicator(){
                     Id = "5",
@@ -69,8 +65,7 @@ namespace ParameterControl.Services.Indicators
                     Parameter = "ParametroEjemplo",
                     State = true,
                     CreationDate = DateTime.Parse("2024-01-10"),
-                    UpdateDate = DateTime.Parse("2023-11-09"),
-                    UserOwner = "User1"
+                    UpdateDate = DateTime.Parse("2023-11-09")
                 },
                 new Indicator(){
                     Id = "6",
@@ -81,8 +76,7 @@ namespace ParameterControl.Services.Indicators
                     Parameter = "ParametroEjemplo",
                     State = false,
                     CreationDate = DateTime.Parse("2024-01-10"),
-                    UpdateDate = DateTime.Parse("2023-11-09"),
-                    UserOwner = "User1"
+                    UpdateDate = DateTime.Parse("2023-11-09")
                 }
             };
         }

@@ -6,7 +6,7 @@
     string ErrorSuccess = "Se genero un problema al obtener la informacion,Scenarios";
 }
 
-<partial name="_Menu" />
+<partial name="_Menu" model="@ViewBag.InfoUser" />
 
 @if (!ViewBag.Success)
 {
@@ -204,10 +204,10 @@ else
             let isValidConciliation = false;
 
             const sendData = async () => {
-                isValidCode = validateInputEmpty("Code", "El codigo es requerido", "CodeError");
-                isValidName = validateInputEmpty("Name", "El nombre es requerido", "NameError");
+                isValidCode = validateInput("Code", "El codigo es requerido", "CodeError");
+                isValidName = validateInput("Name", "El nombre es requerido", "NameError");
                 // isValidImpact = validateInputEmpty("Impact", "El impacto es requerido", "ImpactError");
-                isValidConciliation = validateInputEmpty("input_select_filter_conciliation", "La conciliacion es requerido", "ConciliationError");
+                isValidConciliation = validateInput("input_select_filter_conciliation", "La conciliacion es requerido", "ConciliationError");
 
 
                 if (isValidCode && isValidName && isValidConciliation) {
@@ -251,15 +251,24 @@ else
                 }
             }
 
-            const validateInputEmpty = (idInput, messaje, idError) => {
+            const validateEmpty = (idInput) => {
                 if ($(`#${idInput}`).val() == "" || $(`#${idInput}`).val() == null) {
-                    $(`#${idError}`).text(`${messaje}`);
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+            const validateInput = (idInput, requiredMessage, idError) => {
+                const isEmpty = validateEmpty(idInput);
+                if (isEmpty) {
+                    $(`#${idError}`).text(requiredMessage);
                     return false;
                 } else {
                     $(`#${idError}`).text("");
                     return true;
                 }
             }
+
         </script>
     }
 }

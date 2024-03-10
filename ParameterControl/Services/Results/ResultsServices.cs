@@ -24,8 +24,7 @@ namespace ParameterControl.Services.Results
                     ReinValue = "6444",
                     State = true,
                     CreationDate = DateTime.Parse("2024-01-10"),
-                    UpdateDate = DateTime.Parse("2023-11-09"),
-                    UserOwner = "User1"
+                    UpdateDate = DateTime.Parse("2023-11-09")
                 },
                  new Result(){
                     Id = "2",
@@ -40,8 +39,7 @@ namespace ParameterControl.Services.Results
                     ReinValue = "6444",
                     State = false,
                     CreationDate = DateTime.Parse("2024-01-10"),
-                    UpdateDate = DateTime.Parse("2023-11-09"),
-                    UserOwner = "User1"
+                    UpdateDate = DateTime.Parse("2023-11-09")
                 },
                   new Result(){
                     Id = "3",
@@ -56,8 +54,7 @@ namespace ParameterControl.Services.Results
                     ReinValue = "6444",
                     State = true,
                     CreationDate = DateTime.Parse("2024-01-10"),
-                    UpdateDate = DateTime.Parse("2023-11-09"),
-                    UserOwner = "User1"
+                    UpdateDate = DateTime.Parse("2023-11-09")
                 },
                    new Result(){
                     Id = "4",
@@ -72,8 +69,7 @@ namespace ParameterControl.Services.Results
                     ReinValue = "6444",
                     State = false,
                     CreationDate = DateTime.Parse("2024-01-10"),
-                    UpdateDate = DateTime.Parse("2023-11-09"),
-                    UserOwner = "User1"
+                    UpdateDate = DateTime.Parse("2023-11-09")
                 },
             };
         }

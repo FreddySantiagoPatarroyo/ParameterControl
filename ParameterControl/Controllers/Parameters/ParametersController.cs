@@ -14,7 +14,7 @@ using modParameter = ParameterControl.Models.Parameter;
 
 namespace ParameterControl.Controllers.Parameters
 {
-    [Authorize(Roles = "ADMINISTRADOR,EJECUTOR,CONSULTOR")]
+   
     public class ParametersController : Controller
     {
         public TableParametersViewModel TableParameters = new TableParametersViewModel();
@@ -47,7 +47,7 @@ namespace ParameterControl.Controllers.Parameters
             var context = httpContextAccesor.HttpContext;
             _principal = context.User as ClaimsPrincipal;
             var data = _principal.FindFirst(ClaimTypes.Role).Value;
-            var section = _configuration.GetSection($"Permisos:{data}:Conciliacion").GetChildren();
+            var section = _configuration.GetSection($"Permisos:{data}:Parameters").GetChildren();
             _isCreate = Convert.ToBoolean(section.Where(x => x.Key.Equals("btnCreate")).FirstOrDefault().Value);
             _isActivate = Convert.ToBoolean(section.Where(x => x.Key.Equals("btnActivate")).FirstOrDefault().Value);
             _isEdit = Convert.ToBoolean(section.Where(x => x.Key.Equals("btnEdit")).FirstOrDefault().Value);
@@ -55,9 +55,11 @@ namespace ParameterControl.Controllers.Parameters
             _isInactive = Convert.ToBoolean(section.Where(x => x.Key.Equals("btnInactive")).FirstOrDefault().Value);
         }
 
+        [Authorize(Roles = "ADMINISTRADOR,EJECUTOR,CONSULTOR")]
         [HttpGet]
         public async Task<ActionResult> Parameters(PaginationViewModel paginationViewModel)
         {
+            ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
             try
             {
                 List<modParameter.Parameter> parameters = await parametersService.GetParametersPagination(paginationViewModel);
@@ -94,9 +96,11 @@ namespace ParameterControl.Controllers.Parameters
 
         }
 
+        [Authorize(Roles = "ADMINISTRADOR,EJECUTOR,CONSULTOR")]
         [HttpGet]
         public async Task<ActionResult> ParametersFilter(PaginationViewModel paginationViewModel, string filterColunm = "", string filterValue = "", string typeRow = "")
         {
+            ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
             try
             {
                 if (filterColunm == null || filterColunm == "" || filterValue == null || filterValue == "")
@@ -133,7 +137,6 @@ namespace ParameterControl.Controllers.Parameters
                 };
 
                 ViewBag.ApplyFilter = true;
-
                 ViewBag.Success = true;
                 return View("ParametersFilter", resultViemModel);
             }
@@ -144,9 +147,11 @@ namespace ParameterControl.Controllers.Parameters
             }
         }
 
+        [Authorize(Roles = "ADMINISTRADOR,EJECUTOR,CONSULTOR")]
         [HttpGet]
         public async Task<ActionResult> ParametersConciliationFilter(PaginationViewModel paginationViewModel, string conciliation = "")
         {
+            ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
             try
             {
                 if (conciliation == null)
@@ -177,7 +182,6 @@ namespace ParameterControl.Controllers.Parameters
                 };
 
                 ViewBag.ApplyFilter = true;
-
                 ViewBag.Success = true;
                 return View("ParametersFilterConciliation", resultViemModel);
             }
@@ -188,9 +192,11 @@ namespace ParameterControl.Controllers.Parameters
             }
         }
 
+        [Authorize(Roles = "ADMINISTRADOR")]
         [HttpGet]
         public async Task<ActionResult> Create()
         {
+            ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
             try
             {
                 List<SelectListItem> ParameterTypeOptionList = await parametersService.GetParameterType();
@@ -213,6 +219,7 @@ namespace ParameterControl.Controllers.Parameters
 
         }
 
+        [Authorize(Roles = "ADMINISTRADOR")]
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] modParameter.Parameter request)
         {
@@ -239,9 +246,11 @@ namespace ParameterControl.Controllers.Parameters
 
         }
 
+        [Authorize(Roles = "ADMINISTRADOR")]
         [HttpGet]
         public async Task<ActionResult> Edit(int code)
         {
+            ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
             try
             {
                 ViewBag.CodeSend = code;
@@ -271,6 +280,7 @@ namespace ParameterControl.Controllers.Parameters
             }
         }
 
+        [Authorize(Roles = "ADMINISTRADOR")]
         [HttpPost]
         public async Task<IActionResult> Edit([FromBody] modParameter.Parameter request)
         {
@@ -306,9 +316,11 @@ namespace ParameterControl.Controllers.Parameters
             }
         }
 
+        [Authorize(Roles = "ADMINISTRADOR,EJECUTOR,CONSULTOR")]
         [HttpGet]
         public async Task<ActionResult> View(int code)
         {
+            ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
             try
             {
                 ViewBag.CodeSend = code;
@@ -333,9 +345,11 @@ namespace ParameterControl.Controllers.Parameters
             }
         }
 
+        [Authorize(Roles = "ADMINISTRADOR")]
         [HttpGet]
         public async Task<ActionResult> Active(int code)
         {
+            ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
             try
             {
                 ViewBag.CodeSend = code;
@@ -359,6 +373,7 @@ namespace ParameterControl.Controllers.Parameters
             }
         }
 
+        [Authorize(Roles = "ADMINISTRADOR")]
         [HttpPost]
         public async Task<ActionResult> ActiveParameter([FromBody] int code)
         {
@@ -376,9 +391,11 @@ namespace ParameterControl.Controllers.Parameters
             }
         }
 
+        [Authorize(Roles = "ADMINISTRADOR")]
         [HttpGet]
         public async Task<ActionResult> Desactive(int code)
         {
+            ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
             try
             {
                 ViewBag.CodeSend = code;
@@ -402,6 +419,7 @@ namespace ParameterControl.Controllers.Parameters
             }
         }
 
+        [Authorize(Roles = "ADMINISTRADOR")]
         [HttpPost]
         public async Task<ActionResult> DesactiveParameter([FromBody] int code)
         {
@@ -419,6 +437,7 @@ namespace ParameterControl.Controllers.Parameters
             }
         }
 
+        [Authorize(Roles = "ADMINISTRADOR,EJECUTOR,CONSULTOR")]
         [HttpGet]
         public ActionResult Filter()
         {
@@ -427,10 +446,11 @@ namespace ParameterControl.Controllers.Parameters
                 Rows = rows.RowsParameters()
 
             };
-
+            ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
             return View("Actions/Filter", model);
         }
 
+        [Authorize(Roles = "ADMINISTRADOR,EJECUTOR,CONSULTOR")]
         [HttpPost]
         public async Task<ActionResult> FilterParameters(FilterViewModel filter)
         {
@@ -451,6 +471,7 @@ namespace ParameterControl.Controllers.Parameters
             });
         }
 
+        [Authorize(Roles = "ADMINISTRADOR,EJECUTOR,CONSULTOR")]
         [HttpPost]
         public async Task<IActionResult> GetSecondaryFilter([FromBody] string ColumValue)
         {
@@ -498,7 +519,7 @@ namespace ParameterControl.Controllers.Parameters
                 Conciliations = await GetConciliations()
 
             };
-
+            ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
             return View("Actions/FilterConciliation", model);
         }
 

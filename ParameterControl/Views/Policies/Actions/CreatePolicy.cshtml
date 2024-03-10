@@ -6,7 +6,7 @@
     string ErrorSuccess = "Se genero un problema al obtener la informacion,Policies";
 }
 
-<partial name="_Menu" />
+<partial name="_Menu" model="@ViewBag.InfoUser" />
 
 @if (!ViewBag.Success)
 {
@@ -120,8 +120,8 @@ else
             let isValidDescription = false;
 
             const sendData = async () => {
-                isValidName = validateInputEmpty("Name", "El nombre es requerido", "NameError");
-                isValidDescription = validateInputEmpty("Description", "La descripcion es requerido", "DescriptionError");
+                isValidName = validateInput("Name", "El nombre es requerido", "NameError");
+                isValidDescription = validateInput("Description", "La descripcion es requerido", "DescriptionError");
 
                 if (isValidName && isValidDescription) {
                     document.getElementById('btn_container').style.display = 'none';
@@ -162,9 +162,17 @@ else
                 }
             }
 
-            const validateInputEmpty = (idInput, messaje, idError) => {
+            const validateEmpty = (idInput) => {
                 if ($(`#${idInput}`).val() == "" || $(`#${idInput}`).val() == null) {
-                    $(`#${idError}`).text(`${messaje}`);
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+            const validateInput = (idInput, requiredMessage, idError) => {
+                const isEmpty = validateEmpty(idInput);
+                if (isEmpty) {
+                    $(`#${idError}`).text(requiredMessage);
                     return false;
                 } else {
                     $(`#${idError}`).text("");

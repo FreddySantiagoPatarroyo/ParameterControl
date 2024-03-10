@@ -2,7 +2,6 @@
 {
     public class LoadControlModel
     {
-        public int Code { get; set; }
         public string Package { get; set; } = string.Empty;
         public string Table { get; set; } = string.Empty;
         public string Periodicity { get; set; } = string.Empty;
@@ -24,7 +23,6 @@
         public string FlagStatistics { get; set; } = string.Empty;
         public string FlagDep { get; set; } = string.Empty;
         public int DaysDep { get; set; }
-        public string ModifieldBy { get; set; } = string.Empty;
         public bool State { get; set; } = false;
     }
 }

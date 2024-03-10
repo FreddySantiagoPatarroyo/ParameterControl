@@ -17,6 +17,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddHttpContextAccessor();
 builder.Services.AddTransient<IPoliciesServices, PoliciesServices>();
 builder.Services.AddTransient<IConciliationsServices, ConciliationsServices>();
 builder.Services.AddTransient<IParametersService, ParametersService>();
@@ -38,7 +39,7 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
     {
         option.LoginPath = "/Login/Login";
         option.ExpireTimeSpan = TimeSpan.FromMinutes(5);
-        option.AccessDeniedPath = "/Home/Error";
+        option.AccessDeniedPath = "/Home/AuthorizedError";
     });
 
 builder.Services.AddHttpContextAccessor();

@@ -13,8 +13,7 @@ using System.Security.Claims;
 using modUser = ParameterControl.Models.User;
 
 namespace ParameterControl.Controllers.Users
-{
-    [Authorize(Roles = "ADMINISTRADOR,EJECUTOR,CONSULTOR")]
+{    
     public class UsersController : Controller
     {
         public TableUserViewModel TableUsers = new TableUserViewModel();
@@ -56,9 +55,11 @@ namespace ParameterControl.Controllers.Users
 
         }
 
+        [Authorize(Roles = "ADMINISTRADOR,EJECUTOR,CONSULTOR")]
         [HttpGet]
         public async Task<ActionResult> Users(PaginationViewModel paginationViewModel)
         {
+            ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
             try
             {
                 List<modUser.User> Users = await usersServices.GetUsersPagination(paginationViewModel);
@@ -95,10 +96,11 @@ namespace ParameterControl.Controllers.Users
             }
         }
 
-
+        [Authorize(Roles = "ADMINISTRADOR,EJECUTOR,CONSULTOR")]
         [HttpGet]
         public async Task<ActionResult> UsersFilter(PaginationViewModel paginationViewModel, string filterColunm = "", string filterValue = "", string typeRow = "")
         {
+            ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
             try
             {
                 if (filterColunm == null || filterColunm == "" || filterValue == null || filterValue == "")
@@ -145,9 +147,11 @@ namespace ParameterControl.Controllers.Users
             }
         }
 
+        [Authorize(Roles = "ADMINISTRADOR")]
         [HttpGet]
         public async Task<ActionResult> Create()
         {
+            ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
             try
             {
                 UserCreateViewModel model = new UserCreateViewModel();
@@ -163,6 +167,7 @@ namespace ParameterControl.Controllers.Users
             }
         }
 
+        [Authorize(Roles = "ADMINISTRADOR")]
         [HttpPost]
         public async Task<IActionResult> CreateUser([FromBody] modUser.User request)
         {
@@ -190,9 +195,11 @@ namespace ParameterControl.Controllers.Users
 
         }
 
+        [Authorize(Roles = "ADMINISTRADOR")]
         [HttpGet]
         public async Task<ActionResult> Edit(int code)
         {
+            ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
             try
             {
                 ViewBag.CodeSend = code;
@@ -219,6 +226,7 @@ namespace ParameterControl.Controllers.Users
             }
         }
 
+        [Authorize(Roles = "ADMINISTRADOR")]
         [HttpPost]
         public async Task<ActionResult> EditUser([FromBody] modUser.User request)
         {
@@ -256,9 +264,11 @@ namespace ParameterControl.Controllers.Users
 
         }
 
+        [Authorize(Roles = "ADMINISTRADOR,EJECUTOR,CONSULTOR")]
         [HttpGet]
         public async Task<ActionResult> View(int code)
         {
+            ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
             try
             {
                 ViewBag.CodeSend = code;
@@ -283,9 +293,11 @@ namespace ParameterControl.Controllers.Users
             }
         }
 
+        [Authorize(Roles = "ADMINISTRADOR")]
         [HttpGet]
         public async Task<ActionResult> Active(int code)
         {
+            ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
             try
             {
                 ViewBag.CodeSend = code;
@@ -309,6 +321,7 @@ namespace ParameterControl.Controllers.Users
             }
         }
 
+        [Authorize(Roles = "ADMINISTRADOR")]
         [HttpPost]
         public async Task<ActionResult> ActiveUser([FromBody] int code)
         {
@@ -326,9 +339,11 @@ namespace ParameterControl.Controllers.Users
             }
         }
 
+        [Authorize(Roles = "ADMINISTRADOR")]
         [HttpGet]
         public async Task<ActionResult> Desactive(int code)
         {
+            ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
             try
             {
                 ViewBag.CodeSend = code;
@@ -352,6 +367,7 @@ namespace ParameterControl.Controllers.Users
             }
         }
 
+        [Authorize(Roles = "ADMINISTRADOR")]
         [HttpPost]
         public async Task<ActionResult> DesactiveUser([FromBody] int code)
         {
@@ -369,6 +385,7 @@ namespace ParameterControl.Controllers.Users
             }
         }
 
+        [Authorize(Roles = "ADMINISTRADOR,EJECUTOR,CONSULTOR")]
         [HttpGet]
         public ActionResult Filter()
         {
@@ -377,10 +394,11 @@ namespace ParameterControl.Controllers.Users
                 Rows = rows.RowsUsers()
 
             };
-
+            ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
             return View("Actions/Filter", model);
         }
 
+        [Authorize(Roles = "ADMINISTRADOR,EJECUTOR,CONSULTOR")]
         [HttpPost]
         public async Task<ActionResult> FilterUsers(FilterViewModel filter)
         {
@@ -401,6 +419,7 @@ namespace ParameterControl.Controllers.Users
             });
         }
 
+        [Authorize(Roles = "ADMINISTRADOR,EJECUTOR,CONSULTOR")]
         [HttpPost]
         public async Task<IActionResult> GetSecondaryFilter([FromBody] string ColumValue)
         {
@@ -435,6 +454,7 @@ namespace ParameterControl.Controllers.Users
             return Ok(filter);
         }
 
+        [Authorize(Roles = "ADMINISTRADOR")]
         [HttpPost]
         public async Task<IActionResult> ValidateDataRepeatCreate([FromBody] string value)
         {
@@ -445,6 +465,7 @@ namespace ParameterControl.Controllers.Users
             return validate == false ? Ok(validate) : BadRequest(validate);
         }
 
+        [Authorize(Roles = "ADMINISTRADOR")]
         [HttpPost]
         public async Task<IActionResult> ValidateDataRepeatEdit([FromBody] string value)
         {

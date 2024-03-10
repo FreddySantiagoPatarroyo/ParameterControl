@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using ParameterControl.Models.ConciliationExecution;
+using ParameterControl.Services.Authenticated;
 using ParameterControl.Services.ConciliationExecution;
 using System.Security.Claims;
 
@@ -13,39 +14,37 @@ namespace ParameterControl.Controllers.ConciliationExecution
         private readonly IConciliationExecutionService conciliationExecutionService;
         private readonly IConfiguration _configuration;
         private readonly ClaimsPrincipal _principal;
-        private readonly bool _isCreate;
-        private readonly bool _isActivate;
-        private readonly bool _isEdit;
-        private readonly bool _isView;
-        private readonly bool _isInactive;
+        private readonly AuthenticatedUser authenticatedUser;
+        private readonly bool _isExecute;
+        private readonly bool _isProgram;
+        private readonly bool _isAbort;
 
         public ConciliationExecutionController(
             IConciliationExecutionService conciliationExecutionService,
             IConfiguration configuration,
-            IHttpContextAccessor httpContextAccesor)
+            IHttpContextAccessor httpContextAccesor,
+             AuthenticatedUser authenticatedUser)
         {
             this.conciliationExecutionService = conciliationExecutionService;
             _configuration = configuration;
             var context = httpContextAccesor.HttpContext;
             _principal = context.User as ClaimsPrincipal;
+            this.authenticatedUser = authenticatedUser;
             var data = _principal.FindFirst(ClaimTypes.Role).Value;
-            var section = _configuration.GetSection($"Permisos:{data}:Conciliacion").GetChildren();
-            _isCreate = Convert.ToBoolean(section.Where(x => x.Key.Equals("btnCreate")).FirstOrDefault().Value);
-            _isActivate = Convert.ToBoolean(section.Where(x => x.Key.Equals("btnActivate")).FirstOrDefault().Value);
-            _isEdit = Convert.ToBoolean(section.Where(x => x.Key.Equals("btnEdit")).FirstOrDefault().Value);
-            _isView = Convert.ToBoolean(section.Where(x => x.Key.Equals("btnDetail")).FirstOrDefault().Value);
-            _isInactive = Convert.ToBoolean(section.Where(x => x.Key.Equals("btnInactive")).FirstOrDefault().Value);
-
+            var section = _configuration.GetSection($"Permisos:{data}:ExecuteConciliation").GetChildren();
+            _isExecute = Convert.ToBoolean(section.Where(x => x.Key.Equals("btnExecute")).FirstOrDefault().Value);
+            _isProgram = Convert.ToBoolean(section.Where(x => x.Key.Equals("btnProgram")).FirstOrDefault().Value);
+            _isAbort = Convert.ToBoolean(section.Where(x => x.Key.Equals("btnAbort")).FirstOrDefault().Value);
         }
 
         public async Task<ActionResult> ConciliationExecution()
         {
+            ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
             try
             {
                 ConciliationExecutionViewModel model = new ConciliationExecutionViewModel();
                 model.Conciliations = await GetAllConciliation();
                 ViewBag.Success = true;
-
                 return View("ConciliationExecution", model);
             }
             catch (Exception)
@@ -58,6 +57,7 @@ namespace ParameterControl.Controllers.ConciliationExecution
 
         public async Task<ActionResult> RunProcess(int code)
         {
+            ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
             try
             {
                 ViewBag.CodeSend = code;
@@ -86,6 +86,7 @@ namespace ParameterControl.Controllers.ConciliationExecution
 
         public async Task<ActionResult> ProgramExecution(int code)
         {
+            ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
             try
             {
                 ViewBag.CodeSend = code;
@@ -114,6 +115,7 @@ namespace ParameterControl.Controllers.ConciliationExecution
 
         public async Task<ActionResult> SuccesfulTransaction(int code)
         {
+            ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
             try
             {
                 ViewBag.CodeSend = code;
@@ -137,6 +139,35 @@ namespace ParameterControl.Controllers.ConciliationExecution
                 ViewBag.Success = false;
                 ViewBag.EntyNull = false;
                 return View("Actions/SuccesfulTransaction", null);
+            }
+        }
+
+        public async Task<ActionResult> AbortConciliation(int code)
+        {
+            ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
+            try
+            {
+                ViewBag.CodeSend = code;
+                var conciliation = await conciliationExecutionService.GetConciliationByCode(code);
+                if (conciliation.Code == 0)
+                {
+                    ViewBag.Success = true;
+                    ViewBag.EntyNull = true;
+                    return View("Actions/AbortConciliation", null);
+                }
+                var model = new ConciliationExecutionViewModel();
+                model.conciliation = conciliation;
+
+
+                ViewBag.Success = true;
+                ViewBag.EntyNull = false;
+                return View("Actions/AbortConciliation", model);
+            }
+            catch (Exception)
+            {
+                ViewBag.Success = false;
+                ViewBag.EntyNull = false;
+                return View("Actions/AbortConciliation", null);
             }
         }
 

@@ -27,8 +27,7 @@ namespace ParameterControl.Services.Users
                    Name = "name1",
                    CreationDate = DateTime.Parse("2024-01-10"),
                    UpdateDate = DateTime.Parse("2023-11-09"),
-                   State = true,
-                    UserOwner = "User1"
+                   State = true
                 },
                  new modUser.User(){
                    Code = 2,
@@ -37,8 +36,7 @@ namespace ParameterControl.Services.Users
                    Name = "name2",
                    CreationDate = DateTime.Parse("2024-01-10"),
                    UpdateDate = DateTime.Parse("2023-11-09"),
-                   State = true,
-                    UserOwner = "User1"
+                   State = true
                 }
             };
         }
@@ -252,7 +250,6 @@ namespace ParameterControl.Services.Users
                     RolName = User.RolName,
                     CreationDate = User.CreationDate,
                     UpdateDate = User.ModifiedDate,
-                    UserOwner = User.ModifiedBy,
                     State = User.State,
                 };
                 return model;
@@ -307,7 +304,6 @@ namespace ParameterControl.Services.Users
                     FirstAccess = request.FirstAccess,
                     CreationDate = DateTime.Now,
                     ModifiedDate = DateTime.Now,
-                    ModifiedBy = "CreateToUserDev",
                     State = request.State,
                 };
 
@@ -360,7 +356,6 @@ namespace ParameterControl.Services.Users
                     FirstAccess = User.FirstAccess,
                     CreationDate = User.CreationDate,
                     ModifiedDate = DateTime.Now,
-                    ModifiedBy = "CreateToUserDev",
                     State = User.State,
                 };
                 return model;
@@ -382,7 +377,6 @@ namespace ParameterControl.Services.Users
                     FirstAccess = User.FirstAccess,
                     CreationDate = User.CreationDate,
                     ModifiedDate = DateTime.Now,
-                    ModifiedBy = "CreateToUserDev",
                     State = false,
                 };
                 return model;
@@ -404,7 +398,6 @@ namespace ParameterControl.Services.Users
                     FirstAccess = User.FirstAccess,
                     CreationDate = User.CreationDate,
                     ModifiedDate = DateTime.Now,
-                    ModifiedBy = "CreateToUserDev",
                     State = true,
                 };
                 return model;

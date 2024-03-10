@@ -44,7 +44,7 @@ namespace ParameterControl.Controllers.ApprovedResults
             var context = httpContextAccesor.HttpContext;
             _principal = context.User as ClaimsPrincipal;
             var data = _principal.FindFirst(ClaimTypes.Role).Value;
-            var section = _configuration.GetSection($"Permisos:{data}:Conciliacion").GetChildren();
+            var section = _configuration.GetSection($"Permisos:{data}:ApprovedResults").GetChildren();
             _isCreate = Convert.ToBoolean(section.Where(x => x.Key.Equals("btnCreate")).FirstOrDefault().Value);
             _isActivate = Convert.ToBoolean(section.Where(x => x.Key.Equals("btnActivate")).FirstOrDefault().Value);
             _isEdit = Convert.ToBoolean(section.Where(x => x.Key.Equals("btnEdit")).FirstOrDefault().Value);
@@ -55,6 +55,7 @@ namespace ParameterControl.Controllers.ApprovedResults
         [HttpGet]
         public async Task<ActionResult> ApprovedResults()
         {
+            ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
             try
             {
                 List<modApprovedResult.ApprovedResult> approvedResults = await approvedResultsServices.GetApprovedResults();
@@ -71,6 +72,7 @@ namespace ParameterControl.Controllers.ApprovedResults
 
                 ViewBag.Success = true;
                 return View("ApprovedResults", TableApprovedResults);
+
             }
             catch (Exception)
             {
@@ -83,6 +85,7 @@ namespace ParameterControl.Controllers.ApprovedResults
         [HttpGet]
         public async Task<ActionResult> ApprovedResultsFilter(string filterColunm = "", string filterValue = "", string typeRow = "")
         {
+            ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
             try
             {
                 if (filterColunm == null || filterColunm == "" || filterValue == null || filterValue == "")
@@ -123,6 +126,7 @@ namespace ParameterControl.Controllers.ApprovedResults
         public async Task<ActionResult> View(string id)
         {
             ApprovedResult approvedResult = await approvedResultsServices.GetApprovedResultsById(id);
+            ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
             return View("Actions/ViewApprovedResult", approvedResult);
         }
 
@@ -134,7 +138,7 @@ namespace ParameterControl.Controllers.ApprovedResults
                 Rows = rows.RowsApprovedResults()
 
             };
-
+            ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
             return View("Actions/Filter", model);
         }
 

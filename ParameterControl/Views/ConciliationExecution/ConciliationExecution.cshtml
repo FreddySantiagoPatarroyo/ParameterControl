@@ -6,7 +6,7 @@
     string ErrorSuccess = "Se genero un problema al obtener la informacion,Home";
 }
 
-<partial name="_Menu" />
+<partial name="_Menu" model="@ViewBag.InfoUser" />
 
 @if (!ViewBag.Success)
 {
@@ -54,10 +54,15 @@ else
 
                 <p class="note_text"><span>Nota: </span>Los campos con (*) son obligatorios</p>
 
-                <div id="btn_container" class="btn_container">
-                    <a class="button button_green" onclick="sendData('Execution')"><p class="text font_bold">Ejecutar</p></a>
-                    <a class="button button_primary" onclick="sendData('Program')"><p class="text font_bold">Programar</p></a>
-                    <a class="button button_yellow" asp-controller="Home" asp-action="Index"><p class="text font_bold">Cancelar</p></a>
+                <div id="btn_container" class="btn_container_ejecution">
+                    <div class="btn_actions_successful">
+                        <a class="button button_ejecution" onclick="sendData('Execution')"><p class="text font_bold">Ejecutar</p></a>
+                        <a class="button button_program btn_spacing" onclick="sendData('Program')"><p class="text font_bold">Programar</p></a>
+                        <a class="button button_primary" onclick="sendData('Abort')"><p class="text font_bold">Abortar</p></a>
+                    </div>
+                   <div class="btn_action_cancel">
+                        <a class="button button_secondary button_cancel" asp-controller="Home" asp-action="Index"><p class="text font_bold">Cancelar</p></a>
+                   </div>        
                 </div>
                 <div id="loading" class="loading">
                     <span class="loader"></span>
@@ -107,8 +112,9 @@ else
     </script>
 
     <script>
-        const urlExecution = '@Url.Action("RunProcess")';
+            const urlExecution = '@Url.Action("RunProcess")';
             const urlProgram = '@Url.Action("ProgramExecution")';
+            const urlAbort = '@Url.Action("AbortConciliation")';
             let data;
             let isValidCode = false;
 
@@ -122,10 +128,13 @@ else
                     data = $('#ConciliationCode').val();
 
                     if (validateAcction == "Execution") {
-                        location.href = `${urlExecution + '?code=' + data}`;
+                        location.href = `${urlExecution}?code=${data}`;
+                    } else if (validateAcction == "Abort") {
+                        location.href = `${urlAbort}?code=${data}`;
                     } else {
-                        location.href = `${urlProgram + '?code=' + data}`;
+                        location.href = `${urlProgram}?code=${data}`;
                     }
+
 
                 }
             }

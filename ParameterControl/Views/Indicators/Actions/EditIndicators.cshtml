@@ -7,7 +7,7 @@
     string MessageSuccess = "El indicador se actualizo correctamente";
 }
 
-<partial name="_Menu" />
+<partial name="_Menu" model="@ViewBag.InfoUser" />
 
 <div class="box_edit">
     <div class="bg__blur"></div>
@@ -105,11 +105,11 @@
         let isValidParameter = false;
 
         const sendData = async () => {
-            isValidName = validateInputEmpty("Name", "El nombre es requerido", "NameError");
-            isValidDescription = validateInputEmpty("Description", "La descripcion es requerido", "DescriptionError");
-            isValidFormula = validateInputEmpty("Formula", "La Formula es requerido", "FormulaError");
-            isValidScenery = validateInputEmpty("Scenery", "El esenario es requerido", "SceneryError");
-            isValidParameter = validateInputEmpty("Parameter", "El parametro es requerido", "ParameterError");
+            isValidName = validateInput("Name", "El nombre es requerido", "NameError");
+            isValidDescription = validateInput("Description", "La descripcion es requerido", "DescriptionError");
+            isValidFormula = validateInput("Formula", "La Formula es requerido", "FormulaError");
+            isValidScenery = validateInput("Scenery", "El esenario es requerido", "SceneryError");
+            isValidParameter = validateInput("Parameter", "El parametro es requerido", "ParameterError");
 
             if (isValidName && isValidDescription && isValidFormula && isValidScenery && isValidParameter) {
                 document.getElementById('btn_container').style.display = 'none';
@@ -155,9 +155,18 @@
             }
         }
 
-        const validateInputEmpty = (idInput, messaje, idError) => {
+        const validateEmpty = (idInput) => {
             if ($(`#${idInput}`).val() == "" || $(`#${idInput}`).val() == null) {
-                $(`#${idError}`).text(`${messaje}`);
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+        const validateInput = (idInput, requiredMessage, idError) => {
+            const isEmpty = validateEmpty(idInput);
+            if (isEmpty) {
+                $(`#${idError}`).text(requiredMessage);
                 return false;
             } else {
                 $(`#${idError}`).text("");
