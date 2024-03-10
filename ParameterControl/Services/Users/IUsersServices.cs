@@ -1,4 +1,5 @@
 ﻿using ParameterControl.Models.Filter;
+using ParameterControl.Models.Login;
 using ParameterControl.Models.Pagination;
 using ParameterControl.Models.User;
 using modUser = ParameterControl.Models.User;
@@ -22,5 +23,6 @@ namespace ParameterControl.Services.Users
         Task<string> DesactiveUser(modUser.User User);
         Task<string> ActiveUser(modUser.User User);
         Task<List<modUser.Role>> GetRoles();
+        Task<modUser.User> ValidateUser(LoginViewModel request);
     }
 }

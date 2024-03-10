@@ -27,15 +27,15 @@ namespace ParameterControl.User.DataAccess
                     using (OracleCommand command = new OracleCommand("INSERT_USER", connection))
                     {
                         command.CommandType = CommandType.StoredProcedure;
-                        command.Parameters.Add(new OracleParameter("PARAM_NAME", entity.User));
+                        command.Parameters.Add(new OracleParameter("PARAM_USUARIO", entity.User));
                         command.Parameters.Add(new OracleParameter("PARAM_EMAIL", entity.Email));
-                        command.Parameters.Add(new OracleParameter("PARAM_USER_NAME", entity.UserName));
+                        command.Parameters.Add(new OracleParameter("PARAM_NOMBRE_USUARIO", entity.UserName));
                         command.Parameters.Add(new OracleParameter("PARAM_IDROL", entity.RolId));
                         command.Parameters.Add(new OracleParameter("PARAM_LOGINGROUP", entity.GroupId));
-                        command.Parameters.Add(new OracleParameter("PARAM_MODIFIELDBY", entity.ModifiedBy));
-                        command.Parameters.Add(new OracleParameter("PARAM_ESTADO_ACTIVACION", Convert.ToInt32(entity.State)));
+                        //command.Parameters.Add(new OracleParameter("PARAM_MODIFIELDBY", entity.ModifiedBy));
+                        command.Parameters.Add(new OracleParameter("PARAM_ESTADO_USUARIO", Convert.ToInt32(entity.State)));
                         command.Parameters.Add(new OracleParameter("PARAM_PRIMER_ACCESO", Convert.ToInt32(entity.FirstAccess)));
-                        command.Parameters.Add(new OracleParameter("PARAM_CONTRASEÑA", entity.Password));
+                        command.Parameters.Add(new OracleParameter("PARAM_CONTRASENIA", entity.Password));
 
                         OracleDataReader reader = command.ExecuteReader();
                         response = 1;

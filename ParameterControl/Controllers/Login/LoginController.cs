@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using ParameterControl.Models.Login;
 using ParameterControl.Services.Authenticated;
 using ParameterControl.Services.Users;
+using ParameterControl.Services.Util;
 using System.Security.Claims;
 
 namespace ParameterControl.Controllers.Login
@@ -33,16 +34,16 @@ namespace ParameterControl.Controllers.Login
                 {
                     return BadRequest(new { message = "Error en la informacion enviada", state = "Error" });
                 }
-                var users = await _usersServices.GetUsers();
-                var user = users.FirstOrDefault(x => x.User_.Equals(request.User) && x.Password.Equals(request.Password));
+
+                var user = await _usersServices.ValidateUser(request);
 
                 if (user != null)
                 {
                     var claims = new List<Claim>
-                {
-                    new Claim(ClaimTypes.Name,user.User_),
-                    new Claim("Correo",user.Email)
-                };
+                    {
+                        new Claim(ClaimTypes.Name,user.User_),
+                        new Claim("Correo",user.Email)
+                    };
 
                     claims.Add(new Claim(ClaimTypes.Role, user.RolName));
 
@@ -57,7 +58,7 @@ namespace ParameterControl.Controllers.Login
                     return BadRequest(new { message = "El usuario o la contraseña son incorrectos", state = "Error" });
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 return BadRequest(new { message = "Error al ingresar", state = "Error" });
             }
