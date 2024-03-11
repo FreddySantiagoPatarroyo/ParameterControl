@@ -38,20 +38,25 @@ namespace ParameterControl.Controllers.Login
 
                 if (user != null)
                 {
-                    var claims = new List<Claim>
+                    if (user.State == false)
                     {
-                        new Claim(ClaimTypes.Name,user.User_),
-                        new Claim("Correo",user.Email),
-                        new Claim(ClaimTypes.NameIdentifier, user.Code.ToString())
-                    };
+                        return Ok(new { message = "El usuario esta desactivado, comuniquese con el administrador", state = "Error" });
+                    }
+                    else
+                    {
+                        var claims = new List<Claim>
+                        {
+                            new Claim(ClaimTypes.Name,user.User_),
+                            new Claim("Correo",user.Email),
+                            new Claim(ClaimTypes.NameIdentifier, user.Code.ToString())
+                        };
+                        claims.Add(new Claim(ClaimTypes.Role, user.RolName));
 
-                    claims.Add(new Claim(ClaimTypes.Role, user.RolName));
+                        var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                        await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new System.Security.Claims.ClaimsPrincipal(claimsIdentity));
 
-                    var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-
-                    await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new System.Security.Claims.ClaimsPrincipal(claimsIdentity));
-
-                    return Ok(new { message = "Datos ingresados correctamente", state = "Success" });
+                        return Ok(new { message = "Datos ingresados correctamente", state = "Success"});
+                    }
                 }
                 else
                 {
@@ -68,7 +73,7 @@ namespace ParameterControl.Controllers.Login
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
 
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Login");
         }
     }
 }

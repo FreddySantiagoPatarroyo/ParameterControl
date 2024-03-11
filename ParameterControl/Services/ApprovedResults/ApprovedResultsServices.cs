@@ -1,5 +1,12 @@
-﻿using ParameterControl.Models.ApprovedResult;
+﻿using Microsoft.AspNetCore.Mvc;
+using ParameterControl.Models.ApprovedResult;
 using ParameterControl.Models.Filter;
+using ParameterControl.Models.Pagination;
+using ParameterControl.Models.Result;
+using ParameterControl.Stage.Entities;
+using ParameterControl.Stage.Impl;
+using ParameterControl.Stage.Interfaces;
+using System.Configuration;
 using modApprovedResult = ParameterControl.Models.ApprovedResult;
 
 namespace ParameterControl.Services.ApprovedResults
@@ -7,77 +14,72 @@ namespace ParameterControl.Services.ApprovedResults
     public class ApprovedResultsServices : IApprovedResultsServices
     {
         private List<ApprovedResult> ApprovedResults = new List<ApprovedResult>();
+        private readonly IStageService _approvedResultService;
 
-        public ApprovedResultsServices()
+        public ApprovedResultsServices(IConfiguration configuration)
         {
+            _approvedResultService = new StageService(configuration);
             ApprovedResults = new List<ApprovedResult>()
             {
                 new ApprovedResult(){
-                    Id = "1",
                     Conciliation = "CO_CONCILIACIÓN",
                     Scenery = "CO_ESCENARIO",
-                    Status = "OK",
-                    StartDate = DateTime.Parse("2024-01-10"),
-                    EndDate = DateTime.Parse("2024-01-10"),
-                    BeneValue = "2000",
-                    IncoValue = "78888",
-                    PQValue = "789",
-                    ReinValue = "6444",
-                    State = true,
-                    CreationDate = DateTime.Parse("2024-01-10"),
-                    UpdateDate = DateTime.Parse("2023-11-09")
+                    StatusConciliation = "OK",
+                    UploadDate = DateTime.Parse("2024-01-10"),
+                    ValueBeneficiary = "2000",
+                    ValueInconsistency = "78888",
+                    ValuePqr = "789",
+                    ValueRepetition = "6444"
                 },
                  new ApprovedResult(){
-                    Id = "2",
-                    Conciliation = "CO_CONCILIACIÓN_1",
-                    Scenery = "CO_ESCENARIO",
-                    Status = "OK",
-                    StartDate = DateTime.Parse("2024-01-10"),
-                    EndDate = DateTime.Parse("2024-01-10"),
-                    BeneValue = "2000",
-                    IncoValue = "78888",
-                    PQValue = "789",
-                    ReinValue = "6444",
-                    State = false,
-                    CreationDate = DateTime.Parse("2024-01-10"),
-                    UpdateDate = DateTime.Parse("2023-11-09")
-                },
-                  new ApprovedResult(){
-                    Id = "3",
                     Conciliation = "CO_CONCILIACIÓN",
                     Scenery = "CO_ESCENARIO",
-                    Status = "OK",
-                    StartDate = DateTime.Parse("2024-01-10"),
-                    EndDate = DateTime.Parse("2024-01-10"),
-                    BeneValue = "2000",
-                    IncoValue = "78888",
-                    PQValue = "789",
-                    ReinValue = "6444",
-                    State = true,
-                    CreationDate = DateTime.Parse("2024-01-10"),
-                    UpdateDate = DateTime.Parse("2023-11-09")
+                    StatusConciliation = "OK",
+                    UploadDate = DateTime.Parse("2024-01-10"),
+                    ValueBeneficiary = "2000",
+                    ValueInconsistency = "78888",
+                    ValuePqr = "789",
+                    ValueRepetition = "6444"
                 },
-                   new ApprovedResult(){
-                    Id = "4",
-                    Conciliation = "CO_CONCILIACIÓN_1",
+                  new ApprovedResult(){
+                    Conciliation = "CO_CONCILIACIÓN",
                     Scenery = "CO_ESCENARIO",
-                    Status = "OK",
-                    StartDate = DateTime.Parse("2024-01-10"),
-                    EndDate = DateTime.Parse("2024-01-10"),
-                    BeneValue = "2000",
-                    IncoValue = "78888",
-                    PQValue = "789",
-                    ReinValue = "6444",
-                    State = false,
-                    CreationDate = DateTime.Parse("2024-01-10"),
-                    UpdateDate = DateTime.Parse("2023-11-09")
-                },
+                    StatusConciliation = "OK",
+                    UploadDate = DateTime.Parse("2024-01-10"),
+                    ValueBeneficiary = "2000",
+                    ValueInconsistency = "78888",
+                    ValuePqr = "789",
+                    ValueRepetition = "6444"
+                }
             };
         }
 
         public async Task<List<ApprovedResult>> GetApprovedResults()
         {
-            return ApprovedResults;
+            var collectionApprovedResults = await _approvedResultService.SelectAllSummaryStage();
+            var response = await MapperApprovedResults(collectionApprovedResults);
+            return response;
+        }
+
+        public async Task<int> CountApprovedResults()
+        {
+            var collectionApprovedResults = await _approvedResultService.SelectAllSummaryStage();
+            return collectionApprovedResults.Count();
+        }
+
+        public async Task<List<modApprovedResult.ApprovedResult>> GetAppovedResultsPagination(PaginationViewModel pagination)
+        {
+            try
+            {
+                var response = await _approvedResultService.SelectPaginatorSummaryStage(pagination.Page, pagination.RecordsPage);
+                var result = await MapperApprovedResults(response);
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
         }
 
         public async Task<List<ApprovedResultViewModel>> GetApprovedResultsFormat(List<modApprovedResult.ApprovedResult> approvedResults)
@@ -87,24 +89,15 @@ namespace ParameterControl.Services.ApprovedResults
             foreach (modApprovedResult.ApprovedResult approvedResult in approvedResults)
             {
                 ApprovedResultViewModel approvedResultModel = new ApprovedResultViewModel();
-                approvedResultModel.Id = approvedResult.Id;
                 approvedResultModel.Conciliation = approvedResult.Conciliation;
                 approvedResultModel.Scenery = approvedResult.Scenery;
-                approvedResultModel.Status = approvedResult.Status;
-                approvedResultModel.BeneValue = approvedResult.BeneValue;
-                approvedResultModel.IncoValue = approvedResult.IncoValue;
-                approvedResultModel.PQValue = approvedResult.PQValue;
-                approvedResultModel.ReinValue = approvedResult.ReinValue;
-                approvedResultModel.StartDate = approvedResult.StartDate;
-                approvedResultModel.EndDate = approvedResult.EndDate;
-                approvedResultModel.State = approvedResult.State;
-                approvedResultModel.StateFormat = approvedResult.State ? "Activo" : "Inactivo";
-                approvedResultModel.CreationDate = approvedResult.CreationDate;
-                approvedResultModel.UpdateDate = approvedResult.UpdateDate;
-                approvedResultModel.CreationDateFormat = approvedResult.CreationDate.ToString("dd/MM/yyyy");
-                approvedResultModel.UpdateDateFormat = approvedResult.UpdateDate.ToString("dd/MM/yyyy");
-                approvedResultModel.StartDateFormat = approvedResult.StartDate.ToString("dd/MM/yyyy");
-                approvedResultModel.EndDateFormat = approvedResult.EndDate.ToString("dd/MM/yyyy");
+                approvedResultModel.StatusConciliation = approvedResult.StatusConciliation;
+                approvedResultModel.ValueBeneficiary = approvedResult.ValueBeneficiary;
+                approvedResultModel.ValueInconsistency = approvedResult.ValueInconsistency;
+                approvedResultModel.ValuePqr = approvedResult.ValuePqr;
+                approvedResultModel.ValueRepetition = approvedResult.ValueRepetition;
+                approvedResultModel.UploadDate = approvedResult.UploadDate;
+                approvedResultModel.UploadDateFormat = approvedResult.UploadDate.ToString("dd/MM/yyyy");
 
                 ResultsModel.Add(approvedResultModel);
             }
@@ -112,11 +105,11 @@ namespace ParameterControl.Services.ApprovedResults
             return ResultsModel;
         }
 
-        public async Task<ApprovedResult> GetApprovedResultsById(string id)
-        {
-            ApprovedResult approvedResult = ApprovedResults.Find(approvedResults => approvedResults.Id == id);
-            return approvedResult;
-        }
+        //public async Task<ApprovedResult> GetApprovedResultsById(string id)
+        //{
+        //    ApprovedResult approvedResult = ApprovedResults.Find(approvedResults => approvedResults.Id == id);
+        //    return approvedResult;
+        //}
 
         public async Task<List<ApprovedResultViewModel>> GetFilterApprovedResults(FilterViewModel filterModel)
         {
@@ -161,6 +154,61 @@ namespace ParameterControl.Services.ApprovedResults
                 }
             }
             return approvedResultsFilter;
+        }
+
+        public List<ApprovedResultViewModel> GetFilterPagination(List<ApprovedResultViewModel> inicialApprovedResults, PaginationViewModel paginationViewModel, int totalData)
+        {
+            var limit = paginationViewModel.Page * paginationViewModel.RecordsPage;
+            var index = limit - paginationViewModel.RecordsPage;
+            var count = 0;
+
+            if (limit > totalData)
+            {
+                count = totalData - index;
+            }
+            else
+            {
+                count = paginationViewModel.RecordsPage;
+            }
+
+            List<ApprovedResultViewModel> approvedResultsFilterPagination = inicialApprovedResults.GetRange(index, count);
+
+            return approvedResultsFilterPagination;
+        }
+
+        private async Task<List<modApprovedResult.ApprovedResult>> MapperApprovedResults(List<StageSummaryModel> stageSummaryModel)
+        {
+            return await Task.Run(() =>
+            {
+                List<modApprovedResult.ApprovedResult> results = new List<modApprovedResult.ApprovedResult>();
+                if (stageSummaryModel.Count > 0)
+                {
+                    foreach (var stageSummary in stageSummaryModel)
+                    {
+                        results.Add(MapperToApprovedResult(stageSummary).Result);
+                    }
+                }
+                return results;
+            });
+        }
+
+        private async Task<modApprovedResult.ApprovedResult> MapperToApprovedResult(StageSummaryModel stageSummaryModel)
+        {
+            return await Task.Run(() =>
+            {
+                modApprovedResult.ApprovedResult model = new modApprovedResult.ApprovedResult
+                {
+                    Conciliation = stageSummaryModel.ConciliarionCode,
+                    Scenery = stageSummaryModel.StageCode,
+                    StatusConciliation = stageSummaryModel.StatusConciliation,
+                    UploadDate = stageSummaryModel.UploadDate,
+                    ValueBeneficiary = stageSummaryModel.ValueBeneficiary,
+                    ValueInconsistency = stageSummaryModel.ValueInconsistency,
+                    ValuePqr = stageSummaryModel.ValuePqr,
+                    ValueRepetition = stageSummaryModel.ValueRepetition
+                };
+                return model;
+            });
         }
     }
 }

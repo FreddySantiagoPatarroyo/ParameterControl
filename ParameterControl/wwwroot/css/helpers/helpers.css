@@ -7,6 +7,16 @@
     align-items: center;
 }
 
+.content_center{
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: -1;
+}
+
 .text_break {
     word-break: break-all;
 }

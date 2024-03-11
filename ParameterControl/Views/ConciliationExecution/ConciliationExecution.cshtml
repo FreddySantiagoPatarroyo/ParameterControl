@@ -56,9 +56,16 @@ else
 
                 <div id="btn_container" class="btn_container_ejecution">
                     <div class="btn_actions_successful">
-                        <a class="button button_ejecution" onclick="sendData('Execution')"><p class="text font_bold">Ejecutar</p></a>
-                        <a class="button button_program btn_spacing" onclick="sendData('Program')"><p class="text font_bold">Programar</p></a>
-                        <a class="button button_primary" onclick="sendData('Abort')"><p class="text font_bold">Abortar</p></a>
+                        @if(Model.IsExecution){
+                            <a class="button button_ejecution" onclick="sendData('Execution')"><p class="text font_bold">Ejecutar</p></a>
+                        }
+                        @if(Model.IsProgram){
+                            <a class="button button_program btn_spacing" onclick="sendData('Program')"><p class="text font_bold">Programar</p></a>
+                        }
+                        @if (Model.IsAbort)
+                        {
+                            <a class="button button_primary" onclick="sendData('Abort')"><p class="text font_bold">Abortar</p></a>
+                        }
                     </div>
                    <div class="btn_action_cancel">
                         <a class="button button_secondary button_cancel" asp-controller="Home" asp-action="Index"><p class="text font_bold">Cancelar</p></a>

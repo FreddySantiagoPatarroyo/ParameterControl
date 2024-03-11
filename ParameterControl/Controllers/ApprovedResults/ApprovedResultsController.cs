@@ -3,8 +3,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using ParameterControl.Models.ApprovedResult;
 using ParameterControl.Models.Filter;
+using ParameterControl.Models.Pagination;
+using ParameterControl.Models.Result;
 using ParameterControl.Services.ApprovedResults;
 using ParameterControl.Services.Authenticated;
+using ParameterControl.Services.Results;
 using ParameterControl.Services.Rows;
 using System.Security.Claims;
 using modApprovedResult = ParameterControl.Models.ApprovedResult;
@@ -52,13 +55,15 @@ namespace ParameterControl.Controllers.ApprovedResults
             _isInactive = Convert.ToBoolean(section.Where(x => x.Key.Equals("btnInactive")).FirstOrDefault().Value);
         }
 
+        [Authorize(Roles = "ADMINISTRADOR,EJECUTOR,CONSULTOR")]
         [HttpGet]
-        public async Task<ActionResult> ApprovedResults()
+        public async Task<ActionResult> ApprovedResults(PaginationViewModel paginationViewModel)
         {
             ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
             try
             {
-                List<modApprovedResult.ApprovedResult> approvedResults = await approvedResultsServices.GetApprovedResults();
+                List<modApprovedResult.ApprovedResult> approvedResults = await approvedResultsServices.GetAppovedResultsPagination(paginationViewModel);
+                int TotalApprovedResults = await approvedResultsServices.CountApprovedResults();
 
                 TableApprovedResults.Data = await approvedResultsServices.GetApprovedResultsFormat(approvedResults);
                 TableApprovedResults.Rows = rows.RowsApprovedResults();
@@ -70,8 +75,17 @@ namespace ParameterControl.Controllers.ApprovedResults
                 TableApprovedResults.Filter = true;
                 ViewBag.ApplyFilter = false;
 
+                var resultViemModel = new PaginationResult<TableApprovedResultViewModel>()
+                {
+                    Elements = TableApprovedResults,
+                    Page = paginationViewModel.Page,
+                    RecordsPage = paginationViewModel.RecordsPage,
+                    TotalRecords = TotalApprovedResults,
+                    BaseUrl = Url.Action() + "?"
+                };
+
                 ViewBag.Success = true;
-                return View("ApprovedResults", TableApprovedResults);
+                return View("ApprovedResults", resultViemModel);
 
             }
             catch (Exception)
@@ -81,9 +95,9 @@ namespace ParameterControl.Controllers.ApprovedResults
             }
         }
 
-
+        [Authorize(Roles = "ADMINISTRADOR,EJECUTOR,CONSULTOR")]
         [HttpGet]
-        public async Task<ActionResult> ApprovedResultsFilter(string filterColunm = "", string filterValue = "", string typeRow = "")
+        public async Task<ActionResult> ApprovedResultsFilter(PaginationViewModel paginationViewModel, string filterColunm = "", string filterValue = "", string typeRow = "")
         {
             ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
             try
@@ -101,8 +115,9 @@ namespace ParameterControl.Controllers.ApprovedResults
                 };
 
                 List<ApprovedResultViewModel> approvedResultsFilter = await approvedResultsServices.GetFilterApprovedResults(filter);
+                int TotalApprovedResults = approvedResultsFilter.Count();
 
-                TableApprovedResults.Data = approvedResultsFilter;
+                TableApprovedResults.Data = approvedResultsServices.GetFilterPagination(approvedResultsFilter, paginationViewModel, TotalApprovedResults);
                 TableApprovedResults.Rows = rows.RowsApprovedResults();
                 TableApprovedResults.IsCreate = _isCreate;
                 TableApprovedResults.IsActivate = _isActivate;
@@ -112,8 +127,17 @@ namespace ParameterControl.Controllers.ApprovedResults
                 TableApprovedResults.Filter = true;
                 ViewBag.ApplyFilter = true;
 
+                var resultViemModel = new PaginationResult<TableApprovedResultViewModel>()
+                {
+                    Elements = TableApprovedResults,
+                    Page = paginationViewModel.Page,
+                    RecordsPage = paginationViewModel.RecordsPage,
+                    TotalRecords = TotalApprovedResults,
+                    BaseUrl = Url.Action() + "?filterColunm=" + filterColunm + "&filterValue=" + filterValue + "&typeRow=" + typeRow + "&"
+                };
+
                 ViewBag.Success = true;
-                return View("ApprovedResultsFilter", TableApprovedResults);
+                return View("ApprovedResultsFilter", resultViemModel);
             }
             catch (Exception)
             {
@@ -122,14 +146,15 @@ namespace ParameterControl.Controllers.ApprovedResults
             }
         }
 
-        [HttpGet]
-        public async Task<ActionResult> View(string id)
-        {
-            ApprovedResult approvedResult = await approvedResultsServices.GetApprovedResultsById(id);
-            ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
-            return View("Actions/ViewApprovedResult", approvedResult);
-        }
+        //[HttpGet]
+        //public async Task<ActionResult> View(string id)
+        //{
+        //    ApprovedResult approvedResult = await approvedResultsServices.GetApprovedResultsById(id);
+        //    ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
+        //    return View("Actions/ViewApprovedResult", approvedResult);
+        //}
 
+        [Authorize(Roles = "ADMINISTRADOR,EJECUTOR,CONSULTOR")]
         [HttpGet]
         public ActionResult Filter()
         {
@@ -142,6 +167,7 @@ namespace ParameterControl.Controllers.ApprovedResults
             return View("Actions/Filter", model);
         }
 
+        [Authorize(Roles = "ADMINISTRADOR,EJECUTOR,CONSULTOR")]
         [HttpPost]
         public async Task<ActionResult> FilterApprovedResults(FilterViewModel filter)
         {
@@ -162,6 +188,7 @@ namespace ParameterControl.Controllers.ApprovedResults
             });
         }
 
+        [Authorize(Roles = "ADMINISTRADOR,EJECUTOR,CONSULTOR")]
         [HttpPost]
         public async Task<IActionResult> GetSecondaryFilter([FromBody] string ColumValue)
         {

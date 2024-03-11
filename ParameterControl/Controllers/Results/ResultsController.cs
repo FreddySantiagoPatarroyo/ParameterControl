@@ -3,8 +3,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
 using ParameterControl.Models.Filter;
+using ParameterControl.Models.Pagination;
+using ParameterControl.Models.Policy;
 using ParameterControl.Models.Result;
 using ParameterControl.Services.Authenticated;
+using ParameterControl.Services.Policies;
 using ParameterControl.Services.Results;
 using ParameterControl.Services.Rows;
 using System.Security.Claims;
@@ -53,13 +56,15 @@ namespace ParameterControl.Controllers.Results
             _isInactive = Convert.ToBoolean(section.Where(x => x.Key.Equals("btnInactive")).FirstOrDefault().Value);
         }
 
+        [Authorize(Roles = "ADMINISTRADOR,EJECUTOR,CONSULTOR")]
         [HttpGet]
-        public async Task<ActionResult> Results()
+        public async Task<ActionResult> Results(PaginationViewModel paginationViewModel)
         {
             ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
             try
             {
-                List<modResult.Result> results = await resultsServices.GetResults();
+                List<modResult.Result> results = await resultsServices.GetResultsPagination(paginationViewModel);
+                int TotalResults = await resultsServices.CountResults();
 
                 TableResults.Data = await resultsServices.GetResultsFormat(results);
                 TableResults.Rows = rows.RowsResults();
@@ -71,8 +76,17 @@ namespace ParameterControl.Controllers.Results
                 TableResults.Filter = true;
                 ViewBag.ApplyFilter = false;
 
+                var resultViemModel = new PaginationResult<TableResultViewModel>()
+                {
+                    Elements = TableResults,
+                    Page = paginationViewModel.Page,
+                    RecordsPage = paginationViewModel.RecordsPage,
+                    TotalRecords = TotalResults,
+                    BaseUrl = Url.Action() + "?"
+                };
+
                 ViewBag.Success = true;
-                return View("Results", TableResults);
+                return View("Results", resultViemModel);
             }
             catch (Exception)
             {
@@ -82,9 +96,9 @@ namespace ParameterControl.Controllers.Results
 
         }
 
-
+        [Authorize(Roles = "ADMINISTRADOR,EJECUTOR,CONSULTOR")]
         [HttpGet]
-        public async Task<ActionResult> ResultsFilter(string filterColunm = "", string filterValue = "", string typeRow = "")
+        public async Task<ActionResult> ResultsFilter(PaginationViewModel paginationViewModel, string filterColunm = "", string filterValue = "", string typeRow = "")
         {
             ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
             try
@@ -102,8 +116,9 @@ namespace ParameterControl.Controllers.Results
                 };
 
                 List<ResultViewModel> resultsFilter = await resultsServices.GetFilterResults(filter);
+                int TotalResults = resultsFilter.Count();
 
-                TableResults.Data = resultsFilter;
+                TableResults.Data = resultsServices.GetFilterPagination(resultsFilter, paginationViewModel, TotalResults);
                 TableResults.Rows = rows.RowsResults();
                 TableResults.IsCreate = _isCreate;
                 TableResults.IsActivate = _isActivate;
@@ -113,8 +128,17 @@ namespace ParameterControl.Controllers.Results
                 TableResults.Filter = true;
                 ViewBag.ApplyFilter = true;
 
+                var resultViemModel = new PaginationResult<TableResultViewModel>()
+                {
+                    Elements = TableResults,
+                    Page = paginationViewModel.Page,
+                    RecordsPage = paginationViewModel.RecordsPage,
+                    TotalRecords = TotalResults,
+                    BaseUrl = Url.Action() + "?filterColunm=" + filterColunm + "&filterValue=" + filterValue + "&typeRow=" + typeRow + "&"
+                };
+
                 ViewBag.Success = true;
-                return View("ResultsFilter", TableResults);
+                return View("ResultsFilter", resultViemModel);
             }
             catch (Exception)
             {
@@ -122,70 +146,26 @@ namespace ParameterControl.Controllers.Results
                 return View("ResultsFilter", null);
             }
         }
+
+        [Authorize(Roles = "ADMINISTRADOR")]
         [HttpGet]
-        public async Task<ActionResult> Edit(string id)
+        public async Task<ActionResult> Edit()
         {
-            Result result = await resultsServices.GetResultsById(id);
+            Result result = new Result();
             ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
             return View("Actions/EditResult", result);
         }
 
-        [HttpGet]
-        public async Task<ActionResult> View(string id)
-        {
-            Result result = await resultsServices.GetResultsById(id);
-            ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
-            return View("Actions/ViewResult", result);
-        }
+        //[Authorize(Roles = "ADMINISTRADOR,EJECUTOR,CONSULTOR")]
+        //[HttpGet]
+        //public async Task<ActionResult> View(string id)
+        //{
+        //    Result result = await resultsServices.GetResultsById(id);
+        //    ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
+        //    return View("Actions/ViewResult", result);
+        //}
 
-        [HttpGet]
-        public async Task<ActionResult> Active(string id)
-        {
-            modResult.Result result = await resultsServices.GetResultsById(id);
-            ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
-            return View("Actions/ActiveResult", result);
-        }
-
-        [HttpPost]
-        public async Task<ActionResult> ActiveResult([FromBody] string id)
-        {
-            try
-            {
-                modResult.Result request = await resultsServices.GetResultsById(id);
-                _logger.LogInformation($"Inicia método ResultController.Active {JsonConvert.SerializeObject(request)}");
-                return Ok(new { message = "Se activo el resultado de manera exitosa", state = "Success" });
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Error en el método ResultController.Active : {JsonConvert.SerializeObject(ex.Message)}");
-                return BadRequest(new { message = "Error al activar el resultado", state = "Error" });
-            }
-        }
-
-        [HttpGet]
-        public async Task<ActionResult> Desactive(string id)
-        {
-            Result result = await resultsServices.GetResultsById(id);
-            ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
-            return View("Actions/DesactiveResult", result);
-        }
-
-        [HttpPost]
-        public async Task<ActionResult> DesactiveResult([FromBody] string id)
-        {
-            try
-            {
-                modResult.Result request = await resultsServices.GetResultsById(id);
-                _logger.LogInformation($"Inicia método ResultController.Active {JsonConvert.SerializeObject(request)}");
-                return Ok(new { message = "Se desactivo el resultado de manera exitosa", state = "Success" });
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Error en el método ResultController.Active : {JsonConvert.SerializeObject(ex.Message)}");
-                return BadRequest(new { message = "Error al desactivar el resultado", state = "Error" });
-            }
-        }
-
+        [Authorize(Roles = "ADMINISTRADOR,EJECUTOR,CONSULTOR")]
         [HttpGet]
         public ActionResult Filter()
         {
@@ -198,6 +178,7 @@ namespace ParameterControl.Controllers.Results
             return View("Actions/Filter", model);
         }
 
+        [Authorize(Roles = "ADMINISTRADOR,EJECUTOR,CONSULTOR")]
         [HttpPost]
         public async Task<ActionResult> FilterResults(FilterViewModel filter)
         {
@@ -218,6 +199,7 @@ namespace ParameterControl.Controllers.Results
             });
         }
 
+        [Authorize(Roles = "ADMINISTRADOR,EJECUTOR,CONSULTOR")]
         [HttpPost]
         public async Task<IActionResult> GetSecondaryFilter([FromBody] string ColumValue)
         {

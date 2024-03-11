@@ -300,53 +300,33 @@ namespace ParameterControl.Services.Rows
                 },
                 new Row()
                 {
-                    Value = "Status",
+                    Value = "StatusConciliation",
                     Name = "Estado"
                 },
                 new Row()
                 {
-                    Value = "StartDateFormat",
-                    Name = "Fecha Inicio"
+                    Value = "UploadDateFormat",
+                    Name = "Fecha carga"
                 },
                 new Row()
                 {
-                    Value = "EndDateFormat",
-                    Name = "Fecha Fin"
-                },
-                new Row()
-                {
-                    Value = "BeneValue",
+                    Value = "ValueBeneficiary",
                     Name = "Valor Beneficio"
                 },
                 new Row()
                 {
-                    Value = "IncoValue",
+                    Value = "ValueInconsistency",
                     Name = "Valor Inconsistencia"
                 },
                 new Row()
                 {
-                    Value = "PQValue",
+                    Value = "ValuePqr",
                     Name = "Valor PQR"
                 },
                 new Row()
                 {
-                    Value = "ReinValue",
+                    Value = "ValueRepetition",
                     Name = "Valor Reincidencia"
-                },
-                 new Row()
-                {
-                    Value = "StateFormat",
-                    Name = "Estado Activación"
-                },
-                new Row()
-                {
-                    Value = "CreationDateFormat",
-                    Name = "Fecha Creacion"
-                },
-                 new Row()
-                {
-                    Value = "UpdateDateFormat",
-                    Name = "Fecha Actualizacion"
                 }
             };
 
@@ -413,53 +393,33 @@ namespace ParameterControl.Services.Rows
                 },
                 new Row()
                 {
-                    Value = "Status",
+                    Value = "StatusConciliation",
                     Name = "Estado"
                 },
                 new Row()
                 {
-                    Value = "StartDateFormat",
-                    Name = "Fecha Inicio"
+                    Value = "UploadDateFormat",
+                    Name = "Fecha carga"
                 },
                 new Row()
                 {
-                    Value = "EndDateFormat",
-                    Name = "Fecha Fin"
-                },
-                new Row()
-                {
-                    Value = "BeneValue",
+                    Value = "ValueBeneficiary",
                     Name = "Valor Beneficio"
                 },
                 new Row()
                 {
-                    Value = "IncoValue",
+                    Value = "ValueInconsistency",
                     Name = "Valor Inconsistencia"
                 },
                 new Row()
                 {
-                    Value = "PQValue",
+                    Value = "ValuePqr",
                     Name = "Valor PQR"
                 },
                 new Row()
                 {
-                    Value = "ReinValue",
+                    Value = "ValueRepetition",
                     Name = "Valor Reincidencia"
-                },
-                 new Row()
-                {
-                    Value = "StateFormat",
-                    Name = "Estado Activación"
-                },
-                new Row()
-                {
-                    Value = "CreationDateFormat",
-                    Name = "Fecha Creacion"
-                },
-                 new Row()
-                {
-                    Value = "UpdateDateFormat",
-                    Name = "Fecha Actualizacion"
                 }
             };
 

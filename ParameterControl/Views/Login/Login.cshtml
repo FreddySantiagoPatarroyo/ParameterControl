@@ -70,8 +70,6 @@
 
                 console.log(data);
 
-                console.log(urlLogin);
-
                 const result = await fetch(urlLogin, {
                     method: 'POST',
                     body: JSON.stringify(data),
@@ -82,12 +80,13 @@
 
                 const json = await result.json();
 
-                console.log(json);
+                console.log(json.FirstAccess);
 
                 if (json.state == "Success") {
                     document.getElementById('LayoytSuccess').style.display = 'block';
                     document.getElementById('layout_message_success').innerHTML = json.message;
                     document.getElementById('loading').style.display = 'none';
+
                     setTimeout(() => {
                         location.href = '/Home/Index';
                     }, 1000)

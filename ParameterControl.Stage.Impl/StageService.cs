@@ -15,6 +15,8 @@ namespace ParameterControl.Stage.Impl
         private readonly GetAllStage _getAllStage;
         private readonly GetPaginatorStage _getPaginatorStage;
         private readonly CountStage _countStage;
+        private readonly GetAllSummaryStage _getAllSummaryStage;
+        private readonly GetPaginatorSummaryStage _getPaginatorSummaryStage;
 
         public StageService(IConfiguration configuration)
         {
@@ -25,6 +27,8 @@ namespace ParameterControl.Stage.Impl
             _getAllStage = new GetAllStage(configuration);
             _getPaginatorStage = new GetPaginatorStage(configuration);
             _countStage = new CountStage(configuration);
+            _getAllSummaryStage = new GetAllSummaryStage(configuration);
+            _getPaginatorSummaryStage = new GetPaginatorSummaryStage(configuration);
         }
 
         public async Task<int> InsertStage(StageModel entity)
@@ -175,6 +179,76 @@ namespace ParameterControl.Stage.Impl
             {
                 throw;
             }
+        }
+
+        public async Task<List<StageSummaryModel>> SelectAllSummaryStage()
+        {
+            try
+            {
+                List<StageSummaryModel> mapper = new List<StageSummaryModel>();
+                return await Task.Run(async () =>
+                {
+                    var response = await _getAllSummaryStage.SelectAllSummaryStage();
+                    mapper = await MapperSummaryStage(response);
+
+                    return mapper;
+                });
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
+        public async Task<List<StageSummaryModel>> SelectPaginatorSummaryStage(int page, int row)
+        {
+            try
+            {
+                var response = await _getPaginatorSummaryStage.SelectPaginatorSummaryStage(page, row);
+                var mapper = await MapperSummaryStage(response);
+                return mapper;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
+        private async Task<List<StageSummaryModel>> MapperSummaryStage(DataTable dt)
+        {
+            if (dt.Rows.Count > 0)
+            {
+                List<StageSummaryModel> stageSummary = new List<StageSummaryModel>();
+                foreach (DataRow row in dt.Rows)
+                {
+                    var response = await MapperToSummaryStage(row);
+                    stageSummary.Add(response);
+                }
+                return stageSummary;
+            }
+            else
+            {
+                return new List<StageSummaryModel>();
+            }
+        }
+
+        private async Task<StageSummaryModel> MapperToSummaryStage(DataRow dr)
+        {
+            return await Task.Run(() =>
+            {
+                StageSummaryModel model = new StageSummaryModel
+                {
+                    ConciliarionCode = dr["COD_CONCILIACION"] is DBNull ? string.Empty : dr["COD_CONCILIACION"].ToString(),
+                    StageCode = dr["COD_ESCENARIO"] is DBNull ? string.Empty : dr["COD_ESCENARIO"].ToString(),
+                    StatusConciliation = dr["ESTADO_CONCILIACION"] is DBNull ? string.Empty : dr["ESTADO_CONCILIACION"].ToString(),
+                    ValueBeneficiary = dr["VAL_BENEFICIO"] is DBNull ? string.Empty : dr["VAL_BENEFICIO"].ToString(),
+                    ValueInconsistency = dr["VAL_INCONSISTENCIAS"] is DBNull ? string.Empty : dr["VAL_INCONSISTENCIAS"].ToString(),
+                    ValuePqr = dr["VAL_PQR"] is DBNull ? string.Empty : dr["VAL_PQR"].ToString(),
+                    ValueRepetition = dr["VAL_REINCIDENCIAS"] is DBNull ? string.Empty : dr["VAL_REINCIDENCIAS"].ToString(),
+                    UploadDate = dr["FEC_CARGA_DWH"] is DBNull ? DateTime.Now : Convert.ToDateTime(dr["FEC_CARGA_DWH"])
+                };
+                return model;
+            });
         }
     }
 }

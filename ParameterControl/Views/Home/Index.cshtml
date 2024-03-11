@@ -1,7 +1,15 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Home";
 }
 
 <partial name="_Menu" model="@ViewBag.InfoUser" />
+
+@if (ViewBag.FirstAccess == false)
+{
+    <div class="content_center">
+        <h1> Bienvenido @ViewBag.User a la aplicacion de control de parametros </h1>
+    </div>
+}
+
 
 

@@ -11,5 +11,7 @@ namespace ParameterControl.Stage.Interfaces
         Task<StageModel> SelectByIdStage(StageModel entity);
         Task<List<StageModel>> SelectPaginatorStage(int page, int row);
         Task<int> SelectCountStage();
+        Task<List<StageSummaryModel>> SelectAllSummaryStage();
+        Task<List<StageSummaryModel>> SelectPaginatorSummaryStage(int page, int row);
     }
 }
