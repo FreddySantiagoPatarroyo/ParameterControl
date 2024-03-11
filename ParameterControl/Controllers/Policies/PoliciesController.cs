@@ -88,7 +88,7 @@ namespace ParameterControl.Controllers.Policies
 
                 return View("Policies", resultViemModel);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 ViewBag.Success = false;
                 return View("Policies", null);
