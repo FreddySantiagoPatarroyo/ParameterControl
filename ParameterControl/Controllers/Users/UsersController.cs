@@ -46,7 +46,7 @@ namespace ParameterControl.Controllers.Users
             var context = httpContextAccesor.HttpContext;
             _principal = context.User as ClaimsPrincipal;
             var data = _principal.FindFirst(ClaimTypes.Role).Value;
-            var section = _configuration.GetSection($"Permisos:{data}:Users").GetChildren();
+            var section = _configuration.GetSection($"Permisos:{data}:Usuario").GetChildren();
             _isCreate = Convert.ToBoolean(section.Where(x => x.Key.Equals("btnCreate")).FirstOrDefault().Value);
             _isActivate = Convert.ToBoolean(section.Where(x => x.Key.Equals("btnActivate")).FirstOrDefault().Value);
             _isEdit = Convert.ToBoolean(section.Where(x => x.Key.Equals("btnEdit")).FirstOrDefault().Value);

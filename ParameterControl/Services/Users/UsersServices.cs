@@ -1,6 +1,8 @@
 ﻿using ParameterControl.Models.Filter;
+using ParameterControl.Models.Login;
 using ParameterControl.Models.Pagination;
 using ParameterControl.Models.User;
+using ParameterControl.Services.Util;
 using ParameterControl.User.Entities;
 using ParameterControl.User.Impl;
 using ParameterControl.User.Interfaces;
@@ -290,13 +292,15 @@ namespace ParameterControl.Services.Users
         {
             try
             {
+                var hash = PasswordHasher.HashPasswordV3(request.Password);
+
                 var user = new User.Entities.UserModel
                 {
                     User = request.User_,
                     Email = request.Email,
                     UserName = request.Name,
                     RolId = request.RolCode,
-                    Password = request.Password,
+                    Password = hash,
                     FirstAccess = request.FirstAccess,
                     CreationDate = DateTime.Now,
                     ModifiedDate = DateTime.Now,
@@ -406,6 +410,22 @@ namespace ParameterControl.Services.Users
             var response = await MapperUser(collectionUsers);
             var user = response.FirstOrDefault(x => x.User_.Equals(userName) && x.Email.Equals(email));
             return user;
+        }
+
+        public async Task<modUser.User> ValidateUser(LoginViewModel request)
+        {
+            var users = await GetUsers();
+            var user = users.FirstOrDefault(x => x.User_.Equals(request.User));
+            var isValid = PasswordHasher.VerifyHashedPasswordV3(user.Password, request.Password);
+
+            if (isValid)
+            {
+                return user;
+            }
+            else
+            {
+                return null;
+            }
         }
     }
 }
