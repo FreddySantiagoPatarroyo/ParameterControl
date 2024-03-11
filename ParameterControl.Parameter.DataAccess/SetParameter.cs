@@ -33,7 +33,7 @@ namespace ParameterControl.Parameter.DataAccess
                             command.Parameters.Add(new OracleParameter("PARAM_VALOR", entity.Value));
                             command.Parameters.Add(new OracleParameter("PARAM_DESCRIPCION", entity.Description));
                             command.Parameters.Add(new OracleParameter("PARAM_TIPO", entity.ParameterType));
-                            command.Parameters.Add(new OracleParameter("PARAM_CODE_PADRE", entity.FatherId));
+                            command.Parameters.Add(new OracleParameter("PARAM_CODE_PADRE", entity.FatherCode));
                             command.Parameters.Add(new OracleParameter("PARAM_VALOR1", entity.Value1));
                             command.Parameters.Add(new OracleParameter("PARAM_ESTADO_PARAMETRO", Convert.ToInt32(entity.State).ToString()));
                             OracleDataReader reader = command.ExecuteReader();

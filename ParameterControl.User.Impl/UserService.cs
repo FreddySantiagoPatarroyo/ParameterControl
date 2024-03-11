@@ -162,7 +162,7 @@ namespace ParameterControl.User.Impl
                     Email = dr["EMAIL"] is DBNull ? string.Empty : dr["EMAIL"].ToString(),
                     UserName = dr["NOMBRE_USUARIO"] is DBNull ? string.Empty : dr["NOMBRE_USUARIO"].ToString(),
                     RolName = dr["NOMBRE_ROL"] is DBNull ? string.Empty : dr["NOMBRE_ROL"].ToString(),
-                    Password = dr["CONTRASENIA"] is DBNull ? string.Empty : dr["CONTRASENIA"].ToString(),
+                    Password = dr["CONTRASEÑA"] is DBNull ? string.Empty : dr["CONTRASEÑA"].ToString(),
                     RolId = dr["COD_ROL"] is DBNull ? 0 : Convert.ToInt32(dr["COD_ROL"]),
                     CreationDate = dr["FECHA_CREACION"] is DBNull ? DateTime.Now : Convert.ToDateTime(dr["FECHA_CREACION"]),
                     ModifiedDate = dr["FECHA_ACTUALIZACION"] is DBNull ? DateTime.Now : Convert.ToDateTime(dr["FECHA_ACTUALIZACION"]),

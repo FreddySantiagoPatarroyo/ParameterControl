@@ -9,8 +9,9 @@
         public DateTime CreationDate { get; set; }
         public DateTime ModifieldDate { get; set; }
         public string ParameterType { get; set; } = string.Empty;
-        public int FatherId { get; set; }
+        public int FatherCode { get; set; }
         public string Value1 { get; set; } = string.Empty;
         public bool State { get; set; } = false;
+        public string Scenary { get; set; } = string.Empty;
     }
 }

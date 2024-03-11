@@ -35,10 +35,15 @@ namespace ParameterControl.Controllers.Login
                     return BadRequest(new { message = "Error en la informacion enviada", state = "Error" });
                 }
 
+                var code = PasswordHasher.HashPasswordV3("1234");
+
+                Console.WriteLine(code);
+
                 var user = await _usersServices.ValidateUser(request);
 
                 if (user != null)
                 {
+
                     if (user.State == false)
                     {
                         return Ok(new { message = "El usuario esta desactivado, comuniquese con el administrador", state = "Error" });

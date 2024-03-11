@@ -224,9 +224,7 @@ namespace ParameterControl.Services.Parameters
         {
             List<SelectListItem> parameterType = new List<SelectListItem>().ToList();
             parameterType.Add(new SelectListItem("ESCENARIO", "ESCENARIO"));
-            parameterType.Add(new SelectListItem("PARÁMETROS SEGURIDAD", "PARÁMETROS SEGURIDAD"));
             parameterType.Add(new SelectListItem("PARÁMETROS SISTEMA", "PARÁMETROS SISTEMA"));
-            parameterType.Add(new SelectListItem("PARÁMETROS CONCILIACIÓN", "PARÁMETROS CONCILIACIÓN"));
 
             return parameterType;
         }

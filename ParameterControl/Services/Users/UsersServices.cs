@@ -345,6 +345,8 @@ namespace ParameterControl.Services.Users
         {
             return await Task.Run(() =>
             {
+                var hash = PasswordHasher.HashPasswordV3(User.Password);
+
                 UserModel model = new UserModel
                 {
                     Code = User.Code,
@@ -352,7 +354,7 @@ namespace ParameterControl.Services.Users
                     Email = User.Email,
                     UserName = User.Name,
                     RolId = User.RolCode,
-                    Password = User.Password,
+                    Password = hash,
                     FirstAccess = User.FirstAccess,
                     CreationDate = User.CreationDate,
                     ModifiedDate = DateTime.Now,

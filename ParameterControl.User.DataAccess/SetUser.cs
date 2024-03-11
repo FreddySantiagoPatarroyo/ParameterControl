@@ -34,7 +34,7 @@ namespace ParameterControl.User.DataAccess
                         command.Parameters.Add(new OracleParameter("PARAM_LOGINGROUP", entity.GroupId));
                         command.Parameters.Add(new OracleParameter("PARAM_ESTADO_USUARIO", Convert.ToInt32(entity.State).ToString()));
                         command.Parameters.Add(new OracleParameter("PARAM_PRIMER_ACCESO", Convert.ToInt32(entity.FirstAccess)));
-                        command.Parameters.Add(new OracleParameter("PARAM_CONTRASENIA", entity.Password));
+                        command.Parameters.Add(new OracleParameter("PARAM_CONTRASEÑA", entity.Password));
 
                         OracleDataReader reader = command.ExecuteReader();
                         response = 1;
