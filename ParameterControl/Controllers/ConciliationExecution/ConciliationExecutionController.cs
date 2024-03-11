@@ -37,6 +37,7 @@ namespace ParameterControl.Controllers.ConciliationExecution
             _isAbort = Convert.ToBoolean(section.Where(x => x.Key.Equals("btnAbort")).FirstOrDefault().Value);
         }
 
+        [Authorize(Roles = "ADMINISTRADOR,EJECUTOR,CONSULTOR")]
         public async Task<ActionResult> ConciliationExecution()
         {
             ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
@@ -44,6 +45,10 @@ namespace ParameterControl.Controllers.ConciliationExecution
             {
                 ConciliationExecutionViewModel model = new ConciliationExecutionViewModel();
                 model.Conciliations = await GetAllConciliation();
+                model.IsExecution = _isExecute;
+                model.IsProgram = _isProgram;
+                model.IsAbort = _isAbort;
+
                 ViewBag.Success = true;
                 return View("ConciliationExecution", model);
             }
@@ -55,6 +60,7 @@ namespace ParameterControl.Controllers.ConciliationExecution
 
         }
 
+        [Authorize(Roles = "ADMINISTRADOR,EJECUTOR")]
         public async Task<ActionResult> RunProcess(int code)
         {
             ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
@@ -84,6 +90,7 @@ namespace ParameterControl.Controllers.ConciliationExecution
             }
         }
 
+        [Authorize(Roles = "ADMINISTRADOR,EJECUTOR")]
         public async Task<ActionResult> ProgramExecution(int code)
         {
             ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
@@ -113,6 +120,8 @@ namespace ParameterControl.Controllers.ConciliationExecution
             }
         }
 
+        [Authorize(Roles = "ADMINISTRADOR,EJECUTOR")]
+        [HttpGet]
         public async Task<ActionResult> SuccesfulTransaction(int code)
         {
             ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
@@ -142,6 +151,8 @@ namespace ParameterControl.Controllers.ConciliationExecution
             }
         }
 
+        [Authorize(Roles = "ADMINISTRADOR")]
+        [HttpGet]
         public async Task<ActionResult> AbortConciliation(int code)
         {
             ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();

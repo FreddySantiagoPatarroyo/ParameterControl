@@ -4,17 +4,17 @@ using System.Data;
 
 namespace ParameterControl.Stage.DataAccess
 {
-    public class GetAllSummaryStage
+    public class GetPaginatorSummaryStage
     {
         private readonly IConfiguration _configuration;
         DataTable _dataTable = new DataTable();
 
-        public GetAllSummaryStage(IConfiguration configuration)
+        public GetPaginatorSummaryStage(IConfiguration configuration)
         {
             _configuration = configuration;
         }
 
-        public async Task<DataTable> SelectAllSummaryStage()
+        public async Task<DataTable> SelectPaginatorSummaryStage(int page, int row)
         {
             try
             {
@@ -24,9 +24,11 @@ namespace ParameterControl.Stage.DataAccess
                     {
                         connection.Open();
 
-                        using (OracleCommand command = new OracleCommand("ALL_SUMMARY_SCENARY", connection))
+                        using (OracleCommand command = new OracleCommand("PAGINATOR_SUMMARY_SCENARY", connection))
                         {
                             command.CommandType = CommandType.StoredProcedure;
+                            command.Parameters.Add(new OracleParameter("PARAM_PAGE", page));
+                            command.Parameters.Add(new OracleParameter("PARAM_ROW", row));
                             OracleDataReader reader = command.ExecuteReader();
                             _dataTable.Load(reader);
                             return _dataTable;

@@ -1,5 +1,13 @@
 using ParameterControl.Models.Filter;
+using ParameterControl.Models.Pagination;
+using ParameterControl.Models.Policy;
 using ParameterControl.Models.Result;
+using ParameterControl.Policy.Entities;
+using ParameterControl.Policy.Impl;
+using ParameterControl.Policy.Interfaces;
+using ParameterControl.Stage.Entities;
+using ParameterControl.Stage.Impl;
+using ParameterControl.Stage.Interfaces;
 using modResult = ParameterControl.Models.Result;
 
 namespace ParameterControl.Services.Results
@@ -7,76 +15,72 @@ namespace ParameterControl.Services.Results
     public class ResultsServices : IResultsServices
     {
         private List<Result> results = new List<Result>();
-        public ResultsServices()
+        private readonly IStageService _resultService;
+
+        public ResultsServices(IConfiguration configuration)
         {
+            _resultService = new StageService(configuration);
             results = new List<Result>()
             {
                 new Result(){
-                    Id = "1",
                     Conciliation = "CO_CONCILIACIÓN",
                     Scenery = "CO_ESCENARIO",
-                    Status = "OK",
-                    StartDate = DateTime.Parse("2024-01-10"),
-                    EndDate = DateTime.Parse("2024-01-10"),
-                    BeneValue = "2000",
-                    IncoValue = "78888",
-                    PQValue = "789",
-                    ReinValue = "6444",
-                    State = true,
-                    CreationDate = DateTime.Parse("2024-01-10"),
-                    UpdateDate = DateTime.Parse("2023-11-09")
+                    StatusConciliation = "OK",
+                    UploadDate = DateTime.Parse("2024-01-10"),
+                    ValueBeneficiary = "2000",
+                    ValueInconsistency = "78888",
+                    ValuePqr = "789",
+                    ValueRepetition = "6444"
                 },
                  new Result(){
-                    Id = "2",
-                    Conciliation = "CO_CONCILIACIÓN_1",
-                    Scenery = "CO_ESCENARIO",
-                    Status = "OK",
-                    StartDate = DateTime.Parse("2024-01-10"),
-                    EndDate = DateTime.Parse("2024-01-10"),
-                    BeneValue = "2000",
-                    IncoValue = "78888",
-                    PQValue = "789",
-                    ReinValue = "6444",
-                    State = false,
-                    CreationDate = DateTime.Parse("2024-01-10"),
-                    UpdateDate = DateTime.Parse("2023-11-09")
-                },
-                  new Result(){
-                    Id = "3",
                     Conciliation = "CO_CONCILIACIÓN",
                     Scenery = "CO_ESCENARIO",
-                    Status = "OK",
-                    StartDate = DateTime.Parse("2024-01-10"),
-                    EndDate = DateTime.Parse("2024-01-10"),
-                    BeneValue = "2000",
-                    IncoValue = "78888",
-                    PQValue = "789",
-                    ReinValue = "6444",
-                    State = true,
-                    CreationDate = DateTime.Parse("2024-01-10"),
-                    UpdateDate = DateTime.Parse("2023-11-09")
+                    StatusConciliation = "OK",
+                    UploadDate = DateTime.Parse("2024-01-10"),
+                    ValueBeneficiary = "2000",
+                    ValueInconsistency = "78888",
+                    ValuePqr = "789",
+                    ValueRepetition = "6444"
                 },
-                   new Result(){
-                    Id = "4",
-                    Conciliation = "CO_CONCILIACIÓN_1",
+                  new Result(){
+                   Conciliation = "CO_CONCILIACIÓN",
                     Scenery = "CO_ESCENARIO",
-                    Status = "OK",
-                    StartDate = DateTime.Parse("2024-01-10"),
-                    EndDate = DateTime.Parse("2024-01-10"),
-                    BeneValue = "2000",
-                    IncoValue = "78888",
-                    PQValue = "789",
-                    ReinValue = "6444",
-                    State = false,
-                    CreationDate = DateTime.Parse("2024-01-10"),
-                    UpdateDate = DateTime.Parse("2023-11-09")
-                },
+                    StatusConciliation = "OK",
+                    UploadDate = DateTime.Parse("2024-01-10"),
+                    ValueBeneficiary = "2000",
+                    ValueInconsistency = "78888",
+                    ValuePqr = "789",
+                    ValueRepetition = "6444"
+                }
             };
         }
 
-        public async Task<List<Result>> GetResults()
+        public async Task<List<modResult.Result>> GetResults()
         {
-            return results;
+            var collectionResults = await _resultService.SelectAllSummaryStage();
+            var response = await MapperResults(collectionResults);
+            return response;
+        }
+
+        public async Task<int> CountResults()
+        {
+            var collectionResults = await _resultService.SelectAllSummaryStage();
+            return collectionResults.Count();
+        }
+
+        public async Task<List<modResult.Result>> GetResultsPagination(PaginationViewModel pagination)
+        {
+            try
+            {
+                var response = await _resultService.SelectPaginatorSummaryStage(pagination.Page, pagination.RecordsPage);
+                var result = await MapperResults(response);
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
         }
 
         public async Task<List<ResultViewModel>> GetResultsFormat(List<modResult.Result> results)
@@ -86,24 +90,15 @@ namespace ParameterControl.Services.Results
             foreach (modResult.Result result in results)
             {
                 ResultViewModel resultModel = new ResultViewModel();
-                resultModel.Id = result.Id;
                 resultModel.Conciliation = result.Conciliation;
                 resultModel.Scenery = result.Scenery;
-                resultModel.Status = result.Status;
-                resultModel.BeneValue = result.BeneValue;
-                resultModel.IncoValue = result.IncoValue;
-                resultModel.PQValue = result.PQValue;
-                resultModel.ReinValue = result.ReinValue;
-                resultModel.StartDate = result.StartDate;
-                resultModel.EndDate = result.EndDate;
-                resultModel.State = result.State;
-                resultModel.StateFormat = result.State ? "Activo" : "Inactivo";
-                resultModel.CreationDate = result.CreationDate;
-                resultModel.UpdateDate = result.UpdateDate;
-                resultModel.CreationDateFormat = result.CreationDate.ToString("dd/MM/yyyy");
-                resultModel.UpdateDateFormat = result.UpdateDate.ToString("dd/MM/yyyy");
-                resultModel.StartDateFormat = result.StartDate.ToString("dd/MM/yyyy");
-                resultModel.EndDateFormat = result.EndDate.ToString("dd/MM/yyyy");
+                resultModel.StatusConciliation = result.StatusConciliation;
+                resultModel.ValueBeneficiary = result.ValueBeneficiary;
+                resultModel.ValueInconsistency = result.ValueInconsistency;
+                resultModel.ValuePqr = result.ValuePqr;
+                resultModel.ValueRepetition = result.ValueRepetition;
+                resultModel.UploadDate = result.UploadDate;
+                resultModel.UploadDateFormat = result.UploadDate.ToString("dd/MM/yyyy");
 
                 ResultsModel.Add(resultModel);
             }
@@ -111,11 +106,11 @@ namespace ParameterControl.Services.Results
             return ResultsModel;
         }
 
-        public async Task<Result> GetResultsById(string id)
-        {
-            Result result = results.Find(results => results.Id == id);
-            return result;
-        }
+        //public async Task<Result> GetResultsById(string code)
+        //{
+        //    Result result = results.Find(results => results.code == code);
+        //    return result;
+        //}
 
         public async Task<List<ResultViewModel>> GetFilterResults(FilterViewModel filterModel)
         {
@@ -160,6 +155,61 @@ namespace ParameterControl.Services.Results
                 }
             }
             return resultsFilter;
+        }
+
+        public List<ResultViewModel> GetFilterPagination(List<ResultViewModel> inicialResults, PaginationViewModel paginationViewModel, int totalData)
+        {
+            var limit = paginationViewModel.Page * paginationViewModel.RecordsPage;
+            var index = limit - paginationViewModel.RecordsPage;
+            var count = 0;
+
+            if (limit > totalData)
+            {
+                count = totalData - index;
+            }
+            else
+            {
+                count = paginationViewModel.RecordsPage;
+            }
+
+            List<ResultViewModel> resultsFilterPagination = inicialResults.GetRange(index, count);
+
+            return resultsFilterPagination;
+        }
+
+        private async Task<List<modResult.Result>> MapperResults(List<StageSummaryModel> stageSummaryModel)
+        {
+            return await Task.Run(() =>
+            {
+                List<modResult.Result> results = new List<modResult.Result>();
+                if (stageSummaryModel.Count > 0)
+                {
+                    foreach (var stageSummary in stageSummaryModel)
+                    {
+                        results.Add(MapperToResult(stageSummary).Result);
+                    }
+                }
+                return results;
+            });
+        }
+
+        private async Task<modResult.Result> MapperToResult(StageSummaryModel stageSummaryModel)
+        {
+            return await Task.Run(() =>
+            {
+                modResult.Result model = new modResult.Result
+                {
+                    Conciliation = stageSummaryModel.ConciliarionCode,
+                    Scenery = stageSummaryModel.StageCode,
+                    StatusConciliation = stageSummaryModel.StatusConciliation,
+                    UploadDate = stageSummaryModel.UploadDate,
+                    ValueBeneficiary = stageSummaryModel.ValueBeneficiary,
+                    ValueInconsistency = stageSummaryModel.ValueInconsistency,
+                    ValuePqr = stageSummaryModel.ValuePqr,
+                    ValueRepetition = stageSummaryModel.ValueRepetition
+                };
+                return model;
+            });
         }
     }
 }
