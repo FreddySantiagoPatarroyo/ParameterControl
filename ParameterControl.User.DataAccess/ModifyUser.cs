@@ -32,7 +32,7 @@ namespace ParameterControl.User.DataAccess
                         command.Parameters.Add(new OracleParameter("PARAM_EMAIL", entity.Email));
                         command.Parameters.Add(new OracleParameter("PARAM_USER_NAME", entity.UserName));
                         command.Parameters.Add(new OracleParameter("PARAM_IDROL", entity.RolId));
-                        command.Parameters.Add(new OracleParameter("PARAM_PRIMER_ACCESO", Convert.ToInt32(entity.FirstAccess)));
+                        command.Parameters.Add(new OracleParameter("PARAM_PRIMER_ACCESO", Convert.ToInt32(entity.FirstAccess).ToString()));
                         command.Parameters.Add(new OracleParameter("PARAM_ESTADO_ACTIVACION", Convert.ToInt32(entity.State).ToString()));
                         command.Parameters.Add(new OracleParameter("PARAM_CONTRASEÑA", entity.Password));
                         OracleDataReader reader = command.ExecuteReader();

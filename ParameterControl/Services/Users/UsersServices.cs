@@ -279,10 +279,7 @@ namespace ParameterControl.Services.Users
                 modUser.Role model = new modUser.Role
                 {
                     Code = Convert.ToInt32(Rol.Code),
-                    Name = Rol.Name,
-                    CreationDate = Rol.CreationDate,
-                    ModifiedDate = Rol.ModifiedDate,
-                    ModifiedBy = Rol.ModifiedBy
+                    Name = Rol.Name
                 };
                 return model;
             });
