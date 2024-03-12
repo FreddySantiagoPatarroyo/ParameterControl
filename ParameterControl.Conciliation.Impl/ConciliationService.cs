@@ -163,7 +163,7 @@ namespace ParameterControl.Conciliation.Impl
                     OperationType = dr["TIPO_OPERACION"] is DBNull ? string.Empty : dr["TIPO_OPERACION"].ToString(),
                     AssignmentType = dr["TIPO_ASIGNACION"] is DBNull ? string.Empty : dr["TIPO_ASIGNACION"].ToString(),
                     State = dr["ESTADO"] is DBNull ? false : Convert.ToBoolean(Convert.ToInt32(dr["ESTADO"])),
-                    //StatePolicy = dr["ESTADO_POLITICA"] is DBNull ? false : Convert.ToBoolean(Convert.ToInt32(dr["ESTADO_POLITICA"])),
+                    StatePolicy = dr["ESTADO_POLITICA"] is DBNull ? false : Convert.ToBoolean(Convert.ToInt32(dr["ESTADO_POLITICA"])),
                 };
                 return model;
             });

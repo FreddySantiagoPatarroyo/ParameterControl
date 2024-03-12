@@ -51,18 +51,18 @@ else
                 </div>
                 <div class="form_group">
                     <div class="field">
-                        <label asp-for="List" class="label_form">Listado*</label>
+                        <label asp-for="FatherCode" class="label_form">Listado*</label>
                         <div id="input_select_list" class="input">
-                            <input class="input_select" id="input_select_filter_list" asp-for="List" placeholder="Seleccione una opción" onclick="showOptionsList()" readonly />
-                            <input asp-for="List" class="oculte" />
+                            <input class="input_select" id="input_select_filter_list" asp-for="Scenary" placeholder="Seleccione una opción" onclick="showOptionsList()" readonly />
+                            <input asp-for="FatherCode" class="oculte" />
                             <i class="icon icon_select icon_153" onclick="showOptionsList()"></i>
                         </div>
                         <div id="options_list" class="options">
-                            <ul class="options_list">
+                            <ul id="options_list_list" class="options_list">
                                 <li onclick="selectOptionList('@null', '@null')" class="option">
                                     <p class="option_text">Seleccione una opción</p>
                                 </li>
-                                @foreach (var Option in Model.ListParameter)
+                                @foreach (var Option in Model.ListScenarios)
                                 {
                                     <li onclick="selectOptionList('@Option.Text', '@Option.Value')" class="option">
                                         <p class="option_text">@Option.Text</p>
@@ -128,6 +128,34 @@ else
     @section Scripts {
         <partial name="_ValidationScriptsPartial.cshtml" />
         <script>
+            const urlList = '@Url.Action("GetList")';
+            const changeList = async (type) => {
+                const data = type;
+
+                const result = await fetch(urlList, {
+                    method: 'POST',
+                    body: JSON.stringify(data),
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                const json = await result.json();
+                console.log(json.length);
+
+                let options = [];
+
+                if (json.length > 0) {
+                    options = json.map(option => `<li onclick="selectOptionList('${option.text}', '${option.value}')"  class="option"> <p class="option_text">${option.text}</p> </li>`);
+                }
+
+                options.unshift(`<li onclick="selectOptionList(${null}, ${null})"  class="option"> <p class="option_text">${'Seleccione una opción'}</p> </li>`);
+
+                $('#options_list_list').html(options);
+            }
+        </script>
+
+        <script>
             /* ----------- Select de tipo ----------- */
             let viewOptions = false;
 
@@ -154,11 +182,15 @@ else
                     console.log("vacio");
                     document.getElementById("input_select_filter").value = '';
                     document.getElementById("ParameterType").value = '';
+                    document.getElementById("input_select_filter_list").value = '';
+                    document.getElementById("FatherCode").value = '';
                 } else {
                     console.log(value);
                     document.getElementById("input_select_filter").value = name;
                     document.getElementById("ParameterType").value = value;
                 }
+
+                changeList(value);
 
                 showOptions();
             }
@@ -184,15 +216,16 @@ else
             }
 
             const selectOptionList = (name, value) => {
+                
 
                 if (name == null || value == null || name == '' || value == '') {
                     console.log("vacio");
                     document.getElementById("input_select_filter_list").value = '';
-                    document.getElementById("List").value = '';
+                    document.getElementById("FatherCode").value = '';
                 } else {
                     console.log(value);
                     document.getElementById("input_select_filter_list").value = name;
-                    document.getElementById("List").value = value;
+                document.getElementById("FatherCode").value = value;
                 }
 
                 showOptionsList();
@@ -211,7 +244,7 @@ else
 
             const sendData = async () => {
                 isValidParameterType = validateInput("ParameterType", "El tipo de parametro es requerido", "ParameterTypeError");
-                isValidList = validateInput("List", "La lista es requerido", "ListError");
+                isValidList = validateInput("FatherCode", "La lista es requerido", "ListError");
                 isValidParameter = validateInput("Parameter_", "El parametro es requerido", "ParameterError");
                 isValidValue = validateInput("Value", "El valor es requerido", "ValueError");
                 //isValidDescription = validateInputEmpty("Description", "La descripcion es requerido", "DescriptionError");
@@ -226,7 +259,7 @@ else
                         Value: $('#Value').val(),
                         Description: $('#Description').val(),
                         ParameterType: $('#ParameterType').val(),
-                        List: $('#List').val(),
+                        FatherCode: $('#FatherCode').val(),
                         State: true
                     }
 

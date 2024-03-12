@@ -5,6 +5,6 @@ namespace ParameterControl.Models.Parameter
     public class ParameterCreateViewModel : Parameter
     {
         public List<SelectListItem> ParameterTypeOption = new List<SelectListItem>();
-        public List<SelectListItem> ListParameter = new List<SelectListItem>();
+        public List<SelectListItem> ListScenarios = new List<SelectListItem>();
     }
 }

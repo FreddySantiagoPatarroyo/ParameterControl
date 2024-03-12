@@ -54,6 +54,22 @@ namespace ParameterControl.Services.Scenarios
             return response;
         }
 
+        public async Task<List<Scenery>> GetActiveScenarios()
+        {
+            var scenarios = await GetScenarios();
+            var response = new List<Scenery>();
+
+            foreach (var scenary in scenarios)
+            {
+                if (scenary.State)
+                {
+                    response.Add(scenary);
+                }
+            }
+
+            return response;
+        }
+
         public async Task<int> CountScenarios()
         {
             var collectionScenarios = await _stageService.SelectAllStage();

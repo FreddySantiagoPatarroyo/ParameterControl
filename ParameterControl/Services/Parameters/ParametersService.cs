@@ -30,7 +30,7 @@ namespace ParameterControl.Services.Parameters
                     Code = 1,
                     Parameter_ = "Parameter1",
                     ParameterType = "OTRO",
-                    List = "Ejemplo List",
+                    FatherCode = 1,
                     Value = "ACT",
                     Description = "Descripcion ejemplo",
                     State = true,
@@ -41,7 +41,7 @@ namespace ParameterControl.Services.Parameters
                     Code = 2,
                     Parameter_ = "Parameter2",
                     ParameterType = "GENERAL",
-                    List = "Ejemplo List",
+                    FatherCode = 2,
                     Value = "ACT",
                     Description = "Descripcion ejemplo",
                     State = false,
@@ -91,8 +91,9 @@ namespace ParameterControl.Services.Parameters
                 parameterModel.Value = parameter.Value;
                 parameterModel.Description = parameter.Description;
                 parameterModel.ParameterType = parameter.ParameterType;
-                parameterModel.List = parameter.List;
+                parameterModel.FatherCode = parameter.FatherCode;
                 parameterModel.State = parameter.State;
+                parameterModel.Scenary = parameter.Scenary;
                 parameterModel.StateFormat = parameter.State ? "Activo" : "Inactivo";
                 parameterModel.CreationDate = parameter.CreationDate;
                 parameterModel.UpdateDate = parameter.UpdateDate;
@@ -113,8 +114,9 @@ namespace ParameterControl.Services.Parameters
             parameterModel.Value = parameter.Value;
             parameterModel.Description = parameter.Description;
             parameterModel.ParameterType = parameter.ParameterType;
-            parameterModel.List = parameter.List;
+            parameterModel.FatherCode = parameter.FatherCode;
             parameterModel.State = parameter.State;
+            parameterModel.Scenary = parameter.Scenary;
             parameterModel.StateFormat = parameter.State ? "Activo" : "Inactivo";
             parameterModel.CreationDate = parameter.CreationDate;
             parameterModel.UpdateDate = parameter.UpdateDate;
@@ -132,8 +134,9 @@ namespace ParameterControl.Services.Parameters
             parameterModel.Value = parameter.Value;
             parameterModel.Description = parameter.Description;
             parameterModel.ParameterType = parameter.ParameterType;
-            parameterModel.List = parameter.List;
+            parameterModel.FatherCode = parameter.FatherCode;
             parameterModel.State = parameter.State;
+            parameterModel.Scenary = parameter.Scenary;
             parameterModel.CreationDate = parameter.CreationDate;
             parameterModel.UpdateDate = parameter.UpdateDate;
 
@@ -224,7 +227,7 @@ namespace ParameterControl.Services.Parameters
         {
             List<SelectListItem> parameterType = new List<SelectListItem>().ToList();
             parameterType.Add(new SelectListItem("ESCENARIO", "ESCENARIO"));
-            parameterType.Add(new SelectListItem("PARÁMETROS SISTEMA", "PARÁMETROS SISTEMA"));
+            //parameterType.Add(new SelectListItem("PARÁMETROS SISTEMA", "PARÁMETROS SISTEMA"));
 
             return parameterType;
         }
@@ -269,10 +272,11 @@ namespace ParameterControl.Services.Parameters
                     Value = Parameter.Value,
                     Description = Parameter.Description,
                     ParameterType = Parameter.ParameterType,
+                    FatherCode = Parameter.FatherCode,
                     CreationDate = Parameter.CreationDate,
                     UpdateDate = Parameter.ModifieldDate,
                     State = Parameter.State,
-
+                    Scenary = Parameter.Scenary
                 };
                 return model;
             });
@@ -289,6 +293,7 @@ namespace ParameterControl.Services.Parameters
                 CreationDate = DateTime.Now,
                 ModifieldDate = DateTime.Now,
                 State = request.State,
+                FatherCode = request.FatherCode
 
             };
             var response = await _parameterServices.InsertParameter(Parameter);
@@ -329,6 +334,7 @@ namespace ParameterControl.Services.Parameters
                     Code = Parameter.Code,
                     Parameter = Parameter.Parameter_,
                     ParameterType = Parameter.ParameterType,
+                    FatherCode = Parameter.FatherCode,
                     Value = Parameter.Value,
                     Description = Parameter.Description,
                     CreationDate = Parameter.CreationDate,
@@ -348,6 +354,7 @@ namespace ParameterControl.Services.Parameters
                     Code = Parameter.Code,
                     Parameter = Parameter.Parameter_,
                     ParameterType = Parameter.ParameterType,
+                    FatherCode = Parameter.FatherCode,
                     Value = Parameter.Value,
                     Description = Parameter.Description,
                     CreationDate = Parameter.CreationDate,
@@ -367,6 +374,7 @@ namespace ParameterControl.Services.Parameters
                     Code = Parameter.Code,
                     Parameter = Parameter.Parameter_,
                     ParameterType = Parameter.ParameterType,
+                    FatherCode = Parameter.FatherCode,
                     Value = Parameter.Value,
                     Description = Parameter.Description,
                     CreationDate = Parameter.CreationDate,

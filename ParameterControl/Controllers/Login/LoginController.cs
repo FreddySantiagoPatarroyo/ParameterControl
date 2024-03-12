@@ -35,9 +35,9 @@ namespace ParameterControl.Controllers.Login
                     return BadRequest(new { message = "Error en la informacion enviada", state = "Error" });
                 }
 
-                var code = PasswordHasher.HashPasswordV3("1234");
+                //var code = PasswordHasher.HashPasswordV3("1234");
 
-                Console.WriteLine(code);
+                //Console.WriteLine(code);
 
                 var user = await _usersServices.ValidateUser(request);
 

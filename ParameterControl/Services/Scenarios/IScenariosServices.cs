@@ -23,5 +23,6 @@ namespace ParameterControl.Services.Scenarios
         Task<List<Scenery>> GetScenariosPagination(PaginationViewModel pagination);
         Task<string> ActiveScenery(Scenery scenery);
         Task<string> DesactiveScenery(Scenery scenery);
+        Task<List<Scenery>> GetActiveScenarios();
     }
 }

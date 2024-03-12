@@ -8,9 +8,11 @@ using ParameterControl.Models.Parameter;
 using ParameterControl.Services.Authenticated;
 using ParameterControl.Services.Parameters;
 using ParameterControl.Services.Rows;
+using ParameterControl.Services.Scenarios;
 using System.Security.Claims;
 using modConciliation = ParameterControl.Models.Conciliation;
 using modParameter = ParameterControl.Models.Parameter;
+using modScenary = ParameterControl.Models.Scenery;
 
 namespace ParameterControl.Controllers.Parameters
 {
@@ -20,6 +22,7 @@ namespace ParameterControl.Controllers.Parameters
         public TableParametersViewModel TableParameters = new TableParametersViewModel();
         private readonly ILogger<HomeController> _logger;
         private readonly IParametersService parametersService;
+        private readonly IScenariosServices scenariosServices;
         private readonly Rows rows;
         private readonly AuthenticatedUser authenticatedUser;
         private readonly IConfiguration _configuration;
@@ -33,6 +36,7 @@ namespace ParameterControl.Controllers.Parameters
         public ParametersController(
             ILogger<HomeController> logger,
             IParametersService parametersService,
+            IScenariosServices scenariosServices,
             Rows rows,
             AuthenticatedUser authenticatedUser,
             IConfiguration configuration,
@@ -41,6 +45,7 @@ namespace ParameterControl.Controllers.Parameters
         {
             this._logger = logger;
             this.parametersService = parametersService;
+            this.scenariosServices = scenariosServices;
             this.rows = rows;
             this.authenticatedUser = authenticatedUser;
             _configuration = configuration;
@@ -200,12 +205,12 @@ namespace ParameterControl.Controllers.Parameters
             try
             {
                 List<SelectListItem> ParameterTypeOptionList = await parametersService.GetParameterType();
-                List<SelectListItem> GetListParameterList = await GetParameters();
+                List<SelectListItem> ListScenarios = await GetListValite(string.Empty);
 
                 ParameterCreateViewModel model = new ParameterCreateViewModel()
                 {
                     ParameterTypeOption = ParameterTypeOptionList,
-                    ListParameter = GetListParameterList
+                    ListScenarios = ListScenarios
                 };
 
                 ViewBag.Success = true;
@@ -216,7 +221,6 @@ namespace ParameterControl.Controllers.Parameters
                 ViewBag.Success = false;
                 return View("Actions/CreateParameter", null);
             }
-
         }
 
         [Authorize(Roles = "ADMINISTRADOR")]
@@ -262,11 +266,11 @@ namespace ParameterControl.Controllers.Parameters
                     return View("Actions/EditParameter", null);
                 }
                 List<SelectListItem> ParameterTypeList = await parametersService.GetParameterType();
-                List<SelectListItem> ParameterList = await GetParameters();
+                List<SelectListItem> ListScenarios = await GetListValite(parameter.ParameterType);
 
                 ParameterCreateViewModel model = await parametersService.GetParameterFormatCreate(parameter);
                 model.ParameterTypeOption = ParameterTypeList;
-                model.ListParameter = ParameterList;
+                model.ListScenarios = ListScenarios;
 
                 ViewBag.Success = true;
                 ViewBag.EntyNull = false;
@@ -538,10 +542,39 @@ namespace ParameterControl.Controllers.Parameters
             return parameters.Select(parameter => new SelectListItem(parameter.Parameter_, parameter.Code.ToString())).ToList();
         }
 
+        public async Task<List<SelectListItem>> GetScenarios()
+        {
+            List<modScenary.Scenery> scenarios = await scenariosServices.GetActiveScenarios();
+            return scenarios.Select(scenary => new SelectListItem(scenary.Name, scenary.Code.ToString())).ToList();
+        }
+
         public async Task<List<SelectListItem>> GetConciliations()
         {
             List<modConciliation.Conciliation> conciliations = await parametersService.GetConciliations();
             return conciliations.Select(conciliation => new SelectListItem(conciliation.Name, conciliation.Name)).ToList();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> GetList([FromBody] string type)
+        {
+            var List = await GetListValite(type);
+            return Ok(List);
+        }
+
+        private async Task<List<SelectListItem>> GetListValite(string type)
+        {
+            if(type == string.Empty)
+            {
+                return new List<SelectListItem>();
+            }
+
+            switch (type)
+            {
+                case "ESCENARIO":
+                    return await GetScenarios();
+                default:
+                    return new List<SelectListItem>();
+            }
         }
     }
 }

@@ -39,8 +39,12 @@ namespace ParameterControl.Controllers
 
                 modUser.User request = await usersServices.GetUsersByCode(code);
                 ViewBag.FirstAccess = request.FirstAccess;
-                request.FirstAccess = true;
-                var responseIn = await usersServices.UpdateUser(request);
+                if(request.FirstAccess == false)
+                {
+                    request.FirstAccess = true;
+                    var responseIn = await usersServices.UpdateUser(request);
+
+                }
 
                 return View("Index");
             }

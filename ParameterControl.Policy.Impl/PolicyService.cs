@@ -156,7 +156,7 @@ namespace ParameterControl.Policy.Impl
                     Objetive = dr["OBJETIVO"] is DBNull ? string.Empty : dr["OBJETIVO"].ToString(),
                     CreationDate = dr["FECHA_CREACION"] is DBNull ? DateTime.Now : Convert.ToDateTime(dr["FECHA_CREACION"]),
                     ModifieldDate = dr["FECHA_ACTUALIZACION"] is DBNull ? DateTime.Now : Convert.ToDateTime(dr["FECHA_ACTUALIZACION"]),
-                    //State = dr["ESTADO_POLITICA"] is DBNull ? false : Convert.ToBoolean(Convert.ToInt32(dr["ESTADO_POLITICA"])),
+                    State = dr["ESTADO_POLITICA"] is DBNull ? false : Convert.ToBoolean(Convert.ToInt32(dr["ESTADO_POLITICA"])),
                 };
                 return model;
             });

@@ -13,7 +13,7 @@ namespace ParameterControl.Models.Parameter
         [Required(ErrorMessage = "El tipo de parametro es requerido")]
         public string ParameterType { get; set; } = string.Empty;
         [Required(ErrorMessage = "El listado es requerido")]
-        public string List { get; set; } = string.Empty;
-        public string Email { get; set; } = string.Empty;
+        public int FatherCode { get; set; }
+        public string Scenary { get; set; } = string.Empty;
     }
 }
