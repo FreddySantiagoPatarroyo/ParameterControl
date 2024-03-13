@@ -2,10 +2,12 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using ParameterControl.Models.Login;
+using ParameterControl.Services.Audit;
 using ParameterControl.Services.Authenticated;
 using ParameterControl.Services.Users;
 using ParameterControl.Services.Util;
 using System.Security.Claims;
+using modAudit = ParameterControl.Models.Audit;
 
 namespace ParameterControl.Controllers.Login
 {
@@ -13,11 +15,17 @@ namespace ParameterControl.Controllers.Login
     {
         private readonly IUsersServices _usersServices;
         private readonly AuthenticatedUser _authenticatedUser;
+        private readonly IAuditsService auditsService;
 
-        public LoginController(IConfiguration configuration, AuthenticatedUser authenticatedUser)
+        public LoginController(
+            IConfiguration configuration, 
+            AuthenticatedUser authenticatedUser,
+            IAuditsService auditsService
+        )
         {
             _usersServices = new UsersServices(configuration);
             _authenticatedUser = authenticatedUser;
+            this.auditsService = auditsService;
         }
 
         public IActionResult Login()
@@ -57,6 +65,17 @@ namespace ParameterControl.Controllers.Login
                         var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
                         await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new System.Security.Claims.ClaimsPrincipal(claimsIdentity));
 
+                        var audit = new modAudit.Audit()
+                        {
+                            Action = "Ingresar a la aplicacion",
+                            UserCode = _authenticatedUser.GetUserCode(),
+                            Component = "Login",
+                            ModifieldDate = DateTime.Now,
+                            BeforeValue = ""
+                        };
+
+                        await auditsService.InsertAudit(audit);
+
                         return Ok(new { message = "Datos ingresados correctamente", state = "Success"});
                     }
                 }
@@ -74,6 +93,17 @@ namespace ParameterControl.Controllers.Login
         public async Task<IActionResult> LogOut()
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+
+            var audit = new modAudit.Audit()
+            {
+                Action = "Salir de la aplicacion",
+                UserCode = _authenticatedUser.GetUserCode(),
+                Component = "Login",
+                ModifieldDate = DateTime.Now,
+                BeforeValue = ""
+            };
+
+            await auditsService.InsertAudit(audit);
 
             return RedirectToAction("Login");
         }

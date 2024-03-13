@@ -6,6 +6,7 @@ using ParameterControl.Models.Conciliation;
 using ParameterControl.Models.Filter;
 using ParameterControl.Models.Pagination;
 using ParameterControl.Models.Policy;
+using ParameterControl.Services.Audit;
 using ParameterControl.Services.Authenticated;
 using ParameterControl.Services.Conciliations;
 using ParameterControl.Services.Policies;
@@ -14,6 +15,7 @@ using System.Data;
 using System.Security.Claims;
 using modConciliation = ParameterControl.Models.Conciliation;
 using modPolicy = ParameterControl.Models.Policy;
+using modAudit = ParameterControl.Models.Audit;
 
 namespace ParameterControl.Controllers.Conciliations
 {
@@ -27,6 +29,7 @@ namespace ParameterControl.Controllers.Conciliations
         private readonly IPoliciesServices policiesServices;
         private readonly AuthenticatedUser authenticatedUser;
         private readonly IConfiguration _configuration;
+        private readonly IAuditsService auditsService;
         private readonly ClaimsPrincipal _principal;
         private readonly bool _isCreate;
         private readonly bool _isActivate;
@@ -41,7 +44,8 @@ namespace ParameterControl.Controllers.Conciliations
             IPoliciesServices policiesServices,
             AuthenticatedUser authenticatedUser,
             IConfiguration configuration,
-            IHttpContextAccessor httpContextAccesor
+            IHttpContextAccessor httpContextAccesor,
+            IAuditsService auditsService
         )
         {
             this._logger = logger;
@@ -50,6 +54,7 @@ namespace ParameterControl.Controllers.Conciliations
             this.policiesServices = policiesServices;
             this.authenticatedUser = authenticatedUser;
             _configuration = configuration;
+            this.auditsService = auditsService;
             var context = httpContextAccesor.HttpContext;
             _principal = context.User as ClaimsPrincipal;
             var data = _principal.FindFirst(ClaimTypes.Role).Value;
@@ -196,6 +201,16 @@ namespace ParameterControl.Controllers.Conciliations
                 else
                 {
                     var responseIn = await conciliationsServices.InsertConciliation(request);
+                    var audit = new modAudit.Audit()
+                    {
+                        Action = "Crear Conciliacion",
+                        UserCode = authenticatedUser.GetUserCode(),
+                        Component = "Conciliaciones",
+                        ModifieldDate = DateTime.Now,
+                        BeforeValue = ""
+                    };
+
+                    await auditsService.InsertAudit(audit);
                     _logger.LogInformation($"Finaliza método ConciliationController.Create {responseIn}");
                     return Ok(new { message = "Se creo la conciliación de manera exitosa", state = "Success" });
                 }
@@ -274,6 +289,16 @@ namespace ParameterControl.Controllers.Conciliations
                 else
                 {
                     var responseIn = await conciliationsServices.UpdateConciliation(request);
+                    var audit = new modAudit.Audit()
+                    {
+                        Action = "Editar Conciliacion",
+                        UserCode = authenticatedUser.GetUserCode(),
+                        Component = "Conciliaciones",
+                        ModifieldDate = DateTime.Now,
+                        BeforeValue = JsonConvert.SerializeObject(conciliation).ToString()
+                    };
+
+                    await auditsService.InsertAudit(audit);
                     _logger.LogInformation($"Finaliza método ConciliationController.Edit {responseIn}");
                     return Ok(new { message = "Se actualizo la conciliación de manera exitosa", state = "Success" });
                 }
@@ -303,6 +328,17 @@ namespace ParameterControl.Controllers.Conciliations
                 }
                 ConciliationViewModel model = await conciliationsServices.GetConciliationFormat(conciliation);
 
+                var audit = new modAudit.Audit()
+                {
+                    Action = "Ver Conciliacion",
+                    UserCode = authenticatedUser.GetUserCode(),
+                    Component = "Conciliaciones",
+                    ModifieldDate = DateTime.Now,
+                    BeforeValue = ""
+                };
+
+                await auditsService.InsertAudit(audit);
+
                 ViewBag.Success = true;
                 ViewBag.EntyNull = false;
                 return View("Actions/ViewConciliation", model);
@@ -331,6 +367,17 @@ namespace ParameterControl.Controllers.Conciliations
                     return View("Actions/ViewPolicyConciliations", null);
                 }
                 PolicyViewModel model = await policiesServices.GetPolicyFormat(policy);
+
+                var audit = new modAudit.Audit()
+                {
+                    Action = "Ver Politica En Conciliacion",
+                    UserCode = authenticatedUser.GetUserCode(),
+                    Component = "Conciliaciones",
+                    ModifieldDate = DateTime.Now,
+                    BeforeValue = ""
+                };
+
+                await auditsService.InsertAudit(audit);
 
                 ViewBag.Success = true;
                 ViewBag.EntyNull = false;
@@ -380,6 +427,16 @@ namespace ParameterControl.Controllers.Conciliations
             {
                 modConciliation.Conciliation request = await conciliationsServices.GetConciliationsByCode(code);
                 var responseIn = await conciliationsServices.ActiveConciliation(request);
+                var audit = new modAudit.Audit()
+                {
+                    Action = "Activar Conciliacion",
+                    UserCode = authenticatedUser.GetUserCode(),
+                    Component = "Conciliaciones",
+                    ModifieldDate = DateTime.Now,
+                    BeforeValue = JsonConvert.SerializeObject(request).ToString()
+                };
+
+                await auditsService.InsertAudit(audit);
                 _logger.LogInformation($"Finaliza método ConciliationController.Active {responseIn}");
                 return Ok(new { message = "Se activo la conciliación de manera exitosa", state = "Success" });
             }
@@ -433,6 +490,16 @@ namespace ParameterControl.Controllers.Conciliations
                 {
                     modConciliation.Conciliation request = await conciliationsServices.GetConciliationsByCode(code);
                     var responseIn = await conciliationsServices.DesactiveConciliation(request);
+                    var audit = new modAudit.Audit()
+                    {
+                        Action = "Desactivar Conciliacion",
+                        UserCode = authenticatedUser.GetUserCode(),
+                        Component = "Conciliaciones",
+                        ModifieldDate = DateTime.Now,
+                        BeforeValue = JsonConvert.SerializeObject(request).ToString()
+                    };
+
+                    await auditsService.InsertAudit(audit);
                     _logger.LogInformation($"Finaliza método ConciliationController.Desactive {responseIn}");
                     return Ok(new { message = "Se desactivo la conciliación de manera exitosa", state = "Success" });
                 }
