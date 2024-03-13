@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using ParameterControl.Services.ApprovedResults;
+using ParameterControl.Services.Audit;
 using ParameterControl.Services.Authenticated;
 using ParameterControl.Services.ConciliationExecition;
 using ParameterControl.Services.ConciliationExecution;
@@ -28,6 +29,7 @@ builder.Services.AddTransient<IResultsServices, ResultsServices>();
 builder.Services.AddTransient<ICrossConnectionsService, CrossConnectionsService>();
 builder.Services.AddTransient<IConciliationExecutionService, ConciliationExecutionService>();
 builder.Services.AddTransient<IApprovedResultsServices, ApprovedResultsServices>();
+builder.Services.AddTransient<IAuditsService, AuditsService>();
 builder.Services.AddTransient<AuthenticatedUser>();
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());

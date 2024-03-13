@@ -5,7 +5,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
 <Project>
   <PropertyGroup>
     <_PublishTargetUrl>C:\inetpub\AppClaroWeb</_PublishTargetUrl>
-    <History>True|2024-03-01T00:02:26.5151924Z;False|2024-02-29T19:01:41.4298009-05:00;</History>
+    <History>False|2024-03-13T17:49:37.7624289Z;False|2024-03-13T12:48:33.6219921-05:00;True|2024-03-13T12:34:39.2276333-05:00;False|2024-03-13T12:31:59.4804151-05:00;False|2024-03-13T12:31:13.3620268-05:00;True|2024-02-29T19:02:26.5151924-05:00;False|2024-02-29T19:01:41.4298009-05:00;</History>
     <LastFailureDetails />
   </PropertyGroup>
 </Project>

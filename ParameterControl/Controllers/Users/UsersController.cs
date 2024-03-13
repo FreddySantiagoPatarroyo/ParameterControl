@@ -12,6 +12,8 @@ using ParameterControl.Services.Util;
 using System.Data;
 using System.Security.Claims;
 using modUser = ParameterControl.Models.User;
+using modAudit = ParameterControl.Models.Audit;
+using ParameterControl.Services.Audit;
 
 namespace ParameterControl.Controllers.Users
 {    
@@ -23,6 +25,7 @@ namespace ParameterControl.Controllers.Users
         private readonly Rows rows;
         private readonly AuthenticatedUser authenticatedUser;
         private readonly IConfiguration _configuration;
+        private readonly IAuditsService auditsService;
         private readonly ClaimsPrincipal _principal;
         private readonly bool _isCreate;
         private readonly bool _isActivate;
@@ -36,7 +39,8 @@ namespace ParameterControl.Controllers.Users
             Rows rows,
             AuthenticatedUser authenticatedUser,
             IConfiguration configuration,
-            IHttpContextAccessor httpContextAccesor
+            IHttpContextAccessor httpContextAccesor,
+            IAuditsService auditsService
         )
         {
             this._logger = logger;
@@ -44,6 +48,7 @@ namespace ParameterControl.Controllers.Users
             this.rows = rows;
             this.authenticatedUser = authenticatedUser;
             _configuration = configuration;
+            this.auditsService = auditsService;
             var context = httpContextAccesor.HttpContext;
             _principal = context.User as ClaimsPrincipal;
             var data = _principal.FindFirst(ClaimTypes.Role).Value;
@@ -251,15 +256,18 @@ namespace ParameterControl.Controllers.Users
                 else
                 {
                     var responseIn = await usersServices.UpdateUser(request);
-                    AuditServices _auditServices = new AuditServices(_configuration);
-                    _ = _auditServices.InsertAudit(new Audit.Entities.AuditModel
+
+                    var audit = new modAudit.Audit()
                     {
-                        Action = "EditUser",
-                        UserCode = request.Code,
-                        Component = "Users",
+                        Action = "Editar Usuario",
+                        UserCode = authenticatedUser.GetUserCode(),
+                        Component = "Usuarios",
                         ModifieldDate = DateTime.Now,
-                        BeforeValue = Newtonsoft.Json.JsonConvert.SerializeObject(request)
-                    });
+                        BeforeValue = JsonConvert.SerializeObject(user).ToString()
+                    };
+
+                    await auditsService.InsertAudit(audit);
+
                     _logger.LogInformation($"Finaliza método UsersController.Edit {JsonConvert.SerializeObject(responseIn)}");
                     return Ok(new { message = "Se actualizo el usuario de manera exitosa", state = "Success" });
 
@@ -289,6 +297,17 @@ namespace ParameterControl.Controllers.Users
                     return View("Actions/ViewUser", null);
                 }
                 UserViewModel model = await usersServices.GetUserFormat(user);
+
+                var audit = new modAudit.Audit()
+                {
+                    Action = "Ver User",
+                    UserCode = authenticatedUser.GetUserCode(),
+                    Component = "Usuarios",
+                    ModifieldDate = DateTime.Now,
+                    BeforeValue = ""
+                };
+
+                await auditsService.InsertAudit(audit);
 
                 ViewBag.Success = true;
                 ViewBag.EntyNull = false;
