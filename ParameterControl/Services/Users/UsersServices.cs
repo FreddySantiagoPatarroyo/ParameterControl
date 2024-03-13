@@ -1,4 +1,6 @@
-﻿using ParameterControl.Models.Filter;
+﻿using ParameterControl.Audit.Impl;
+using ParameterControl.Audit.Interfaces;
+using ParameterControl.Models.Filter;
 using ParameterControl.Models.Login;
 using ParameterControl.Models.Pagination;
 using ParameterControl.Models.User;
@@ -318,7 +320,6 @@ namespace ParameterControl.Services.Users
         {
             var mapping = await MapperUpdateUser(User);
             var response = await _userService.UpdateUser(mapping);
-
             return response.Equals(1) ? "Usuario actualizado correctamente" : "Error actualizando el usuario";
         }
 
@@ -417,7 +418,7 @@ namespace ParameterControl.Services.Users
             var user = users.FirstOrDefault(x => x.User_.Equals(request.User));
             var isValid = PasswordHasher.VerifyHashedPasswordV3(user.Password, request.Password);
 
-            if (true) //isValid
+            if (isValid)
             {
                 return user;
             }

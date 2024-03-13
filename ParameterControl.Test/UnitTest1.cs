@@ -71,7 +71,7 @@ namespace ParameterControl.Test
                 {
                     Name = "PO_AIC_427",
                     Description = "Test_Description",
-                    ModifieldBy = "Test-Dev",
+                    //ModifieldBy = "Test-Dev",
                     Objetive = "Mitigar pérdidas de ingresos por inconsistencias en el aprovisionamiento de las ofertas"
                 };
 

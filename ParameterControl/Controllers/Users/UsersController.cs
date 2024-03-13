@@ -8,6 +8,7 @@ using ParameterControl.Models.User;
 using ParameterControl.Services.Authenticated;
 using ParameterControl.Services.Rows;
 using ParameterControl.Services.Users;
+using ParameterControl.Services.Util;
 using System.Data;
 using System.Security.Claims;
 using modUser = ParameterControl.Models.User;
@@ -52,7 +53,6 @@ namespace ParameterControl.Controllers.Users
             _isEdit = Convert.ToBoolean(section.Where(x => x.Key.Equals("btnEdit")).FirstOrDefault().Value);
             _isView = Convert.ToBoolean(section.Where(x => x.Key.Equals("btnDetail")).FirstOrDefault().Value);
             _isInactive = Convert.ToBoolean(section.Where(x => x.Key.Equals("btnInactive")).FirstOrDefault().Value);
-
         }
 
         [Authorize(Roles = "ADMINISTRADOR,EJECUTOR,CONSULTOR")]
@@ -251,6 +251,15 @@ namespace ParameterControl.Controllers.Users
                 else
                 {
                     var responseIn = await usersServices.UpdateUser(request);
+                    AuditServices _auditServices = new AuditServices(_configuration);
+                    _ = _auditServices.InsertAudit(new Audit.Entities.AuditModel
+                    {
+                        Action = "EditUser",
+                        UserCode = request.Code,
+                        Component = "Users",
+                        ModifieldDate = DateTime.Now,
+                        BeforeValue = Newtonsoft.Json.JsonConvert.SerializeObject(request)
+                    });
                     _logger.LogInformation($"Finaliza método UsersController.Edit {JsonConvert.SerializeObject(responseIn)}");
                     return Ok(new { message = "Se actualizo el usuario de manera exitosa", state = "Success" });
 
