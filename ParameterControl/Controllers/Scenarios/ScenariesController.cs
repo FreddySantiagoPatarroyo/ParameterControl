@@ -2,10 +2,14 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
+using ParameterControl.Models.Conciliation;
 using ParameterControl.Models.Filter;
 using ParameterControl.Models.Pagination;
+using ParameterControl.Models.Policy;
 using ParameterControl.Models.Scenery;
 using ParameterControl.Services.Authenticated;
+using ParameterControl.Services.Conciliations;
+using ParameterControl.Services.Policies;
 using ParameterControl.Services.Rows;
 using ParameterControl.Services.Scenarios;
 using System.Security.Claims;
@@ -21,6 +25,7 @@ namespace ParameterControl.Controllers.Scenarios
         public TableScenariosViewModel TableScenarios = new TableScenariosViewModel();
         private readonly ILogger<HomeController> _logger;
         private readonly IScenariosServices scenariosServices;
+        private readonly IConciliationsServices conciliationsServices;
         private readonly Rows rows;
         private readonly AuthenticatedUser authenticatedUser;
         private readonly IConfiguration _configuration;
@@ -34,6 +39,7 @@ namespace ParameterControl.Controllers.Scenarios
         public ScenariosController(
         ILogger<HomeController> logger,
             IScenariosServices scenariosServices,
+            IConciliationsServices conciliationsServices,
             Rows rows,
             AuthenticatedUser authenticatedUser,
             IConfiguration configuration,
@@ -42,6 +48,7 @@ namespace ParameterControl.Controllers.Scenarios
         {
             this._logger = logger;
             this.scenariosServices = scenariosServices;
+            this.conciliationsServices = conciliationsServices;
             this.rows = rows;
             this.authenticatedUser = authenticatedUser;
             _configuration = configuration;
@@ -392,6 +399,35 @@ namespace ParameterControl.Controllers.Scenarios
             {
                 _logger.LogError($"Error en el método ScenariosController.Desactive : {JsonConvert.SerializeObject(ex.Message)}");
                 return BadRequest(new { message = "Error al desactivar el escenario", state = "Error" });
+            }
+        }
+
+        [Authorize(Roles = "ADMINISTRADOR,EJECUTOR,CONSULTOR")]
+        [HttpGet]
+        public async Task<ActionResult> ViewConciliation(int code)
+        {
+            ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
+            try
+            {
+                ViewBag.CodeSend = code;
+                modConciliation.Conciliation conciliation = await conciliationsServices.GetConciliationsByCode(code);
+                if (conciliation.Code == 0)
+                {
+                    ViewBag.Success = true;
+                    ViewBag.EntyNull = true;
+                    return View("Actions/ViewConciliationScenarios", null);
+                }
+                ConciliationViewModel model = await conciliationsServices.GetConciliationFormat(conciliation);
+
+                ViewBag.Success = true;
+                ViewBag.EntyNull = false;
+                return View("Actions/ViewConciliationScenarios", model);
+            }
+            catch (Exception)
+            {
+                ViewBag.Success = false;
+                ViewBag.EntyNull = false;
+                return View("Actions/ViewConciliationScenarios", null);
             }
         }
 

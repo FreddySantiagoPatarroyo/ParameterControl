@@ -73,7 +73,14 @@
                                         @foreach (var Row in Model.Elements.Rows)
                                         {
                                             <div class="row_table flex_box">
-                                                <p id="text_row" class="text flex_box">@GetRowInfo(Row.Value)?.GetValue(Scenary)?.ToString()</p>
+                                                @if (Row.Value == "Conciliation")
+                                                {
+                                                    <a id="text_row" class="link_table flex_box" asp-controller="Scenarios" asp-action="ViewConciliation" asp-route-code="@Scenary.CodeConciliation">@GetRowInfo(Row.Value)?.GetValue(Scenary)?.ToString()</a>
+                                                }
+                                                else
+                                                {
+                                                    <p id="text_row" class="text flex_box">@GetRowInfo(Row.Value)?.GetValue(Scenary)?.ToString()</p>
+                                                }
                                             </div>
                                         }
                                         @if (Model.Elements.IsView || Model.Elements.IsEdit || Model.Elements.IsInactivate)
