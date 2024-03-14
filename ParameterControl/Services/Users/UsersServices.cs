@@ -291,7 +291,7 @@ namespace ParameterControl.Services.Users
         {
             try
             {
-                var hash = PasswordHasher.HashPasswordV3(request.Password);
+                var hash = PasswordHasher.HashPass(request.Password);
 
                 var user = new User.Entities.UserModel
                 {
@@ -343,7 +343,7 @@ namespace ParameterControl.Services.Users
         {
             return await Task.Run(() =>
             {
-                var hash = PasswordHasher.HashPasswordV3(User.Password);
+                var hash = PasswordHasher.HashPass(User.Password);
 
                 UserModel model = new UserModel
                 {
@@ -416,7 +416,7 @@ namespace ParameterControl.Services.Users
         {
             var users = await GetUsers();
             var user = users.FirstOrDefault(x => x.User_.Equals(request.User));
-            var isValid = PasswordHasher.VerifyHashedPasswordV3(user.Password, request.Password);
+            var isValid = PasswordHasher.VerifyHashedPass(user.Password, request.Password);
 
             if (isValid)
             {

@@ -1,96 +1,70 @@
 ﻿using System.Security.Cryptography;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
+using ParameterControl.Models;
 
 namespace ParameterControl.Services.Util
 {
     public class PasswordHasher
     {
-        public const int Pbkdf2Iterations = 1000;
-
-        public static string HashPasswordV3(string password)
+        public static string HashPass(string textPass)
         {
-            return Convert.ToBase64String(HashPasswordV3(password, RandomNumberGenerator.Create()
-                , prf: KeyDerivationPrf.HMACSHA512, iterCount: Pbkdf2Iterations, saltSize: 128 / 8
-                , numBytesRequested: 256 / 8));
+            byte[] salt;
+            byte[] buffer;
+
+            if (textPass == null)
+            {
+                throw new ArgumentNullException(nameof(textPass));
+            }
+
+            using (Rfc2898DeriveBytes bytes = new Rfc2898DeriveBytes(textPass, 16, 1000))
+            {
+                salt = bytes.Salt;
+                buffer = bytes.GetBytes(32);
+            }
+
+            byte[] dst = new byte[49];
+            Buffer.BlockCopy(salt,0,dst,1,16);
+            Buffer.BlockCopy(buffer, 0, dst, 17, 32);
+            return Convert.ToBase64String(dst);
         }
 
-
-        public static bool VerifyHashedPasswordV3(string hashedPasswordStr, string password)
+        public static bool VerifyHashedPass(string hashedPasswordStr, string textPass)
         {
-            byte[] hashedPassword = Convert.FromBase64String(hashedPasswordStr);
-            var iterCount = default(int);
-            var prf = default(KeyDerivationPrf);
+            byte[] buffer4;
+            if (hashedPasswordStr == null)
+            {
+                return false;
+            }
+            if (textPass == null)
+            {
+                throw new ArgumentException(nameof(textPass));
+            }
 
             try
             {
-                // Read header information
-                prf = (KeyDerivationPrf)ReadNetworkByteOrder(hashedPassword, 1);
-                iterCount = (int)ReadNetworkByteOrder(hashedPassword, 5);
-                int saltLength = (int)ReadNetworkByteOrder(hashedPassword, 9);
-
-                // Read the salt: must be >= 128 bits
-                if (saltLength < 128 / 8)
+                byte[] src = Convert.FromBase64String(hashedPasswordStr);
+                if ((src.Length != 49) || (src[0] != 0))
                 {
                     return false;
                 }
-                byte[] salt = new byte[saltLength];
-                Buffer.BlockCopy(hashedPassword, 13, salt, 0, salt.Length);
+                byte[] dst = new byte[16];
+                Buffer.BlockCopy(src, 1, dst, 0, 16);
+                byte[] buffer3 = new byte[32];
+                Buffer.BlockCopy(src, 17, buffer3, 0, 32);
 
-                // Read the subkey (the rest of the payload): must be >= 128 bits
-                int subkeyLength = hashedPassword.Length - 13 - salt.Length;
-                if (subkeyLength < 128 / 8)
+                using (Rfc2898DeriveBytes bytes = new Rfc2898DeriveBytes(textPass, dst,1000))
                 {
-                    return false;
+                    buffer4 = bytes.GetBytes(32);
                 }
-                byte[] expectedSubkey = new byte[subkeyLength];
-                Buffer.BlockCopy(hashedPassword, 13 + salt.Length, expectedSubkey, 0, expectedSubkey.Length);
-
-                // Hash the incoming password and verify it
-                byte[] actualSubkey = KeyDerivation.Pbkdf2(password, salt, prf, iterCount, subkeyLength);
-
-                return CryptographicOperations.FixedTimeEquals(actualSubkey, expectedSubkey);
-
+                return buffer3.SequenceEqual(buffer4);
             }
-            catch
+            catch (Exception ex)
             {
                 // This should never occur except in the case of a malformed payload, where
                 // we might go off the end of the array. Regardless, a malformed payload
                 // implies verification failed.
                 return false;
             }
-        }
-
-
-        // privates
-        private static byte[] HashPasswordV3(string password, RandomNumberGenerator rng, KeyDerivationPrf prf, int iterCount, int saltSize, int numBytesRequested)
-        {
-            byte[] salt = new byte[saltSize];
-            rng.GetBytes(salt);
-            byte[] subkey = KeyDerivation.Pbkdf2(password, salt, prf, iterCount, numBytesRequested);
-            var outputBytes = new byte[13 + salt.Length + subkey.Length];
-            outputBytes[0] = 0x01; // format marker
-            WriteNetworkByteOrder(outputBytes, 1, (uint)prf);
-            WriteNetworkByteOrder(outputBytes, 5, (uint)iterCount);
-            WriteNetworkByteOrder(outputBytes, 9, (uint)saltSize);
-            Buffer.BlockCopy(salt, 0, outputBytes, 13, salt.Length);
-            Buffer.BlockCopy(subkey, 0, outputBytes, 13 + saltSize, subkey.Length);
-            return outputBytes;
-        }
-
-        private static void WriteNetworkByteOrder(byte[] buffer, int offset, uint value)
-        {
-            buffer[offset + 0] = (byte)(value >> 24);
-            buffer[offset + 1] = (byte)(value >> 16);
-            buffer[offset + 2] = (byte)(value >> 8);
-            buffer[offset + 3] = (byte)(value >> 0);
-        }
-
-        private static uint ReadNetworkByteOrder(byte[] buffer, int offset)
-        {
-            return ((uint)(buffer[offset + 0]) << 24)
-                | ((uint)(buffer[offset + 1]) << 16)
-                | ((uint)(buffer[offset + 2]) << 8)
-                | ((uint)(buffer[offset + 3]));
         }
     }
 }
