@@ -8,6 +8,7 @@ using ParameterControl.Services.Util;
 using ParameterControl.User.Entities;
 using ParameterControl.User.Impl;
 using ParameterControl.User.Interfaces;
+using System.Security.Policy;
 using modUser = ParameterControl.Models.User;
 
 namespace ParameterControl.Services.Users
@@ -341,10 +342,20 @@ namespace ParameterControl.Services.Users
 
         private async Task<UserModel> MapperUpdateUser(modUser.User User)
         {
+            var userDB = await GetUsersByCode(User.Code);
+            var password = "";
+            if (userDB.Password == User.Password)
+            {
+                password = userDB.Password;
+            }
+            else
+            {
+                password =  PasswordHasher.HashPass(User.Password);
+            }
+            
             return await Task.Run(() =>
             {
-                var hash = PasswordHasher.HashPass(User.Password);
-
+                //var hash = PasswordHasher.HashPass(User.Password);
                 UserModel model = new UserModel
                 {
                     Code = User.Code,
@@ -352,7 +363,7 @@ namespace ParameterControl.Services.Users
                     Email = User.Email,
                     UserName = User.Name,
                     RolId = User.RolCode,
-                    Password = hash,
+                    Password = password,
                     FirstAccess = User.FirstAccess,
                     CreationDate = User.CreationDate,
                     ModifiedDate = DateTime.Now,
@@ -418,7 +429,7 @@ namespace ParameterControl.Services.Users
             var user = users.FirstOrDefault(x => x.User_.Equals(request.User));
             var isValid = PasswordHasher.VerifyHashedPass(user.Password, request.Password);
 
-            if (true)
+            if (isValid)
             {
                 return user;
             }

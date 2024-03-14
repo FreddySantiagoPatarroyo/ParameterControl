@@ -80,8 +80,6 @@
 
                 const json = await result.json();
 
-                console.log(json.FirstAccess);
-
                 if (json.state == "Success") {
                     document.getElementById('LayoytSuccess').style.display = 'block';
                     document.getElementById('layout_message_success').innerHTML = json.message;
