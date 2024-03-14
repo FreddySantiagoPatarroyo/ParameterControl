@@ -5,6 +5,7 @@ using Newtonsoft.Json;
 using ParameterControl.Models.Filter;
 using ParameterControl.Models.Pagination;
 using ParameterControl.Models.Parameter;
+using ParameterControl.Services.Audit;
 using ParameterControl.Services.Authenticated;
 using ParameterControl.Services.Parameters;
 using ParameterControl.Services.Rows;
@@ -13,6 +14,9 @@ using System.Security.Claims;
 using modConciliation = ParameterControl.Models.Conciliation;
 using modParameter = ParameterControl.Models.Parameter;
 using modScenary = ParameterControl.Models.Scenery;
+using modAudit = ParameterControl.Models.Audit;
+using ParameterControl.Models.Conciliation;
+using System.Reflection.Metadata;
 
 namespace ParameterControl.Controllers.Parameters
 {
@@ -26,6 +30,7 @@ namespace ParameterControl.Controllers.Parameters
         private readonly Rows rows;
         private readonly AuthenticatedUser authenticatedUser;
         private readonly IConfiguration _configuration;
+        private readonly IAuditsService auditsService;
         private readonly ClaimsPrincipal _principal;
         private readonly bool _isCreate;
         private readonly bool _isActivate;
@@ -40,7 +45,8 @@ namespace ParameterControl.Controllers.Parameters
             Rows rows,
             AuthenticatedUser authenticatedUser,
             IConfiguration configuration,
-            IHttpContextAccessor httpContextAccesor
+            IHttpContextAccessor httpContextAccesor,
+            IAuditsService auditsService
         )
         {
             this._logger = logger;
@@ -49,6 +55,7 @@ namespace ParameterControl.Controllers.Parameters
             this.rows = rows;
             this.authenticatedUser = authenticatedUser;
             _configuration = configuration;
+            this.auditsService = auditsService;
             var context = httpContextAccesor.HttpContext;
             _principal = context.User as ClaimsPrincipal;
             var data = _principal.FindFirst(ClaimTypes.Role).Value;
@@ -237,6 +244,16 @@ namespace ParameterControl.Controllers.Parameters
                 else
                 {
                     var responseIn = await parametersService.InsertParameter(request);
+                    var audit = new modAudit.Audit()
+                    {
+                        Action = "Crear Parametro",
+                        UserCode = authenticatedUser.GetUserCode(),
+                        Component = "Parametros",
+                        ModifieldDate = DateTime.Now,
+                        BeforeValue = ""
+                    };
+
+                    await auditsService.InsertAudit(audit);
                     _logger.LogInformation($"Finaliza método ParametersController.Create {responseIn}");
                     return Ok(new { message = "Se creo el parametro de manera exitosa", state = "Success" });
 
@@ -309,6 +326,16 @@ namespace ParameterControl.Controllers.Parameters
                 else
                 {
                     var responseIn = await parametersService.UpdateParameter(request);
+                    var audit = new modAudit.Audit()
+                    {
+                        Action = "Editar Parametro",
+                        UserCode = authenticatedUser.GetUserCode(),
+                        Component = "Parametros",
+                        ModifieldDate = DateTime.Now,
+                        BeforeValue = JsonConvert.SerializeObject(parameter).ToString()
+                    };
+
+                    await auditsService.InsertAudit(audit);
                     _logger.LogInformation($"Finaliza método ParametersController.Edit {responseIn}");
                     return Ok(new { message = "Se actualizo el parametro de manera exitosa", state = "Success" });
                 }
@@ -336,6 +363,17 @@ namespace ParameterControl.Controllers.Parameters
                     return View("Actions/ViewParameter", null);
                 }
                 ParameterViewModel model = await parametersService.GetParameterFormat(parameter);
+
+                var audit = new modAudit.Audit()
+                {
+                    Action = "Ver Parametro",
+                    UserCode = authenticatedUser.GetUserCode(),
+                    Component = "Parametros",
+                    ModifieldDate = DateTime.Now,
+                    BeforeValue = ""
+                };
+
+                await auditsService.InsertAudit(audit);
 
                 ViewBag.Success = true;
                 ViewBag.EntyNull = false;
@@ -385,6 +423,16 @@ namespace ParameterControl.Controllers.Parameters
             {
                 modParameter.Parameter request = await parametersService.GetParameterByCode(code);
                 var responseIn = await parametersService.ActiveParameter(request);
+                var audit = new modAudit.Audit()
+                {
+                    Action = "Activar Parametro",
+                    UserCode = authenticatedUser.GetUserCode(),
+                    Component = "Parametros",
+                    ModifieldDate = DateTime.Now,
+                    BeforeValue = JsonConvert.SerializeObject(request).ToString()
+                };
+
+                await auditsService.InsertAudit(audit);
                 _logger.LogInformation($"Finaliza método ParametersController.Active {responseIn}");
                 return Ok(new { message = "Se activo el parametro de manera exitosa", state = "Success" });
             }
@@ -431,6 +479,16 @@ namespace ParameterControl.Controllers.Parameters
             {
                 modParameter.Parameter request = await parametersService.GetParameterByCode(code);
                 var responseIn = await parametersService.DesactiveParameter(request);
+                var audit = new modAudit.Audit()
+                {
+                    Action = "Desactivar Parametro",
+                    UserCode = authenticatedUser.GetUserCode(),
+                    Component = "Parametros",
+                    ModifieldDate = DateTime.Now,
+                    BeforeValue = JsonConvert.SerializeObject(request).ToString()
+                };
+
+                await auditsService.InsertAudit(audit);
                 _logger.LogInformation($"Finaliza método ParametersController.Desactive {responseIn}");
                 return Ok(new { message = "Se desactivo el parametro de manera exitosa", state = "Success" });
             }

@@ -6,6 +6,7 @@ using ParameterControl.Models.Filter;
 using ParameterControl.Models.Pagination;
 using ParameterControl.Models.Result;
 using ParameterControl.Services.ApprovedResults;
+using ParameterControl.Services.Audit;
 using ParameterControl.Services.Authenticated;
 using ParameterControl.Services.Results;
 using ParameterControl.Services.Rows;
@@ -23,6 +24,7 @@ namespace ParameterControl.Controllers.ApprovedResults
         private readonly Rows rows;
         private readonly AuthenticatedUser authenticatedUser;
         private readonly IConfiguration _configuration;
+        private readonly IAuditsService auditsService;
         private readonly ClaimsPrincipal _principal;
         private readonly bool _isCreate;
         private readonly bool _isActivate;
@@ -36,7 +38,8 @@ namespace ParameterControl.Controllers.ApprovedResults
             Rows rows,
             AuthenticatedUser authenticatedUser,
             IConfiguration configuration,
-            IHttpContextAccessor httpContextAccesor
+            IHttpContextAccessor httpContextAccesor,
+            IAuditsService auditsService
         )
         {
             this._logger = logger;
@@ -44,6 +47,7 @@ namespace ParameterControl.Controllers.ApprovedResults
             this.rows = rows;
             this.authenticatedUser = authenticatedUser;
             _configuration = configuration;
+            this.auditsService = auditsService;
             var context = httpContextAccesor.HttpContext;
             _principal = context.User as ClaimsPrincipal;
             var data = _principal.FindFirst(ClaimTypes.Role).Value;

@@ -10,7 +10,9 @@ using ParameterControl.Services.Policies;
 using ParameterControl.Services.Rows;
 using System.Security.Claims;
 using modPolicy = ParameterControl.Models.Policy;
-
+using modAudit = ParameterControl.Models.Audit;
+using ParameterControl.Services.Audit;
+using ParameterControl.Models.Conciliation;
 
 namespace ParameterControl.Controllers.Policies
 {
@@ -23,6 +25,7 @@ namespace ParameterControl.Controllers.Policies
         private readonly Rows rows;
         private readonly AuthenticatedUser authenticatedUser;
         private readonly IConfiguration _configuration;
+        private readonly IAuditsService auditsService;
         private readonly ClaimsPrincipal _principal;
         private readonly bool _isCreate;
         private readonly bool _isActivate;
@@ -36,7 +39,8 @@ namespace ParameterControl.Controllers.Policies
             Rows rows,
             AuthenticatedUser authenticatedUser,
             IConfiguration configuration,
-            IHttpContextAccessor httpContextAccesor
+            IHttpContextAccessor httpContextAccesor,
+            IAuditsService auditsService
         )
         {
             this._logger = logger;
@@ -44,6 +48,7 @@ namespace ParameterControl.Controllers.Policies
             this.rows = rows;
             this.authenticatedUser = authenticatedUser;
             _configuration = configuration;
+            this.auditsService = auditsService;
             var context = httpContextAccesor.HttpContext;
             _principal = context.User as ClaimsPrincipal;
             var data = _principal.FindFirst(ClaimTypes.Role).Value;
@@ -183,6 +188,16 @@ namespace ParameterControl.Controllers.Policies
                 {
                     _logger.LogInformation($"Inicia método PoliciesController.Create {JsonConvert.SerializeObject(request)}");
                     var responseIn = await policiesServices.InsertPolicy(request);
+                    var audit = new modAudit.Audit()
+                    {
+                        Action = "Crear Politica",
+                        UserCode = authenticatedUser.GetUserCode(),
+                        Component = "Politicas",
+                        ModifieldDate = DateTime.Now,
+                        BeforeValue = ""
+                    };
+
+                    await auditsService.InsertAudit(audit);
                     _logger.LogInformation($"Finaliza método PoliciesController.Create {responseIn}");
                     return Ok(new { message = "Se creo la politica de manera exitosa", state = "Success" });
                 }
@@ -254,6 +269,16 @@ namespace ParameterControl.Controllers.Policies
                 else
                 {
                     var responseIn = await policiesServices.UpdatePolicy(request);
+                    var audit = new modAudit.Audit()
+                    {
+                        Action = "Editar Politica",
+                        UserCode = authenticatedUser.GetUserCode(),
+                        Component = "Politicas",
+                        ModifieldDate = DateTime.Now,
+                        BeforeValue = JsonConvert.SerializeObject(policy).ToString()
+                    };
+
+                    await auditsService.InsertAudit(audit);
                     _logger.LogInformation($"Finaliza método PoliciesController.Edit {responseIn}");
                     return Ok(new { message = "Se actualizo la politica de manera exitosa", state = "Success" });
                 }
@@ -285,6 +310,17 @@ namespace ParameterControl.Controllers.Policies
 
                 ViewBag.Success = true;
                 ViewBag.EntyNull = false;
+
+                var audit = new modAudit.Audit()
+                {
+                    Action = "Ver Politica",
+                    UserCode = authenticatedUser.GetUserCode(),
+                    Component = "Politicas",
+                    ModifieldDate = DateTime.Now,
+                    BeforeValue = ""
+                };
+
+                await auditsService.InsertAudit(audit);
 
                 return View("Actions/ViewPolicy", model);
             }
@@ -332,6 +368,16 @@ namespace ParameterControl.Controllers.Policies
             {
                 modPolicy.Policy request = await policiesServices.GetPolicyByCode(code);
                 var responseIn = await policiesServices.ActivePolicy(request);
+                var audit = new modAudit.Audit()
+                {
+                    Action = "Activar Politica",
+                    UserCode = authenticatedUser.GetUserCode(),
+                    Component = "Politicas",
+                    ModifieldDate = DateTime.Now,
+                    BeforeValue = JsonConvert.SerializeObject(request).ToString()
+                };
+
+                await auditsService.InsertAudit(audit);
                 _logger.LogInformation($"Finaliza método PoliciesController.Active {responseIn}");
                 return Ok(new { message = "Se activo la politica de manera exitosa", state = "Success" });
             }
@@ -378,6 +424,16 @@ namespace ParameterControl.Controllers.Policies
             {
                 modPolicy.Policy request = await policiesServices.GetPolicyByCode(code);
                 var responseIn = await policiesServices.DesactivePolicy(request);
+                var audit = new modAudit.Audit()
+                {
+                    Action = "Desactivar Politica",
+                    UserCode = authenticatedUser.GetUserCode(),
+                    Component = "Politicas",
+                    ModifieldDate = DateTime.Now,
+                    BeforeValue = JsonConvert.SerializeObject(request).ToString()
+                };
+
+                await auditsService.InsertAudit(audit);
                 _logger.LogInformation($"Finaliza método PoliciesController.Desactive {responseIn}");
                 return Ok(new { message = "Se desactivo la politica de manera exitosa", state = "Success" });
             }

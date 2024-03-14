@@ -15,7 +15,8 @@ using ParameterControl.Services.Scenarios;
 using System.Security.Claims;
 using modConciliation = ParameterControl.Models.Conciliation;
 using modScenery = ParameterControl.Models.Scenery;
-
+using modAudit = ParameterControl.Models.Audit;
+using ParameterControl.Services.Audit;
 
 namespace ParameterControl.Controllers.Scenarios
 {
@@ -29,6 +30,7 @@ namespace ParameterControl.Controllers.Scenarios
         private readonly Rows rows;
         private readonly AuthenticatedUser authenticatedUser;
         private readonly IConfiguration _configuration;
+        private readonly IAuditsService auditsService;
         private readonly ClaimsPrincipal _principal;
         private readonly bool _isCreate;
         private readonly bool _isActivate;
@@ -43,7 +45,8 @@ namespace ParameterControl.Controllers.Scenarios
             Rows rows,
             AuthenticatedUser authenticatedUser,
             IConfiguration configuration,
-            IHttpContextAccessor httpContextAccesor
+            IHttpContextAccessor httpContextAccesor,
+            IAuditsService auditsService
         )
         {
             this._logger = logger;
@@ -52,6 +55,7 @@ namespace ParameterControl.Controllers.Scenarios
             this.rows = rows;
             this.authenticatedUser = authenticatedUser;
             _configuration = configuration;
+            this.auditsService = auditsService;
             var context = httpContextAccesor.HttpContext;
             _principal = context.User as ClaimsPrincipal;
             var data = _principal.FindFirst(ClaimTypes.Role).Value;
@@ -192,6 +196,16 @@ namespace ParameterControl.Controllers.Scenarios
                 else
                 {
                     var responseIn = await scenariosServices.InsertScenery(request);
+                    var audit = new modAudit.Audit()
+                    {
+                        Action = "Crear Escenario",
+                        UserCode = authenticatedUser.GetUserCode(),
+                        Component = "Escenarios",
+                        ModifieldDate = DateTime.Now,
+                        BeforeValue = ""
+                    };
+
+                    await auditsService.InsertAudit(audit);
                     _logger.LogInformation($"Finaliza método ScenariosController.Create {responseIn}");
                     return Ok(new { message = "Se creo el escenario de manera exitosa", state = "Success" });
 
@@ -265,6 +279,16 @@ namespace ParameterControl.Controllers.Scenarios
                 else
                 {
                     var responseIn = await scenariosServices.UpdateScenery(request);
+                    var audit = new modAudit.Audit()
+                    {
+                        Action = "Editar Escenario",
+                        UserCode = authenticatedUser.GetUserCode(),
+                        Component = "Escenarios",
+                        ModifieldDate = DateTime.Now,
+                        BeforeValue = JsonConvert.SerializeObject(scenery).ToString()
+                    };
+
+                    await auditsService.InsertAudit(audit);
                     _logger.LogInformation($"Finaliza método ScenariosController.Edit {responseIn}");
                     return Ok(new { message = "Se actualizo el escenario de manera exitosa", state = "Success" });
 
@@ -295,6 +319,17 @@ namespace ParameterControl.Controllers.Scenarios
                     return View("Actions/ViewScenery", null);
                 }
                 SceneryViewModel model = await scenariosServices.GetSceneryFormat(scenery);
+
+                var audit = new modAudit.Audit()
+                {
+                    Action = "Ver Escenario",
+                    UserCode = authenticatedUser.GetUserCode(),
+                    Component = "Escenarios",
+                    ModifieldDate = DateTime.Now,
+                    BeforeValue = ""
+                };
+
+                await auditsService.InsertAudit(audit);
 
                 ViewBag.Success = true;
                 ViewBag.EntyNull = false;
@@ -346,6 +381,16 @@ namespace ParameterControl.Controllers.Scenarios
             {
                 Scenery request = await scenariosServices.GetSceneryByCode(code);
                 var responseIn = await scenariosServices.ActiveScenery(request);
+                var audit = new modAudit.Audit()
+                {
+                    Action = "Editar Escenario",
+                    UserCode = authenticatedUser.GetUserCode(),
+                    Component = "Escenarios",
+                    ModifieldDate = DateTime.Now,
+                    BeforeValue = JsonConvert.SerializeObject(request).ToString()
+                };
+
+                await auditsService.InsertAudit(audit);
                 _logger.LogInformation($"Finaliza método ScenariosController.Active {responseIn}");
                 return Ok(new { message = "Se activo el escenario de manera exitosa", state = "Success" });
             }
@@ -392,6 +437,16 @@ namespace ParameterControl.Controllers.Scenarios
             {
                 Scenery request = await scenariosServices.GetSceneryByCode(code);
                 var responseIn = await scenariosServices.DesactiveScenery(request);
+                var audit = new modAudit.Audit()
+                {
+                    Action = "Editar Escenario",
+                    UserCode = authenticatedUser.GetUserCode(),
+                    Component = "Escenarios",
+                    ModifieldDate = DateTime.Now,
+                    BeforeValue = JsonConvert.SerializeObject(request).ToString()
+                };
+
+                await auditsService.InsertAudit(audit);
                 _logger.LogInformation($"Finaliza método ScenariosController.Desactive {responseIn}");
                 return Ok(new { message = "Se desactivo el escenario de manera exitosa", state = "Success" });
             }
@@ -421,6 +476,18 @@ namespace ParameterControl.Controllers.Scenarios
 
                 ViewBag.Success = true;
                 ViewBag.EntyNull = false;
+
+                var audit = new modAudit.Audit()
+                {
+                    Action = "Ver Conciliacion En Escenario",
+                    UserCode = authenticatedUser.GetUserCode(),
+                    Component = "Escenarios",
+                    ModifieldDate = DateTime.Now,
+                    BeforeValue = ""
+                };
+
+                await auditsService.InsertAudit(audit);
+
                 return View("Actions/ViewConciliationScenarios", model);
             }
             catch (Exception)

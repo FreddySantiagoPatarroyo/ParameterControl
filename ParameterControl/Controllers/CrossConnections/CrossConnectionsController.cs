@@ -5,11 +5,13 @@ using Newtonsoft.Json;
 using ParameterControl.Models.CrossConnection;
 using ParameterControl.Models.Filter;
 using ParameterControl.Models.Pagination;
+using ParameterControl.Services.Audit;
 using ParameterControl.Services.Authenticated;
 using ParameterControl.Services.CrossConnections;
 using ParameterControl.Services.Rows;
 using System.Security.Claims;
 using modCrossConnection = ParameterControl.Models.CrossConnection;
+using modAudit = ParameterControl.Models.Audit;
 
 namespace ParameterControl.Controllers.CrossConnections
 {
@@ -22,6 +24,7 @@ namespace ParameterControl.Controllers.CrossConnections
         private readonly ILogger<HomeController> _logger;
         private readonly AuthenticatedUser authenticatedUser;
         private readonly IConfiguration _configuration;
+        private readonly IAuditsService auditsService;
         private readonly ClaimsPrincipal _principal;
         private readonly bool _isCreate;
         private readonly bool _isActivate;
@@ -35,7 +38,8 @@ namespace ParameterControl.Controllers.CrossConnections
             ICrossConnectionsService crossConnectionsService,
             AuthenticatedUser authenticatedUser,
             IConfiguration configuration,
-            IHttpContextAccessor httpContextAccesor
+            IHttpContextAccessor httpContextAccesor,
+            IAuditsService auditsService
         )
         {
             this._logger = logger;
@@ -43,6 +47,7 @@ namespace ParameterControl.Controllers.CrossConnections
             this.crossConnectionsService = crossConnectionsService;
             this.authenticatedUser = authenticatedUser;
             _configuration = configuration;
+            this.auditsService = auditsService;
             var context = httpContextAccesor.HttpContext;
             _principal = context.User as ClaimsPrincipal;
             var data = _principal.FindFirst(ClaimTypes.Role).Value;
@@ -161,6 +166,17 @@ namespace ParameterControl.Controllers.CrossConnections
                 }
 
                 CrossConnectionViewModel model = await crossConnectionsService.GetCrossConnectionFormat(crossConnection);
+
+                var audit = new modAudit.Audit()
+                {
+                    Action = "Ver Toma transversal",
+                    UserCode = authenticatedUser.GetUserCode(),
+                    Component = "Tomas Transversales",
+                    ModifieldDate = DateTime.Now,
+                    BeforeValue = ""
+                };
+
+                await auditsService.InsertAudit(audit);
 
                 ViewBag.Success = true;
                 ViewBag.EntyNull = false;

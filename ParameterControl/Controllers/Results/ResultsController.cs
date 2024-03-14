@@ -12,6 +12,8 @@ using ParameterControl.Services.Results;
 using ParameterControl.Services.Rows;
 using System.Security.Claims;
 using modResult = ParameterControl.Models.Result;
+using modAudit = ParameterControl.Models.Audit;
+using ParameterControl.Services.Audit;
 
 namespace ParameterControl.Controllers.Results
 {
@@ -24,6 +26,7 @@ namespace ParameterControl.Controllers.Results
         private readonly Rows rows;
         private readonly AuthenticatedUser authenticatedUser;
         private readonly IConfiguration _configuration;
+        private readonly IAuditsService auditsService;
         private readonly ClaimsPrincipal _principal;
         private readonly bool _isCreate;
         private readonly bool _isActivate;
@@ -37,7 +40,8 @@ namespace ParameterControl.Controllers.Results
             Rows rows,
             AuthenticatedUser authenticatedUser,
             IConfiguration configuration,
-            IHttpContextAccessor httpContextAccesor
+            IHttpContextAccessor httpContextAccesor,
+            IAuditsService auditsService
         )
         {
             this._logger = logger;
@@ -45,6 +49,7 @@ namespace ParameterControl.Controllers.Results
             this.rows = rows;
             this.authenticatedUser = authenticatedUser;
             _configuration = configuration;
+            this.auditsService = auditsService;
             var context = httpContextAccesor.HttpContext;
             _principal = context.User as ClaimsPrincipal;
             var data = _principal.FindFirst(ClaimTypes.Role).Value;

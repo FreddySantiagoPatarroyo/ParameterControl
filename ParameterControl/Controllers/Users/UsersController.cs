@@ -186,6 +186,16 @@ namespace ParameterControl.Controllers.Users
                 else
                 {
                     var responseIn = await usersServices.InsertUser(request);
+                    var audit = new modAudit.Audit()
+                    {
+                        Action = "Crear Usuario",
+                        UserCode = authenticatedUser.GetUserCode(),
+                        Component = "Usuarios",
+                        ModifieldDate = DateTime.Now,
+                        BeforeValue = ""
+                    };
+
+                    await auditsService.InsertAudit(audit);
                     _logger.LogInformation($"Finaliza método UsersController.Create {JsonConvert.SerializeObject(responseIn)}");
 
                     return Ok(new { message = "Se creo el usuario de manera exitosa", state = "Success" });
@@ -300,7 +310,7 @@ namespace ParameterControl.Controllers.Users
 
                 var audit = new modAudit.Audit()
                 {
-                    Action = "Ver User",
+                    Action = "Ver Usuario",
                     UserCode = authenticatedUser.GetUserCode(),
                     Component = "Usuarios",
                     ModifieldDate = DateTime.Now,
@@ -357,6 +367,16 @@ namespace ParameterControl.Controllers.Users
             {
                 modUser.User request = await usersServices.GetUsersByCode(code);
                 var responseIn = await usersServices.ActiveUser(request);
+                var audit = new modAudit.Audit()
+                {
+                    Action = "Activar Usuario",
+                    UserCode = authenticatedUser.GetUserCode(),
+                    Component = "Usuarios",
+                    ModifieldDate = DateTime.Now,
+                    BeforeValue = JsonConvert.SerializeObject(request).ToString()
+                };
+
+                await auditsService.InsertAudit(audit);
                 _logger.LogInformation($"Finaliza método UsersController.Active {JsonConvert.SerializeObject(request)}");
                 return Ok(new { message = "Se activo el usuario de manera exitosa", state = "Success" });
             }
@@ -403,6 +423,16 @@ namespace ParameterControl.Controllers.Users
             {
                 modUser.User request = await usersServices.GetUsersByCode(code);
                 var responseIn = await usersServices.DesactiveUser(request);
+                var audit = new modAudit.Audit()
+                {
+                    Action = "Desactivar Usuario",
+                    UserCode = authenticatedUser.GetUserCode(),
+                    Component = "Usuarios",
+                    ModifieldDate = DateTime.Now,
+                    BeforeValue = JsonConvert.SerializeObject(request).ToString()
+                };
+
+                await auditsService.InsertAudit(audit);
                 _logger.LogInformation($"Finaliza método UsersController.Desactive {JsonConvert.SerializeObject(request)}");
                 return Ok(new { message = "Se desactivo el usuario de manera exitosa", state = "Success" });
             }
