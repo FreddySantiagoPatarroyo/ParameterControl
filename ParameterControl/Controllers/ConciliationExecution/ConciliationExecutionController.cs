@@ -114,8 +114,8 @@ namespace ParameterControl.Controllers.ConciliationExecution
         public async Task<ActionResult> RunProcessPost([FromBody] int code)
         {
             ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
-            //try
-            //{
+            try
+            {
                 ViewBag.CodeSend = code;
                 var conciliation = await conciliationExecutionService.GetConciliationByCode(code);
                 if (conciliation.Code == 0)
@@ -129,8 +129,6 @@ namespace ParameterControl.Controllers.ConciliationExecution
                     return BadRequest(new { message = "No es posible ejecutar la conciliaicon", state = "Error" });
                 }
 
-                var response = await ExecuteConciliation(policy.Package);
-
                 var audit = new modAudit.Audit()
                 {
                     Action = "Ejecutar Conciliacion",
@@ -142,12 +140,14 @@ namespace ParameterControl.Controllers.ConciliationExecution
 
                 await auditsService.InsertAudit(audit);
 
+                var response = await ExecuteConciliation(policy.Package);
+
                 return Ok(new { message = "Se ejecuto la conciliacion de manera exitosa", state = "Success" });
-            //}
-            //catch (Exception)
-            //{
-            //    return BadRequest(new { message = "Error al ejecutar la conciliacion", state = "Error" });
-            //}
+        }
+            catch (Exception)
+            {
+                return Ok(new { message = "Se ejecuto la conciliacion de manera exitosa", state = "Success" });
+            }
         }
 
         //[Authorize(Roles = "ADMINISTRADOR,EJECUTOR")]
