@@ -142,11 +142,11 @@ namespace ParameterControl.Controllers.ConciliationExecution
 
                 var response = await ExecuteConciliation(policy.Package);
 
-                return Ok(new { message = "Se ejecuto la conciliacion de manera exitosa", state = "Success" });
+                return Ok(new { message = "La conciliacion se esta ejecutando", state = "Success" });
         }
             catch (Exception)
             {
-                return Ok(new { message = "Se ejecuto la conciliacion de manera exitosa", state = "Success" });
+                return Ok(new { message = "La conciliacion se esta ejecutando", state = "Success" });
             }
         }
 

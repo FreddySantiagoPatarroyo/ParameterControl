@@ -401,11 +401,11 @@ namespace ParameterControl.Services.Rows
                     Value = "UploadDateFormat",
                     Name = "Fecha carga"
                 },
-                 new Row()
-                {
-                    Value = "UploadDate",
-                    Name = "Fecha carga"
-                },
+                // new Row()
+                //{
+                //    Value = "UploadDate",
+                //    Name = "Fecha carga"
+                //},
                 new Row()
                 {
                     Value = "ValueBeneficiary",

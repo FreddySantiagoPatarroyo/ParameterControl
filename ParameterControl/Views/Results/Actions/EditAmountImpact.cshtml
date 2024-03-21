@@ -5,6 +5,7 @@
     ViewData["Title"] = "Editar Monto Impacto";
     string ErrorEntyNull = "No existe este resultado" + ",Results";
     string ErrorSuccess = "Se genero un problema al obtener la informacion,Results";
+    string MessageInfo = "Una vez se modifique el campo monto impacto, este no podra volver a modificarse nuevamente!";
 }
 
 <partial name="_Menu" model="@ViewBag.InfoUser" />
@@ -33,6 +34,12 @@ else
                         <h1>Resultado</h1>
                     </div>
 
+                    <div style="text-align:center">
+                        <partial name="_MessageInfo" model="MessageInfo" />
+                    </div>
+
+                    <p class="note_text text_error"></p>
+
                     <input type="hidden" asp-for="ConciliationSK" />
                     <input type="hidden" asp-for="StageSK" />
 
@@ -60,7 +67,7 @@ else
                             <div class="input">
                                 @if (Model.AmountImpact == 0)
                                 {
-                                    <input asp-for="AmountImpact" value="" placeholder="Monto Beneficio" />
+                                    <input asp-for="AmountImpact" value="" placeholder="Monto Impacto" />
                                 }
                                 else
                                 {

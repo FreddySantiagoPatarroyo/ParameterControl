@@ -5,6 +5,7 @@
     ViewData["Title"] = "Editar Monto Beneficio";
     string ErrorEntyNull = "No existe este resultado" + ",Results";
     string ErrorSuccess = "Se genero un problema al obtener la informacion,Results";
+    string MessageInfo = "Una vez se modifique el campo monto beneficio, este no podra volver a modificarse nuevamente!";
 }
 
 <partial name="_Menu" model="@ViewBag.InfoUser" />
@@ -31,6 +32,10 @@ else
                     <div class="header_form">
                         <img src="/images/iconApple.png" />
                         <h1>Resultado</h1>
+                    </div>
+
+                    <div style="text-align:center">
+                        <partial name="_MessageInfo" model="MessageInfo" />
                     </div>
 
                     <input type="hidden" asp-for="ConciliationSK"/>

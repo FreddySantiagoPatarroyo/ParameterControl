@@ -154,7 +154,7 @@ namespace ParameterControl.Controllers.Results
             }
         }
 
-        [Authorize(Roles = "ADMINISTRADOR")]
+        [Authorize(Roles = "ADMINISTRADOR,EJECUTOR")]
         [HttpGet]
         public async Task<ActionResult> EditAmountBenefit(int conciliationSK, int stageSK, string uploadDate)
         {
@@ -182,7 +182,7 @@ namespace ParameterControl.Controllers.Results
             }
         }
 
-        [Authorize(Roles = "ADMINISTRADOR")]
+        [Authorize(Roles = "ADMINISTRADOR,EJECUTOR")]
         [HttpPost]
         public async Task<ActionResult> EditAmountBenefit([FromBody] modResult.Result request)
         {
@@ -233,7 +233,7 @@ namespace ParameterControl.Controllers.Results
             }
         }
 
-        [Authorize(Roles = "ADMINISTRADOR")]
+        [Authorize(Roles = "ADMINISTRADOR,EJECUTOR")]
         [HttpGet]
         public async Task<ActionResult> EditAmountImpact(int conciliationSK, int stageSK, string uploadDate)
         {
@@ -261,7 +261,7 @@ namespace ParameterControl.Controllers.Results
             }
         }
 
-        [Authorize(Roles = "ADMINISTRADOR")]
+        [Authorize(Roles = "ADMINISTRADOR,EJECUTOR")]
         [HttpPost]
         public async Task<ActionResult> EditAmountImpact([FromBody] modResult.Result request)
         {

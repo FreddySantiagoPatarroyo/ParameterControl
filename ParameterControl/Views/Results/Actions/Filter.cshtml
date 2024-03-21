@@ -36,9 +36,12 @@
                                     </li>
                                     @foreach (var Colunm in Model.Rows)
                                     {
-                                        <li onclick="selectOption('@Colunm.Name', '@Colunm.Value')" class="option">
-                                            <p class="option_text">@Colunm.Name</p>
-                                        </li>
+                                        @if (Colunm.Value == "Conciliation")
+                                        {
+                                            <li onclick="selectOption('@Colunm.Name', '@Colunm.Value')" class="option">
+                                                <p class="option_text">@Colunm.Name</p>
+                                            </li>
+                                        }
                                     }
                                 </ul>
                             </div>
