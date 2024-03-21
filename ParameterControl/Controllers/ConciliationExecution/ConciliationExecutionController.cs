@@ -210,36 +210,36 @@ namespace ParameterControl.Controllers.ConciliationExecution
             }
         }
 
-        [Authorize(Roles = "ADMINISTRADOR")]
-        [HttpGet]
-        public async Task<ActionResult> AbortConciliation(int code)
-        {
-            ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
-            try
-            {
-                ViewBag.CodeSend = code;
-                var conciliation = await conciliationExecutionService.GetConciliationByCode(code);
-                if (conciliation.Code == 0)
-                {
-                    ViewBag.Success = true;
-                    ViewBag.EntyNull = true;
-                    return View("Actions/AbortConciliation", null);
-                }
-                var model = new ConciliationExecutionViewModel();
-                model.conciliation = conciliation;
+        //[Authorize(Roles = "ADMINISTRADOR")]
+        //[HttpGet]
+        //public async Task<ActionResult> AbortConciliation(int code)
+        //{
+        //    ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
+        //    try
+        //    {
+        //        ViewBag.CodeSend = code;
+        //        var conciliation = await conciliationExecutionService.GetConciliationByCode(code);
+        //        if (conciliation.Code == 0)
+        //        {
+        //            ViewBag.Success = true;
+        //            ViewBag.EntyNull = true;
+        //            return View("Actions/AbortConciliation", null);
+        //        }
+        //        var model = new ConciliationExecutionViewModel();
+        //        model.conciliation = conciliation;
 
 
-                ViewBag.Success = true;
-                ViewBag.EntyNull = false;
-                return View("Actions/AbortConciliation", model);
-            }
-            catch (Exception)
-            {
-                ViewBag.Success = false;
-                ViewBag.EntyNull = false;
-                return View("Actions/AbortConciliation", null);
-            }
-        }
+        //        ViewBag.Success = true;
+        //        ViewBag.EntyNull = false;
+        //        return View("Actions/AbortConciliation", model);
+        //    }
+        //    catch (Exception)
+        //    {
+        //        ViewBag.Success = false;
+        //        ViewBag.EntyNull = false;
+        //        return View("Actions/AbortConciliation", null);
+        //    }
+        //}
 
         private async Task<List<SelectListItem>> GetAllConciliation()
         {

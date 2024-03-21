@@ -62,10 +62,10 @@ else
                      @*    @if(Model.IsProgram){
                             <a class="button button_program btn_spacing" onclick="sendData('Program')"><p class="text font_bold">Programar</p></a>
                         } *@
-                        @if (Model.IsAbort)
+                        @* @if (Model.IsAbort)
                         {
                             <a class="button button_primary btn_spacing" onclick="sendData('Abort')"><p class="text font_bold">Abortar</p></a>
-                        }
+                        } *@
                     </div>
                    <div class="btn_action_cancel">
                         <a class="button button_secondary button_cancel" asp-controller="Home" asp-action="Index"><p class="text font_bold">Cancelar</p></a>
