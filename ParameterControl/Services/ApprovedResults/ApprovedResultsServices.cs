@@ -198,7 +198,7 @@ namespace ParameterControl.Services.ApprovedResults
             {
                 modApprovedResult.ApprovedResult model = new modApprovedResult.ApprovedResult
                 {
-                    Conciliation = stageSummaryModel.ConciliarionCode,
+                    Conciliation = stageSummaryModel.ConciliationCode,
                     Scenery = stageSummaryModel.StageCode,
                     StatusConciliation = stageSummaryModel.StatusConciliation,
                     UploadDate = stageSummaryModel.UploadDate,

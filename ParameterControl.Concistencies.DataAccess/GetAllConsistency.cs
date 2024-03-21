@@ -24,7 +24,7 @@ namespace ParameterControl.Consistency.DataAccess
                     {
                         connection.Open();
 
-                        using (OracleCommand command = new OracleCommand("ALL_CONSISTENCIES_POST_FACT", connection))
+                        using (OracleCommand command = new OracleCommand(_configuration.GetConnectionString("SAICDES") + "ALL_CONSISTENCIES_POST_FACT", connection))
                         {
                             command.CommandType = CommandType.StoredProcedure;
                             OracleDataReader reader = command.ExecuteReader();

@@ -14,6 +14,8 @@ using System.Security.Claims;
 using modResult = ParameterControl.Models.Result;
 using modAudit = ParameterControl.Models.Audit;
 using ParameterControl.Services.Audit;
+using ParameterControl.Models.Conciliation;
+using ParameterControl.Services.Conciliations;
 
 namespace ParameterControl.Controllers.Results
 {
@@ -154,11 +156,160 @@ namespace ParameterControl.Controllers.Results
 
         [Authorize(Roles = "ADMINISTRADOR")]
         [HttpGet]
-        public async Task<ActionResult> Edit()
+        public async Task<ActionResult> EditAmountBenefit(int conciliationSK, int stageSK, string uploadDate)
         {
-            Result result = new Result();
+            try
+            {
+                ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
+                var date = DateTime.Parse(uploadDate);
+                Result result = await resultsServices.GetOneResult(conciliationSK, stageSK, date);
+                if (result.ConciliationSK == 0 || result.StageSK == 0 || result.UploadDate == DateTime.MinValue)
+                {
+                    ViewBag.Success = true;
+                    ViewBag.EntyNull = true;
+                    return View("Actions/EditAmountBenefit", null);
+                }
+
+                ViewBag.Success = true;
+                ViewBag.EntyNull = false;
+                return View("Actions/EditAmountBenefit", result);
+            }
+            catch (Exception)
+            {
+                ViewBag.Success = false;
+                ViewBag.EntyNull = false;
+                return View("Actions/EditAmountBenefit", null);
+            }
+        }
+
+        [Authorize(Roles = "ADMINISTRADOR")]
+        [HttpPost]
+        public async Task<ActionResult> EditAmountBenefit([FromBody] modResult.Result request)
+        {
             ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
-            return View("Actions/EditResult", result);
+            try
+            {
+                if(request.UploadDateTemp == string.Empty)
+                {
+                    _logger.LogError($"Error la conciliacion no existe : {JsonConvert.SerializeObject(request)}");
+                    return BadRequest(new { message = "No existe este resultado", state = "Error" });
+                }
+                else
+                {
+                    request.UploadDate = DateTime.Parse(request.UploadDateTemp);
+                }
+                if (request.ConciliationSK == 0 || request.StageSK == 0 || request.UploadDate == DateTime.MinValue)
+                {
+                    _logger.LogError($"Error la conciliacion no existe : {JsonConvert.SerializeObject(request)}");
+                    return BadRequest(new { message = "No existe este resultado", state = "Error" });
+                }
+
+
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(new { message = "Error en la informacion enviada", state = "Error" });
+                }
+                else
+                {
+                    var responseIn = await resultsServices.UpdateAmountBenefitResult(request);
+                    var audit = new modAudit.Audit()
+                    {
+                        Action = "Editar monto beneficio",
+                        UserCode = authenticatedUser.GetUserCode(),
+                        Component = "Resultados",
+                        ModifieldDate = DateTime.Now,
+                        BeforeValue = ""
+                    };
+
+                    await auditsService.InsertAudit(audit);
+                    _logger.LogInformation($"Finaliza método ResultController.Edit {responseIn}");
+                    return Ok(new { message = "Se actualizo el monto beneficio de manera exitosa", state = "Success" });
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error en el método ResultController.Edit : {JsonConvert.SerializeObject(ex.Message)}");
+                return BadRequest(new { message = "Error al actualizar el monto beneficio", state = "Error" });
+            }
+        }
+
+        [Authorize(Roles = "ADMINISTRADOR")]
+        [HttpGet]
+        public async Task<ActionResult> EditAmountImpact(int conciliationSK, int stageSK, string uploadDate)
+        {
+            try
+            {
+                ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
+                var date = DateTime.Parse(uploadDate);
+                Result result = await resultsServices.GetOneResult(conciliationSK, stageSK, date);
+                if (result.ConciliationSK == 0 || result.StageSK == 0 || result.UploadDate == DateTime.MinValue)
+                {
+                    ViewBag.Success = true;
+                    ViewBag.EntyNull = true;
+                    return View("Actions/EditAmountImpact", null);
+                }
+
+                ViewBag.Success = true;
+                ViewBag.EntyNull = false;
+                return View("Actions/EditAmountImpact", result);
+            }
+            catch (Exception)
+            {
+                ViewBag.Success = false;
+                ViewBag.EntyNull = false;
+                return View("Actions/EditAmountImpact", null);
+            }
+        }
+
+        [Authorize(Roles = "ADMINISTRADOR")]
+        [HttpPost]
+        public async Task<ActionResult> EditAmountImpact([FromBody] modResult.Result request)
+        {
+            ViewBag.InfoUser = authenticatedUser.GetUserNameAndRol();
+            try
+            {
+                if (request.UploadDateTemp == string.Empty)
+                {
+                    _logger.LogError($"Error el resultado no existe : {JsonConvert.SerializeObject(request)}");
+                    return BadRequest(new { message = "No existe este resultado", state = "Error" });
+                }
+                else
+                {
+                    request.UploadDate = DateTime.Parse(request.UploadDateTemp);
+                }
+                if (request.ConciliationSK == 0 || request.StageSK == 0 || request.UploadDate == DateTime.MinValue)
+                {
+                    _logger.LogError($"Error el resultado no existe : {JsonConvert.SerializeObject(request)}");
+                    return BadRequest(new { message = "No existe este resultado", state = "Error" });
+                }
+
+
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(new { message = "Error en la informacion enviada", state = "Error" });
+                }
+                else
+                {
+                    var responseIn = await resultsServices.UpdateAmountImpactResult(request);
+                    var audit = new modAudit.Audit()
+                    {
+                        Action = "Editar monto impacto",
+                        UserCode = authenticatedUser.GetUserCode(),
+                        Component = "Resultados",
+                        ModifieldDate = DateTime.Now,
+                        BeforeValue = ""
+                    };
+
+                    await auditsService.InsertAudit(audit);
+                    _logger.LogInformation($"Finaliza método ResultController.Edit {responseIn}");
+                    return Ok(new { message = "Se actualizo el monto impacto de manera exitosa", state = "Success" });
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error en el método ResultController.Edit : {JsonConvert.SerializeObject(ex.Message)}");
+                return BadRequest(new { message = "Error al actualizar el monto impacto", state = "Error" });
+            }
         }
 
         //[Authorize(Roles = "ADMINISTRADOR,EJECUTOR,CONSULTOR")]

@@ -26,7 +26,7 @@ namespace ParameterControl.Stage.DataAccess
                     {
                         connection.Open();
 
-                        using (OracleCommand command = new OracleCommand("DELETE_SCENARY", connection))
+                        using (OracleCommand command = new OracleCommand(_configuration.GetConnectionString("SAICDES") + "DELETE_SCENARY", connection))
                         {
                             command.CommandType = CommandType.StoredProcedure;
                             command.Parameters.Add(new OracleParameter("PARAM_CODE", entity.Code));

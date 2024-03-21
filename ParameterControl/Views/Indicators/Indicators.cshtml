@@ -3,19 +3,8 @@
 
 @{
     ViewData["Title"] = "Indicadores";
-    string ErrorSuccess = "Se genero un problema al obtener la informacion,Home";
 }
 
 <partial name="_Menu" model="@ViewBag.InfoUser" />
 
-@if (!ViewBag.Success)
-{
-    <partial name="_ModalError" model="ErrorSuccess" />
-}
-else
-{
-    <partial name="_TableIndicators" model="Model" />
-}
-
-@section Scripts {
-}
+<iframe title="INDICADORES - OK" class="board" src="https://app.powerbi.com/reportEmbed?reportId=76844c90-0838-4024-b8f5-8f3b89c8b5a2&autoAuth=true&ctid=46bb22b8-4c2c-40ff-8360-7b6334821279" frameborder="0" allowFullScreen="true"></iframe>

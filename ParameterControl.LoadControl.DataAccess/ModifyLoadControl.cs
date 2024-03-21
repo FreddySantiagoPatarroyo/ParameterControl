@@ -26,7 +26,7 @@ namespace ParameterControl.LoadControl.DataAccess
                     {
                         connection.Open();
 
-                        using (OracleCommand command = new OracleCommand("UPDATE_LOAD_CONTROL", connection))
+                        using (OracleCommand command = new OracleCommand(_configuration.GetConnectionString("SAICDES") + "UPDATE_LOAD_CONTROL", connection))
                         {
                             command.CommandType = CommandType.StoredProcedure;
                             command.Parameters.Add(new OracleParameter("PARAM_PACKAGE", entity.Package));

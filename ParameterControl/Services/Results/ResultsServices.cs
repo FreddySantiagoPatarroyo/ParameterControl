@@ -1,3 +1,4 @@
+using ParameterControl.Conciliation.Entities;
 using ParameterControl.Models.Filter;
 using ParameterControl.Models.Pagination;
 using ParameterControl.Models.Policy;
@@ -8,6 +9,7 @@ using ParameterControl.Policy.Interfaces;
 using ParameterControl.Stage.Entities;
 using ParameterControl.Stage.Impl;
 using ParameterControl.Stage.Interfaces;
+using System.DirectoryServices.Protocols;
 using modResult = ParameterControl.Models.Result;
 
 namespace ParameterControl.Services.Results
@@ -83,6 +85,13 @@ namespace ParameterControl.Services.Results
             }
         }
 
+        public async Task<modResult.Result> GetOneResult(int conciliationSK, int stageSK, DateTime uploadDate)
+        {
+            var response = await _resultService.SelectOneSummaryStage(new StageSummaryModel { ConciliationSK = conciliationSK, StageSK = stageSK, UploadDate = uploadDate });
+            var result = await MapperToResult(response);
+            return result;
+        }
+
         public async Task<List<ResultViewModel>> GetResultsFormat(List<modResult.Result> results)
         {
             List<ResultViewModel> ResultsModel = new List<ResultViewModel>();
@@ -90,6 +99,8 @@ namespace ParameterControl.Services.Results
             foreach (modResult.Result result in results)
             {
                 ResultViewModel resultModel = new ResultViewModel();
+                resultModel.ConciliationSK = result.ConciliationSK;
+                resultModel.StageSK = result.StageSK;
                 resultModel.Conciliation = result.Conciliation;
                 resultModel.Scenery = result.Scenery;
                 resultModel.StatusConciliation = result.StatusConciliation;
@@ -99,6 +110,8 @@ namespace ParameterControl.Services.Results
                 resultModel.ValueRepetition = result.ValueRepetition;
                 resultModel.UploadDate = result.UploadDate;
                 resultModel.UploadDateFormat = result.UploadDate.ToString("dd/MM/yyyy");
+                resultModel.AmountBenefit = result.AmountBenefit;
+                resultModel.AmountImpact = result.AmountImpact;
 
                 ResultsModel.Add(resultModel);
             }
@@ -199,14 +212,55 @@ namespace ParameterControl.Services.Results
             {
                 modResult.Result model = new modResult.Result
                 {
-                    Conciliation = stageSummaryModel.ConciliarionCode,
+                    ConciliationSK = stageSummaryModel.ConciliationSK,
+                    StageSK = stageSummaryModel.StageSK,
+                    Conciliation = stageSummaryModel.ConciliationCode,
                     Scenery = stageSummaryModel.StageCode,
                     StatusConciliation = stageSummaryModel.StatusConciliation,
                     UploadDate = stageSummaryModel.UploadDate,
                     ValueBeneficiary = stageSummaryModel.ValueBeneficiary,
                     ValueInconsistency = stageSummaryModel.ValueInconsistency,
                     ValuePqr = stageSummaryModel.ValuePqr,
-                    ValueRepetition = stageSummaryModel.ValueRepetition
+                    ValueRepetition = stageSummaryModel.ValueRepetition,
+                    AmountBenefit = stageSummaryModel.AmountBenefit,
+                    AmountImpact = stageSummaryModel.AmountImpact
+            };
+                return model;
+            });
+        }
+
+        public async Task<string> UpdateAmountBenefitResult(modResult.Result result)
+        {
+            var mapping = await MapperUpdateResult(result);
+            var response = await _resultService.UpdateAmountBenefitSummaryStage(mapping);
+
+            return response.Equals(1) ? "Resultado actualizado correctamente" : "Error actualizando el resultado";
+        }
+
+        public async Task<string> UpdateAmountImpactResult(modResult.Result result)
+        {
+            var mapping = await MapperUpdateResult(result);
+            var response = await _resultService.UpdateAmountImpactSummaryStage(mapping);
+
+            return response.Equals(1) ? "Resultado actualizado correctamente" : "Error actualizando el resultado";
+        }
+
+        private async Task<StageSummaryModel> MapperUpdateResult(modResult.Result result)
+        {
+            return await Task.Run(() =>
+            {
+                StageSummaryModel model = new StageSummaryModel
+                {
+                    ConciliationSK = result.ConciliationSK,
+                    StageSK = result.StageSK,
+                    StatusConciliation = result.StatusConciliation,
+                    ValueBeneficiary = result.ValueBeneficiary,
+                    ValueInconsistency = result.ValueInconsistency,
+                    ValuePqr = result.ValuePqr,
+                    ValueRepetition = result.ValueRepetition,
+                    UploadDate = result.UploadDate,
+                    AmountBenefit = result.AmountBenefit,
+                    AmountImpact = result.AmountImpact
                 };
                 return model;
             });

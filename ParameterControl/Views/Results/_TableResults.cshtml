@@ -87,9 +87,17 @@
                                                     </a>
                                                 }
 
-                                                <a class="button_icon button_primary" title="Editar" asp-controller="Results" asp-action="Edit">
-                                                    <i class="icon icon_106"></i>
-                                                 </a>
+                                                @if (Model.Elements.IsEdit)
+                                                {
+                                                    <a class="button_icon button_primary" title="Mondo Impacto" asp-controller="Results" asp-action="EditAmountImpact" asp-route-conciliationSK="@Result.ConciliationSK" asp-route-stageSK="@Result.StageSK" asp-route-uploadDate="@Result.UploadDate.ToString()">
+                                                        <i class="icon">M.I</i>
+                                                    </a>
+
+                                                    <a class="button_icon button_primary" title="Monto Beneficio" asp-controller="Results" asp-action="EditAmountBenefit" asp-route-conciliationSK="@Result.ConciliationSK" asp-route-stageSK="@Result.StageSK" asp-route-uploadDate="@Result.UploadDate.ToString()">
+                                                        <i class="icon">M.B</i>
+                                                    </a>
+                                                }
+                                                
                                                 @if (Model.Elements.IsInactivate)
                                                 {
                                                     <a class="button_icon button_primary" title="Inactivar" asp-controller="Results" asp-action="Desactive">

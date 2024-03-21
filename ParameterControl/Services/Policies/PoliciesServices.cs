@@ -85,6 +85,7 @@ namespace ParameterControl.Services.Policies
                 policyModel.StateFormat = policy.State ? "Activo" : "Inactivo";
                 policyModel.CreationDate = policy.CreationDate;
                 policyModel.UpdateDate = policy.UpdateDate;
+                policyModel.Package = policy.Package;
                 policyModel.CreationDateFormat = policy.CreationDate.ToString("dd/MM/yyyy");
                 policyModel.UpdateDateFormat = policy.UpdateDate.ToString("dd/MM/yyyy");
 
@@ -105,6 +106,7 @@ namespace ParameterControl.Services.Policies
             policyModel.StateFormat = policy.State ? "Activo" : "Inactivo";
             policyModel.CreationDate = policy.CreationDate;
             policyModel.UpdateDate = policy.UpdateDate;
+            policyModel.Package = policy.Package;
             policyModel.CreationDateFormat = policy.CreationDate.ToString("dd/MM/yyyy");
             policyModel.UpdateDateFormat = policy.UpdateDate.ToString("dd/MM/yyyy");
 
@@ -119,6 +121,7 @@ namespace ParameterControl.Services.Policies
             policyModel.Description = policy.Description;
             policyModel.State = policy.State;
             policyModel.CodeFormat = "PO_" + policy.Code;
+            policyModel.Package = policy.Package;
             policyModel.CreationDate = policy.CreationDate;
             policyModel.UpdateDate = policy.UpdateDate;
 
@@ -226,6 +229,7 @@ namespace ParameterControl.Services.Policies
                     Objetive = policy.Objetive,
                     CreationDate = policy.CreationDate,
                     UpdateDate = policy.ModifieldDate,
+                    Package = policy.Package,
                     State = policy.State,
                 };
                 return model;

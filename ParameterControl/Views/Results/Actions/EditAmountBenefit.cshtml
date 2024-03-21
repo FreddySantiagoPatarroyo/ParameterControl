@@ -1,0 +1,183 @@
+﻿@using ParameterControl.Models.Result;
+@model Result;
+
+@{
+    ViewData["Title"] = "Editar Monto Beneficio";
+    string ErrorEntyNull = "No existe este resultado" + ",Results";
+    string ErrorSuccess = "Se genero un problema al obtener la informacion,Results";
+}
+
+<partial name="_Menu" model="@ViewBag.InfoUser" />
+
+@if (!ViewBag.Success)
+{
+    <partial name="_ModalError" model="ErrorSuccess" />
+}
+else
+{
+    @if (ViewBag.EntyNull)
+    {
+        <partial name="_ModalError" model="ErrorEntyNull" />
+    }
+    else
+    {
+        <div class="box_edit">
+            <div class="bg__blur"></div>
+
+            <div asp-validation-summary="ModelOnly" class="text_error"></div>
+
+            <form class="form__container">
+                <div class="card__container">
+                    <div class="header_form">
+                        <img src="/images/iconApple.png" />
+                        <h1>Resultado</h1>
+                    </div>
+
+                    <input type="hidden" asp-for="ConciliationSK"/>
+                    <input type="hidden" asp-for="StageSK" />
+
+                    <div class="form_group">
+                        <div class="field">
+                            <label asp-for="Conciliation" class="label_form">Conciliacion*</label>
+                            <div class="input">
+                                <input asp-for="Conciliation" placeholder="Cantidad de recuperadas" readonly autocomplete="off" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form_group">
+                        <div class="field">
+                            <label asp-for="UploadDate" class="label_form">Fecha de carga*</label>
+                            <div class="input">
+                                <input type="text" asp-for="UploadDate" placeholder="Cantidad de recuperadas" readonly autocomplete="off" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form_group">
+                        <div class="field">
+                            <label asp-for="AmountBenefit" class="label_form">Monto Beneficio*</label>
+                            <div class="input">
+                                @if(Model.AmountBenefit == 0)
+                                {
+                                    <input asp-for="AmountBenefit" value="" placeholder="Monto Beneficio" />
+                                }
+                                else
+                                {
+                                    <input asp-for="AmountBenefit" placeholder="Monto Beneficio" readonly/>
+                                }
+                            </div>
+                            <span id="AmountBenefitError" class="text_error"></span>
+                        </div>
+                    </div>
+
+                    <p class="note_text"><span>Nota: </span>Los campos con (*) son obligatorios</p>
+                    
+                    @if (Model.AmountBenefit != 0)
+                    {
+                        <p class="note_text text_error">El monto beneficio ya tiene un valor y este no se puede modificar</p>
+                    }
+
+                    <div id="btn_container" class="btn_container">
+                        <a class="button button_secondary" asp-controller="Results" asp-action="Results"><p class="text font_bold">Cancelar</p></a>
+                        @if (Model.AmountBenefit == 0)
+                        {
+                            <a href="javascript:void(0)" onclick="sendData()" class="button button_primary"><p class="text font_bold">Actualizar</p></a>
+                        }
+                    </div>
+                    <div id="loading" class="loading">
+                        <span class="loader"></span>
+                    </div>
+                    <div id="LayoytError" class="layout_content">
+                        <partial name="_MessageError" />
+                    </div>
+                    <div id="LayoytSuccess" class="layout_content">
+                        <partial name="_MessageSuccess" />
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        @section Scripts {
+            <partial name="_ValidationScriptsPartial.cshtml" />
+
+            <script>
+                const urlResult = '@Url.Action("EditAmountBenefit")';
+                let data;
+                let isValidAmountBenefit = false;
+
+                const sendData = async () => {
+                    isValidAmountBenefit = validateInput("AmountBenefit", "El monto beneficio es requerida", "AmountBenefitError");
+
+                    if (isValidAmountBenefit) {
+                        document.getElementById('btn_container').style.display = 'none';
+                        document.getElementById('loading').style.display = 'flex';
+
+                        data = {
+                            ConciliationSK: $('#ConciliationSK').val(),
+                            StageSK: $('#StageSK').val(),
+                            AmountBenefit: $('#AmountBenefit').val(),
+                            UploadDateTemp: $('#UploadDate').val()
+                        }
+
+                        console.log(data)
+
+                        const result = await fetch(urlResult, {
+                            method: 'POST',
+                            body: JSON.stringify(data),
+                            headers: {
+                                'Content-Type': 'application/json'
+                            }
+                        })
+
+                        const json = await result.json();
+
+                        console.log(json);
+
+                        if (json.state == "Success") {
+                            document.getElementById('LayoytSuccess').style.display = 'block';
+                            document.getElementById('layout_message_success').innerHTML = json.message;
+                            document.getElementById('loading').style.display = 'none';
+                            setTimeout(() => {
+                                location.href = '/Results/Results';
+                            }, 3000)
+                        } else {
+                            document.getElementById('LayoytError').style.display = 'block';
+                            document.getElementById('layout_message_error').innerHTML = json.message;
+                            document.getElementById('loading').style.display = 'none';
+                        }
+                    }
+                }
+                const validateEmpty = (idInput) => {
+                    if ($(`#${idInput}`).val() == "" || $(`#${idInput}`).val() == null) {
+                        return true;
+                    } else {
+                        return false;
+                    }
+                }
+
+                const validateInput = (idInput, requiredMessage, idError) => {
+                    const isEmpty = validateEmpty(idInput);
+                    if (isEmpty) {
+                        $(`#${idError}`).text(requiredMessage);
+                        return false;
+                    } else {
+                        $(`#${idError}`).text("");
+                        return true;
+                    }
+                }
+                // const FormatDate = (date) => {
+
+                //     const validateAm = date.toString().includes("a. m.");
+                //     const validatePm = date.toString().includes("p. m.");
+
+                //     if (validatePm) {
+                //         date = date.replace("p. m.", "PM")
+                //     }
+
+                //     return date;
+                // }
+            </script>
+        }
+    }
+}

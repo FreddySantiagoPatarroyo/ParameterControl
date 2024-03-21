@@ -26,7 +26,7 @@ namespace ParameterControl.Stage.DataAccess
                     {
                         connection.Open();
 
-                        using (OracleCommand command = new OracleCommand("INSERT_SCENARY", connection))
+                        using (OracleCommand command = new OracleCommand(_configuration.GetConnectionString("SAICDES") + "INSERT_SCENARY", connection))
                         {
                             command.CommandType = CommandType.StoredProcedure;
                             command.Parameters.Add(new OracleParameter("PARAM_NOMBRE_ESCENARIO", entity.Name));

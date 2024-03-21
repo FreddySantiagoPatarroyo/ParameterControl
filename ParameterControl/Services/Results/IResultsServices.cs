@@ -13,5 +13,8 @@ namespace ParameterControl.Services.Results
         Task<int> CountResults();
         Task<List<Result>> GetResultsPagination(PaginationViewModel pagination);
         List<ResultViewModel> GetFilterPagination(List<ResultViewModel> inicialResults, PaginationViewModel paginationViewModel, int totalData);
+        Task<Result> GetOneResult(int conciliationSK, int stageSK, DateTime uploadDate);
+        Task<string> UpdateAmountBenefitResult(Result result);
+        Task<string> UpdateAmountImpactResult(Result result);
     }
 }

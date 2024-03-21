@@ -13,5 +13,8 @@ namespace ParameterControl.Stage.Interfaces
         Task<int> SelectCountStage();
         Task<List<StageSummaryModel>> SelectAllSummaryStage();
         Task<List<StageSummaryModel>> SelectPaginatorSummaryStage(int page, int row);
+        Task<StageSummaryModel> SelectOneSummaryStage(StageSummaryModel entity);
+        Task<int> UpdateAmountBenefitSummaryStage(StageSummaryModel entity);
+        Task<int> UpdateAmountImpactSummaryStage(StageSummaryModel entity);
     }
 }

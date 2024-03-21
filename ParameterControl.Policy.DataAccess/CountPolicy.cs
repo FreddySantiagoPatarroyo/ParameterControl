@@ -24,7 +24,7 @@ namespace ParameterControl.Policy.DataAccess
                     {
                         connection.Open();
 
-                        using (OracleCommand command = new OracleCommand("COUNT_POLICY", connection))
+                        using (OracleCommand command = new OracleCommand(_configuration.GetConnectionString("SAICDES") + "COUNT_POLICY", connection))
                         {
                             command.CommandType = CommandType.StoredProcedure;
                             OracleDataReader reader = command.ExecuteReader();

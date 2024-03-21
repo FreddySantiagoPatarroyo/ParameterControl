@@ -13,5 +13,7 @@ namespace ParameterControl.Models.Policy
         public string Description { get; set; } = string.Empty;
 
         public string Objetive { get; set; } = string.Empty;
+
+        public string Package { get; set; } = string.Empty;
     }
 }

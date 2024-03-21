@@ -15,12 +15,10 @@ using modConciliation = ParameterControl.Models.Conciliation;
 using modParameter = ParameterControl.Models.Parameter;
 using modScenary = ParameterControl.Models.Scenery;
 using modAudit = ParameterControl.Models.Audit;
-using ParameterControl.Models.Conciliation;
-using System.Reflection.Metadata;
 
 namespace ParameterControl.Controllers.Parameters
 {
-   
+
     public class ParametersController : Controller
     {
         public TableParametersViewModel TableParameters = new TableParametersViewModel();

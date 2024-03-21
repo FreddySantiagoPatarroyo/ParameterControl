@@ -24,7 +24,7 @@ namespace ParameterControl.Stage.DataAccess
                     {
                         connection.Open();
 
-                        using (OracleCommand command = new OracleCommand("ALL_SUMMARY_SCENARY", connection))
+                        using (OracleCommand command = new OracleCommand(_configuration.GetConnectionString("SAICDES") + "ALL_SUMMARY_SCENARY", connection))
                         {
                             command.CommandType = CommandType.StoredProcedure;
                             OracleDataReader reader = command.ExecuteReader();

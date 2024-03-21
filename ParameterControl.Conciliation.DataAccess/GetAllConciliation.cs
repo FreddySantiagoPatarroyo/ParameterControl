@@ -24,7 +24,7 @@ namespace ParameterControl.Conciliation.DataAccess
                     {
                         connection.Open();
 
-                        using (OracleCommand command = new OracleCommand("ALL_CONCILIATION", connection))
+                        using (OracleCommand command = new OracleCommand(_configuration.GetConnectionString("SAICDES") + "ALL_CONCILIATION", connection))
                         {
                             command.CommandType = CommandType.StoredProcedure;
                             OracleDataReader reader = command.ExecuteReader();

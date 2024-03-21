@@ -59,9 +59,9 @@ else
                         @if(Model.IsExecution){
                             <a class="button button_ejecution" onclick="sendData('Execution')"><p class="text font_bold">Ejecutar</p></a>
                         }
-                        @if(Model.IsProgram){
+                     @*    @if(Model.IsProgram){
                             <a class="button button_program btn_spacing" onclick="sendData('Program')"><p class="text font_bold">Programar</p></a>
-                        }
+                        } *@
                         @if (Model.IsAbort)
                         {
                             <a class="button button_primary" onclick="sendData('Abort')"><p class="text font_bold">Abortar</p></a>

@@ -26,7 +26,7 @@ namespace ParameterControl.Policy.DataAccess
                     {
                         connection.Open();
 
-                        using (OracleCommand command = new OracleCommand("INSERT_POLICY", connection))
+                        using (OracleCommand command = new OracleCommand(_configuration.GetConnectionString("SAICDES") + "INSERT_POLICY", connection))
                         {
                             command.CommandType = CommandType.StoredProcedure;
                             command.Parameters.Add(new OracleParameter("PARAM_NAME", entity.Name));

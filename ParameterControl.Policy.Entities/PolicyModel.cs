@@ -9,5 +9,6 @@
         public string Objetive { get; set; } = string.Empty;
         public DateTime CreationDate { get; set; }
         public DateTime ModifieldDate { get; set; }
+        public string Package { get; set; } = string.Empty; 
     }
 }

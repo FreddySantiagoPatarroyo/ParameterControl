@@ -25,7 +25,7 @@ namespace ParameterControl.Conciliation.DataAccess
                     {
                         connection.Open();
 
-                        using (OracleCommand command = new OracleCommand("SELECT_BY_ID_CONCILIATION", connection))
+                        using (OracleCommand command = new OracleCommand(_configuration.GetConnectionString("SAICDES") + "SELECT_BY_ID_CONCILIATION", connection))
                         {
                             command.CommandType = CommandType.StoredProcedure;
                             command.Parameters.Add(new OracleParameter("PARAM_CODE", entity.Code));

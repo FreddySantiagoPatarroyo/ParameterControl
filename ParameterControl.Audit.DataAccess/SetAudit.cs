@@ -24,7 +24,7 @@ namespace ParameterControl.Audit.DataAccess
                     {
                         connection.Open();
 
-                        using (OracleCommand command = new OracleCommand("INSERT_AUDIT", connection))
+                        using (OracleCommand command = new OracleCommand(_configuration.GetConnectionString("SAICDES") + "INSERT_AUDIT", connection))
                         {
                             command.CommandType = CommandType.StoredProcedure;
                             command.Parameters.Add(new OracleParameter("PARAM_FECHA_CAMBIO", entity.ModifieldDate));

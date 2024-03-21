@@ -24,7 +24,7 @@ namespace ParameterControl.User.DataAccess
                     {
                         connection.Open();
 
-                        using (OracleCommand command = new OracleCommand("PAGINATOR_USER", connection))
+                        using (OracleCommand command = new OracleCommand(_configuration.GetConnectionString("SAICDES") + "PAGINATOR_USER", connection))
                         {
                             command.CommandType = CommandType.StoredProcedure;
                             command.Parameters.Add(new OracleParameter("PARAM_PAGE", page));
