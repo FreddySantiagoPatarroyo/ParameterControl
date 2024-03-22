@@ -220,6 +220,9 @@ namespace ParameterControl.Controllers.ApprovedResults
                 case "UpdateDateFormat":
                     filter.TypeRow = "Date";
                     break;
+                case "UploadDateFormat":
+                    filter.TypeRow = "Date";
+                    break;
                 case "StartDateFormat":
                     filter.TypeRow = "Date";
                     break;

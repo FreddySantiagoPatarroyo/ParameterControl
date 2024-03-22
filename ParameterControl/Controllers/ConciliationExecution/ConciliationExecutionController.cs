@@ -126,7 +126,7 @@ namespace ParameterControl.Controllers.ConciliationExecution
                 var policy = await policiesServices.GetPolicyByCode(conciliation.PolicyCode);
                 if (policy.Code == 0 || policy.Package == string.Empty)
                 {
-                    return BadRequest(new { message = "No es posible ejecutar la conciliaicon", state = "Error" });
+                    return BadRequest(new { message = "No es posible ejecutar la conciliacion", state = "Error" });
                 }
 
                 var audit = new modAudit.Audit()

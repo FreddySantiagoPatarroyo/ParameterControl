@@ -335,6 +335,12 @@ namespace ParameterControl.Controllers.CrossConnections
                 case "CreationDateFormat":
                     filter.TypeRow = "Date";
                     break;
+                case "LastLoadFormat":
+                    filter.TypeRow = "Date";
+                    break;
+                case "LastExecutionFormat":
+                    filter.TypeRow = "Date";
+                    break;
                 case "UpdateDateFormat":
                     filter.TypeRow = "Date";
                     break;
